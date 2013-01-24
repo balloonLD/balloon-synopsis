@@ -1,0 +1,48 @@
+	<script id="iso-element" type="text/x-handlebars-template">
+	{{#eachHistory .}}
+		<div class="element {{subject.token}}">
+			{{#if subject}}
+				<h2 class="showUri">{{subject.value}}</h2>
+			{{/if}}
+			<p class="number">{{@index}}</p>
+			{{#if label}}
+				<h3 class="labelEn">{{label.value}}</h3>
+			{{/if}}
+			{{#if description}}
+				{{#ifLang description}}
+					<div class="descriptionEn ellipsis">{{description.value}}</div>
+				{{/ifLang}}
+			{{/if}}
+		</div>
+	{{/eachHistory}}
+	</script>
+	
+	<script id="overlay-element" type="text/x-handlebars-template">
+		<div class="overlay" id="overlay_{{index}}">
+			<span class="close">close</span>
+			<div class="overlayContent">
+			</div>
+		</div>
+	</script>
+	
+	<script id="overlay-content" type="text/x-handlebars-template">
+	{{#if label}}
+		<h1>{{label}}</h1>
+	{{/if}}
+	{{#if subjectOf}}
+		<div>
+		<p>Subject of:</p>
+		{{#each subjectOf}}
+					<div>{{object.value}}</div>		
+		{{/each}}
+		</div>
+	{{/if}}
+	{{#if objectOf}}
+		<div>
+		<p>Object of:</p>
+		{{#each objectOf}}
+					<div>{{subject.value}}</div>		
+		{{/each}}
+		</div>
+	{{/if}}
+	</script>
