@@ -3,20 +3,6 @@
 ;
 (function($, window, document, undefined) {
 
-	// undefined wird hier als die in ECMAScript 3 veränderbare globale Variable
-	// `undefined` benutzt (d.h. sie kann von einem anderen benutzt und geändert
-	// werden).
-	// undefined wird nicht wirklich an die Funktion übergegen, sondern stellt
-	// nur sicher,
-	// dass undefined nicht von einem anderen Script überschrieben wurde.
-	// In ES5 kann undefined nicht längern modifiziert werden.
-
-	// window und document werden als lokale anstatt als globale Variablen
-	// übergeben
-	// da dies den Auflösungsprozess (leicht) beschleunigt und kann effizienter
-	// minifiziert werden (vor allem, wenn beide in dem Plugin referenziert
-	// sind).
-
 	// Erstellt einmalig die Standardeinstellungen
 	var pluginName = "visaRDF", rdfStore, defaults = {
 		data : undefined,
@@ -543,8 +529,7 @@
 
 	};
 
-	// Ein sehr leichtgewichtiger Plugin-Rahmen um den Konstruktor,
-	// verhindert mehrere Instanziierungen pro Element
+	// Lightweight plugin frame.
 	$.fn[pluginName] = function(options) {
 		return this.each(function() {
 			if (!$.data(this, "plugin_" + pluginName)) {
