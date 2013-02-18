@@ -5,9 +5,9 @@
 <title>visaRDF</title>
 <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
-<link rel="stylesheet" href="css/style.css" />
 <script type="text/javascript" src="js/jquery-1.8.3.js"></script>
 <script type="text/javascript" src="js/jquery.isotope.js"></script>
+<script type="text/javascript" src="js/jquery.textfill.min.js"></script>
 <script type="text/javascript" src="js/jquery.autoellipsis.js"></script>
 <script type="text/javascript" src="js/handlebars.js"></script>
 <script type="text/javascript" src="js/rgbcolor.js"></script>
@@ -16,36 +16,32 @@
 <script type="text/javascript" src="js/visaRDF.js"></script>
 </head>
 <body>
-	<section id="options" class="clearfix">
-	<div class="option-combo">
-		<h2>Sort:</h2>
-		<ul id="sort" class="option-set clearfix" data-option-key="sortBy">
-			<li><a href="#random" data-option-value="random" id="random"
-				class="selected">random</a></li>
-			<li><a href="#number" data-option-value="data-number"
-				id="number">number</a></li>
-			<li><a href="#alphabetical" data-option-value="alphabetical"
-				id="alphabetical">alphabetical</a></li>
-		</ul>
-	</div>
-	</section>
-	<div class="container"></div>
+	<div class="visaRDF"></div>
 	<form>
 		<label for="inputbox">DataURL:</label> <input type="text"
 			name="inputbox" value="data/turtle.ttl">
 		<p>
 			<input type="button" name="insert" value="Insert Data"
-				onclick="$('.container').data('plugin_visaRDF').insertDataURL(this.form.inputbox.value, 'text/turtle');">
+				onclick="$('.visaRDF').data('plugin_visaRDF').insertDataURL(this.form.inputbox.value, 'text/turtle');">
 	</form>
+<!-- 	<div class="visaRDF2"></div> -->
+<!-- 	<form> -->
+<!-- 		<label for="inputbox2">DataURL:</label> <input type="text" -->
+<!-- 			name="inputbox2" value="data/turtle.ttl"> -->
+<!-- 		<p> -->
+<!-- 			<input type="button" name="insert" value="Insert Data" -->
+<!-- 				onclick="$('.visaRDF2').data('plugin_visaRDF').insertDataURL(this.form.inputbox2.value, 'text/turtle');"> -->
+<!-- 	</form> -->
 
 
 
 	<script type="text/javascript">
 
 		$(function() {
-			$('.container').visaRDF({
-				dataLoc : 'data/turtle.ttl',
+			$('.visaRDF').visaRDF({
+				dataLoc : 'data/test_bond.ttl',
 				dataFormat : 'text/turtle',
+				generateSortOptions : true,
 				isotopeOptions : {		
 					masonry : {
 						columnWidth : 120
@@ -63,17 +59,27 @@
 					}
 				}
 			});
-		});
-		
-		$('#sort a').click(function() {
-			// get href attribute, minus the '#'
-			var sortName = $(this).attr('href').slice(1);
-			$('#sort a').removeClass("selected");
-			$(('#' + sortName)).addClass("selected");
-			$('.container').isotope({
-				sortBy : sortName
-			});
-			return false;
+// 			$('.visaRDF2').visaRDF({
+// 				dataLoc : 'data/turtle.ttl',
+// 				dataFormat : 'text/turtle',
+// 				generateSortOptions : true,
+// 				isotopeOptions : {		
+// 					masonry : {
+// 						columnWidth : 120
+// 					},
+// 					sortBy : 'random',
+// 					getSortData : {
+// 						asa : function($elem) {
+// 							var number = $elem.hasClass('element') ? $elem.find('.number').text() : $elem.attr('data-number');
+// 							return parseInt(number, 10);
+// 						},
+// 						alphabetical : function($elem) {
+// 							var labelEn = $elem.find('.labelEn'), itemText = labelEn.length ? labelEn : $elem;
+// 							return itemText.text();
+// 						}
+// 					}
+// 				}
+// 			});
 		});
 	</script>
 </body>

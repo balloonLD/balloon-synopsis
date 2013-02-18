@@ -1,48 +1,59 @@
-	<script id="iso-element" type="text/x-handlebars-template">
-	{{#eachHistory .}}
-		<div class="element {{subject.token}}">
-			{{#if subject}}
-				<h2 class="showUri">{{subject.value}}</h2>
-			{{/if}}
-			<p class="number">{{@index}}</p>
-			{{#if label}}
-				<h3 class="labelEn">{{label.value}}</h3>
-			{{/if}}
-			{{#if description}}
-				{{#ifLang description}}
-					<div class="descriptionEn ellipsis">{{description.value}}</div>
-				{{/ifLang}}
-			{{/if}}
-		</div>
-	{{/eachHistory}}
-	</script>
-	
-	<script id="overlay-element" type="text/x-handlebars-template">
-		<div class="overlay" id="overlay_{{index}}">
+<script id="visaRDF-isotope-elements" type="text/x-handlebars-template">
+	{{#historyAwareEach .}}
+		{{> visaRDF-isotope-element}}
+	{{/historyAwareEach}}
+</script>
+
+<script id="visaRDF-isotope-element" type="text/x-handlebars-template">
+	<div class="element {{subject.token}} {{#if type}}{{type.value}}{{/if}} {{@index}}">
+		{{#if subject}}
+			<h2 class="showUri" style="display:none">{{subject.value}}</h2>
+		{{/if}}
+		<p class="number">{{@index}}</p>
+		{{#if label}}
+			<h3 class="labelEn ellipsis">{{label.value}}</h3>
+		{{/if}}
+		{{#ifLang description}}
+			<div class="descriptionEn ellipsis">{{description.value}}</div>
+		{{/ifLang}}
+	</div>
+</script>
+
+<script id="visaRDF-sort-options" type="text/x-handlebars-template">
+	<div class="option-combo sorter">
+		<h2>Sort:</h2>
+		<ul class="option-set clearfix" data-option-key="sortBy">
+			{{#keysEach .}}
+				<li><a data-sort-value="{{.}}" class="{{.}}">{{.}}</a></li>
+			{{/keysEach}}
+		</ul>
+	</div>
+</script>
+
+<script id="visaRDF-filter-options" type="text/x-handlebars-template">
+	<div class="option-combo filter">
+		<h2>Filter:</h2>
+		<ul class="option-set clearfix" data-option-key="filter">
+			{{#each .}}
+				<li><a data-filter-value="{{value}}" class="{{value}}">{{label}}</a></li>
+			{{/each}}
+		</ul>
+	</div>
+</script>
+
+<script id="visaRDF-overlay-element" type="text/x-handlebars-template">
+		<div class="overlay overlay_{{index}}">
 			<span class="close">close</span>
 			<div class="overlayContent">
 			</div>
 		</div>
 	</script>
-	
-	<script id="overlay-content" type="text/x-handlebars-template">
+
+<script id="visaRDF-overlay-content" type="text/x-handlebars-template">
 	{{#if label}}
 		<h1>{{label}}</h1>
-	{{/if}}
-	{{#if subjectOf}}
-		<div>
-		<p>Subject of:</p>
-		{{#each subjectOf}}
-					<div>{{object.value}}</div>		
-		{{/each}}
-		</div>
-	{{/if}}
-	{{#if objectOf}}
-		<div>
-		<p>Object of:</p>
-		{{#each objectOf}}
-					<div>{{subject.value}}</div>		
-		{{/each}}
+		<div class="innerScroll">
+			<div></div>
 		</div>
 	{{/if}}
 	</script>

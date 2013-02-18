@@ -10,8 +10,14 @@
 <http://dbpedialite.org/categories/19615928#id> rdfs:label "The Living Daylights";
    rdfs:subClassOf <http://dbpedialite.org/categories/3001990#id> .
 
-<http://dbpedialite.org/categories/19616001#id> rdfs:label "A View to a Kill";
+<http://dbpedialite.org/categories/19616001#id> rdfs:label "Aw View to a Kill";
+	dc:fasda "Test 13201";
    rdfs:subClassOf <http://dbpedialite.org/categories/3001990#id> .
+
+<http://dbpedialite.org/categories/19616001#id> dc:fasda "Test 13201";
+	dc:das "Test 1320a1".
+   
+<http://dbpedialite.org/categories/3001990#id> dc:contains <http://dbpedialite.org/categories/19616001#id> .
 
 <http://dbpedialite.org/categories/19616048#id> rdfs:label "For Your Eyes Only (film)";
    rdfs:subClassOf <http://dbpedialite.org/categories/3001990#id> .
