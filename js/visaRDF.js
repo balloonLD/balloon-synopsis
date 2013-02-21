@@ -53,9 +53,6 @@
 			}
 		},
 		isotopeOptions : {
-			masonry : {
-				columnWidth : 200
-			},
 			sortBy : 'number',
 			getSortData : {
 				number : function($elem) {
@@ -76,7 +73,7 @@
 	// handlebars templates for the plugin
 	templates = {},
 
-	// Defered to inform if the plugin was already initialized once
+	// Deferred to inform if the plugin was already initialized once
 	globalInitDfd = undefined,
 
 	// Counter for plugin instances
@@ -86,18 +83,26 @@
 	currentLevel = 0,
 
 	CSS_CLASSES = {
-		container : "outerContainer",
+		outerContainer : "outerContainer",
 		isotopeContainer : "container",
 		options : "options",
 		clearfix : "clearfix",
 		loader : "loading",
+		preview : "preview",
+		previewContent : "previewContent",
+		overlay : "overlay",
+		overlayContent : "overlayContent",
+		typeClasses : {
+			incoming : "incoming",
+			outgoing : "outgoing"
+		},
 		toSelector : function(id) {
-			return "." + CSS_CLASSES[id];
+			return "." + this[id];
 		}
 	},
 
 	// Placeholder in query strings
-	REPLACE_ME = "#replaceMe#",
+	DUMMY = "#replaceMe#",
 
 	// Event types for Pub/Sub system
 	EVENT_TYPES = {
@@ -117,24 +122,47 @@
 	};
 
 	// <---- class private utility functions ---->
-	function _isUndefinedOrNull(a) {
+	function isUndefinedOrNull(a) {
 		return ((typeof a === "undefined") || (a === null));
 	}
-	;
 
-	function getWindowSize() {
+	function replaceDummy(query, replacement) {
+		return query.replace(new RegExp(DUMMY, "g"), replacement);
+	}
+
+	function getWindowSize(withoutScrollbar) {
 		var w = null, h = null;
-		if (that._$body.hasClass('noscroll')) {
-			w = $window.width(), h = $window.height();
+		if (withoutScrollbar) {
+			if (that._$body.hasClass('noscroll')) {
+				w = $window.width(), h = $window.height();
+			} else {
+				that._$body.addClass('noscroll');
+				w = $window.width(), h = $window.height();
+				that._$body.removeClass('noscroll');
+			}
 		} else {
-			that._$body.addClass('noscroll');
 			w = $window.width(), h = $window.height();
-			that._$body.removeClass('noscroll');
 		}
 		return {
 			width : w,
 			height : h
 		};
+	}
+
+	function getClip(name) {
+		switch (name) {
+		case CSS_CLASSES.preview:
+			var winsize = getWindowSize(false);
+			return 'rect(' + winsize.height * 0.25 + 'px ' + winsize.width * 0.75 + 'px ' + winsize.height * 0.75 + 'px ' + winsize.width * 0.25 + 'px)';
+			break;
+		case CSS_CLASSES.overlay:
+			var winsize = getWindowSize(true);
+			return 'rect(0px ' + winsize.width + 'px ' + winsize.height + 'px 0px)';
+			break;
+		default:
+			console.log("No clip data found.");
+			return "";
+		}
 	}
 
 	function getItemLayoutProp($item) {
@@ -163,6 +191,17 @@
 	}
 	// <!--- class private utility functions ---->
 
+	// JQuery custom selector expression
+	$.expr[':']['class-prefix'] = function(elem, index, match) {
+		var prefix = match[3];
+
+		if (!prefix)
+			return true;
+
+		var sel = '[class^="' + prefix + '"], [class*=" ' + prefix + '"]';
+		return $(elem).is(sel);
+	};
+
 	// Plugin constructor
 	function Plugin(element, options) {
 		// <---- private utility functions ---->
@@ -181,10 +220,10 @@
 		// <!--- instance private utility functions ---->
 
 		this._$body = $('BODY'), this._$element = $(element);
-		this._$container = $('<div class="' + CSS_CLASSES.container + '"></div>');
+		this._$outerContainer = $('<div class="' + CSS_CLASSES.outerContainer + '"></div>');
 		this._$isotopeContainer = $('<div class="' + CSS_CLASSES.isotopeContainer + '"></div>');
-		this._$element.append(this._$container);
-		this._$container.append(this._$isotopeContainer);
+		this._$element.append(this._$outerContainer);
+		this._$outerContainer.append(this._$isotopeContainer);
 
 		pluginInstanceCount++;
 		// Give parentelement of the plugin a correspondending plugin class
@@ -337,6 +376,7 @@
 				templates.overlayCon = Handlebars.compile($("#visaRDF-overlay-content").html());
 				templates.sortOptions = Handlebars.compile($("#visaRDF-sort-options").html());
 				templates.filterOptions = Handlebars.compile($("#visaRDF-filter-options").html());
+				templates.previewEle = Handlebars.compile($("#visaRDF-preview-element").html());
 				// <!-- extract templates --->
 
 				templateInitDfd.resolve();
@@ -350,7 +390,7 @@
 		this._addEventHandler = this._selfProxy(function(eventType, handler, object) {
 			var that = this;
 			if (object === undefined) {
-				object = that._$element.children(CSS_CLASSES.toSelector('container'));
+				object = that._$element.children(CSS_CLASSES.toSelector('outerContainer'));
 			}
 			if (that._evHandlerHistory[eventType] === undefined) {
 				that._evHandlerHistory[eventType] = [];
@@ -362,204 +402,379 @@
 			object.on(eventType, handler);
 		});
 
-		// Modified code from: Mary Lou@Codrops -
-		// http://tympanus.net/Tutorials/ExpandingOverlayEffect/
-		this._initOverlays = this._selfProxy(function($items) {
+		this._initBrowsability = this._selfProxy(function($items) {
 			var that = this, transData = getTransData(),
 			// transition end event name
 			transEndEventName = transData.transEndEventName,
 			// transitions support available?
-			supportTransitions = transData.transSupport,
-			// window width and height
-			winsize = getWindowSize();
+			supportTransitions = transData.transSupport;
 
 			$items.each(function() {
 				var $item = $(this);
-				that
-						._addEventHandler('click',
-								function() {
-									$item.index = parseInt($item.find('.number').html());
-									if (!$item.data('isExpanded')) {
-										$item.data('isExpanded', true);
-										var $overlay = that._$element.find('> .overlay_' + $item.index);
 
-										// increment overall level
-										if (that._instanceLevel === currentLevel) {
-											currentLevel++;
-										}
-										that._expandedOverlaysCount++;
-
-										// If overlay isn't added already add
-										// it<
-										if ($overlay.length < 1) {
-											var overlay = templates.overlayEle({
-												"index" : $item.index
-											});
-											that._$element.append(overlay);
-											var $overlay = that._$element.find('> .overlay_' + $item.index), $overlayContent = $overlay
-													.find('> .overlayContent'), $close = $overlay.find('span.close');
-
-											that._addEventHandler('click', function() {
-
-												that._expandedOverlaysCount--;
-												if (that._expandedOverlaysCount === 0) {
-													if (--currentLevel === 0) {
-														that._$body.removeClass('noscroll');
-													}
-												}
-
-												var layoutProp = getItemLayoutProp($item), clipPropFirst = 'rect(' + layoutProp.top + 'px '
-														+ (layoutProp.left + layoutProp.width) + 'px ' + (layoutProp.top + layoutProp.height) + 'px '
-														+ layoutProp.left + 'px)', clipPropLast = 'auto';
-
-												// clear old data
-												$overlayContent.find('> .innerScroll > div').data('plugin_visaRDF').destroy();
-												$overlayContent.children().remove('');
-
-												$overlay.css({
-													clip : clipPropFirst,
-													opacity : 1,
-													pointerEvents : 'none'
-												});
-												if (supportTransitions) {
-													$overlay.on(transEndEventName, function() {
-
-														$overlay.off(transEndEventName);
-														setTimeout(function() {
-															$overlay.css('opacity', 0).on(transEndEventName, function() {
-																$overlay.off(transEndEventName).css({
-																	clip : clipPropLast,
-																	zIndex : -1
-																});
-																$item.data('isExpanded', false);
-															});
-														}, 25);
-
-													});
-												} else {
-													$overlay.css('z-index', -1);
-												}
-
-											}, $close);
-										}
-
-										that._initOverlayContent($item, function() {
-											var layoutProp = getItemLayoutProp($item), clipPropFirst = 'rect(' + layoutProp.top + 'px '
-													+ (layoutProp.left + layoutProp.width) + 'px ' + (layoutProp.top + layoutProp.height) + 'px '
-													+ layoutProp.left + 'px)', clipPropLast = 'rect(0px ' + winsize.width + 'px ' + winsize.height + 'px 0px)';
-
-											// Make overlay visible
-											$overlay.css({
-												clip : supportTransitions ? clipPropFirst : clipPropLast,
-												opacity : 1,
-												zIndex : 9999,
-												pointerEvents : 'auto'
-											});
-
-											if (supportTransitions) {
-												$overlay.on(transEndEventName, function() {
-
-													$overlay.off(transEndEventName);
-
-													setTimeout(function() {
-														$overlay.css('clip', clipPropLast).on(transEndEventName, function() {
-															$overlay.off(transEndEventName);
-															that._$body.addClass('noscroll');
-														});
-													}, 25);
-
-												});
-											} else {
-												that._$body.addClass('noscroll');
-											}
-										});
-									}
-								}, $item);
+				$item.index = parseInt($item.find('.number').html());
+				// <---- item click event ---->
+				that._addItemClickEvent($item, supportTransitions, transEndEventName);
+				// <!--- item click event ---->
 			});
 		});
 
-		this._initOverlayContent = this
-				._selfProxy(function($item, callback) {
-					var that = this, $overlay = that._$element.find('> .overlay_' + $item.index), $overlayContent = $overlay.find('> .overlayContent');
+		this._addItemClickEvent = this._selfProxy(function($item, supportTransitions, transEndEventName) {
+			var that = this;
+			that._addEventHandler('click', function(e) {
 
-					// Get elements who are in a relation to
-					// current item
-					var reg = new RegExp(REPLACE_ME, "g"), subjectOfQuery = that._queries.selectSubjectOf.replace(reg, $item.find('.showUri').html()), objectOfQuery = that._queries.selectObjectOf
-							.replace(reg, $item.find('.showUri').html());
+				/*
+				 * Stop propagation to not trigger window click event which closes preview again
+				 */
+				e.stopPropagation();
 
-					that._rdfStoreExecuteQuery(subjectOfQuery, function(subjectOf) {
-						that._rdfStoreExecuteQuery(objectOfQuery, function(objectOf) {
+				// If preview isn't added already
+				that._addPreview($item, supportTransitions, transEndEventName, function($preview) {
 
-							// console.log(subjectOf);
+					// <!--- preview show ---->
+					var layoutProp = getItemLayoutProp($item), itemClip = 'rect(' + layoutProp.top + 'px ' + (layoutProp.left + layoutProp.width) + 'px '
+							+ (layoutProp.top + layoutProp.height) + 'px ' + layoutProp.left + 'px)', previewClip = getClip(CSS_CLASSES.preview);
 
-							// Input for the handlebar
-							// template
-							var input = {};
-							if (subjectOf[0] && subjectOf[0].origin) {
-								input.label = subjectOf[0].origin.value;
-							} else if (objectOf[0] && objectOf[0].origin) {
-								input.label = objectOf[0].origin.value;
+					// Make preview visible
+					$preview.css({
+						'-webkit-transition' : 'all 0.4s ease',
+						'-moz-transition' : 'all 0.4s ease',
+						transition : 'all 0.4s ease',
+						clip : supportTransitions ? itemClip : previewClip,
+						opacity : 1,
+						zIndex : 9998,
+						pointerEvents : 'auto'
+					});
+
+					if (supportTransitions) {
+						$preview.on(transEndEventName, function() {
+
+							$preview.off(transEndEventName);
+
+							setTimeout(function() {
+								$preview.css('clip', previewClip).on(transEndEventName, function() {
+									$preview.off(transEndEventName);
+								});
+							}, 25);
+
+						});
+					}
+					// <!--- preview show ---->
+
+				});
+			}, $item);
+		});
+
+		this._addPreview = this._selfProxy(function($item, supportTransitions, transEndEventName, callback) {
+			var that = this, $previews = $(CSS_CLASSES.toSelector("preview"));
+			var $preview = $previews.filter('> ' + CSS_CLASSES.toSelector("preview") + '_' + $item.index);
+			$previews.not($preview).css({
+				opacity : 0,
+				pointerEvents : 'none',
+				zIndex : -1,
+				'-webkit-transition' : 'none 0.4s ease',
+				'-moz-transition' : 'none 0.4s ease',
+				transition : 'none 0.4s ease',
+				clip : 'auto'
+			});
+			if ($preview.length < 1) {
+				preview = templates.previewEle({
+					"index" : $item.index,
+					"cssClass" : {
+						"preview" : CSS_CLASSES.preview,
+						"previewContent" : CSS_CLASSES.previewContent
+					}
+				});
+				that._$element.append(preview);
+				$preview = that._$element.find('> ' + CSS_CLASSES.toSelector("preview") + '_' + $item.index);
+				$preview.css('background-color', $item.css('background-color'));
+				$previewContent = $preview.children(CSS_CLASSES.toSelector("previewContent"));
+				$previewContent.text("" + $item.find('.labelEn > div').html());
+
+				// <---- Add event on window click ---->
+				that._addPreviewCloseEvent($item, $preview, supportTransitions, transEndEventName);
+				// <!--- Add event on window click ---->
+
+				// <---- preview click Event ---->
+				that._addPreviewClickEvent($item, $preview, supportTransitions, transEndEventName);
+				// <!--- preview click Event ---->
+				callback($preview);
+			} else {
+				callback($preview);
+			}
+		});
+
+		this._addPreviewCloseEvent = this._selfProxy(function($item, $preview, supportTransitions, transEndEventName) {
+			var that = this;
+			that._addEventHandler('click', function() {
+				var layoutProp = getItemLayoutProp($item), itemClip = 'rect(' + layoutProp.top + 'px ' + (layoutProp.left + layoutProp.width) + 'px '
+						+ (layoutProp.top + layoutProp.height) + 'px ' + layoutProp.left + 'px)';
+
+				$preview.css({
+					opacity : 1,
+					pointerEvents : 'none',
+					clip : itemClip
+				});
+
+				if (supportTransitions) {
+					$preview.on(transEndEventName, function() {
+						$preview.off(transEndEventName);
+						setTimeout(function() {
+							$preview.css('opacity', 0).on(transEndEventName, function() {
+								$preview.off(transEndEventName).css({
+									clip : 'auto',
+									zIndex : -1
+								});
+								$item.data('isExpanded', false);
+							});
+						}, 25);
+
+					});
+				} else {
+					$preview.css({
+						opacity : 0,
+						zIndex : -1
+					});
+				}
+			}, $window);
+		});
+
+		this._addPreviewClickEvent = this._selfProxy(function($item, $preview, supportTransitions, transEndEventName) {
+			var that = this;
+			that._addEventHandler('click', function() {
+				if (!$item.data('isExpanded')) {
+					$item.data('isExpanded', true);
+
+					// increment overall level
+					if (that._instanceLevel === currentLevel) {
+						currentLevel++;
+					}
+
+					// increment Counter (only needed if more than 1 Overlay can be opened)
+					that._expandedOverlaysCount++;
+
+					// Add overlay if needed
+					that._addOverlay($item, supportTransitions, transEndEventName, function($overlay) {
+
+						//Fill overlay with content
+						that._initOverlayContent($item, $overlay, function() {
+							// <---- overlay show function ---->
+							var previewClip = getClip(CSS_CLASSES.preview), overlayClip = getClip(CSS_CLASSES.overlay);
+
+							// Make overlay visible
+							$overlay.css({
+								clip : supportTransitions ? previewClip : overlayClip,
+								opacity : 1,
+								zIndex : 9999,
+								pointerEvents : 'auto'
+							});
+
+							if (supportTransitions) {
+								$overlay.on(transEndEventName, function() {
+
+									$overlay.off(transEndEventName);
+
+									setTimeout(function() {
+										$overlay.css('clip', overlayClip).on(transEndEventName, function() {
+											$overlay.off(transEndEventName);
+											that._$body.addClass('noscroll');
+										});
+									}, 25);
+
+								});
+							} else {
+								that._$body.addClass('noscroll');
 							}
-
-							// Add types for filtering
-							for ( var i = 0; i < subjectOf.length; i++) {
-								subjectOf[i].type = {
-									value : "subjectOfItem"
-								};
-							}
-							for ( var i = 0; i < objectOf.length; i++) {
-								objectOf[i].type = {
-									value : "objectOfItem"
-								};
-							}
-
-							// write new data
-							$overlayContent.append($(templates.overlayCon(input)));
-
-							var resultSet = $.merge($.merge([], subjectOf), objectOf);
-							$overlayContent.find('> .innerScroll > div').visaRDF($.extend({}, that.options, {
-								dataLoc : null,
-								dataFormat : null,
-								sparqlData : resultSet,
-								generateFilterOptions : true,
-								filterBy : [ {
-									value : "*",
-									label : "showAll"
-								}, {
-									value : "objectOfItem",
-									label : "in"
-								}, {
-									value : "subjectOfItem",
-									label : "out"
-								} ],
-							}));
+							// <!--- overlay show function ---->
 						});
 					});
-					// Set contet color
-					var color = new RGBColor($item.css("background-color"));
-					$overlay.css("background-color", color.toRGB());
-					$.each($overlayContent.children('div'), function(i, val) {
-						color.r -= 10;
-						color.b -= 10;
-						color.g -= 10;
-						$(val).css("background", color.toRGB());
-					});
+				}
 
-					// Set content width
-					$overlayContent.find('> .overlayColumn').css("width", 100 + "%");
-
-					// Set innerScrollBox width and height
-					$overlayContent.find('.innerScroll').css("width",
-							($window.width() - parseInt($overlay.css("padding-left")) - parseInt($overlay.css("padding-right"))) + "px");
-					$overlayContent.find('.innerScroll').css("height", $window.height() * 0.95 + "px");
-
-					callback();
+				// <---- hide preview and deactivate transitions
+				// ---->
+				$preview.css({
+					opacity : 0,
+					pointerEvents : 'none',
+					zIndex : -1,
+					'-webkit-transition' : 'none 0.4s ease',
+					'-moz-transition' : 'none 0.4s ease',
+					transition : 'none 0.4s ease',
+					clip : 'auto'
 				});
+				// <!--- hide preview and deactivate transitions
+				// ---->
+			}, $preview);
+		});
+
+		this._addOverlay = this._selfProxy(function($item, supportTransitions, transEndEventName, callback) {
+			var that = this, $overlay = that._$element.find('> ' + CSS_CLASSES.toSelector("overlay") + '_' + $item.index);
+			if ($overlay.length < 1) {
+				var overlay = templates.overlayEle({
+					"index" : $item.index,
+					"cssClass" : {
+						"overlay" : CSS_CLASSES.overlay,
+						"overlayContent" : CSS_CLASSES.overlayContent
+					}
+				});
+				that._$element.append(overlay);
+				$overlay = that._$element.find('> ' + CSS_CLASSES.toSelector("overlay") + '_' + $item.index);
+
+				// <---- close click Event ---->
+				that._addOverlayCloseEvent($item, $overlay, supportTransitions, transEndEventName);
+				// <!--- close Event ---->
+				callback($overlay);
+			} else {
+				callback($overlay);
+			}
+		});
+
+		this._addOverlayCloseEvent = this._selfProxy(function($item, $overlay, supportTransitions, transEndEventName) {
+			var that = this, $overlayContent = $overlay.find('> ' + CSS_CLASSES.toSelector("overlayContent")), $close = $overlay.find('> span.close');
+			that._addEventHandler('click', function() {
+
+				that._expandedOverlaysCount--;
+				if (that._expandedOverlaysCount === 0) {
+					if (--currentLevel === 0) {
+						that._$body.removeClass('noscroll');
+					}
+				}
+
+				var layoutProp = getItemLayoutProp($item), itemClip = 'rect(' + layoutProp.top + 'px ' + (layoutProp.left + layoutProp.width) + 'px '
+						+ (layoutProp.top + layoutProp.height) + 'px ' + layoutProp.left + 'px)';
+
+				$overlay.css({
+					clip : itemClip,
+					opacity : 1,
+					pointerEvents : 'none'
+				});
+
+				// <---- overlay hide ---->
+				// clear old data
+				$overlayContent.find('div:class-prefix(visaRDF)').data('plugin_visaRDF').destroy();
+				$overlayContent.children().remove('');
+
+				if (supportTransitions) {
+					$overlay.on(transEndEventName, function() {
+						$overlay.off(transEndEventName);
+						setTimeout(function() {
+							$overlay.css('opacity', 0).on(transEndEventName, function() {
+								$overlay.off(transEndEventName).css({
+									clip : 'auto',
+									zIndex : -1
+								});
+								$item.data('isExpanded', false);
+							});
+						}, 25);
+
+					});
+				} else {
+					$overlay.css({
+						opacity : 0,
+						zIndex : -1
+					});
+				}
+				// <!--- overlay hide ---->
+			}, $close);
+		});
+
+		this._initOverlayContent = this._selfProxy(function($item, $overlay, callback) {
+			var that = this, $overlayContent = $overlay.find('> ' + CSS_CLASSES.toSelector("overlayContent"));
+
+			// Get elements who are in a relation to
+			// current item
+			var subjectOfQuery = replaceDummy(that._queries.selectSubjectOf, $item.find('.showUri').html()), objectOfQuery = replaceDummy(
+					that._queries.selectObjectOf, $item.find('.showUri').html());
+
+			that._rdfStoreExecuteQuery(subjectOfQuery, function(subjectOf) {
+				that._rdfStoreExecuteQuery(objectOfQuery, function(objectOf) {
+
+					// console.log(subjectOf);
+
+					// Input for the handlebar
+					// template
+					var input = {};
+					if (subjectOf[0] && subjectOf[0].origin) {
+						input.label = subjectOf[0].origin.value;
+					} else if (objectOf[0] && objectOf[0].origin) {
+						input.label = objectOf[0].origin.value;
+					}
+
+					// Add types for filtering
+					for ( var i = 0; i < subjectOf.length; i++) {
+						subjectOf[i].type = {
+							value : CSS_CLASSES.typeClasses.outgoing
+						};
+					}
+					for ( var i = 0; i < objectOf.length; i++) {
+						objectOf[i].type = {
+							value : CSS_CLASSES.typeClasses.incoming
+						};
+					}
+
+					// write new data
+					$overlayContent.append($(templates.overlayCon(input)));
+
+					var resultSet = $.merge($.merge([], subjectOf), objectOf);
+					$overlayContent.find('> .innerScroll > div').visaRDF($.extend(true, {}, that.options, {
+						dataLoc : null,
+						dataFormat : null,
+						sparqlData : resultSet,
+						generateSortOptions : true,
+						generateFilterOptions : true,
+						isotopeOptions : {
+							getSortData : {
+								number : function($elem) {
+									var number = $elem.hasClass('element') ? $elem.find('.number').text() : $elem.attr('data-number');
+									return parseInt(number, 10);
+								},
+								alphabetical : function($elem) {
+									var labelEn = $elem.find('.labelEn'), itemText = labelEn.length ? labelEn : $elem;
+									return itemText.text();
+								},
+								type : function($elem) {
+									var classes = $elem.attr("class");
+									return classes;
+								}
+							}
+						},
+						filterBy : [ {
+							value : "*",
+							label : "showAll"
+						}, {
+							value : CSS_CLASSES.typeClasses.incoming,
+							label : "in"
+						}, {
+							value : CSS_CLASSES.typeClasses.outgoing,
+							label : "out"
+						} ],
+					}));
+				});
+			});
+			// Set contet color
+			var color = new RGBColor($item.css("background-color"));
+			$overlay.css("background-color", color.toRGB());
+			$.each($overlayContent.children('div'), function(i, val) {
+				color.r -= 10;
+				color.b -= 10;
+				color.g -= 10;
+				$(val).css("background", color.toRGB());
+			});
+
+			// Set content width
+			$overlayContent.find('> .overlayColumn').css("width", 100 + "%");
+
+			// Set innerScrollBox width and height
+			$overlayContent.find('.innerScroll').css("width",
+					($window.width() - parseInt($overlay.css("padding-left")) - parseInt($overlay.css("padding-right"))) + "px");
+			$overlayContent.find('.innerScroll').css("height", $window.height() * 0.95 + "px");
+
+			callback();
+		});
 
 		this._initRdfStore = this._selfProxy(function() {
 			var that = this, rdfStoreInitDfd = $.Deferred();
 			// console.log("Init RDFSTORE");
-			if (_isUndefinedOrNull(rdfStore)) {
+			if (isUndefinedOrNull(rdfStore)) {
 				new rdfstore.Store(that.options.rdfstoreOptions, that._selfProxy(function(store) {
 					rdfStore = store;
 					rdfStoreInitDfd.resolve();
@@ -584,15 +799,15 @@
 								+ " SELECT ?subject ?label ?description ?type WHERE { ?subject rdfs:label ?label . OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }. OPTIONAL {?subject rdfs:type ?type}}",
 						selectSubjectOf : that._prefixes
 								+ " SELECT ?subject ?label ?description ?origin WHERE {<"
-								+ REPLACE_ME
+								+ DUMMY
 								+ "> ?x ?subject. <"
-								+ REPLACE_ME
+								+ DUMMY
 								+ "> rdfs:label ?origin. OPTIONAL { ?subject rdfs:label ?label}. OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }}",
 						selectObjectOf : that._prefixes
 								+ " SELECT ?subject ?label ?description ?origin WHERE {?subject ?x <"
-								+ REPLACE_ME
+								+ DUMMY
 								+ ">. <"
-								+ REPLACE_ME
+								+ DUMMY
 								+ "> rdfs:label ?origin. OPTIONAL { ?subject rdfs:label ?label}. OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }}"
 					};
 				});
@@ -600,7 +815,7 @@
 		this._isotopeAddBatches = this._selfProxy(function(items) {
 			var length = items.length, that = this, batchSize = ((length < that.options.batchSize) ? length : that.options.batchSize);
 
-			this._$container.find('> .loading').text(parseInt(batchSize / length * 100) + "% -");
+			this._$outerContainer.find('> .loading').text(parseInt(batchSize / length * 100) + "% -");
 
 			// current batch
 			var batch = items.slice(0, batchSize);
@@ -622,7 +837,7 @@
 				$(val).css("background-color", "rgba(125, 125, 125 ,0.2)");
 			});
 
-			if (!_isUndefinedOrNull($elements.html())) {
+			if (!isUndefinedOrNull($elements.html())) {
 
 				// Use given width/height
 				$elements.css({
@@ -632,11 +847,11 @@
 
 				that._$isotopeContainer.isotope('insert', $elements, function() {
 					$elements.find('.ellipsis').ellipsis();
-					$nodes = $elements.filter('.uri');
-					$literals = $elements.filter('.literal');
+					$nodes = $elements.filter('.token_uri');
+					$literals = $elements.filter('.token_literal');
 
 					// Init overlays on new elements
-					that._initOverlays($nodes);
+					that._initBrowsability($nodes);
 					$.each($nodes, function(i, val) {
 						var color = new RGBColor(that.options.elementStyle.colors[i % that.options.elementStyle.colors.length]);
 						$(val).css("background-color", "rgba(" + color.r + ", " + color.g + ", " + color.b + " ,1)");
@@ -657,8 +872,8 @@
 			if (rest.length > 0) {
 				that._isotopeAddBatches(rest);
 			} else {
-				that._$container.find('> .loading').text("");
-				$(that._$container).trigger(EVENT_TYPES.loading.loadingDone, that);
+				that._$outerContainer.find('> ' + CSS_CLASSES.loader).text("");
+				$(that._$outerContainer).trigger(EVENT_TYPES.loading.loadingDone, that);
 			}
 		});
 
@@ -670,19 +885,19 @@
 		 */
 		this._checkInsertion = this._selfProxy(function() {
 			var that = this, inserted = false;
-			if (!_isUndefinedOrNull(that.options.dataFormat)) {
+			if (!isUndefinedOrNull(that.options.dataFormat)) {
 				// console.log(this);
-				if (!_isUndefinedOrNull(that.options.dataLoc)) {
+				if (!isUndefinedOrNull(that.options.dataLoc)) {
 					inserted = true;
 					that._ajaxLoadData(that.options.dataLoc, that.options.dataFormat, function(rdfData, dataFormat) {
 						that._rdfStoreInsertData(rdfData, dataFormat, function() {
-							$(that._$container).trigger(EVENT_TYPES.storeModified.insert, that);
+							$(that._$outerContainer).trigger(EVENT_TYPES.storeModified.insert, that);
 						});
 					});
-				} else if (!_isUndefinedOrNull(that.options.data)) {
+				} else if (!isUndefinedOrNull(that.options.data)) {
 					inserted = true;
 					that._rdfStoreInsertData(that.options.data, that.options.dataFormat, function() {
-						$(that._$container).trigger(EVENT_TYPES.storeModified.insert, that);
+						$(that._$outerContainer).trigger(EVENT_TYPES.storeModified.insert, that);
 					});
 				}
 			}
@@ -694,17 +909,16 @@
 		 * generation option and generate the sort options if needed.
 		 */
 		this._checkSortGeneration = this._selfProxy(function() {
-			that = this;
-			if (that.options.generateSortOptions) {
+			if (this.options.generateSortOptions) {
 				// Add options
-				var $element = that._$element;
-				var sortOptions = templates.sortOptions(that.options.isotopeOptions.getSortData);
+				var $element = this._$element;
+				var sortOptions = templates.sortOptions(this.options.isotopeOptions.getSortData);
 				var $options = $element.find(".options");
 				$options.prepend(sortOptions);
 				$sorter = $options.find(' > .sorter');
 
 				// Set selected on view
-				$sorter.find('.' + that.options.isotopeOptions.sortBy).addClass("selected");
+				$sorter.find('.' + this.options.isotopeOptions.sortBy).addClass("selected");
 				$sortLinks = $options.find('a');
 
 				// Add onClick
@@ -713,7 +927,7 @@
 					var sortName = $(this).attr('data-sort-value');
 					$element.find('.sorter > > > .selected').removeClass("selected");
 					$(this).addClass("selected");
-					$($element.find('.container')).isotope({
+					$element.find(CSS_CLASSES.toSelector("isotopeContainer")).isotope({
 						sortBy : sortName
 					});
 					return false;
@@ -742,12 +956,35 @@
 					// get href attribute, minus the '#'
 					var selector = $(this).attr('data-filter-value');
 					if (selector !== '*') {
-						selector = "." + selector;
+						selector = ".-filter-_" + selector;
 					}
-					// console.log(selector);
 					$element.find('.filter > > > .selected').removeClass('selected');
 					$(this).addClass('selected');
-					$($element.find('.container')).isotope({
+					$element.find(CSS_CLASSES.toSelector("isotopeContainer")).isotope({
+						filter : selector
+					});
+					return false;
+				});
+
+				$filter.append('<input id="filterField" type="text" size="25" value="Enter types here.">');
+				$filterBox = $filter.find('#filterField');
+
+				// Add onKey
+				$filterBox.keyup(function(e) {
+
+					// get href attribute, minus the '#'
+					var selector = $(this).val();
+					if (selector !== '') {
+						if (selector !== '*') {
+							selector = "div:class-prefix(-filter-_" + selector + ")";
+						}
+					} else {
+						selector = '*';
+					}
+
+					$element.find('.filter > > > .selected').removeClass('selected');
+					$(this).addClass('selected');
+					$element.find(CSS_CLASSES.toSelector("isotopeContainer")).isotope({
 						filter : selector
 					});
 					return false;
@@ -760,7 +997,7 @@
 				if (success) {
 					callback(results);
 				} else {
-					$(that._$container).trigger(EVENT_TYPES.loading.loadingDone, that);
+					$(that._$outerContainer).trigger(EVENT_TYPES.loading.loadingDone, that);
 					// console.log("Error on executing: " + query);
 				}
 			});
@@ -770,7 +1007,7 @@
 		 * Inserts given data in store.
 		 */
 		this._rdfStoreInsertData = this._selfProxy(function(data, dataFormat, callback) {
-			$(that._$container).trigger(EVENT_TYPES.loading.loadingStart, that);
+			$(that._$outerContainer).trigger(EVENT_TYPES.loading.loadingStart, that);
 			// console.log("_rdfStoreInsertData");
 			rdfStore.load(dataFormat, data, function(store) {
 				// console.log(data);
@@ -783,7 +1020,7 @@
 		 */
 		this._ajaxLoadData = this._selfProxy(function(dataURL, dataFormat, callback) {
 			var that = this;
-			$(that._$container).trigger(EVENT_TYPES.loading.loadingStart, that);
+			$(that._$outerContainer).trigger(EVENT_TYPES.loading.loadingStart, that);
 			// console.log("_ajaxLoadData");
 			$.ajax({
 				url : dataURL,
@@ -793,20 +1030,20 @@
 					callback(rdfData, dataFormat);
 				}
 			}).fail(function() {
-				$(that._$container).trigger(EVENT_TYPES.loading.loadingDone, that);
+				$(that._$outerContainer).trigger(EVENT_TYPES.loading.loadingDone, that);
 				alert(MESSAGES.error.ajax);
 			});
 		});
 
 		this._updateView = this._selfProxy(function(query) {
 			var that = this;
-			$(that._$container).trigger(EVENT_TYPES.loading.loadingStart, that);
+			$(that._$outerContainer).trigger(EVENT_TYPES.loading.loadingStart, that);
 			// console.log("_updateView");
 			that._rdfStoreExecuteQuery(query, function(results) {
 				if (results.length !== 0) {
 					that._isotopeAddBatches(results);
 				} else {
-					$(that._$container).trigger(EVENT_TYPES.loading.loadingDone, that);
+					$(that._$outerContainer).trigger(EVENT_TYPES.loading.loadingDone, that);
 				}
 			});
 		});
@@ -826,25 +1063,25 @@
 			this._initQueries();
 
 			// <---- loading img ---->
-			this._$container.prepend('<div class="' + CSS_CLASSES.loader + '">');
-			this._$container.append('<div class="' + CSS_CLASSES.loader + '">');
+			this._$outerContainer.prepend('<div class="' + CSS_CLASSES.loader + '">');
+			this._$outerContainer.append('<div class="' + CSS_CLASSES.loader + '">');
 
 			// Add loading start listener
 
 			this._addEventHandler(EVENT_TYPES.loading.loadingStart, this._selfProxy(function(ev, $invoker) {
 				// console.log(this);
 				if ($invoker === this) {
-					if (this._$container.css("height") < 120) {
-						this._$container.css("height", "20px");
+					if (this._$outerContainer.css("height") < 120) {
+						this._$outerContainer.css("height", "20px");
 					}
-					this._$container.find('> .loading').css("visibility", "visible");
+					this._$outerContainer.find('> ' + CSS_CLASSES.toSelector("loader")).css("visibility", "visible");
 				}
 			}));
 
 			// Add loading done listener
 			this._addEventHandler(EVENT_TYPES.loading.loadingDone, this._selfProxy(function(ev, $invoker) {
 				if ($invoker === this) {
-					this._$container.find('> .loading').css("visibility", "hidden");
+					this._$outerContainer.find('> ' + CSS_CLASSES.toSelector("loader")).css("visibility", "hidden");
 				}
 			}));
 			// <!--- loading img ---->
@@ -862,11 +1099,19 @@
 			// Add a smartresize listener (smartresize to be found in
 			// jQuery.isotope)
 			this._addEventHandler('smartresize', this._selfProxy(function(ev, $invoker) {
-				var winsize = getWindowSize(), $overlays = this._$element.children(".overlay");
-				$overlays.css('clip', 'rect(0px ' + winsize.width + 'px ' + winsize.height + 'px 0px)');
+
+				// <---- overlay modification ---->
+				var $overlays = this._$element.children(CSS_CLASSES.toSelector("overlay"));
+				$overlays.css('clip', getClip(CSS_CLASSES.overlay));
 				var innerScrolls = $overlays.find('.innerScroll');
 				innerScrolls.css("width", ($window.width() - parseInt($overlays.css("padding-left")) - parseInt($overlays.css("padding-right"))) + "px");
 				innerScrolls.css("height", $window.height() * 0.95 + "px");
+				// <!--- overlay modification ---->
+
+				// <---- preview modification ---->
+				var $previews = this._$element.children(CSS_CLASSES.toSelector("preview"));
+				$previews.css('clip', getClip(CSS_CLASSES.preview));
+				// <!--- preview modification ---->
 			}), $window);
 
 			// Init templating and RdfStore if needed
@@ -907,7 +1152,7 @@
 		insertData : function(data, dataFormat) {
 			var that = this;
 			this._rdfStoreInsertData(data, dataFormat, function() {
-				$(that._$container).trigger(EVENT_TYPES.storeModified.insert, that);
+				$(that._$outerContainer).trigger(EVENT_TYPES.storeModified.insert, that);
 			});
 		},
 
@@ -936,7 +1181,7 @@
 			});
 			that._evHandlerHistory = undefined;
 			pluginInstanceCount--;
-			that._$element[pluginName] = null
+			that._$element[pluginName] = null;
 		}
 
 	};

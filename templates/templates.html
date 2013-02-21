@@ -5,7 +5,7 @@
 </script>
 
 <script id="visaRDF-isotope-element" type="text/x-handlebars-template">
-	<div class="element {{subject.token}} {{#if type}}{{type.value}}{{/if}} {{@index}}">
+	<div class="element token_{{subject.token}} {{#if type}}-filter-_{{type.value}}{{/if}}">
 		{{#if subject}}
 			<h2 class="showUri" style="display:none">{{subject.value}}</h2>
 		{{/if}}
@@ -42,9 +42,16 @@
 </script>
 
 <script id="visaRDF-overlay-element" type="text/x-handlebars-template">
-		<div class="overlay overlay_{{index}}">
+		<div class="{{cssClass.overlay}} {{cssClass.overlay}}_{{index}}">
 			<span class="close">close</span>
-			<div class="overlayContent">
+			<div class="{{cssClass.overlayContent}}">
+			</div>
+		</div>
+	</script>
+	
+<script id="visaRDF-preview-element" type="text/x-handlebars-template">
+		<div class="{{cssClass.preview}} {{cssClass.preview}}_{{index}}">
+			<div class="{{cssClass.previewContent}}">
 			</div>
 		</div>
 	</script>

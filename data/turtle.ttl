@@ -5,14 +5,12 @@
 
 <http://www.w3.org/TR/test> ex:homePage <http://www.w3.org/TR/rdf-syntax-grammar> .
 
-<http://www.w3.org/TR/rdf-syntax-grammar> dc:title "RDF/XML Syntax Specification (Revised)" ;
-	ex:editor _:node17eqmqr9kx1 .
+<http://www.w3.org/TR/rdf-syntax-grammar> dc:title "RDF/XML Syntax Specification (Revised)" .
 
-_:node17eqmqr9kx1 ex:fullName "Dave Beckett" ;
+_:node17eqmqr9kx1 rdfs:label "Dave Beckett" ;
 	ex:homePage <http://purl.org/net/dajobe/> .
 	
 <http://www.w3.org/TR/rdf-syntax-grammar> rdfs:label "RDF/XML"@en ;
 	ex:editor _:node17eqmqr9kx1 .
 	
-<http://www.w3.org/TR/rdf-syntax-grammar> rdfs:label "!!!"@fr ;
-	ex:editor _:node17eqmqr9kx1 .
+<http://www.w3.org/TR/rdf-syntax-grammar> rdfs:label "!!!"@fr .
