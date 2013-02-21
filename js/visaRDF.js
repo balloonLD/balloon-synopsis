@@ -424,7 +424,8 @@
 			that._addEventHandler('click', function(e) {
 
 				/*
-				 * Stop propagation to not trigger window click event which closes preview again
+				 * Stop propagation to not trigger window click event which
+				 * closes preview again
 				 */
 				e.stopPropagation();
 
@@ -437,9 +438,6 @@
 
 					// Make preview visible
 					$preview.css({
-						'-webkit-transition' : 'all 0.4s ease',
-						'-moz-transition' : 'all 0.4s ease',
-						transition : 'all 0.4s ease',
 						clip : supportTransitions ? itemClip : previewClip,
 						opacity : 1,
 						zIndex : 9998,
@@ -448,7 +446,6 @@
 
 					if (supportTransitions) {
 						$preview.on(transEndEventName, function() {
-
 							$preview.off(transEndEventName);
 
 							setTimeout(function() {
@@ -466,15 +463,13 @@
 		});
 
 		this._addPreview = this._selfProxy(function($item, supportTransitions, transEndEventName, callback) {
+
 			var that = this, $previews = $(CSS_CLASSES.toSelector("preview"));
-			var $preview = $previews.filter('> ' + CSS_CLASSES.toSelector("preview") + '_' + $item.index);
+			var $preview = $previews.filter(CSS_CLASSES.toSelector("preview") + '_' + $item.index);
 			$previews.not($preview).css({
 				opacity : 0,
 				pointerEvents : 'none',
 				zIndex : -1,
-				'-webkit-transition' : 'none 0.4s ease',
-				'-moz-transition' : 'none 0.4s ease',
-				transition : 'none 0.4s ease',
 				clip : 'auto'
 			});
 			if ($preview.length < 1) {
@@ -506,42 +501,45 @@
 
 		this._addPreviewCloseEvent = this._selfProxy(function($item, $preview, supportTransitions, transEndEventName) {
 			var that = this;
-			that._addEventHandler('click', function() {
-				var layoutProp = getItemLayoutProp($item), itemClip = 'rect(' + layoutProp.top + 'px ' + (layoutProp.left + layoutProp.width) + 'px '
-						+ (layoutProp.top + layoutProp.height) + 'px ' + layoutProp.left + 'px)';
+			that._addEventHandler('click', function(that) {
+				if (that._instanceLevel === currentLevel) {
+					var layoutProp = getItemLayoutProp($item), itemClip = 'rect(' + layoutProp.top + 'px ' + (layoutProp.left + layoutProp.width) + 'px '
+							+ (layoutProp.top + layoutProp.height) + 'px ' + layoutProp.left + 'px)';
 
-				$preview.css({
-					opacity : 1,
-					pointerEvents : 'none',
-					clip : itemClip
-				});
-
-				if (supportTransitions) {
-					$preview.on(transEndEventName, function() {
-						$preview.off(transEndEventName);
-						setTimeout(function() {
-							$preview.css('opacity', 0).on(transEndEventName, function() {
-								$preview.off(transEndEventName).css({
-									clip : 'auto',
-									zIndex : -1
-								});
-								$item.data('isExpanded', false);
-							});
-						}, 25);
-
-					});
-				} else {
 					$preview.css({
-						opacity : 0,
-						zIndex : -1
+						opacity : 1,
+						pointerEvents : 'none',
+						clip : itemClip
 					});
+
+					if (supportTransitions) {
+						$preview.on(transEndEventName, function() {
+							$preview.off(transEndEventName);
+							setTimeout(function() {
+								$preview.css('opacity', 0).on(transEndEventName, function() {
+									$preview.off(transEndEventName).css({
+										clip : 'auto',
+										zIndex : -1
+									});
+									$item.data('isExpanded', false);
+								});
+							}, 25);
+
+						});
+					} else {
+						$preview.css({
+							opacity : 0,
+							zIndex : -1
+						});
+					}
 				}
 			}, $window);
 		});
 
 		this._addPreviewClickEvent = this._selfProxy(function($item, $preview, supportTransitions, transEndEventName) {
 			var that = this;
-			that._addEventHandler('click', function() {
+			that._addEventHandler('click', function(e) {
+
 				if (!$item.data('isExpanded')) {
 					$item.data('isExpanded', true);
 
@@ -550,13 +548,14 @@
 						currentLevel++;
 					}
 
-					// increment Counter (only needed if more than 1 Overlay can be opened)
+					// increment Counter (only needed if more than 1 Overlay can
+					// be opened)
 					that._expandedOverlaysCount++;
 
 					// Add overlay if needed
 					that._addOverlay($item, supportTransitions, transEndEventName, function($overlay) {
 
-						//Fill overlay with content
+						// Fill overlay with content
 						that._initOverlayContent($item, $overlay, function() {
 							// <---- overlay show function ---->
 							var previewClip = getClip(CSS_CLASSES.preview), overlayClip = getClip(CSS_CLASSES.overlay);
@@ -596,9 +595,6 @@
 					opacity : 0,
 					pointerEvents : 'none',
 					zIndex : -1,
-					'-webkit-transition' : 'none 0.4s ease',
-					'-moz-transition' : 'none 0.4s ease',
-					transition : 'none 0.4s ease',
 					clip : 'auto'
 				});
 				// <!--- hide preview and deactivate transitions
