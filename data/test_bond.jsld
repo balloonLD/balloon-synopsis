@@ -1,0 +1,379 @@
+{
+  "@context": {
+    "cc": "http://creativecommons.org/ns#",
+    "coo": "http://purl.org/coo/ns#",
+    "ctag": "http://commontag.org/ns#",
+    "dbpedia": "http://dbpedia.org/resource/",
+    "dc": "http://purl.org/dc/elements/1.1/",
+    "dc1": "http://purl.org/dc/terms/",
+    "dcterms": "http://purl.org/dc/terms/",
+    "eco": "http://www.ebusiness-unibw.org/ontologies/eclass/5.1.4/#",
+    "fab": "http://purl.org/fab/ns#",
+    "foaf": "http://xmlns.com/foaf/0.1/",
+    "gr": "http://purl.org/goodrelations/v1#",
+    "grddl": "http://www.w3.org/2003/g/data-view#",
+    "ical": "http://www.w3.org/2002/12/cal/icaltzd#",
+    "og": "http://ogp.me/ns#",
+    "owl": "http://www.w3.org/2002/07/owl#",
+    "rdf": "http://www.w3.org/1999/02/22-rdf-syntax-ns#",
+    "rdfa": "http://www.w3.org/ns/rdfa#",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "rev": "http://purl.org/stuff/rev#",
+    "rif": "http://www.w3.org/2007/rif#",
+    "s": "http://schema.org/",
+    "sioc": "http://rdfs.org/sioc/ns#",
+    "skos": "http://www.w3.org/2004/02/skos/core#",
+    "skosxl": "http://www.w3.org/2008/05/skos-xl#",
+    "tio": "http://purl.org/tio/ns#",
+    "v": "http://rdf.data-vocabulary.org/#",
+    "vcard": "http://www.w3.org/2006/vcard/ns#",
+    "void": "http://rdfs.org/ns/void#",
+    "vso": "http://purl.org/vso/ns#",
+    "vvo": "http://purl.org/vvo/ns#",
+    "wdr": "http://www.w3.org/2007/05/powder#",
+    "wdsr": "http://www.w3.org/2007/05/powder-s#",
+    "xhv": "http://www.w3.org/1999/xhtml/vocab#",
+    "xro": "http://www.stalsoft.com/ontologies/xro/ns#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#"
+  },
+  "@graph": [
+    {
+      "@id": "http://dbpedialite.org/things/5078515#id",
+      "@type": "http://dbpedialite.org/categories/3001990#id",
+      "rdfs:label": "You Only Live Twice (film)"
+    },
+    {
+      "@id": "http://dbpedialite.org/categories/19617353#id",
+      "rdfs:label": "The World Is Not Enough",
+      "rdfs:subClassOf": {
+        "@id": "http://dbpedialite.org/categories/3001990#id"
+      }
+    },
+    {
+      "@id": "http://dbpedialite.org/things/6446053#id",
+      "@type": "http://dbpedialite.org/categories/3001990#id",
+      "rdfs:label": "Dr. No (film)"
+    },
+    {
+      "@id": "http://dbpedialite.org/categories/19616204#id",
+      "rdfs:label": "Thunderball (film)",
+      "rdfs:subClassOf": {
+        "@id": "http://dbpedialite.org/categories/3001990#id"
+      }
+    },
+    {
+      "@id": "http://dbpedialite.org/things/36954443#id",
+      "@type": "http://dbpedialite.org/categories/3001990#id",
+      "rdfs:label": "James Bond filmography"
+    },
+    {
+      "@id": "http://dbpedialite.org/categories/19616106#id",
+      "rdfs:label": "Octopussy",
+      "rdfs:subClassOf": {
+        "@id": "http://dbpedialite.org/categories/3001990#id"
+      }
+    },
+    {
+      "@id": "http://dbpedialite.org/things/33193442#id",
+      "@type": "http://dbpedialite.org/categories/3001990#id",
+      "rdfs:label": "Motifs in the James Bond film series"
+    },
+    {
+      "@id": "http://dbpedialite.org/categories/19616285#id",
+      "rdfs:label": "The Man with the Golden Gun (film)",
+      "rdfs:subClassOf": {
+        "@id": "http://dbpedialite.org/categories/3001990#id"
+      }
+    },
+    {
+      "@id": "http://dbpedialite.org/things/166121#id",
+      "@type": "http://dbpedialite.org/categories/3001990#id",
+      "rdfs:label": "The World Is Not Enough"
+    },
+    {
+      "@id": "http://dbpedialite.org/categories/19629272#id",
+      "rdfs:label": "Dr. No (film)",
+      "rdfs:subClassOf": {
+        "@id": "http://dbpedialite.org/categories/3001990#id"
+      }
+    },
+    {
+      "@id": "http://dbpedialite.org/things/23219686#id",
+      "@type": "http://dbpedialite.org/categories/3001990#id",
+      "rdfs:label": "List of recurring characters in the James Bond film series"
+    },
+    {
+      "@id": "http://dbpedialite.org/things/6152265#id",
+      "@type": "http://dbpedialite.org/categories/3001990#id",
+      "rdfs:label": "Thunderball (film)"
+    },
+    {
+      "@id": "http://dbpedialite.org/things/33335392#id",
+      "@type": "http://dbpedialite.org/categories/3001990#id",
+      "rdfs:label": "Skyfall"
+    },
+    {
+      "@id": "http://dbpedialite.org/things/156644#id",
+      "@type": "http://dbpedialite.org/categories/3001990#id",
+      "rdfs:label": "Die Another Day"
+    },
+    {
+      "@id": "http://dbpedialite.org/things/6446071#id",
+      "@type": "http://dbpedialite.org/categories/3001990#id",
+      "rdfs:label": "From Russia with Love (film)"
+    },
+    {
+      "@id": "http://dbpedialite.org/categories/19630519#id",
+      "rdfs:label": "Goldfinger (film)",
+      "rdfs:subClassOf": {
+        "@id": "http://dbpedialite.org/categories/3001990#id"
+      }
+    },
+    {
+      "@id": "http://dbpedialite.org/things/6322029#id",
+      "@type": "http://dbpedialite.org/categories/3001990#id",
+      "rdfs:label": "Goldfinger (film)"
+    },
+    {
+      "@id": "http://dbpedialite.org/categories/3001990.ttl",
+      "@type": "foaf:Document",
+      "dcterms:title": "dbpedia lite category - James Bond films",
+      "foaf:primaryTopic": {
+        "@id": "http://dbpedialite.org/categories/3001990#id"
+      }
+    },
+    {
+      "@id": "http://dbpedialite.org/things/541642#id",
+      "@type": "http://dbpedialite.org/categories/3001990#id",
+      "rdfs:label": "Octopussy"
+    },
+    {
+      "@id": "http://dbpedialite.org/categories/19629498#id",
+      "rdfs:label": "Moonraker (film)",
+      "rdfs:subClassOf": {
+        "@id": "http://dbpedialite.org/categories/3001990#id"
+      }
+    },
+    {
+      "@id": "http://dbpedialite.org/things/157481#id",
+      "@type": "http://dbpedialite.org/categories/3001990#id",
+      "rdfs:label": "Diamonds Are Forever (film)"
+    },
+    {
+      "@id": "http://dbpedialite.org/things/930379#id",
+      "@type": "http://dbpedialite.org/categories/3001990#id",
+      "rdfs:label": "Casino Royale (2006 film)"
+    },
+    {
+      "@id": "http://dbpedialite.org/things/2969247#id",
+      "@type": "http://dbpedialite.org/categories/3001990#id",
+      "rdfs:label": "Quantum of Solace"
+    },
+    {
+      "@id": "http://dbpedialite.org/things/490101#id",
+      "@type": "http://dbpedialite.org/categories/3001990#id",
+      "rdfs:label": "Never Say Never Again"
+    },
+    {
+      "@id": "http://dbpedialite.org/things/566713#id",
+      "@type": "http://dbpedialite.org/categories/3001990#id",
+      "rdfs:label": "The Living Daylights"
+    },
+    {
+      "@id": "http://dbpedialite.org/things/449547#id",
+      "@type": "http://dbpedialite.org/categories/3001990#id",
+      "rdfs:label": "Licence to Kill"
+    },
+    {
+      "@id": "http://dbpedialite.org/categories/19615763#id",
+      "rdfs:label": "Licence to Kill",
+      "rdfs:subClassOf": {
+        "@id": "http://dbpedialite.org/categories/3001990#id"
+      }
+    },
+    {
+      "@id": "http://dbpedialite.org/things/6446036#id",
+      "@type": "http://dbpedialite.org/categories/3001990#id",
+      "rdfs:label": "The Spy Who Loved Me (film)"
+    },
+    {
+      "@id": "http://dbpedialite.org/categories/19618694#id",
+      "rdfs:label": "The Spy Who Loved Me (film)",
+      "rdfs:subClassOf": {
+        "@id": "http://dbpedialite.org/categories/3001990#id"
+      }
+    },
+    {
+      "@id": "http://dbpedialite.org/things/6223567#id",
+      "@type": "http://dbpedialite.org/categories/3001990#id",
+      "rdfs:label": "The Man with the Golden Gun (film)"
+    },
+    {
+      "@id": "http://dbpedialite.org/things/317647#id",
+      "@type": "http://dbpedialite.org/categories/3001990#id",
+      "rdfs:label": "Tomorrow Never Dies"
+    },
+    {
+      "@id": "http://dbpedialite.org/categories/19616557#id",
+      "rdfs:label": "Quantum of Solace",
+      "rdfs:subClassOf": {
+        "@id": "http://dbpedialite.org/categories/3001990#id"
+      }
+    },
+    {
+      "@id": "http://dbpedialite.org/categories/19615928#id",
+      "rdfs:label": "The Living Daylights",
+      "rdfs:subClassOf": {
+        "@id": "http://dbpedialite.org/categories/3001990#id"
+      }
+    },
+    {
+      "@id": "http://dbpedialite.org/categories/19616048#id",
+      "rdfs:label": "For Your Eyes Only (film)",
+      "rdfs:subClassOf": {
+        "@id": "http://dbpedialite.org/categories/3001990#id"
+      }
+    },
+    {
+      "@id": "http://dbpedialite.org/categories/19617123#id",
+      "rdfs:label": "Die Another Day",
+      "rdfs:subClassOf": {
+        "@id": "http://dbpedialite.org/categories/3001990#id"
+      }
+    },
+    {
+      "@id": "http://dbpedialite.org/categories/19617689#id",
+      "rdfs:label": "Tomorrow Never Dies",
+      "rdfs:subClassOf": {
+        "@id": "http://dbpedialite.org/categories/3001990#id"
+      }
+    },
+    {
+      "@id": "http://dbpedialite.org/categories/19629680#id",
+      "rdfs:label": "From Russia with Love (film)",
+      "rdfs:subClassOf": {
+        "@id": "http://dbpedialite.org/categories/3001990#id"
+      }
+    },
+    {
+      "@id": "http://dbpedialite.org/categories/19618010#id",
+      "rdfs:label": "You Only Live Twice (film)",
+      "rdfs:subClassOf": {
+        "@id": "http://dbpedialite.org/categories/3001990#id"
+      }
+    },
+    {
+      "@id": "http://dbpedialite.org/things/6268880#id",
+      "@type": "http://dbpedialite.org/categories/3001990#id",
+      "rdfs:label": "On Her Majesty's Secret Service (film)"
+    },
+    {
+      "@id": "http://dbpedialite.org/things/18600419#id",
+      "@type": "http://dbpedialite.org/categories/3001990#id",
+      "rdfs:label": "List of recurring actors and actresses in the James Bond film series"
+    },
+    {
+      "@id": "http://dbpedialite.org/categories/3001990#id",
+      "@type": "owl:Class",
+      "dcterms:contains": {
+        "@id": "http://dbpedialite.org/categories/19616001#id"
+      },
+      "foaf:isPrimaryTopicOf": {
+        "@id": "http://en.wikipedia.org/wiki/Category:James_Bond_films"
+      },
+      "owl:sameAs": {
+        "@id": "http://dbpedia.org/resource/Category:James_Bond_films"
+      },
+      "rdfs:label": "James Bond films"
+    },
+    {
+      "@id": "http://dbpedialite.org/things/6446044#id",
+      "@type": "http://dbpedialite.org/categories/3001990#id",
+      "rdfs:label": "For Your Eyes Only (film)"
+    },
+    {
+      "@id": "http://dbpedialite.org/categories/37511019#id",
+      "rdfs:label": "Skyfall",
+      "rdfs:subClassOf": {
+        "@id": "http://dbpedialite.org/categories/3001990#id"
+      }
+    },
+    {
+      "@id": "http://dbpedialite.org/things/583932#id",
+      "@type": "http://dbpedialite.org/categories/3001990#id",
+      "rdfs:label": "A View to a Kill"
+    },
+    {
+      "@id": "http://dbpedialite.org/things/6446061#id",
+      "@type": "http://dbpedialite.org/categories/3001990#id",
+      "rdfs:label": "Live and Let Die (film)"
+    },
+    {
+      "@id": "http://dbpedialite.org/things/6446062#id",
+      "@type": "http://dbpedialite.org/categories/3001990#id",
+      "rdfs:label": "Moonraker (film)"
+    },
+    {
+      "@id": "http://dbpedialite.org/categories/19616142#id",
+      "rdfs:label": "Live and Let Die (film)",
+      "rdfs:subClassOf": {
+        "@id": "http://dbpedialite.org/categories/3001990#id"
+      }
+    },
+    {
+      "@id": "http://dbpedialite.org/things/2461592#id",
+      "@type": "http://dbpedialite.org/categories/3001990#id",
+      "rdfs:label": "Casino Royale (1967 film)"
+    },
+    {
+      "@id": "http://dbpedialite.org/things/33190861#id",
+      "@type": "http://dbpedialite.org/categories/3001990#id",
+      "rdfs:label": "List of James Bond films"
+    },
+    {
+      "@id": "http://dbpedialite.org/categories/19618473#id",
+      "rdfs:label": "GoldenEye",
+      "rdfs:subClassOf": {
+        "@id": "http://dbpedialite.org/categories/3001990#id"
+      }
+    },
+    {
+      "@id": "http://dbpedialite.org/categories/19616566#id",
+      "rdfs:label": "Casino Royale (2006 film)",
+      "rdfs:subClassOf": {
+        "@id": "http://dbpedialite.org/categories/3001990#id"
+      }
+    },
+    {
+      "@id": "http://dbpedialite.org/things/268833#id",
+      "@type": "http://dbpedialite.org/categories/3001990#id",
+      "rdfs:label": "GoldenEye"
+    },
+    {
+      "@id": "http://dbpedialite.org/things/9019882#id",
+      "@type": "http://dbpedialite.org/categories/3001990#id",
+      "rdfs:label": "Casino Royale (Climax!)"
+    },
+    {
+      "@id": "http://dbpedialite.org/categories/19616001#id",
+      "dcterms:das": "Test 1320a1",
+      "dcterms:fasda": "Test 13201",
+      "rdfs:label": "Aw View to a Kill",
+      "rdfs:subClassOf": {
+        "@id": "http://dbpedialite.org/categories/3001990#id"
+      }
+    },
+    {
+      "@id": "http://dbpedialite.org/categories/24216255#id",
+      "rdfs:label": "On Her Majesty's Secret Service",
+      "rdfs:subClassOf": {
+        "@id": "http://dbpedialite.org/categories/3001990#id"
+      }
+    },
+    {
+      "@id": "http://dbpedialite.org/things/9593869#id",
+      "@type": "http://dbpedialite.org/categories/3001990#id",
+      "rdfs:label": "James Bond in film"
+    }
+  ]
+}

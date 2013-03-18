@@ -1,0 +1,41 @@
+@prefix dc: <http://purl.org/dc/terms/> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+<http://dbpedialite.org/things/18016.ttl> a foaf:Document;
+   dc:title "dbpedia lite thing - Lisp (programming language)";
+   dc:modified "2013-03-01T11:57:16Z"^^xsd:dateTime;
+   foaf:primaryTopic <http://dbpedialite.org/things/18016#id> .
+
+<http://dbpedialite.org/things/18016#id> a owl:Thing;
+   rdfs:label "Lisp (programming language)";
+   rdfs:comment "Lisp (historically, LISP) is a family of computer programming languages with a long history and a distinctive, fully parenthesized Polish prefix notation. Originally specified in 1958, Lisp is the second-oldest high-level programming language in widespread use today; only Fortran is older (by one year). Like Fortran, Lisp has changed a great deal since its early days, and a number of dialects have existed over its history. Today, the most widely known general-purpose Lisp dialects are Common Lisp and Scheme.";
+   owl:sameAs <http://dbpedia.org/resource/Lisp_%28programming_language%29>,
+     <http://rdf.freebase.com/ns/guid.9202a8c04000641f80000000000247bb>,
+     <http://rdf.freebase.com/ns/m.04kyw>;
+   foaf:isPrimaryTopicOf <http://en.wikipedia.org/wiki/Lisp_(programming_language)>;
+   foaf:page <http://wikidata.org/wiki/Q132874>,
+     <http://www.gnu.org/gnu/rms-lisp.html>,
+     <http://www-formal.stanford.edu/jmc/history/lisp/lisp.html>,
+     <http://www8.informatik.uni-erlangen.de/html/lisp-enter.html>,
+     <http://www-formal.stanford.edu/jmc/history/>,
+     <http://www.softwarepreservation.org/projects/LISP/>,
+     <http://www.alu.org/>,
+     <http://www.weitz.de/eclm2009/>,
+     <http://european-lisp-symposium.org/>,
+     <http://www.international-lisp-conference.org/>,
+     <http://purl.umn.edu/107476>,
+     <http://www.se-radio.net/2008/01/episode-84-dick-gabriel-on-lisp/>,
+     <http://www.cliki.net/>,
+     <http://www.cl-user.net/>,
+     <http://www.faqs.org/faqs/lisp-faq/>,
+     <http://paste.lisp.org/>,
+     <http://planet.lisp.org/>,
+     <http://lispnews.wordpress.com/>,
+     <http://www.dmoz.org/http://www.dmoz.org/Computers/Programming/Languages/Lisp//> .
+
+<http://wikidata.org/wiki/Q132874> a foaf:Document;
+   rdfs:label "LISP" .
