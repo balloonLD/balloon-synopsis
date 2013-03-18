@@ -154,16 +154,8 @@ html,body {
 	left: 2%;
 	margin-bottom: 20px;
 	margin-top: 50px;
-	background: #f9f9f9;
+	background: #f3f3f3;
 	position:   relative;
-}
-
-.previewContent {
-	left: 25%;
-	top: 25%;
-	position: relative;
-	width: 50%;
-	height: 50%;
 }
 
 .loading {
@@ -197,6 +189,14 @@ html,body {
 	z-index: -1;
 	pointer-events: none;
 	cursor: default;
+}
+
+.previewContent {
+	left: 25%;
+	top: 25%;
+	position: relative;
+	width: 50%;
+	height: 50%;
 }
 
 /**** Overlay ****/
@@ -275,9 +275,9 @@ html,body {
 
 .element .descriptionEn {
 	left: 5%;
-	top: 60%;
+	top: 55%;
 	width: 90%;
-	height: 40%;
+	height: 35%;
 	line-height: 100%;
 	font-size: 80%;
 	text-align: center;
@@ -289,9 +289,29 @@ html,body {
 	left: 5%;
 	overflow: hidden;
 	top: 30%;
-	height: 30%;
+	height: 25%;
 	width: 90%;
-	font-size: 100%;
+	font-size: 90%;
+	color: #F2F2F2;
+}
+
+.element .groupLabel {
+	left: 1%;
+	overflow: hidden;
+	top: 1%;
+	height: 30%;
+	width: 98%;
+	font-size: 90%;
+	color: #F2F2F2;
+}
+
+.element .predicate {
+	left: 5%;
+	overflow: shown;
+	top: 80%;
+	height: 20%;
+	width: 90%;
+	font-size: 60%;
 	color: #F2F2F2;
 }
 
@@ -314,19 +334,15 @@ html,body {
 	top: 0.5em;
 }
 
-.element .uri {
-	background: #8CC7DF;
-}
-
-.element .uri:hover {
+.token_uri:hover {
 	cursor: pointer;
 }
 
-.element .uri:hover h3 {
+.token_uri:hover h3 {
 	text-shadow: 0 0 10px white, 0 0 10px white;
 }
 
-.element .uri:hover h2 {
+.token_uri:hover h2 {
 	color: white;
 }
 

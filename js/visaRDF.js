@@ -16,7 +16,9 @@
 		templatesPath : "templates/templates.html",
 		batchSize : 25,
 		generateSortOptions : true,
-		generateFilterOptions : false,
+		previewAsOverlay : false,
+		generateFilterOptions : true,
+		supportRegExpFilter : true,
 		filterBy : [ {
 			value : "*",
 			label : "showAll"
@@ -25,7 +27,7 @@
 		elementStyle : {
 			dimension : {
 				width : 200,
-				height : 100
+				height : 200
 			},
 			colors : [ '#e2674a', '#99CC99', '#3399CC', '#33CCCC', '#996699', '#C24747', '#FFCC66', '#669999', '#CC6699', '#339966', '#666699' ]
 		},
@@ -82,6 +84,7 @@
 	// currentLevel
 	currentLevel = 0,
 
+	// CSS classes to use
 	CSS_CLASSES = {
 		outerContainer : "outerContainer",
 		isotopeContainer : "container",
@@ -89,6 +92,7 @@
 		clearfix : "clearfix",
 		loader : "loading",
 		preview : "preview",
+		previewItem : "preview-item",
 		previewContent : "previewContent",
 		overlay : "overlay",
 		overlayContent : "overlayContent",
@@ -96,13 +100,40 @@
 			incoming : "incoming",
 			outgoing : "outgoing"
 		},
+		patternClasses : {
+			uri : "uri",
+			literal : "literal",
+			blanknode : "blank"
+		},
+		toToken : function(id) {
+			var idChain = id.split("."), it = this;
+			for ( var i = 0; i < idChain.length; i++) {
+				it = it[idChain[i]];
+			}
+			return TOKEN_TAG + it;
+		},
+		toType : function(id) {
+			var idChain = id.split("."), it = this;
+			for ( var i = 0; i < idChain.length; i++) {
+				it = it[idChain[i]];
+			}
+			return TYPE_TAG + it;
+		},
 		toSelector : function(id) {
-			return "." + this[id];
+			var idChain = id.split("."), it = this;
+			for ( var i = 0; i < idChain.length; i++) {
+				it = it[idChain[i]];
+			}
+			return "." + it;
 		}
 	},
 
 	// Placeholder in query strings
 	DUMMY = "#replaceMe#",
+
+	TYPE_TAG = "-filter-_",
+
+	TOKEN_TAG = "token_",
 
 	// Event types for Pub/Sub system
 	EVENT_TYPES = {
@@ -121,6 +152,97 @@
 		}
 	};
 
+	// Extend Isotope - groupRows custom layout mode
+	$.extend($.Isotope.prototype, {
+
+		_groupRowsReset : function() {
+			this.groupRows = {
+				x : 0,
+				y : 0,
+				height : 0,
+				currentGroup : null
+			};
+		},
+
+		_groupRowsLayout : function($elems) {
+			var instance = this, containerWidth = this.element.width(), sortBy = this.options.sortBy, props = this.groupRows;
+
+			$elems.each(function() {
+				var $this = $(this), atomW = $this.outerWidth(true), atomH = $this.outerHeight(true), group = $.data(this, 'isotope-sort-data')[sortBy], x, y;
+
+				if (group !== props.currentGroup) {
+					// new group, new row
+					props.x = 0;
+					props.height += props.currentGroup ? instance.options.groupRows.gutter : 0;
+					props.y = props.height;
+					props.currentGroup = group;
+
+				} else if (props.x !== 0 && atomW + props.x > containerWidth) {
+
+					// if this element cannot fit in the current row
+					props.x = 0;
+					props.y = props.height;
+				}
+
+				$this.find(".groupLabel").remove();
+				// label for new group
+				if (group !== '') {
+					var prefix = group.split("_")[0] + "_";
+					var groups = group.split(prefix), divBox = "<div class='groupLabel'>";
+					for (var i = 1; i < groups.length; i++) {
+						divBox += groups[i];
+					}
+					divBox += "</div>";
+					$this.append(divBox);
+				}
+
+				// position the atom
+				instance._pushPosition($this, props.x, props.y);
+
+				props.height = Math.max(props.y + atomH, props.height);
+				props.x += atomW;
+			});
+		},
+
+		_groupRowsGetContainerSize : function() {
+			return {
+				height : this.groupRows.height
+			};
+		},
+
+		_groupRowsResizeChanged : function() {
+			return true;
+		}
+
+	});
+
+	// JQuery custom selector expression : class-prefix
+	$.expr[':']['class-prefix'] = function(elem, index, match) {
+		var prefix = match[3];
+
+		if (!prefix)
+			return true;
+
+		var sel = '[class^="' + prefix + '"], [class*=" ' + prefix + '"]';
+		return $(elem).is(sel);
+	};
+
+	// JQuery custom selector expression : regex (modified the version of James
+	// Padolsey -
+	// http://james.padolsey.com/javascript/regex-selector-for-jquery/)
+	jQuery.expr[':'].regex = function(elem, index, match) {
+		var matchParams = match[3].split(','), validLabels = /^(data|css):/, attr = {
+			method : matchParams[0].match(validLabels) ? matchParams[0].split(':')[0] : 'attr',
+			property : matchParams.shift().replace(validLabels, '')
+		}, regexFlags = 'ig', regex;
+		try {
+			regex = new RegExp(matchParams.join('').replace(/^\s+|\s+$/g, ''), regexFlags);
+		} catch (e) {
+			return false;
+		}
+		return regex.test(jQuery(elem)[attr.method](attr.property));
+	};
+
 	// <---- class private utility functions ---->
 	function isUndefinedOrNull(a) {
 		return ((typeof a === "undefined") || (a === null));
@@ -133,12 +255,12 @@
 	function getWindowSize(withoutScrollbar) {
 		var w = null, h = null;
 		if (withoutScrollbar) {
-			if (that._$body.hasClass('noscroll')) {
+			if ($('BODY').hasClass('noscroll')) {
 				w = $window.width(), h = $window.height();
 			} else {
-				that._$body.addClass('noscroll');
+				$('BODY').addClass('noscroll');
 				w = $window.width(), h = $window.height();
-				that._$body.removeClass('noscroll');
+				$('BODY').removeClass('noscroll');
 			}
 		} else {
 			w = $window.width(), h = $window.height();
@@ -151,13 +273,13 @@
 
 	function getClip(name) {
 		switch (name) {
-		case CSS_CLASSES.preview:
-			var winsize = getWindowSize(false);
-			return 'rect(' + winsize.height * 0.25 + 'px ' + winsize.width * 0.75 + 'px ' + winsize.height * 0.75 + 'px ' + winsize.width * 0.25 + 'px)';
-			break;
 		case CSS_CLASSES.overlay:
 			var winsize = getWindowSize(true);
 			return 'rect(0px ' + winsize.width + 'px ' + winsize.height + 'px 0px)';
+			break;
+		case CSS_CLASSES.preview:
+			var winsize = getWindowSize(false);
+			return 'rect(' + winsize.height * 0.25 + 'px ' + winsize.width * 0.75 + 'px ' + winsize.height * 0.75 + 'px ' + winsize.width * 0.25 + 'px)';
 			break;
 		default:
 			console.log("No clip data found.");
@@ -191,17 +313,6 @@
 	}
 	// <!--- class private utility functions ---->
 
-	// JQuery custom selector expression
-	$.expr[':']['class-prefix'] = function(elem, index, match) {
-		var prefix = match[3];
-
-		if (!prefix)
-			return true;
-
-		var sel = '[class^="' + prefix + '"], [class*=" ' + prefix + '"]';
-		return $(elem).is(sel);
-	};
-
 	// Plugin constructor
 	function Plugin(element, options) {
 		// <---- private utility functions ---->
@@ -219,9 +330,21 @@
 		};
 		// <!--- instance private utility functions ---->
 
+		this.cssClasses = $.extend({}, CSS_CLASSES, {
+			patternClasses : {
+				uri : CSS_CLASSES.toToken("patternClasses.uri"),
+				literal : CSS_CLASSES.toToken("patternClasses.literal"),
+				blanknode : CSS_CLASSES.toToken("patternClasses.blanknode")
+			},
+			typeClasses : {
+				incoming : CSS_CLASSES.toType("typeClasses.incoming"),
+				outgoing : CSS_CLASSES.toType("typeClasses.outgoing")
+			}
+		});
+
 		this._$body = $('BODY'), this._$element = $(element);
-		this._$outerContainer = $('<div class="' + CSS_CLASSES.outerContainer + '"></div>');
-		this._$isotopeContainer = $('<div class="' + CSS_CLASSES.isotopeContainer + '"></div>');
+		this._$outerContainer = $('<div class="' + this.cssClasses.outerContainer + '"></div>');
+		this._$isotopeContainer = $('<div class="' + this.cssClasses.isotopeContainer + '"></div>');
 		this._$element.append(this._$outerContainer);
 		this._$outerContainer.append(this._$isotopeContainer);
 
@@ -244,7 +367,7 @@
 		};
 
 		// Prefixes for SPARQL queries variable
-		this._prefixes = "";
+		this._queryPrefixes = "";
 
 		// SPARQL query variable
 		this._queries = {};
@@ -276,12 +399,15 @@
 						for ( var j = context.length; i < j; i++) {
 							// console.log(context)
 							switch (context[i].subject.token) {
-							case 'uri':
+							case context.plugin.cssClasses.patternClasses.uri:
 								var currentUri = context[i].subject.value;
 
 								// If element isn't already created, create it
 								if (!(currentUri in context.plugin._itemHistory)) {
 									if (context[i].label) {
+
+										// Only subjects with labels in english
+										// or undefined language
 										if (context[i].label.lang === undefined || context[i].label.lang === "en") {
 
 											// increment index and give it back
@@ -341,7 +467,7 @@
 									}
 								}
 								break;
-							case 'literal':
+							case context.plugin.cssClasses.patternClasses.literal:
 								// increment index and give it back
 								// to
 								// the template
@@ -367,16 +493,18 @@
 
 			// Get external template file
 			$.get(that.options.templatesPath, function(data) {
-				$('HEAD').append(data);
+				var $fakeDiv = $("<div>");
+				$fakeDiv.append(data);
 
 				// <--- extract templates --->
-				templates.isoEle = Handlebars.compile($("#visaRDF-isotope-elements").html());
-				Handlebars.registerPartial("visaRDF-isotope-element", $("#visaRDF-isotope-element").html());
-				templates.overlayEle = Handlebars.compile($("#visaRDF-overlay-element").html());
-				templates.overlayCon = Handlebars.compile($("#visaRDF-overlay-content").html());
-				templates.sortOptions = Handlebars.compile($("#visaRDF-sort-options").html());
-				templates.filterOptions = Handlebars.compile($("#visaRDF-filter-options").html());
-				templates.previewEle = Handlebars.compile($("#visaRDF-preview-element").html());
+				templates.isoEle = Handlebars.compile($fakeDiv.find("#visaRDF-isotope-elements").html());
+				Handlebars.registerPartial("visaRDF-isotope-element", $fakeDiv.find("#visaRDF-isotope-element").html());
+				templates.overlayEle = Handlebars.compile($fakeDiv.find("#visaRDF-overlay-element").html());
+				templates.overlayCon = Handlebars.compile($fakeDiv.find("#visaRDF-overlay-content").html());
+				templates.sortOptions = Handlebars.compile($fakeDiv.find("#visaRDF-sort-options").html());
+				templates.filterOptions = Handlebars.compile($fakeDiv.find("#visaRDF-filter-options").html());
+				templates.previewEle = Handlebars.compile($fakeDiv.find("#visaRDF-preview-element").html());
+				templates.groupSortDropdown = Handlebars.compile($fakeDiv.find("#visaRDF-groupSort-dropdown").html());
 				// <!-- extract templates --->
 
 				templateInitDfd.resolve();
@@ -387,19 +515,40 @@
 		// History of event handler bindings
 		this._evHandlerHistory = {};
 
-		this._addEventHandler = this._selfProxy(function(eventType, handler, object) {
+		this._addEventHandler = this._selfProxy(function(eventType, handler, object, id) {
 			var that = this;
 			if (object === undefined) {
-				object = that._$element.children(CSS_CLASSES.toSelector('outerContainer'));
+				object = that._$element.children(that.cssClasses.toSelector('outerContainer'));
 			}
 			if (that._evHandlerHistory[eventType] === undefined) {
 				that._evHandlerHistory[eventType] = [];
 			}
 			that._evHandlerHistory[eventType].push({
+				"id" : id,
 				"object" : object,
 				"handler" : handler
 			});
 			object.on(eventType, handler);
+		});
+
+		this._removeEventHandler = this._selfProxy(function(eventType, id, object) {
+			var that = this;
+			$.each(that._evHandlerHistory[eventType], function(i, val) {
+				if (id === val.id) {
+					if (object !== undefined) {
+						if ($.data(val.object) === $.data(object)) {
+							val.object.off(eventType, val.handler);
+
+							// Stop each on find
+							return false;
+						}
+					} else {
+
+						// Else delete all entries with id
+						val.object.off(eventType, val.handler);
+					}
+				}
+			});
 		});
 
 		this._initBrowsability = this._selfProxy(function($items) {
@@ -413,13 +562,20 @@
 				var $item = $(this);
 
 				$item.index = parseInt($item.find('.number').html());
-				// <---- item click event ---->
-				that._addItemClickEvent($item, supportTransitions, transEndEventName);
-				// <!--- item click event ---->
+
+				if (that.options.previewAsOverlay === true) {
+					// <---- item click event ---->
+					that._addDivPreviewItemClickEvent($item, supportTransitions, transEndEventName);
+					// <!--- item click event ---->
+				} else {
+					// <---- item click event ---->
+					that._addItemClickEvent($item, supportTransitions, transEndEventName);
+					// <!--- item click event ---->
+				}
 			});
 		});
 
-		this._addItemClickEvent = this._selfProxy(function($item, supportTransitions, transEndEventName) {
+		this._addDivPreviewItemClickEvent = this._selfProxy(function($item, supportTransitions, transEndEventName) {
 			var that = this;
 			that._addEventHandler('click', function(e) {
 
@@ -430,11 +586,11 @@
 				e.stopPropagation();
 
 				// If preview isn't added already
-				that._addPreview($item, supportTransitions, transEndEventName, function($preview) {
+				that._addDivPreview($item, supportTransitions, transEndEventName, function($preview) {
 
 					// <!--- preview show ---->
 					var layoutProp = getItemLayoutProp($item), itemClip = 'rect(' + layoutProp.top + 'px ' + (layoutProp.left + layoutProp.width) + 'px '
-							+ (layoutProp.top + layoutProp.height) + 'px ' + layoutProp.left + 'px)', previewClip = getClip(CSS_CLASSES.preview);
+							+ (layoutProp.top + layoutProp.height) + 'px ' + layoutProp.left + 'px)', previewClip = getClip(that.cssClasses.preview);
 
 					// Make preview visible
 					$preview.css({
@@ -462,10 +618,10 @@
 			}, $item);
 		});
 
-		this._addPreview = this._selfProxy(function($item, supportTransitions, transEndEventName, callback) {
+		this._addDivPreview = this._selfProxy(function($item, supportTransitions, transEndEventName, callback) {
 
-			var that = this, $previews = $(CSS_CLASSES.toSelector("preview"));
-			var $preview = $previews.filter(CSS_CLASSES.toSelector("preview") + '_' + $item.index);
+			var that = this, $previews = $(that.cssClasses.toSelector("preview"));
+			var $preview = $previews.filter(that.cssClasses.toSelector("preview") + '_' + $item.index);
 			$previews.not($preview).css({
 				opacity : 0,
 				pointerEvents : 'none',
@@ -476,22 +632,22 @@
 				preview = templates.previewEle({
 					"index" : $item.index,
 					"cssClass" : {
-						"preview" : CSS_CLASSES.preview,
-						"previewContent" : CSS_CLASSES.previewContent
+						"preview" : that.cssClasses.preview,
+						"previewContent" : that.cssClasses.previewContent
 					}
 				});
 				that._$element.append(preview);
-				$preview = that._$element.find('> ' + CSS_CLASSES.toSelector("preview") + '_' + $item.index);
+				$preview = that._$element.find('> ' + that.cssClasses.toSelector("preview") + '_' + $item.index);
 				$preview.css('background-color', $item.css('background-color'));
-				$previewContent = $preview.children(CSS_CLASSES.toSelector("previewContent"));
+				$previewContent = $preview.children(that.cssClasses.toSelector("previewContent"));
 				$previewContent.text("" + $item.find('.labelEn > div').html());
 
 				// <---- Add event on window click ---->
-				that._addPreviewCloseEvent($item, $preview, supportTransitions, transEndEventName);
+				that._addDivPreviewCloseEvent($item, $preview, supportTransitions, transEndEventName);
 				// <!--- Add event on window click ---->
 
 				// <---- preview click Event ---->
-				that._addPreviewClickEvent($item, $preview, supportTransitions, transEndEventName);
+				that._addDivPreviewClickEvent($item, $preview, supportTransitions, transEndEventName);
 				// <!--- preview click Event ---->
 				callback($preview);
 			} else {
@@ -499,7 +655,7 @@
 			}
 		});
 
-		this._addPreviewCloseEvent = this._selfProxy(function($item, $preview, supportTransitions, transEndEventName) {
+		this._addDivPreviewCloseEvent = this._selfProxy(function($item, $preview, supportTransitions, transEndEventName) {
 			var that = this;
 			that._addEventHandler('click', function(that) {
 				if (that._instanceLevel === currentLevel) {
@@ -536,7 +692,7 @@
 			}, $window);
 		});
 
-		this._addPreviewClickEvent = this._selfProxy(function($item, $preview, supportTransitions, transEndEventName) {
+		this._addDivPreviewClickEvent = this._selfProxy(function($item, $preview, supportTransitions, transEndEventName) {
 			var that = this;
 			that._addEventHandler('click', function(e) {
 
@@ -558,7 +714,7 @@
 						// Fill overlay with content
 						that._initOverlayContent($item, $overlay, function() {
 							// <---- overlay show function ---->
-							var previewClip = getClip(CSS_CLASSES.preview), overlayClip = getClip(CSS_CLASSES.overlay);
+							var previewClip = getClip(that.cssClasses.preview), overlayClip = getClip(that.cssClasses.overlay);
 
 							// Make overlay visible
 							$overlay.css({
@@ -602,18 +758,141 @@
 			}, $preview);
 		});
 
+		this._addItemClickEvent = this._selfProxy(function($item, supportTransitions, transEndEventName) {
+			var that = this;
+			that._addEventHandler('click', function(e) {
+				var $items = that._$isotopeContainer.children("div");
+				$items.css({
+					"width" : that.options.elementStyle.dimension.width,
+					"height" : that.options.elementStyle.dimension.height
+				});
+				$items.removeClass(that.cssClasses.previewItem);
+				that._$isotopeContainer.isotope('reLayout');
+				that._removeEventHandler("click", "previewClick");
+
+				/*
+				 * Stop propagation to not trigger window click event which
+				 * closes preview again
+				 */
+				e.stopPropagation();
+
+				var newWidth, newHeight;
+				
+				// get Isotope instance
+				//var isotopeInstance = that._$isotopeContainer.data('isotope');
+
+				newWidth = that._$isotopeContainer.width()-100;
+				newHeight = $window.height() - 100;
+
+				$item.addClass(that.cssClasses.previewItem);
+				$item.css({
+					"width" : newWidth,
+					"height" : newHeight
+				});
+				that._$isotopeContainer.isotope('reLayout');
+
+				// <---- add preview click Event ---->
+				that._addPreviewClickEvent($item, supportTransitions, transEndEventName);
+				// <!--- add preview click Event ---->
+
+				// <---- Add event on window click ---->
+				that._addPreviewCloseEvent($item, supportTransitions, transEndEventName);
+				// <!--- Add event on window click ---->
+
+				$item.off('click', this);
+			}, $item);
+		});
+
+		this._addPreviewClickEvent = this._selfProxy(function($item, supportTransitions, transEndEventName) {
+			var that = this;
+			that._addEventHandler('click', function(e) {
+				var $items = that._$isotopeContainer.children("div");
+				$items.css({
+					"width" : that.options.elementStyle.dimension.width,
+					"height" : that.options.elementStyle.dimension.height
+				});
+				that._$isotopeContainer.isotope('reLayout');
+
+				if (!$item.data('isExpanded')) {
+					$item.data('isExpanded', true);
+
+					// increment overall level
+					if (that._instanceLevel === currentLevel) {
+						currentLevel++;
+					}
+
+					// increment Counter (only needed if more than 1 Overlay can
+					// be opened)
+					that._expandedOverlaysCount++;
+
+					// Add overlay if needed
+					that._addOverlay($item, supportTransitions, transEndEventName, function($overlay) {
+
+						// Fill overlay with content
+						that._initOverlayContent($item, $overlay,
+								function() {
+									// <---- overlay show function ---->
+									var layoutProp = getItemLayoutProp($item), itemClip = 'rect(' + layoutProp.top + 'px '
+											+ (layoutProp.left + layoutProp.width) + 'px ' + (layoutProp.top + layoutProp.height) + 'px ' + layoutProp.left
+											+ 'px)', overlayClip = getClip(that.cssClasses.overlay);
+
+									// Make overlay visible
+									$overlay.css({
+										clip : supportTransitions ? itemClip : overlayClip,
+										opacity : 1,
+										zIndex : 9999,
+										pointerEvents : 'auto'
+									});
+
+									if (supportTransitions) {
+										$overlay.on(transEndEventName, function() {
+
+											$overlay.off(transEndEventName);
+
+											setTimeout(function() {
+												$overlay.css('clip', overlayClip).on(transEndEventName, function() {
+													$overlay.off(transEndEventName);
+													that._$body.addClass('noscroll');
+												});
+											}, 25);
+
+										});
+									} else {
+										that._$body.addClass('noscroll');
+									}
+									// <!--- overlay show function ---->
+								});
+					});
+				}
+				$item.off("click", this);
+			}, $item, "previewClick");
+		});
+
+		this._addPreviewCloseEvent = this._selfProxy(function($item, supportTransitions, transEndEventName) {
+			var that = this;
+			that._addEventHandler('click', function() {
+				$item.css({
+					"width" : that.options.elementStyle.dimension.width,
+					"height" : that.options.elementStyle.dimension.height
+				});
+				that._$isotopeContainer.isotope('reLayout');
+				$item.off('click');
+				that._addItemClickEvent($item, supportTransitions, transEndEventName);
+			}, $window);
+		});
+
 		this._addOverlay = this._selfProxy(function($item, supportTransitions, transEndEventName, callback) {
-			var that = this, $overlay = that._$element.find('> ' + CSS_CLASSES.toSelector("overlay") + '_' + $item.index);
+			var that = this, $overlay = that._$element.find('> ' + that.cssClasses.toSelector("overlay") + '_' + $item.index);
 			if ($overlay.length < 1) {
 				var overlay = templates.overlayEle({
 					"index" : $item.index,
 					"cssClass" : {
-						"overlay" : CSS_CLASSES.overlay,
-						"overlayContent" : CSS_CLASSES.overlayContent
+						"overlay" : that.cssClasses.overlay,
+						"overlayContent" : that.cssClasses.overlayContent
 					}
 				});
 				that._$element.append(overlay);
-				$overlay = that._$element.find('> ' + CSS_CLASSES.toSelector("overlay") + '_' + $item.index);
+				$overlay = that._$element.find('> ' + that.cssClasses.toSelector("overlay") + '_' + $item.index);
 
 				// <---- close click Event ---->
 				that._addOverlayCloseEvent($item, $overlay, supportTransitions, transEndEventName);
@@ -625,7 +904,7 @@
 		});
 
 		this._addOverlayCloseEvent = this._selfProxy(function($item, $overlay, supportTransitions, transEndEventName) {
-			var that = this, $overlayContent = $overlay.find('> ' + CSS_CLASSES.toSelector("overlayContent")), $close = $overlay.find('> span.close');
+			var that = this, $overlayContent = $overlay.find('> ' + that.cssClasses.toSelector("overlayContent")), $close = $overlay.find('> span.close');
 			that._addEventHandler('click', function() {
 
 				that._expandedOverlaysCount--;
@@ -674,36 +953,33 @@
 		});
 
 		this._initOverlayContent = this._selfProxy(function($item, $overlay, callback) {
-			var that = this, $overlayContent = $overlay.find('> ' + CSS_CLASSES.toSelector("overlayContent"));
+			var that = this, $overlayContent = $overlay.find('> ' + that.cssClasses.toSelector("overlayContent"));
 
 			// Get elements who are in a relation to
 			// current item
 			var subjectOfQuery = replaceDummy(that._queries.selectSubjectOf, $item.find('.showUri').html()), objectOfQuery = replaceDummy(
 					that._queries.selectObjectOf, $item.find('.showUri').html());
+			// console.log($item.find('.showUri').html());
 
 			that._rdfStoreExecuteQuery(subjectOfQuery, function(subjectOf) {
 				that._rdfStoreExecuteQuery(objectOfQuery, function(objectOf) {
-
 					// console.log(subjectOf);
+					// console.log(objectOf);
 
 					// Input for the handlebar
 					// template
 					var input = {};
-					if (subjectOf[0] && subjectOf[0].origin) {
-						input.label = subjectOf[0].origin.value;
-					} else if (objectOf[0] && objectOf[0].origin) {
-						input.label = objectOf[0].origin.value;
-					}
+					input.label = $item.find('.labelEn').text();
 
 					// Add types for filtering
 					for ( var i = 0; i < subjectOf.length; i++) {
 						subjectOf[i].type = {
-							value : CSS_CLASSES.typeClasses.outgoing
+							value : that.cssClasses.typeClasses.outgoing
 						};
 					}
 					for ( var i = 0; i < objectOf.length; i++) {
 						objectOf[i].type = {
-							value : CSS_CLASSES.typeClasses.incoming
+							value : that.cssClasses.typeClasses.incoming
 						};
 					}
 
@@ -718,18 +994,24 @@
 						generateSortOptions : true,
 						generateFilterOptions : true,
 						isotopeOptions : {
+							itemSelector : '.element',
+							layoutMode : 'masonry',
+							groupRows : {
+								gutter : 20
+							},
 							getSortData : {
-								number : function($elem) {
-									var number = $elem.hasClass('element') ? $elem.find('.number').text() : $elem.attr('data-number');
-									return parseInt(number, 10);
-								},
-								alphabetical : function($elem) {
-									var labelEn = $elem.find('.labelEn'), itemText = labelEn.length ? labelEn : $elem;
-									return itemText.text();
-								},
 								type : function($elem) {
 									var classes = $elem.attr("class");
 									return classes;
+								},
+								group : function($elem) {
+									var classes = $elem.attr("class");
+									var pattern = new RegExp("(\s)*[a-zA-Z0-9]*" + TOKEN_TAG + "[a-zA-Z0-9]*(\s)*", 'g');
+									var groups = classes.match(pattern), group = "";
+									for ( var i = 0; i < groups.length; i++) {
+										group += groups[i] + " ";
+									}
+									return group;
 								}
 							}
 						},
@@ -779,32 +1061,36 @@
 			return rdfStoreInitDfd.promise();
 		});
 
-		this._initQueries = this
+		this._generateQueryPrefixes = this._selfProxy(function() {
+			var that = this;
+			that._queryPrefixes = "";
+
+			// Generate prefixes for SPARQL queries by using namesspaces
+			// given in
+			// options
+			$.each(this.options.ns, this._selfProxy(function(i, val) {
+				that._generateQueryPrefix(i, val);
+			}));
+		});
+
+		this._generateQueryPrefix = this._selfProxy(function(prefix, uri) {
+			var that = this;
+			that._queryPrefixes += "PREFIX " + prefix + ": <" + uri + "> ";
+		});
+
+		this._generateQueries = this
 				._selfProxy(function() {
 					var that = this;
-					// Generate prefixes for SPARQL queries by using namesspaces
-					// given in
-					// options
-					$.each(this.options.ns, this._selfProxy(function(i, val) {
-						that._prefixes += "PREFIX " + i + ": <" + val + "> ";
-					}));
 
 					// Generate SPARQL queries
-					this._queries = {
-						initQuery : that._prefixes
-								+ " SELECT ?subject ?label ?description ?type WHERE { ?subject rdfs:label ?label . OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }. OPTIONAL {?subject rdfs:type ?type}}",
-						selectSubjectOf : that._prefixes
-								+ " SELECT ?subject ?label ?description ?origin WHERE {<"
+					that._queries = {
+						initQuery : " SELECT ?subject ?label ?description ?type WHERE { ?subject rdfs:label ?label . OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }. OPTIONAL {?subject rdfs:type ?type}}",
+						selectSubjectOf : " SELECT ?subject ?predicate ?label ?description ?origin WHERE {<"
 								+ DUMMY
-								+ "> ?x ?subject. <"
+								+ "> ?predicate ?subject. OPTIONAL { ?subject rdfs:label ?label}. OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }}",
+						selectObjectOf : " SELECT ?subject ?predicate ?label ?description ?origin WHERE {?subject ?predicate <"
 								+ DUMMY
-								+ "> rdfs:label ?origin. OPTIONAL { ?subject rdfs:label ?label}. OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }}",
-						selectObjectOf : that._prefixes
-								+ " SELECT ?subject ?label ?description ?origin WHERE {?subject ?x <"
-								+ DUMMY
-								+ ">. <"
-								+ DUMMY
-								+ "> rdfs:label ?origin. OPTIONAL { ?subject rdfs:label ?label}. OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }}"
+								+ ">. OPTIONAL { ?subject rdfs:label ?label}. OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }}"
 					};
 				});
 
@@ -824,11 +1110,11 @@
 				if (val.subject.token === "literal") {
 					val.label = val.subject;
 				}
+				val.subject.token = TOKEN_TAG + val.subject.token;
 			});
 			// console.log(batch)
 
 			var $elements = $(templates.isoEle(batch));
-			// console.log($elements)
 			$.each($elements, function(i, val) {
 				$(val).css("background-color", "rgba(125, 125, 125 ,0.2)");
 			});
@@ -843,8 +1129,8 @@
 
 				that._$isotopeContainer.isotope('insert', $elements, function() {
 					$elements.find('.ellipsis').ellipsis();
-					$nodes = $elements.filter('.token_uri');
-					$literals = $elements.filter('.token_literal');
+					$nodes = $elements.filter(that.cssClasses.toSelector("patternClasses.uri"));
+					$literals = $elements.filter(that.cssClasses.toSelector("patternClasses.literal"));
 
 					// Init overlays on new elements
 					that._initBrowsability($nodes);
@@ -868,7 +1154,7 @@
 			if (rest.length > 0) {
 				that._isotopeAddBatches(rest);
 			} else {
-				that._$outerContainer.find('> ' + CSS_CLASSES.loader).text("");
+				that._$outerContainer.find('> ' + that.cssClasses.loader).text("");
 				$(that._$outerContainer).trigger(EVENT_TYPES.loading.loadingDone, that);
 			}
 		});
@@ -907,8 +1193,10 @@
 		this._checkSortGeneration = this._selfProxy(function() {
 			if (this.options.generateSortOptions) {
 				// Add options
-				var $element = this._$element;
-				var sortOptions = templates.sortOptions(this.options.isotopeOptions.getSortData);
+				var $element = this._$element, $isotopeContainer = this._$isotopeContainer;
+				var sortData = $.extend({}, this.options.isotopeOptions.getSortData);
+				delete sortData["group"];
+				var sortOptions = templates.sortOptions(sortData);
 				var $options = $element.find(".options");
 				$options.prepend(sortOptions);
 				$sorter = $options.find(' > .sorter');
@@ -917,13 +1205,59 @@
 				$sorter.find('.' + this.options.isotopeOptions.sortBy).addClass("selected");
 				$sortLinks = $options.find('a');
 
+				$sorter.append(templates.groupSortDropdown({
+					type : {
+						label : "type",
+						val : TYPE_TAG
+					},
+					token : {
+						label : "node-type",
+						val : TOKEN_TAG
+					}
+				}));
+				$sorterGroup = $sorter.find('#GroupDropDown');
+
+				// Add onCLick
+				$sorterGroup.children().click(function(e) {
+
+					// get href attribute, minus the '#'
+					var groupBy = $(this).parent().val();
+
+					$element.find('.sorter > > > .selected').removeClass('selected');
+					$isotopeContainer.isotope({
+						getSortData : {
+							group : function($elem) {
+								var classes = $elem.attr("class");
+								var pattern = new RegExp("(\s)*[a-zA-Z0-9]*" + groupBy + "[a-zA-Z0-9]*(\s)*", 'g');
+								var groups = classes.match(pattern), group = "";
+								if (groups !== null) {
+									for ( var i = 0; i < groups.length; i++) {
+										group += groups[i] + " ";
+									}
+								}
+								return group;
+							}
+						}
+					});
+					$isotopeContainer.isotope('updateSortData', $isotopeContainer.find(".element"));
+					$isotopeContainer.find("> > .groupLabel").remove();
+					$isotopeContainer.isotope({
+						layoutMode : 'groupRows',
+						sortBy : "group"
+					});
+					return false;
+				});
+
 				// Add onClick
 				$sortLinks.click(function() {
 					// get href attribute, minus the '#'
 					var sortName = $(this).attr('data-sort-value');
+					$sorterGroup.val("Group by...");
 					$element.find('.sorter > > > .selected').removeClass("selected");
+					$isotopeContainer.find("> > .groupLabel").remove();
 					$(this).addClass("selected");
-					$element.find(CSS_CLASSES.toSelector("isotopeContainer")).isotope({
+					$isotopeContainer.isotope({
+						layoutMode : 'masonry',
 						sortBy : sortName
 					});
 					return false;
@@ -936,7 +1270,7 @@
 		 * generation option and generate the filter options if needed.
 		 */
 		this._checkFilterGeneration = this._selfProxy(function() {
-			that = this;
+			var that = this;
 			if (that.options.generateFilterOptions) {
 				// Add options
 				var $element = that._$element;
@@ -952,17 +1286,17 @@
 					// get href attribute, minus the '#'
 					var selector = $(this).attr('data-filter-value');
 					if (selector !== '*') {
-						selector = ".-filter-_" + selector;
+						selector = "." + TYPE_TAG + selector;
 					}
 					$element.find('.filter > > > .selected').removeClass('selected');
 					$(this).addClass('selected');
-					$element.find(CSS_CLASSES.toSelector("isotopeContainer")).isotope({
+					$element.find(that.cssClasses.toSelector("isotopeContainer")).isotope({
 						filter : selector
 					});
 					return false;
 				});
 
-				$filter.append('<input id="filterField" type="text" size="25" value="Enter types here.">');
+				$filter.append('<input id="filterField" type="text" size="25" value="Enter search here.">');
 				$filterBox = $filter.find('#filterField');
 
 				// Add onKey
@@ -972,15 +1306,23 @@
 					var selector = $(this).val();
 					if (selector !== '') {
 						if (selector !== '*') {
-							selector = "div:class-prefix(-filter-_" + selector + ")";
+							if (that.options.supportRegExpFilter) {
+								try {
+									var regEx = new RegExp(selector);
+									selector = "div:regex(class, " + selector + "), div > div:contains(" + selector + ")";
+								} catch (e) {
+									selector = "div > div:contains(" + selector + ")";
+								}
+							} else {
+								selector = "div > div:contains(" + selector + ")";
+							}
 						}
 					} else {
 						selector = '*';
 					}
 
 					$element.find('.filter > > > .selected').removeClass('selected');
-					$(this).addClass('selected');
-					$element.find(CSS_CLASSES.toSelector("isotopeContainer")).isotope({
+					$element.find(that.cssClasses.toSelector("isotopeContainer")).isotope({
 						filter : selector
 					});
 					return false;
@@ -989,7 +1331,8 @@
 		});
 
 		this._rdfStoreExecuteQuery = this._selfProxy(function(query, callback) {
-			rdfStore.execute(query, function(success, results) {
+			var that = this;
+			rdfStore.execute(that._queryPrefixes + query, function(success, results) {
 				if (success) {
 					callback(results);
 				} else {
@@ -1003,10 +1346,31 @@
 		 * Inserts given data in store.
 		 */
 		this._rdfStoreInsertData = this._selfProxy(function(data, dataFormat, callback) {
+			var that = this;
 			$(that._$outerContainer).trigger(EVENT_TYPES.loading.loadingStart, that);
-			// console.log("_rdfStoreInsertData");
+
+			if (that.options.dataFormat !== "application/ld+json" && that.options.dataFormat === "text/turtle") {
+				// get prefix terms and update namespaces
+				var prefixTerms = data.match(/.*@prefix.*>(\s)*./g);
+				$.each(prefixTerms, function(i, val) {
+					var prefixTerm = (val.split(/>(\s)*./)[0]).split(/:(\s)*</);
+					var prefix = prefixTerm[0].replace(/@prefix(\s)*/, "");
+					var uri = prefixTerm[2];
+					if (isUndefinedOrNull(that.options.ns[prefix])) {
+						that.options.ns[prefix] = uri;
+						that._generateQueryPrefix(prefix, uri);
+					}
+					// if (prefixTerms.length - 1 === i) {
+					//
+					// // filter prefix terms out
+					// var nonPrefixes = data.replace(/.*@prefix.*>(\s)*./g,
+					// "");
+					// }
+				});
+			}
+
+			// TODO Long loading times due to ttl parser
 			rdfStore.load(dataFormat, data, function(store) {
-				// console.log(data);
 				callback();
 			});
 		});
@@ -1022,7 +1386,6 @@
 				url : dataURL,
 				dataType : "text",
 				success : function(rdfData) {
-					// console.log(dataURL);
 					callback(rdfData, dataFormat);
 				}
 			}).fail(function() {
@@ -1055,12 +1418,15 @@
 			// Init Isotope
 			this._$isotopeContainer.isotope(this.options.isotopeOptions);
 
+			// Generate SPARQL Query Prefixes
+			this._generateQueryPrefixes();
+
 			// Generate SPARQL Queries
-			this._initQueries();
+			this._generateQueries();
 
 			// <---- loading img ---->
-			this._$outerContainer.prepend('<div class="' + CSS_CLASSES.loader + '">');
-			this._$outerContainer.append('<div class="' + CSS_CLASSES.loader + '">');
+			this._$outerContainer.prepend('<div class="' + this.cssClasses.loader + '">');
+			this._$outerContainer.append('<div class="' + this.cssClasses.loader + '">');
 
 			// Add loading start listener
 
@@ -1070,14 +1436,15 @@
 					if (this._$outerContainer.css("height") < 120) {
 						this._$outerContainer.css("height", "20px");
 					}
-					this._$outerContainer.find('> ' + CSS_CLASSES.toSelector("loader")).css("visibility", "visible");
+					this._$outerContainer.find('> ' + this.cssClasses.toSelector("loader")).css("visibility", "visible");
 				}
 			}));
 
 			// Add loading done listener
 			this._addEventHandler(EVENT_TYPES.loading.loadingDone, this._selfProxy(function(ev, $invoker) {
 				if ($invoker === this) {
-					this._$outerContainer.find('> ' + CSS_CLASSES.toSelector("loader")).css("visibility", "hidden");
+					this._$outerContainer.find('> .loading').text('');
+					this._$outerContainer.find('> ' + this.cssClasses.toSelector("loader")).css("visibility", "hidden");
 				}
 			}));
 			// <!--- loading img ---->
@@ -1097,7 +1464,7 @@
 			this._addEventHandler('smartresize', this._selfProxy(function(ev, $invoker) {
 
 				// <---- overlay modification ---->
-				var $overlays = this._$element.children(CSS_CLASSES.toSelector("overlay"));
+				var $overlays = this._$element.children(this.cssClasses.toSelector("overlay"));
 				$overlays.css('clip', getClip(CSS_CLASSES.overlay));
 				var innerScrolls = $overlays.find('.innerScroll');
 				innerScrolls.css("width", ($window.width() - parseInt($overlays.css("padding-left")) - parseInt($overlays.css("padding-right"))) + "px");
@@ -1105,8 +1472,21 @@
 				// <!--- overlay modification ---->
 
 				// <---- preview modification ---->
-				var $previews = this._$element.children(CSS_CLASSES.toSelector("preview"));
-				$previews.css('clip', getClip(CSS_CLASSES.preview));
+				if (this.options.previewAsDiv) {
+					var $previews = this._$element.children(this.cssClasses.toSelector("preview"));
+					$previews.css('clip', getClip(this.cssClasses.preview));
+				} else {
+					var $previews = this._$isotopeContainer.children(this.cssClasses.toSelector("previewItem"));
+
+					var newWidth, newHeight;
+					newWidth = this._$isotopeContainer.width()-100;
+					newHeight = $window.height() - 100;
+					$previews.css({
+						"width" : newWidth,
+						"height" : newHeight
+					});
+					this._$isotopeContainer.isotope('reLayout');
+				}
 				// <!--- preview modification ---->
 			}), $window);
 
@@ -1122,7 +1502,7 @@
 			// is to be inserted
 			$.when(globalInitDfd.promise()).done(this._selfProxy(function() {
 				if (this.options.generateSortOptions || this.options.generateFilterOptions) {
-					this._$element.prepend('<section class="' + CSS_CLASSES.options + '" class="' + CSS_CLASSES.clearfix + '"></section>');
+					this._$element.prepend('<section class="' + this.cssClasses.options + '" class="' + this.cssClasses.clearfix + '"></section>');
 					this._checkSortGeneration();
 					this._checkFilterGeneration();
 				}
@@ -1165,6 +1545,16 @@
 			this._ajaxLoadData(dataURL, dataFormat, this._selfProxy(this.insertData));
 		},
 
+		insertRemoteData : function(url) {
+
+			// TODO Problem with cross domain and ajax.get()
+			rdfStore.execute('LOAD <' + url + '>\ ', function(success) {
+				if (success) {
+					$(that._$outerContainer).trigger(EVENT_TYPES.storeModified.insert, that);
+				}
+			})
+		},
+
 		/**
 		 * Clean up after plugin (destroy bindings..)
 		 */
@@ -1192,3 +1582,5 @@
 	};
 
 })(jQuery, window, document);
+
+// Zeile 391 rdf-store modifiziert

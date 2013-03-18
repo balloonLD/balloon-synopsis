@@ -5,7 +5,7 @@
 </script>
 
 <script id="visaRDF-isotope-element" type="text/x-handlebars-template">
-	<div class="element token_{{subject.token}} {{#if type}}-filter-_{{type.value}}{{/if}}">
+	<div class="element {{subject.token}} {{#if type}}{{type.value}}{{/if}}">
 		{{#if subject}}
 			<h2 class="showUri" style="display:none">{{subject.value}}</h2>
 		{{/if}}
@@ -16,6 +16,9 @@
 		{{#ifLang description}}
 			<div class="descriptionEn ellipsis">{{description.value}}</div>
 		{{/ifLang}}
+		{{#if predicate}}
+			<div class="predicate">{{predicate.value}}</div>
+		{{/if}}
 	</div>
 </script>
 
@@ -63,4 +66,12 @@
 			<div></div>
 		</div>
 	{{/if}}
+	</script>
+
+<script id="visaRDF-groupSort-dropdown" type="text/x-handlebars-template">
+    <select id="GroupDropDown">
+		{{#each .}}
+      		<option value={{val}}>{{label}}</option>
+		{{/each}}
+    </select>
 	</script>

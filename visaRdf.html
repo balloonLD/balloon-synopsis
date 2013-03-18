@@ -21,10 +21,17 @@
 		<label for="inputbox">DataURL:</label> <input type="text"
 			name="inputbox" value="data/turtle.ttl">
 		<p>
-			<input type="button" name="insert" value="Insert Data"
+			<input type="button" name="insert" value="Insert data"
 				onclick="$('.visaRDF').data('plugin_visaRDF').insertDataURL(this.form.inputbox.value, 'text/turtle');">
 	</form>
-<!-- 	<div class="visaRDF2"></div> -->
+		<form>
+		<label for="inputbox">RemoteData:</label> <input type="text"
+			name="inputbox" value="http://dbpedialite.org/things/18016">
+		<p>
+			<input type="button" name="insert" value="Insert remote data"
+				onclick="$('.visaRDF').data('plugin_visaRDF').insertRemoteData(this.form.inputbox.value, 'text/turtle');">
+	</form>
+<!-- <div class="visaRDF2"></div> -->
 <!-- 	<form> -->
 <!-- 		<label for="inputbox2">DataURL:</label> <input type="text" -->
 <!-- 			name="inputbox2" value="data/turtle.ttl"> -->
@@ -39,14 +46,15 @@
 
 		$(function() {
 			$('.visaRDF').visaRDF({
-				dataLoc : 'data/test_bond.ttl',
-				dataFormat : 'text/turtle',
+				dataLoc : 'data/test_bond.jsld',
+				dataFormat : 'application/json',
 				generateSortOptions : true,
 				isotopeOptions : {		
 					masonry : {
 						columnWidth : 120
 					},
 					sortBy : 'random',
+					previewAsOverlay : 'true',
 					getSortData : {
 						number : function($elem) {
 							var number = $elem.hasClass('element') ? $elem.find('.number').text() : $elem.attr('data-number');
