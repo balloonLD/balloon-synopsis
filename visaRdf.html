@@ -5,15 +5,7 @@
 <title>visaRDF</title>
 <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
 
-<script type="text/javascript" src="js/jquery-1.8.3.js"></script>
-<script type="text/javascript" src="js/jquery.isotope.js"></script>
-<script type="text/javascript" src="js/jquery.textfill.min.js"></script>
-<script type="text/javascript" src="js/jquery.autoellipsis.js"></script>
-<script type="text/javascript" src="js/handlebars.js"></script>
-<script type="text/javascript" src="js/rgbcolor.js"></script>
-<script type="text/javascript" src="js/rdf_store.js"></script>
-<script type="text/javascript" src="js/modernizr.js"></script>
-<script type="text/javascript" src="js/visaRDF.js"></script>
+<script type="text/javascript" src="build/visaRDF.min.js"></script>
 </head>
 <body>
 	<div class="visaRDF"></div>
@@ -24,21 +16,22 @@
 			<input type="button" name="insert" value="Insert data"
 				onclick="$('.visaRDF').data('plugin_visaRDF').insertDataURL(this.form.inputbox.value, 'text/turtle');">
 	</form>
-		<form>
-		<label for="inputbox">RemoteData:</label> <input type="text"
-			name="inputbox" value="http://dbpedialite.org/things/18016">
-		<p>
-			<input type="button" name="insert" value="Insert remote data"
-				onclick="$('.visaRDF').data('plugin_visaRDF').insertRemoteData(this.form.inputbox.value, 'text/turtle');">
+	<form>
+		<label for="serviceinputbox">Remote data service:</label> <input
+			type="text" name="serviceinputbox"
+			value="http://zaire.dimis.fim.uni-passau.de:8080/bigdata/sparql">
+			<p>
+			<label for="queryinputbox">Remote data query:</label>
+			<textarea type="text" name="queryinputbox">SELECT ?subject ?predicate ?object { BIND( rdfs:label as ?predicate) ?subject ?predicate ?object. ?subject a <http://dbpedia.org/ontology/Place> . ?subject <http://dbpedia.org/property/rulingParty> ?x } LIMIT 500
+			</textarea>
+			<p>
+			<input type="button" name="insertRemote" value="Insert remote data"
+				onclick="$('.visaRDF').data('plugin_visaRDF').insertRemoteDataQuery(this.form.serviceinputbox.value, this.form.queryinputbox.value);">
 	</form>
-<!-- <div class="visaRDF2"></div> -->
-<!-- 	<form> -->
-<!-- 		<label for="inputbox2">DataURL:</label> <input type="text" -->
-<!-- 			name="inputbox2" value="data/turtle.ttl"> -->
-<!-- 		<p> -->
-<!-- 			<input type="button" name="insert" value="Insert Data" -->
-<!-- 				onclick="$('.visaRDF2').data('plugin_visaRDF').insertDataURL(this.form.inputbox2.value, 'text/turtle');"> -->
-<!-- 	</form> -->
+	<form>
+			<input type="button" name="clearStore" value="clearStore"
+			onclick="$('.visaRDF').data('plugin_visaRDF').clearStore();">
+	</form>
 
 
 
@@ -46,15 +39,13 @@
 
 		$(function() {
 			$('.visaRDF').visaRDF({
-				dataLoc : 'data/test_bond.jsld',
-				dataFormat : 'application/json',
 				generateSortOptions : true,
 				isotopeOptions : {		
 					masonry : {
 						columnWidth : 120
 					},
 					sortBy : 'random',
-					previewAsOverlay : 'true',
+					previewAsOverlay : false,
 					getSortData : {
 						number : function($elem) {
 							var number = $elem.hasClass('element') ? $elem.find('.number').text() : $elem.attr('data-number');
@@ -67,27 +58,6 @@
 					}
 				}
 			});
-// 			$('.visaRDF2').visaRDF({
-// 				dataLoc : 'data/turtle.ttl',
-// 				dataFormat : 'text/turtle',
-// 				generateSortOptions : true,
-// 				isotopeOptions : {		
-// 					masonry : {
-// 						columnWidth : 120
-// 					},
-// 					sortBy : 'random',
-// 					getSortData : {
-// 						asa : function($elem) {
-// 							var number = $elem.hasClass('element') ? $elem.find('.number').text() : $elem.attr('data-number');
-// 							return parseInt(number, 10);
-// 						},
-// 						alphabetical : function($elem) {
-// 							var labelEn = $elem.find('.labelEn'), itemText = labelEn.length ? labelEn : $elem;
-// 							return itemText.text();
-// 						}
-// 					}
-// 				}
-// 			});
 		});
 	</script>
 </body>

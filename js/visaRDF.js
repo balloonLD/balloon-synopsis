@@ -13,9 +13,11 @@
 		data : undefined,
 		dataLoc : undefined,
 		dataFormat : undefined,
+		templatesPrecompiled : true,
 		templatesPath : "templates/templates.html",
 		batchSize : 25,
 		generateSortOptions : true,
+		usePreviews : false,
 		previewAsOverlay : false,
 		generateFilterOptions : true,
 		supportRegExpFilter : true,
@@ -43,6 +45,13 @@
 			'geo' : 'http://www.w3.org/2003/01/geo/wgs84_pos#',
 			'dc' : 'http://purl.org/dc/terms/'
 		},
+		initQueries : [ {
+			query : "SELECT ?subject ?label ?description ?type WHERE { ?subject rdfs:label ?label . OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }. OPTIONAL {?subject rdfs:type ?type}}"
+		} ],
+		remoteQuery : "SELECT ?subject ?predicate ?object { BIND( rdfs:label as ?predicate) ?subject ?predicate ?object. ?subject a <http://dbpedia.org/ontology/Place> . ?subject <http://dbpedia.org/property/rulingParty> ?x } LIMIT 500",
+		remoteBackend : "http://zaire.dimis.fim.uni-passau.de:8080/bigdata/sparql",
+		remoteLimit : 100,
+		remoteDynamicly : true,
 		rdfstoreOptions : {
 			persistence : true,
 			name : '',
@@ -148,7 +157,8 @@
 
 	MESSAGES = {
 		error : {
-			ajax : "Error on loading data."
+			ajax : "Error on loading data.",
+			remote : "Error on loading remote data."
 		}
 	};
 
@@ -168,7 +178,7 @@
 			var instance = this, containerWidth = this.element.width(), sortBy = this.options.sortBy, props = this.groupRows;
 
 			$elems.each(function() {
-				var $this = $(this), atomW = $this.outerWidth(true), atomH = $this.outerHeight(true), group = $.data(this, 'isotope-sort-data')[sortBy], x, y;
+				var $this = $(this), atomW = $this.outerWidth(true), atomH = $this.outerHeight(true), group = $.data(this, 'isotope-sort-data')[sortBy];
 
 				if (group !== props.currentGroup) {
 					// new group, new row
@@ -189,7 +199,7 @@
 				if (group !== '') {
 					var prefix = group.split("_")[0] + "_";
 					var groups = group.split(prefix), divBox = "<div class='groupLabel'>";
-					for (var i = 1; i < groups.length; i++) {
+					for ( var i = 1; i < groups.length; i++) {
 						divBox += groups[i];
 					}
 					divBox += "</div>";
@@ -361,10 +371,12 @@
 
 		this._expandedOverlaysCount = 0;
 
-		// List of added items. Holds only uri and index of an item.
+		// List of added items.
 		this._itemHistory = {
 			length : 0
 		};
+
+		this._literalHistory = {};
 
 		// Prefixes for SPARQL queries variable
 		this._queryPrefixes = "";
@@ -415,6 +427,7 @@
 											// the template
 											if (data) {
 												context[i].index = data.index = context.plugin._itemHistory.length++;
+												data.uri = currentUri;
 											}
 											ret = ret + fn(context[i], {
 												data : data
@@ -428,17 +441,19 @@
 
 									// Check for element update
 									var update = false;
-									$.each(context[i], function(i, val) {
+									$.each(context[i], function(j, val) {
 										if (val !== null) {
-											if (context.plugin._itemHistory[currentUri][i] === null) {
-												context.plugin._itemHistory[currentUri][i] = val;
+											if (context.plugin._itemHistory[currentUri][j] === null) {
+												context.plugin._itemHistory[currentUri][j] = val;
 												update = true;
-											} else if (i === "type" && context.plugin._itemHistory[currentUri][i] !== context[i]) {
+											} else if (j === "type"
+													&& (context.plugin._itemHistory[currentUri][j].value
+															.indexOf(context.plugin._itemHistory[currentUri][j].value) === -1)) {
 
 												// An element can have more than
 												// one
 												// type
-												context.plugin._itemHistory[currentUri][i].value += " " + val.value;
+												context.plugin._itemHistory[currentUri][j].value += " " + val.value;
 												update = true;
 											}
 										}
@@ -453,7 +468,10 @@
 										// remove it from ret
 										$tempDiv = $('<div/>').append(ret);
 										$tempDiv.remove("." + context.plugin._itemHistory[currentUri].index);
-										ret = $tempDiv.contents();
+										var temp = $tempDiv.children();
+										$.each(temp, function(i, val) {
+											ret += $(val).html();
+										});
 
 										// If element is already added we need
 										// to
@@ -468,15 +486,46 @@
 								}
 								break;
 							case context.plugin.cssClasses.patternClasses.literal:
+								if (!(context[i].predicate.value in context.plugin._literalHistory)) {
+									context.plugin._literalHistory[context[i].predicate.value] = [];
+									context.plugin._literalHistory[context[i].predicate.value].push(context[i].subject.value);
+									// increment index and give it back
+									// to
+									// the template
+									if (data) {
+										context[i].index = data.index = context.plugin._itemHistory.length++;
+									}
+									ret = ret + fn(context[i], {
+										data : data
+									});
+
+								} else {
+									if ($.inArray(context[i].subject.value, context.plugin._literalHistory[context[i].predicate.value]) === -1) {
+
+										context.plugin._literalHistory[context[i].predicate.value].push(context[i].subject.value);
+										if (data) {
+											context[i].index = data.index = context.plugin._itemHistory.length++;
+										}
+										ret = ret + fn(context[i], {
+											data : data
+										});
+									} else {
+										//console.log(context[i]);
+										//console.log(context.plugin._literalHistory)
+										//console.log("duplicated literal found");
+									}
+								}
+								break;
+							case context.plugin.cssClasses.patternClasses.blanknode:
 								// increment index and give it back
 								// to
 								// the template
-								if (data) {
-									context[i].index = data.index = context.plugin._itemHistory.length++;
-								}
-								ret = ret + fn(context[i], {
-									data : data
+								console.log(context[i]);
+								var blankNodeQuery = replaceDummy(that._queries.blankNodeQuery, context[i].subject.value);
+								that._rdfStoreExecuteQuery(blankNodeQuery, function(data) {
+									console.log(data);
 								});
+								console.log("TODO blanknode");
 							}
 						}
 					}
@@ -491,14 +540,29 @@
 				}
 			});
 
+			
+			if (that.options.templatesPrecompiled) {
+				
+				// <--- extract templates --->
+				templates.isoEles = window["visaRDF"]["isotopeElements"];
+				templates.isoEleContent = window["visaRDF"]["isotopeElementContent"];
+				templates.overlayEle = window["visaRDF"]["overlayElement"];
+				templates.overlayCon = window["visaRDF"]["overlayContent"];
+				templates.sortOptions = window["visaRDF"]["sortOptions"];
+				templates.filterOptions = window["visaRDF"]["filterOptions"];
+				templates.previewEle = window["visaRDF"]["previewElement"];
+				templates.groupSortDropdown = window["visaRDF"]["groupDropDown"];
+				// <!-- extract templates --->
+				templateInitDfd.resolve();
+			} else {
 			// Get external template file
 			$.get(that.options.templatesPath, function(data) {
 				var $fakeDiv = $("<div>");
 				$fakeDiv.append(data);
 
 				// <--- extract templates --->
-				templates.isoEle = Handlebars.compile($fakeDiv.find("#visaRDF-isotope-elements").html());
-				Handlebars.registerPartial("visaRDF-isotope-element", $fakeDiv.find("#visaRDF-isotope-element").html());
+				templates.isoEles = Handlebars.compile($fakeDiv.find("#visaRDF-isotope-elements").html());
+				templates.isoEleContent = Handlebars.compile($fakeDiv.find("#visaRDF-isotope-element-content").html());
 				templates.overlayEle = Handlebars.compile($fakeDiv.find("#visaRDF-overlay-element").html());
 				templates.overlayCon = Handlebars.compile($fakeDiv.find("#visaRDF-overlay-content").html());
 				templates.sortOptions = Handlebars.compile($fakeDiv.find("#visaRDF-sort-options").html());
@@ -509,6 +573,7 @@
 
 				templateInitDfd.resolve();
 			}, "html");
+			}
 			return templateInitDfd.promise();
 		});
 
@@ -563,14 +628,18 @@
 
 				$item.index = parseInt($item.find('.number').html());
 
-				if (that.options.previewAsOverlay === true) {
-					// <---- item click event ---->
-					that._addDivPreviewItemClickEvent($item, supportTransitions, transEndEventName);
-					// <!--- item click event ---->
+				if (that.options.usePreviews) {
+					if (that.options.previewAsOverlay === true) {
+						// <---- item click event ---->
+						that._addDivPreviewItemClickEvent($item, supportTransitions, transEndEventName);
+						// <!--- item click event ---->
+					} else {
+						// <---- item click event ---->
+						that._addItemClickEvent($item, supportTransitions, transEndEventName);
+						// <!--- item click event ---->
+					}
 				} else {
-					// <---- item click event ---->
-					that._addItemClickEvent($item, supportTransitions, transEndEventName);
-					// <!--- item click event ---->
+					that._addPreviewClickEvent($item, supportTransitions, transEndEventName);
 				}
 			});
 		});
@@ -777,17 +846,26 @@
 				e.stopPropagation();
 
 				var newWidth, newHeight;
-				
-				// get Isotope instance
-				//var isotopeInstance = that._$isotopeContainer.data('isotope');
 
-				newWidth = that._$isotopeContainer.width()-100;
+				// get Isotope instance
+				// var isotopeInstance =
+				// that._$isotopeContainer.data('isotope');
+
+				newWidth = that._$isotopeContainer.width() - 100;
 				newHeight = $window.height() - 100;
 
 				$item.addClass(that.cssClasses.previewItem);
 				$item.css({
 					"width" : newWidth,
 					"height" : newHeight
+				});
+
+				var previewQuery = replaceDummy(that._queries.previewQuery, $item.data("uri"));
+
+				that._rdfStoreExecuteQuery(previewQuery, function(data) {
+					var content = templates.isoEleContent(data[0]);
+					$item.find(".itemContent").remove();
+					$item.append(content);
 				});
 				that._$isotopeContainer.isotope('reLayout');
 
@@ -864,7 +942,9 @@
 								});
 					});
 				}
-				$item.off("click", this);
+				if (that.options.usePreviews) {
+					$item.off("click", this);
+				}
 			}, $item, "previewClick");
 		});
 
@@ -952,102 +1032,127 @@
 			}, $close);
 		});
 
-		this._initOverlayContent = this._selfProxy(function($item, $overlay, callback) {
-			var that = this, $overlayContent = $overlay.find('> ' + that.cssClasses.toSelector("overlayContent"));
+		this._initOverlayContent = this
+				._selfProxy(function($item, $overlay, callback) {
+					var that = this, $overlayContent = $overlay.find('> ' + that.cssClasses.toSelector("overlayContent")), uri = $item.find('.showUri').html();
 
-			// Get elements who are in a relation to
-			// current item
-			var subjectOfQuery = replaceDummy(that._queries.selectSubjectOf, $item.find('.showUri').html()), objectOfQuery = replaceDummy(
-					that._queries.selectObjectOf, $item.find('.showUri').html());
-			// console.log($item.find('.showUri').html());
+					// Get elements who are in a relation to
+					// current item
+					var subjectOfQuery = replaceDummy(that._queries.selectSubjectOf, uri), objectOfQuery = replaceDummy(that._queries.selectObjectOf, uri), remoteSubjectOf = replaceDummy(
+							that._queries.remoteSubjectOf, uri), remoteObjectOf = replaceDummy(that._queries.remoteObjectOf, uri);
+					// console.log($item.find('.showUri').html());
 
-			that._rdfStoreExecuteQuery(subjectOfQuery, function(subjectOf) {
-				that._rdfStoreExecuteQuery(objectOfQuery, function(objectOf) {
-					// console.log(subjectOf);
-					// console.log(objectOf);
+					that._rdfStoreExecuteQuery(subjectOfQuery, function(subjectOf) {
+						that._rdfStoreExecuteQuery(objectOfQuery, function(objectOf) {
 
-					// Input for the handlebar
-					// template
-					var input = {};
-					input.label = $item.find('.labelEn').text();
+							// Input for the handlebar
+							// template
+							var input = {};
+							input.label = $item.find('.labelEn').text();
 
-					// Add types for filtering
-					for ( var i = 0; i < subjectOf.length; i++) {
-						subjectOf[i].type = {
-							value : that.cssClasses.typeClasses.outgoing
-						};
-					}
-					for ( var i = 0; i < objectOf.length; i++) {
-						objectOf[i].type = {
-							value : that.cssClasses.typeClasses.incoming
-						};
-					}
-
-					// write new data
-					$overlayContent.append($(templates.overlayCon(input)));
-
-					var resultSet = $.merge($.merge([], subjectOf), objectOf);
-					$overlayContent.find('> .innerScroll > div').visaRDF($.extend(true, {}, that.options, {
-						dataLoc : null,
-						dataFormat : null,
-						sparqlData : resultSet,
-						generateSortOptions : true,
-						generateFilterOptions : true,
-						isotopeOptions : {
-							itemSelector : '.element',
-							layoutMode : 'masonry',
-							groupRows : {
-								gutter : 20
-							},
-							getSortData : {
-								type : function($elem) {
-									var classes = $elem.attr("class");
-									return classes;
-								},
-								group : function($elem) {
-									var classes = $elem.attr("class");
-									var pattern = new RegExp("(\s)*[a-zA-Z0-9]*" + TOKEN_TAG + "[a-zA-Z0-9]*(\s)*", 'g');
-									var groups = classes.match(pattern), group = "";
-									for ( var i = 0; i < groups.length; i++) {
-										group += groups[i] + " ";
-									}
-									return group;
-								}
+							// Add types for filtering
+							for ( var i = 0; i < subjectOf.length; i++) {
+								subjectOf[i].type = {
+									value : that.cssClasses.typeClasses.outgoing
+								};
 							}
-						},
-						filterBy : [ {
-							value : "*",
-							label : "showAll"
-						}, {
-							value : CSS_CLASSES.typeClasses.incoming,
-							label : "in"
-						}, {
-							value : CSS_CLASSES.typeClasses.outgoing,
-							label : "out"
-						} ],
-					}));
+							for ( var i = 0; i < objectOf.length; i++) {
+								objectOf[i].type = {
+									value : that.cssClasses.typeClasses.incoming
+								};
+							}
+
+							// write new data
+							$overlayContent.append($(templates.overlayCon(input)));
+
+							var resultSet = $.merge($.merge([], subjectOf), objectOf);
+							$overlayContent.find('> .innerScroll > div').visaRDF($.extend(true, {}, that.options, {
+								dataLoc : null,
+								dataFormat : null,
+								sparqlData : resultSet,
+								generateSortOptions : true,
+								generateFilterOptions : true,
+								isotopeOptions : {
+									itemSelector : '.element',
+									layoutMode : 'masonry',
+									groupRows : {
+										gutter : 20
+									},
+									getSortData : {
+										type : function($elem) {
+											var classes = $elem.attr("class");
+											return classes;
+										},
+										group : function($elem) {
+											var classes = $elem.attr("class");
+											var pattern = new RegExp("(\s)*[a-zA-Z0-9]*" + TOKEN_TAG + "[a-zA-Z0-9]*(\s)*", 'g');
+											var groups = classes.match(pattern), group = "";
+											for ( var i = 0; i < groups.length; i++) {
+												group += groups[i] + " ";
+											}
+											return group;
+										}
+									}
+								},
+								initQueries : [ {
+									query : subjectOfQuery,
+									type : that.cssClasses.typeClasses.outgoing
+								}, {
+									query : objectOfQuery,
+									type : that.cssClasses.typeClasses.incoming
+								} ],
+								filterBy : [ {
+									value : "*",
+									label : "showAll"
+								}, {
+									value : CSS_CLASSES.typeClasses.incoming,
+									label : "in"
+								}, {
+									value : CSS_CLASSES.typeClasses.outgoing,
+									label : "out"
+								} ],
+							}));
+						});
+					});
+
+					if (that.options.remoteDynamicly) {
+						that._addEventHandler(EVENT_TYPES.loading.loadingDone, function(ev, $invoker) {
+							var contentVisaRDF = $overlayContent.find('div:class-prefix(visaRDF)').data('plugin_visaRDF');
+							if ($invoker === contentVisaRDF) {
+								that._removeEventHandler(EVENT_TYPES.loading.loadingDone, "remoteSubjectOf", $overlayContent);
+								contentVisaRDF.insertRemoteDataQuery(that.options.remoteBackend, remoteSubjectOf + " LIMIT " + that.options.remoteLimit);
+								that._addEventHandler(EVENT_TYPES.loading.loadingDone,
+										function(ev, $invoker) {
+											if ($invoker === contentVisaRDF) {
+												that._removeEventHandler(EVENT_TYPES.loading.loadingDone, "remoteObjectOf", $overlayContent);
+												contentVisaRDF.insertRemoteDataQuery(that.options.remoteBackend, remoteObjectOf + " LIMIT "
+														+ that.options.remoteLimit);
+											}
+										}, $overlayContent, "remoteObjectOf");
+							}
+						}, $overlayContent, "remoteSubjectOf");
+					}
+
+					// Set contet color
+					var color = new RGBColor($item.css("background-color"));
+					$overlay.css("background-color", color.toRGB());
+					$.each($overlayContent.children('div'), function(i, val) {
+						color.r -= 10;
+						color.b -= 10;
+						color.g -= 10;
+						$(val).css("background", color.toRGB());
+					});
+
+					// Set content width
+					$overlayContent.find('> .overlayColumn').css("width", 100 + "%");
+
+					// Set innerScrollBox width and height
+					$overlayContent.find('.innerScroll').css("width",
+							($window.width() - parseInt($overlay.css("padding-left")) - parseInt($overlay.css("padding-right"))) + "px");
+					$overlayContent.find('.innerScroll').css("height", $window.height() * 0.95 + "px");
+
+					callback();
 				});
-			});
-			// Set contet color
-			var color = new RGBColor($item.css("background-color"));
-			$overlay.css("background-color", color.toRGB());
-			$.each($overlayContent.children('div'), function(i, val) {
-				color.r -= 10;
-				color.b -= 10;
-				color.g -= 10;
-				$(val).css("background", color.toRGB());
-			});
-
-			// Set content width
-			$overlayContent.find('> .overlayColumn').css("width", 100 + "%");
-
-			// Set innerScrollBox width and height
-			$overlayContent.find('.innerScroll').css("width",
-					($window.width() - parseInt($overlay.css("padding-left")) - parseInt($overlay.css("padding-right"))) + "px");
-			$overlayContent.find('.innerScroll').css("height", $window.height() * 0.95 + "px");
-
-			callback();
-		});
 
 		this._initRdfStore = this._selfProxy(function() {
 			var that = this, rdfStoreInitDfd = $.Deferred();
@@ -1084,13 +1189,22 @@
 
 					// Generate SPARQL queries
 					that._queries = {
-						initQuery : " SELECT ?subject ?label ?description ?type WHERE { ?subject rdfs:label ?label . OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }. OPTIONAL {?subject rdfs:type ?type}}",
-						selectSubjectOf : " SELECT ?subject ?predicate ?label ?description ?origin WHERE {<"
+						initQueries : this.options.initQueries,
+						remoteQuery : this.options.remoteQuery,
+						remoteSubjectOf : " SELECT ?subject ?predicate ?object ?labelObj WHERE { BIND (<" + DUMMY
+								+ "> as ?subject) ?subject ?predicate ?object. OPTIONAL { ?object rdfs:label ?labelObj }}",
+						remoteObjectOf : " SELECT ?subject ?predicate ?object ?labelSub WHERE {BIND (<" + DUMMY
+								+ "> as ?object) ?subject ?predicate ?object. OPTIONAL { ?subject rdfs:label ?labelSub }}",
+						selectSubjectOf : " SELECT ?subject ?predicate ?label ?description WHERE {<"
 								+ DUMMY
 								+ "> ?predicate ?subject. OPTIONAL { ?subject rdfs:label ?label}. OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }}",
-						selectObjectOf : " SELECT ?subject ?predicate ?label ?description ?origin WHERE {?subject ?predicate <"
+						selectObjectOf : " SELECT ?subject ?predicate ?type ?label ?description WHERE {?subject ?predicate <"
 								+ DUMMY
-								+ ">. OPTIONAL { ?subject rdfs:label ?label}. OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }}"
+								+ ">. OPTIONAL { ?subject rdfs:label ?label}. OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }}",
+						previewQuery : " SELECT ?label ?description ?type WHERE { <" + DUMMY + "> rdfs:label ?label . OPTIONAL { <" + DUMMY
+								+ "> rdfs:description ?description } . OPTIONAL { <" + DUMMY + "> rdfs:comment ?description } . OPTIONAL { <" + DUMMY
+								+ "> rdfs:type ?type}}",
+						blankNodeQuery : "SELECT ?object WHERE {<" + DUMMY + "> ?predicate ?object}"
 					};
 				});
 
@@ -1102,7 +1216,7 @@
 			// current batch
 			var batch = items.slice(0, batchSize);
 
-			// isoEle / HistoryAwareEach needs plugincontext
+			// isoEles / HistoryAwareEach needs plugincontext
 			batch.plugin = that;
 
 			$.each(batch, function(i, val) {
@@ -1110,11 +1224,13 @@
 				if (val.subject.token === "literal") {
 					val.label = val.subject;
 				}
-				val.subject.token = TOKEN_TAG + val.subject.token;
+				if (val.label) {
+					val.label.value = unescape(val.label.value);
+					val.subject.token = TOKEN_TAG + val.subject.token;
+				}
 			});
-			// console.log(batch)
+			var $elements = $(templates.isoEles(batch));
 
-			var $elements = $(templates.isoEle(batch));
 			$.each($elements, function(i, val) {
 				$(val).css("background-color", "rgba(125, 125, 125 ,0.2)");
 			});
@@ -1131,6 +1247,10 @@
 					$elements.find('.ellipsis').ellipsis();
 					$nodes = $elements.filter(that.cssClasses.toSelector("patternClasses.uri"));
 					$literals = $elements.filter(that.cssClasses.toSelector("patternClasses.literal"));
+
+					$.each($nodes, function(i, val) {
+						$(val).data("uri", $(val).find(".showUri").html());
+					});
 
 					// Init overlays on new elements
 					that._initBrowsability($nodes);
@@ -1154,7 +1274,6 @@
 			if (rest.length > 0) {
 				that._isotopeAddBatches(rest);
 			} else {
-				that._$outerContainer.find('> ' + that.cssClasses.loader).text("");
 				$(that._$outerContainer).trigger(EVENT_TYPES.loading.loadingDone, that);
 			}
 		});
@@ -1217,11 +1336,11 @@
 				}));
 				$sorterGroup = $sorter.find('#GroupDropDown');
 
-				// Add onCLick
-				$sorterGroup.children().click(function(e) {
+				// Add onChange
+				$sorterGroup.change(function(e) {
 
 					// get href attribute, minus the '#'
-					var groupBy = $(this).parent().val();
+					var groupBy = $(this).val();
 
 					$element.find('.sorter > > > .selected').removeClass('selected');
 					$isotopeContainer.isotope({
@@ -1308,7 +1427,6 @@
 						if (selector !== '*') {
 							if (that.options.supportRegExpFilter) {
 								try {
-									var regEx = new RegExp(selector);
 									selector = "div:regex(class, " + selector + "), div > div:contains(" + selector + ")";
 								} catch (e) {
 									selector = "div > div:contains(" + selector + ")";
@@ -1337,7 +1455,7 @@
 					callback(results);
 				} else {
 					$(that._$outerContainer).trigger(EVENT_TYPES.loading.loadingDone, that);
-					// console.log("Error on executing: " + query);
+					console.log("Error on executing: " + query);
 				}
 			});
 		});
@@ -1349,7 +1467,10 @@
 			var that = this;
 			$(that._$outerContainer).trigger(EVENT_TYPES.loading.loadingStart, that);
 
-			if (that.options.dataFormat !== "application/ld+json" && that.options.dataFormat === "text/turtle") {
+			if (dataFormat === "remote") {
+			}
+
+			if (dataFormat === "text/turtle" || dataFormat === "text/plain" || dataFormat === "text/n3") {
 				// get prefix terms and update namespaces
 				var prefixTerms = data.match(/.*@prefix.*>(\s)*./g);
 				$.each(prefixTerms, function(i, val) {
@@ -1367,9 +1488,17 @@
 					// "");
 					// }
 				});
+			} else if (dataFormat === "application/ld+json" || dataFormat === "application/json") {
+				var prefixes = data["@context"];
+				$.each(prefixes, function(i, val) {
+					if (isUndefinedOrNull(that.options.ns[prefix])) {
+						that.options.ns[i] = val;
+						that._generateQueryPrefix(i, val);
+					}
+				});
 			}
 
-			// TODO Long loading times due to ttl parser
+			// TODO Long loading times due to parser
 			rdfStore.load(dataFormat, data, function(store) {
 				callback();
 			});
@@ -1394,18 +1523,89 @@
 			});
 		});
 
-		this._updateView = this._selfProxy(function(query) {
-			var that = this;
+		this._updateView = this._selfProxy(function(initQueries) {
+			var that = this, emptyResults = true;
 			$(that._$outerContainer).trigger(EVENT_TYPES.loading.loadingStart, that);
-			// console.log("_updateView");
-			that._rdfStoreExecuteQuery(query, function(results) {
-				if (results.length !== 0) {
-					that._isotopeAddBatches(results);
-				} else {
-					$(that._$outerContainer).trigger(EVENT_TYPES.loading.loadingDone, that);
+			for ( var i = 0; i < initQueries.length; i++) {
+				that._rdfStoreExecuteQuery(initQueries[i].query, function(results) {
+					if (results && results.length !== 0) {
+						emptyResults = false;
+						if (initQueries[i].type) {
+							// Add types for filtering
+							for ( var j = 0; j < results.length; j++) {
+								results[j].type = {
+									value : initQueries[i].type
+								};
+							}
+						}
+						that._isotopeAddBatches(results);
+					} else if (i === initQueries.length - 1 && emptyResults) {
+						$(that._$outerContainer).trigger(EVENT_TYPES.loading.loadingDone, that);
+					}
+				});
+			}
+		});
+
+		// Accepts a url and a callback function to run.
+		this._requestCrossDomain = function(site, query, callback) {
+
+			var that = this, success = false;
+			$(that._$outerContainer).trigger(EVENT_TYPES.loading.loadingStart, this);
+
+			// If no url was passed, exit.
+			if (!site) {
+				alert('No site was passed.');
+				return false;
+			}
+
+			// If no query was passed, exit.
+			if (!query) {
+				alert('No query was passed.');
+				return false;
+			}
+
+			// Take the provided url, and add it to a YQL query. Make sure you
+			// encode it!
+			var yql = 'http://query.yahooapis.com/v1/public/yql?q='
+					+ encodeURIComponent('use "http://triplr.org/sparyql/sparql.xml" as sparql; select * from sparql where query="' + query + '" and service="'
+							+ site) + '"&format=json&callback=cbFunc';
+
+			// Request that YSQL string, and run a callback function.
+			// Pass a defined function to prevent cache-busting.
+			// $.getJSONP(yql, cbFunc);
+			$.ajax({
+				dataType : 'jsonp',
+				url : yql,
+				success : window.cbFunc,
+				error : function(jqXHR, textStatus, errorThrown) {
+					//console.log(yql);
+					console.log("Error on yql query.");
+					//console.log(textStatus);
+					//console.log(jqXHR);
+					console.log(errorThrown);
+					if (!success) {
+						that._$outerContainer.trigger(EVENT_TYPES.loading.loadingDone, that);
+					}
 				}
 			});
-		});
+
+			window.cbFunc = function(data, textStatus, jqXHR) {
+				success = true;
+				//console.log(success);
+				
+				// If we have something to work with...
+				// console.log(data)
+				if (data && data.query.results) {
+					callback(data.query.results.sparql.result);
+				}
+				// Else, Maybe we requested a site that doesn't exist, and
+				// nothing returned.
+				else
+					console.log('Nothing returned from getJSON.');
+				that._$outerContainer.trigger(EVENT_TYPES.loading.loadingDone, that);
+			};
+		},
+
 		// <!--- instance private functions ---->
 
 		this.init();
@@ -1414,7 +1614,7 @@
 	Plugin.prototype = {
 
 		init : function() {
-
+			
 			// Init Isotope
 			this._$isotopeContainer.isotope(this.options.isotopeOptions);
 
@@ -1451,12 +1651,7 @@
 
 			// Add insertion listener
 			this._addEventHandler(EVENT_TYPES.storeModified.insert, this._selfProxy(function(ev, $invoker) {
-
-				// Only update the base plugin //TODO Add update support for
-				// higher levels
-				if (this._instanceLevel === 0) {
-					this._updateView(this._queries.initQuery);
-				}
+				this._updateView(this._queries.initQueries);
 			}));
 
 			// Add a smartresize listener (smartresize to be found in
@@ -1479,7 +1674,7 @@
 					var $previews = this._$isotopeContainer.children(this.cssClasses.toSelector("previewItem"));
 
 					var newWidth, newHeight;
-					newWidth = this._$isotopeContainer.width()-100;
+					newWidth = this._$isotopeContainer.width() - 100;
 					newHeight = $window.height() - 100;
 					$previews.css({
 						"width" : newWidth,
@@ -1508,7 +1703,7 @@
 				}
 				if (!this._checkInsertion()) {
 					if (this.options.sparqlData === undefined) {
-						this._updateView(this._queries.initQuery);
+						this._updateView(this._queries.initQueries);
 					} else {
 						this._isotopeAddBatches(this.options.sparqlData);
 					}
@@ -1546,13 +1741,72 @@
 		},
 
 		insertRemoteData : function(url) {
+			this.insertRemoteDataQuery(url, this._queries.remoteQuery);
+		},
 
-			// TODO Problem with cross domain and ajax.get()
-			rdfStore.execute('LOAD <' + url + '>\ ', function(success) {
-				if (success) {
-					$(that._$outerContainer).trigger(EVENT_TYPES.storeModified.insert, that);
-				}
-			})
+		insertRemoteDataQuery : function(url, query) {
+
+			if (query === undefined || query === "") {
+				insertRemoteData(url);
+			} else {
+				this._requestCrossDomain(url, query, this._selfProxy(function(data) {
+
+					// Generate insertionQuery out of the resultset.
+					if (data) {
+						if (data.subject !== undefined) {
+							data = [ data ];
+						}
+						var insertionQuery = "INSERT DATA {";
+						$.each(data, function(i, val) {
+							if (val.subject === undefined) {
+								console.log("Resultset disfigured.");
+							} else if (val.subject.type === "uri") {
+								insertionQuery += "<" + val.subject.value + "> ";
+							} else {
+								// TODO BlankNodes
+								insertionQuery += "<" + val.subject.value + "> ";
+							}
+							insertionQuery += "<" + val.predicate.value + "> ";
+							if (val.object.type === "uri") {
+								insertionQuery += "<" + val.object.value + ">. ";
+							} else if (val.object.type === "literal") {
+								insertionQuery += '"' + escape(val.object.value) + '". ';
+							}
+							if (val.labelSub) {
+								insertionQuery += '<' + val.subject.value + '> rdfs:label "' + val.labelSub.value + '". ';
+								// console.log('<' + val.subject.value + '>
+								// rdfs:label "' + val.labelSub.value + '".
+								// ');
+							}
+							if (val.labelObj) {
+								insertionQuery += '<' + val.object.value + '> rdfs:label "' + val.labelObj.value + '". ';
+								// console.log('<' + val.object.value + '>
+								// rdfs:label "' + val.labelObj.value + '".
+								// ');
+							}
+						});
+						insertionQuery += "}";
+
+						// Execute insertion
+						this._rdfStoreExecuteQuery(insertionQuery, this._selfProxy(function() {
+							$(this._$outerContainer).trigger(EVENT_TYPES.storeModified.insert, this);
+						}));
+					}
+				}));
+			}
+		},
+
+		clearStore : function() {
+			this._rdfStoreExecuteQuery("CLEAR ALL", this._selfProxy(function() {
+				var that = this;
+				that._$isotopeContainer.isotope('remove', $(".element"), function() {
+					that._itemHistory = {
+						length : 0
+					};
+					that._literalHistory = {};
+					console.log("store cleared");
+				});
+			}));
 		},
 
 		/**

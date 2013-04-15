@@ -142,6 +142,10 @@ blockquote {
 	font-style: italic;
 }
 
+label {
+	color: 		#222;
+}
+
 /**** Isotope styles ****/
 
 /* required for containers to inherit vertical size from window */
