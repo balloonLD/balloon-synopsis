@@ -1,0 +1,7 @@
+	<div class="element {{subject.token}} {{#if type}}{{type.value}}{{/if}} {{@index}}">
+		{{#if subject}}
+			<h2 class="showUri" style="display:none">{{subject.value}}</h2>
+		{{/if}}
+		<p class="number">{{@index}}</p>
+		{{> isotopeElementContent}}
+	</div>
