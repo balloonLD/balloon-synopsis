@@ -14515,7 +14515,7 @@ Utils.lexicalFormBaseUri = function(term, env) {
         return null;
     } else {
         //console.log(" - resolved URI is "+uri);
-        if(uri.indexOf(":") == -1 && uri != "@graph") { //visaRDF JSON-LD load modifie
+        if(uri.indexOf(":") == -1 && uri != "@graph") {
             //console.log(" - URI is partial");
             uri = (env.base||"") + uri; // applyBaseUri
         } else {
@@ -16077,9 +16077,6 @@ var NetworkTransport = {};
 NetworkTransport.load = function (uri, accept, callback, redirect) {
     var transport = jQuery;
     
-	
-	//visaRDF modifie remote load
-    console.log("visaRDF")
 
     transport.ajax({
         url:uri,
@@ -19293,7 +19290,7 @@ var RDFLoader = {};
 RDFLoader.RDFLoader = function (params) {
     this.precedences = ["text/turtle", "text/n3", "application/ld+json", "application/json"];
     
-    //visaRDF added "text/plain"... not very clean
+    //visaRDF added "text/plain"
     this.parsers = {"text/turtle":N3Parser.parser, "text/plain":N3Parser.parser, "text/n3":N3Parser.parser, "application/ld+json":JSONLDParser.parser, "application/json":JSONLDParser.parser};
     if (params != null) {
         for (var mime in params["parsers"]) {
@@ -19344,7 +19341,6 @@ RDFLoader.RDFLoader.prototype.setAcceptHeaderPrecedence = function(mediaTypes) {
 RDFLoader.RDFLoader.prototype.load = function(uri, graph, callback) {
     var that = this;
     
-	//visaRDF modifie remote load
     NetworkTransport.load(uri, this.acceptHeaderValue, function(success, results){
         if(success == true) {
             var mime = results["headers"]["Content-Type"] || results["headers"]["content-type"];
@@ -43432,7 +43428,6 @@ QueryEngine.QueryEngine.prototype.executeUpdate = function(syntaxTree, callback)
             }
             var that = this;
             
-            //visaRDF load modifie
             this.rdfLoader.load(aqt.sourceGraph.value, graph, function(success, result){
                 if(success == false) {
                     console.log("Error loading graph");
@@ -48357,7 +48352,10 @@ function program1(depth0,data) {
 		},
 
 		insertRemoteData : function(url) {
-			this.insertRemoteDataQuery(url, this._queries.remoteQuery);
+			var that = this;
+			$.when(globalInitDfd.promise()).done(function() {
+				that.insertRemoteDataQuery(url, that._queries.remoteQuery);
+			});
 		},
 
 		insertRemoteDataQuery : function(url, query) {

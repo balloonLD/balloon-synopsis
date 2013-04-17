@@ -1746,7 +1746,10 @@
 		},
 
 		insertRemoteData : function(url) {
-			this.insertRemoteDataQuery(url, this._queries.remoteQuery);
+			var that = this;
+			$.when(globalInitDfd.promise()).done(function() {
+				that.insertRemoteDataQuery(url, that._queries.remoteQuery);
+			});
 		},
 
 		insertRemoteDataQuery : function(url, query) {

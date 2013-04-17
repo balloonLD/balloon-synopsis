@@ -38,26 +38,7 @@
 	<script type="text/javascript">
 
 		$(function() {
-			$('.visaRDF').visaRDF({
-				generateSortOptions : true,
-				isotopeOptions : {		
-					masonry : {
-						columnWidth : 120
-					},
-					sortBy : 'random',
-					previewAsOverlay : false,
-					getSortData : {
-						number : function($elem) {
-							var number = $elem.hasClass('element') ? $elem.find('.number').text() : $elem.attr('data-number');
-							return parseInt(number, 10);
-						},
-						alphabetical : function($elem) {
-							var labelEn = $elem.find('.labelEn'), itemText = labelEn.length ? labelEn : $elem;
-							return itemText.text();
-						}
-					}
-				}
-			});
+			$('.visaRDF').visaRDF();
 		});
 	</script>
 </body>
