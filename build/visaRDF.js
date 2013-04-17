@@ -46696,7 +46696,7 @@ function program1(depth0,data) {
 	templates = {},
 
 	// Deferred to inform if the plugin was already initialized once
-	globalInitDfd = undefined,
+	globalInitDfd = $.Deferred();
 
 	// Counter for plugin instances
 	pluginInstanceCount = 0,
@@ -48297,7 +48297,7 @@ function program1(depth0,data) {
 			}), $window);
 
 			// Init templating and RdfStore if needed
-			if (globalInitDfd === undefined) {
+			if (globalInitDfd.state() === "pending") {
 				globalInitDfd = $.Deferred();
 				$.when(this._initRdfStore(), this._initTemplating()).done(function() {
 					globalInitDfd.resolve();
@@ -48333,8 +48333,10 @@ function program1(depth0,data) {
 		 */
 		insertData : function(data, dataFormat) {
 			var that = this;
-			this._rdfStoreInsertData(data, dataFormat, function() {
-				$(that._$outerContainer).trigger(EVENT_TYPES.storeModified.insert, that);
+			$.when(globalInitDfd.promise()).done(function() {
+				that._rdfStoreInsertData(data, dataFormat, function() {
+					$(that._$outerContainer).trigger(EVENT_TYPES.storeModified.insert, that);
+				});
 			});
 		},
 
@@ -48347,8 +48349,11 @@ function program1(depth0,data) {
 		 * @param dataFormat
 		 *            Format of the data
 		 */
-		insertDataURL : function(dataURL, dataFormat) {
-			this._ajaxLoadData(dataURL, dataFormat, this._selfProxy(this.insertData));
+		insertDataFile : function(dataURL, dataFormat) {
+			var that = this;
+			$.when(globalInitDfd.promise()).done(function() {
+				that._ajaxLoadData(dataURL, dataFormat, that._selfProxy(that.insertData));
+			});
 		},
 
 		insertRemoteData : function(url) {

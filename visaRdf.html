@@ -14,7 +14,7 @@
 			name="inputbox" value="data/turtle.ttl">
 		<p>
 			<input type="button" name="insert" value="Insert data"
-				onclick="$('.visaRDF').data('plugin_visaRDF').insertDataURL(this.form.inputbox.value, 'text/turtle');">
+				onclick="$('.visaRDF').data('plugin_visaRDF').insertDataFile(this.form.inputbox.value, 'text/turtle');">
 	</form>
 	<form>
 		<label for="serviceinputbox">Remote data service:</label> <input
@@ -58,6 +58,7 @@
 					}
 				}
 			});
+			$('.visaRDF').data('plugin_visaRDF').insertDataFile("data/turtle.ttl", 'text/turtle');
 		});
 	</script>
 </body>
