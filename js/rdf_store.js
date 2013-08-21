@@ -386,7 +386,7 @@ Utils.lexicalFormBaseUri = function(term, env) {
         return null;
     } else {
         //console.log(" - resolved URI is "+uri);
-        if(uri.indexOf(":") == -1 && uri != "@graph") {
+        if(uri.indexOf(":") == -1 && uri != "@graph") { //VisaRDF modified for jsonld
             //console.log(" - URI is partial");
             uri = (env.base||"") + uri; // applyBaseUri
         } else {

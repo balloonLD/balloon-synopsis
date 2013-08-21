@@ -1,4 +1,5 @@
 this["visaRDF"] = this["visaRDF"] || {};
+this["visaRDF"]["templates"] = this["visaRDF"]["templates"] || {};
 
 Handlebars.registerPartial("isotopeElement", Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [2,'>= 1.0.0-rc.3'];
@@ -84,7 +85,7 @@ function program5(depth0,data) {
   return buffer;
   }));
 
-this["visaRDF"]["filterOptions"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["visaRDF"]["templates"]["filterOptions"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [2,'>= 1.0.0-rc.3'];
 helpers = helpers || Handlebars.helpers; data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
@@ -115,7 +116,7 @@ function program1(depth0,data) {
   return buffer;
   });
 
-this["visaRDF"]["groupDropDown"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["visaRDF"]["templates"]["groupDropDown"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [2,'>= 1.0.0-rc.3'];
 helpers = helpers || Handlebars.helpers; data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
@@ -142,7 +143,7 @@ function program1(depth0,data) {
   return buffer;
   });
 
-this["visaRDF"]["isotopeElements"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["visaRDF"]["templates"]["isotopeElements"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [2,'>= 1.0.0-rc.3'];
 helpers = helpers || Handlebars.helpers; partials = partials || Handlebars.partials; data = data || {};
   var buffer = "", stack1, stack2, options, self=this, helperMissing=helpers.helperMissing;
@@ -164,7 +165,7 @@ function program1(depth0,data) {
   return buffer;
   });
 
-this["visaRDF"]["overlayContent"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["visaRDF"]["templates"]["overlayContent"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [2,'>= 1.0.0-rc.3'];
 helpers = helpers || Handlebars.helpers; data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
@@ -186,7 +187,7 @@ function program1(depth0,data) {
   return buffer;
   });
 
-this["visaRDF"]["overlayElement"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["visaRDF"]["templates"]["overlayElement"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [2,'>= 1.0.0-rc.3'];
 helpers = helpers || Handlebars.helpers; data = data || {};
   var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression;
@@ -206,7 +207,7 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   return buffer;
   });
 
-this["visaRDF"]["previewElement"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["visaRDF"]["templates"]["previewElement"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [2,'>= 1.0.0-rc.3'];
 helpers = helpers || Handlebars.helpers; data = data || {};
   var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression;
@@ -226,7 +227,7 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   return buffer;
   });
 
-this["visaRDF"]["sortOptions"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["visaRDF"]["templates"]["sortOptions"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [2,'>= 1.0.0-rc.3'];
 helpers = helpers || Handlebars.helpers; data = data || {};
   var buffer = "", stack1, stack2, options, functionType="function", escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;

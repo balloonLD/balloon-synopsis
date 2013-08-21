@@ -12,7 +12,7 @@ module.exports = function(grunt) {
 					processPartialName : function(filePath) { // input:  templates/_header.hbs
 						return filePath.split('.')[0].split('/')[1].split('_')[1]; // output: _header.hbs
 					},
-					namespace : "<%= pkg.name %>",
+					namespace : "<%= pkg.name %>.templates",
 					partialRegex : /^par_/
 				},
 				files : {
@@ -46,13 +46,13 @@ module.exports = function(grunt) {
 	// Load the plugin that provides the "handlebars" task.
 	grunt.loadNpmTasks('grunt-contrib-handlebars');
 
-	// Load the plugin that provides the "handlebars" task.
+	// Load the plugin that provides the "concatination" task.
 	grunt.loadNpmTasks('grunt-contrib-concat');
 
 	// Load the plugin that provides the "uglify" task.
-	grunt.loadNpmTasks('grunt-contrib-uglify');
+	//grunt.loadNpmTasks('grunt-contrib-uglify');
 
 	// Default task(s).
-	grunt.registerTask('default', [ 'handlebars', 'concat', 'uglify' ]);
+	grunt.registerTask('default', [ 'handlebars', 'concat' ]);
 
 };

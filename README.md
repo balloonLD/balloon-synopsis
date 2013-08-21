@@ -1,6 +1,8 @@
-# visaRDF - A jQuery Plugin for rdf visualisation
+# visaRDF - A jQuery Plugin for RDF visualisation
 
 ## Installation
+Grunt concatinates all needed files and dependencies. If you get a double load issue you can remove the respective file from the js folder an rebuild visaRDF.
+
 visaRDF dependencies:
 
  * [jQuery](http://jquery.com/) 1.8.3
