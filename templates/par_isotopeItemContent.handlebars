@@ -1,0 +1,12 @@
+		{{#if label}}
+			<h3 class="itemContent labelEn ellipsis">{{label.value}}</h3>
+		{{/if}}
+		{{#ifLang description}}
+			<div class="itemContent descriptionEn ellipsis">{{description.value}}</div>
+		{{/ifLang}}
+		{{#if predicate}}
+			<div class="itemContent predicate" style="display:none">{{predicate.value}}</div>
+                        {{#predicateLabelRetriver predicate}}
+                            <div class="itemContent predicateLabel">{{predicate.label}}</div>
+                        {{/predicateLabelRetriver}}
+		{{/if}}

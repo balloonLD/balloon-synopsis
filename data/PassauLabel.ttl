@@ -1,0 +1,123 @@
+@prefix rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix owl:	<http://www.w3.org/2002/07/owl#> .
+owl:Thing	rdf:type	owl:Class .
+@prefix xsd:	<http://www.w3.org/2001/XMLSchema#> .
+@prefix dcterms:	<http://purl.org/dc/terms/> .
+owl:Thing	dcterms:modified	"2013-01-24T10:35:15.597Z"^^xsd:dateTime .
+@prefix rdfs:	<http://www.w3.org/2000/01/rdf-schema#> .
+owl:Thing	rdfs:label	"cosa"@it ,
+		"cosa"@es ,
+		"chose"@fr ,
+		"thing"@en ;
+	rdfs:subClassOf	owl:Thing ;
+	owl:equivalentClass	owl:Thing .
+@prefix ns5:	<http://dbpedia.org/meta/> .
+owl:Thing	ns5:editlink	<http://mappings.dbpedia.org/index.php?title=OntologyClass:Owl:Thing&action=edit> ;
+	ns5:revisionlink	<http://mappings.dbpedia.org/index.php?title=OntologyClass:Owl:Thing&oldid=23545> .
+@prefix dbpedia:	<http://dbpedia.org/resource/> .
+@prefix ns7:	<http://umbel.org/umbel/rc/> .
+dbpedia:Germany	rdf:type	ns7:Country .
+@prefix ns8:	<http://www.opengis.net/gml/> .
+dbpedia:Germany	rdf:type	ns8:_Feature .
+@prefix yago:	<http://dbpedia.org/class/yago/> .
+dbpedia:Germany	rdf:type	yago:AlpineCountries ,
+		yago:EuropeanCountries ,
+		yago:CountriesBorderingTheBalticSea ,
+		yago:EuropeanUnionMemberStates .
+@prefix ns10:	<http://schema.org/> .
+dbpedia:Germany	rdf:type	ns10:Place ,
+		yago:German-speakingCountries ,
+		owl:Thing ,
+		yago:MemberStatesOfTheUnionForTheMediterranean ,
+		ns7:Location_Underspecified ,
+		ns7:PopulatedPlace ,
+		yago:StatesAndTerritoriesEstablishedIn1291 .
+@prefix dbpedia-owl:	<http://dbpedia.org/ontology/> .
+dbpedia:Germany	rdf:type	dbpedia-owl:Place ,
+		yago:YagoGeoEntity ,
+		dbpedia-owl:Country ,
+		ns10:Country ,
+		yago:CountriesBorderingTheAtlanticOcean ,
+		yago:FederalCountries ,
+		dbpedia-owl:PopulatedPlace .
+dbpedia-owl:PopulatedPlace	rdf:type	owl:Class ;
+	dcterms:modified	"2013-01-23T11:33:37.291Z"^^xsd:dateTime ;
+	rdfs:label	"populated place"@en ,
+		"bebouwde omgeving"@nl ,
+		"lieu habit\u00E9"@fr ,
+		"bewohnter Ort"@de ;
+	rdfs:comment	"As defined by the United States Geological Survey, a populated place is a place or area with clustered or scattered buildings and a permanent human population (city, settlement, town, or village) referenced with geographic coordinates ([http://en.wikipedia.org/wiki/Populated_place). http://en.wikipedia.org/wiki/Populated_place).]"@en ;
+	rdfs:subClassOf	dbpedia-owl:Place ;
+	ns5:editlink	<http://mappings.dbpedia.org/index.php?title=OntologyClass:PopulatedPlace&action=edit> ;
+	ns5:revisionlink	<http://mappings.dbpedia.org/index.php?title=OntologyClass:PopulatedPlace&oldid=20439> .
+dbpedia-owl:Place	rdf:type	owl:Class ;
+	dcterms:modified	"2013-06-18T11:22:36.258Z"^^xsd:dateTime ;
+	rdfs:label	"\u7ACB\u5730"@ja ,
+		"\u03C0\u03B5\u03C1\u03B9\u03BF\u03C7\u03AE"@el ,
+		"lugar"@es ,
+		"Ort"@de ,
+		"lugar"@pt ,
+		"\u0645\u0643\u0627\u0646"@ar ,
+		"plaats"@nl ,
+		"place"@en ,
+		"lieu"@fr ,
+		"lekua"@eu ;
+	rdfs:comment	"Immobile things or locations."@en ,
+		"uma localiza\u00E7\u00E3o"@pt ,
+		"a location"@en ;
+	rdfs:subClassOf	owl:Thing ;
+	owl:equivalentClass	ns10:Place .
+@prefix ns12:	<schema:> .
+dbpedia-owl:Place	owl:equivalentClass	ns12:Place ;
+	ns5:editlink	<http://mappings.dbpedia.org/index.php?title=OntologyClass:Place&action=edit> ;
+	ns5:revisionlink	<http://mappings.dbpedia.org/index.php?title=OntologyClass:Place&oldid=26192> .
+dbpedia-owl:Town	rdf:type	owl:Class ;
+	dcterms:modified	"2013-01-23T11:31:22.365Z"^^xsd:dateTime ;
+	rdfs:label	"\u753A"@ja ,
+		"\u03C0\u03CC\u03BB\u03B7"@el ,
+		"town"@en ,
+		"stad"@nl ,
+		"ville"@fr ,
+		"miasteczko"@pl ;
+	rdfs:comment	"a settlement ranging from a few hundred to several thousand (occasionally hundreds of thousands). The precise meaning varies between countries and is not always a matter of legal definition. Usually, a town is thought of as larger than a village but smaller than a city, though there are exceptions to this rule."@en ;
+	rdfs:subClassOf	dbpedia-owl:Settlement ;
+	ns5:editlink	<http://mappings.dbpedia.org/index.php?title=OntologyClass:Town&action=edit> ;
+	ns5:revisionlink	<http://mappings.dbpedia.org/index.php?title=OntologyClass:Town&oldid=19922> .
+dbpedia-owl:Settlement	rdf:type	owl:Class ;
+	dcterms:modified	"2013-02-22T19:53:14.918Z"^^xsd:dateTime ;
+	rdfs:label	"\u03BF\u03B9\u03BA\u03B9\u03C3\u03BC\u03CC\u03C2"@el ,
+		"municipalit\u00E9"@fr ,
+		"\uB3C4\uC2DC"@ko ,
+		"municipality"@en ,
+		"gemeente"@nl ,
+		"hiri orokor"@eu ;
+	rdfs:subClassOf	dbpedia-owl:PopulatedPlace ;
+	ns5:editlink	<http://mappings.dbpedia.org/index.php?title=OntologyClass:Settlement&action=edit> ;
+	ns5:revisionlink	<http://mappings.dbpedia.org/index.php?title=OntologyClass:Settlement&oldid=23950> .
+dbpedia:Passau	rdf:type	owl:Thing ,
+		yago:PopulatedPlacesOnTheDanuBE ,
+		yago:GeoclassPopulatedPlace ,
+		dbpedia-owl:Settlement ,
+		dbpedia-owl:Town ,
+		dbpedia-owl:PopulatedPlace ,
+		yago:DisplacedPersonsCamps ,
+		dbpedia-owl:Place .
+@prefix category:	<http://dbpedia.org/resource/Category:> .
+dbpedia:Passau	dcterms:subject	category:Populated_places_on_the_Danube ,
+		category:Passau_district ;
+	dbpedia-owl:country	dbpedia:Germany .
+@prefix skos:	<http://www.w3.org/2004/02/skos/core#> .
+category:Passau_district	rdf:type	skos:Concept ;
+	rdfs:label	"Passau district"@en ;
+	skos:prefLabel	"Passau district"@en ;
+	skos:broader	category:Lower_Bavaria .
+category:Populated_places_on_the_Danube	rdf:type	skos:Concept ;
+	rdfs:label	"Populated places on the Danube"@en ;
+	skos:prefLabel	"Populated places on the Danube"@en ;
+	skos:broader	category:Danube ,
+		category:Populated_riverside_places .
+yago:GeoclassPopulatedPlace	rdfs:suBClassOf	yago:Home108559508 .
+yago:DisplacedPersonsCamps	rdfs:label	"Displaced Persons camps"@en ;
+	rdfs:suBClassOf	yago:Camp102944826 .
+yago:PopulatedPlacesOnTheDanuBE	rdfs:label	"Populated places on the DanuBE"@en ;
+	rdfs:suBClassOf	yago:Site108651247 .

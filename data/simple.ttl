@@ -1,0 +1,8 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix ex: <http://example.org/stuff/1.0/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+
+<http://www.w3.org/TR/rdf-syntax-grammar> dc:title "RDF/XML Syntax Specification (Revised)" .
+<http://www.w3.org/TR/rdf-syntax-grammar> rdfs:label "RDF/XML"@en.
+<http://www.w3.org/TR/rdf-syntax-grammar> rdfs:comment "RDF/XML Syntax Specification (Revised)" .
