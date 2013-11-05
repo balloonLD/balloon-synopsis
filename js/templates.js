@@ -1,46 +1,7 @@
 this["visaRDF"] = this["visaRDF"] || {};
 this["visaRDF"]["templates"] = this["visaRDF"]["templates"] || {};
 
-Handlebars.registerPartial("isotopeElement", Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
-helpers = helpers || Handlebars.helpers; partials = partials || Handlebars.partials; data = data || {};
-  var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression, self=this;
-
-function program1(depth0,data) {
-  
-  var stack1;
-  return escapeExpression(((stack1 = ((stack1 = depth0.type),stack1 == null || stack1 === false ? stack1 : stack1.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1));
-  }
-
-function program3(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\r\n			<h2 class=\"showUri\" style=\"display:none\">"
-    + escapeExpression(((stack1 = ((stack1 = depth0.subject),stack1 == null || stack1 === false ? stack1 : stack1.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</h2>\r\n		";
-  return buffer;
-  }
-
-  buffer += "	<div class=\"element "
-    + escapeExpression(((stack1 = ((stack1 = depth0.subject),stack1 == null || stack1 === false ? stack1 : stack1.token)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " ";
-  stack2 = helpers['if'].call(depth0, depth0.type, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += " "
-    + escapeExpression(((stack1 = data.index),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">\r\n		";
-  stack2 = helpers['if'].call(depth0, depth0.subject, {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += "\r\n		<p class=\"number\">"
-    + escapeExpression(((stack1 = data.index),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</p>\r\n		";
-  stack2 = self.invokePartial(partials.isotopeElementContent, 'isotopeElementContent', depth0, helpers, partials, data);
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += "\r\n	</div>";
-  return buffer;
-  }));
-
-Handlebars.registerPartial("isotopeElementContent", Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+Handlebars.registerPartial("isotopeItemContent", Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [2,'>= 1.0.0-rc.3'];
 helpers = helpers || Handlebars.helpers; data = data || {};
   var buffer = "", stack1, stack2, options, functionType="function", escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
@@ -65,10 +26,22 @@ function program3(depth0,data) {
 
 function program5(depth0,data) {
   
-  var buffer = "", stack1;
-  buffer += "\r\n			<div class=\"itemContent predicate\">"
+  var buffer = "", stack1, stack2, options;
+  buffer += "\r\n			<div class=\"itemContent predicate\" style=\"display:none\">"
     + escapeExpression(((stack1 = ((stack1 = depth0.predicate),stack1 == null || stack1 === false ? stack1 : stack1.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</div>\r\n		";
+    + "</div>\r\n                        ";
+  options = {hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data};
+  stack2 = ((stack1 = helpers.predicateLabelRetriver),stack1 ? stack1.call(depth0, depth0.predicate, options) : helperMissing.call(depth0, "predicateLabelRetriver", depth0.predicate, options));
+  if(stack2 || stack2 === 0) { buffer += stack2; }
+  buffer += "\r\n		";
+  return buffer;
+  }
+function program6(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\r\n                            <div class=\"itemContent predicateLabel\">"
+    + escapeExpression(((stack1 = ((stack1 = depth0.predicate),stack1 == null || stack1 === false ? stack1 : stack1.label)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</div>\r\n                        ";
   return buffer;
   }
 
@@ -143,25 +116,46 @@ function program1(depth0,data) {
   return buffer;
   });
 
-this["visaRDF"]["templates"]["isotopeElements"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["visaRDF"]["templates"]["isotopeItem"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [2,'>= 1.0.0-rc.3'];
 helpers = helpers || Handlebars.helpers; partials = partials || Handlebars.partials; data = data || {};
-  var buffer = "", stack1, stack2, options, self=this, helperMissing=helpers.helperMissing;
+  var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
+  var stack1;
+  return escapeExpression(((stack1 = ((stack1 = depth0.type),stack1 == null || stack1 === false ? stack1 : stack1.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1));
+  }
+
+function program3(depth0,data) {
+  
   var buffer = "", stack1;
-  buffer += "\r\n		";
-  stack1 = self.invokePartial(partials.isotopeElement, 'isotopeElement', depth0, helpers, partials, data);
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n	";
+  buffer += "\r\n			<h2 class=\"showUri\" style=\"display:none\">"
+    + escapeExpression(((stack1 = ((stack1 = depth0.subject),stack1 == null || stack1 === false ? stack1 : stack1.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</h2>\r\n		";
   return buffer;
   }
 
-  buffer += "	";
-  options = {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data};
-  stack2 = ((stack1 = helpers.historyAwareEach),stack1 ? stack1.call(depth0, depth0, options) : helperMissing.call(depth0, "historyAwareEach", depth0, options));
+  buffer += "	<div class=\"item "
+    + escapeExpression(((stack1 = ((stack1 = depth0.subject),stack1 == null || stack1 === false ? stack1 : stack1.token)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " ";
+  stack2 = helpers['if'].call(depth0, depth0.type, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack2 || stack2 === 0) { buffer += stack2; }
+  buffer += " ";
+  if (stack2 = helpers.index) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.index; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
+    + "\">\r\n		";
+  stack2 = helpers['if'].call(depth0, depth0.subject, {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
+  if(stack2 || stack2 === 0) { buffer += stack2; }
+  buffer += "\r\n		<p class=\"number\" style=\"display:none\">";
+  if (stack2 = helpers.index) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.index; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
+    + "</p>\r\n		";
+  stack2 = self.invokePartial(partials.isotopeItemContent, 'isotopeItemContent', depth0, helpers, partials, data);
+  if(stack2 || stack2 === 0) { buffer += stack2; }
+  buffer += "\r\n	</div>";
   return buffer;
   });
 
@@ -187,7 +181,7 @@ function program1(depth0,data) {
   return buffer;
   });
 
-this["visaRDF"]["templates"]["overlayElement"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["visaRDF"]["templates"]["overlayItem"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [2,'>= 1.0.0-rc.3'];
 helpers = helpers || Handlebars.helpers; data = data || {};
   var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression;
@@ -207,7 +201,27 @@ helpers = helpers || Handlebars.helpers; data = data || {};
   return buffer;
   });
 
-this["visaRDF"]["templates"]["previewElement"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["visaRDF"]["templates"]["plugin"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [2,'>= 1.0.0-rc.3'];
+helpers = helpers || Handlebars.helpers; data = data || {};
+  var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "		<div class=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.cssClass),stack1 == null || stack1 === false ? stack1 : stack1.overlay)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " "
+    + escapeExpression(((stack1 = ((stack1 = depth0.cssClass),stack1 == null || stack1 === false ? stack1 : stack1.overlay)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "_";
+  if (stack2 = helpers.index) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.index; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
+    + "\">\r\n			<span class=\"close\">close</span>\r\n			<div class=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.cssClass),stack1 == null || stack1 === false ? stack1 : stack1.overlayContent)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">\r\n			</div>\r\n		</div>";
+  return buffer;
+  });
+
+this["visaRDF"]["templates"]["previewItem"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [2,'>= 1.0.0-rc.3'];
 helpers = helpers || Handlebars.helpers; data = data || {};
   var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression;

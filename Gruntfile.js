@@ -16,13 +16,22 @@ module.exports = function(grunt) {
 					partialRegex : /^par_/
 				},
 				files : {
-					"js/templates.js" : [ "templates/filterOptions.handlebars", "templates/groupDropDown.handlebars",
-							"templates/isotopeElements.handlebars", "templates/overlayContent.handlebars", "templates/overlayElement.handlebars",
-							"templates/previewElement.handlebars", "templates/sortOptions.handlebars", "templates/par_isotopeElement.handlebars",
-							"templates/par_isotopeElementContent.handlebars" ]
+					"js/templates.js" : [ "templates/*.handlebars" ]
 				}
 			}
 		},
+		 yuidoc: {
+			compile: {
+			  name: '<%= pkg.name %>',
+			  description: '<%= pkg.description %>',
+			  version: '<%= pkg.version %>',
+			  url: '<%= pkg.homepage %>',
+			  options: {
+				paths: 'js/',
+				outdir: 'documentation/'
+			  }
+			}
+		  },
 		concat : {
 			options : {
 				separator : ';'
@@ -48,11 +57,14 @@ module.exports = function(grunt) {
 
 	// Load the plugin that provides the "concatination" task.
 	grunt.loadNpmTasks('grunt-contrib-concat');
+	
+	// Load the plugin that provides documentation generation.
+	grunt.loadNpmTasks('grunt-contrib-yuidoc');
 
 	// Load the plugin that provides the "uglify" task.
 	//grunt.loadNpmTasks('grunt-contrib-uglify');
 
 	// Default task(s).
-	grunt.registerTask('default', [ 'handlebars', 'concat' ]);
+	grunt.registerTask('default', [ 'handlebars', 'yuidoc', 'concat' ]);
 
 };

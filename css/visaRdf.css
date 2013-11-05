@@ -89,7 +89,7 @@ h1,h2,h3,p,ul,ol,pre,dl {
 	margin-bottom: 1.0em;
 }
 
-h1,h2,#super-list,.element,.tagline,#index-list,.super-list .link {
+h1,h2,#super-list,.item,.tagline,#index-list,.super-list .link {
 	font-family: 'Helvetica Neue', Arial, sans-serif;
 }
 
@@ -262,9 +262,9 @@ html,body {
 	overflow: hidden;
 }
 
-/**** Element ****/
+/**** Item ****/
 
-.element {
+.item {
 	margin: 5px;
 	float: left;
 	overflow: hidden;
@@ -272,34 +272,34 @@ html,body {
 	color: #222;
 }
 
-.element * {
+.item * {
 	position: absolute;
 	margin: 0;
 }
 
-.element .descriptionEn {
+.item .descriptionEn {
 	left: 5%;
-	top: 55%;
+	top: 25%;
 	width: 90%;
-	height: 35%;
+	height: 55%;
 	line-height: 100%;
 	font-size: 80%;
 	text-align: center;
-	overflow: hidden;
+	overflow-y: auto;
 	color: #FFF;
 }
 
-.element .labelEn {
+.item .labelEn {
 	left: 5%;
 	overflow: hidden;
-	top: 30%;
-	height: 25%;
+	top: 5%;
+	height: 20%;
 	width: 90%;
 	font-size: 90%;
 	color: #F2F2F2;
 }
 
-.element .groupLabel {
+.item .groupLabel {
 	left: 1%;
 	overflow: hidden;
 	top: 1%;
@@ -309,20 +309,34 @@ html,body {
 	color: #F2F2F2;
 }
 
-.element .predicate {
+.item .predicateLabel {
 	left: 5%;
-	overflow: shown;
-	top: 80%;
+	overflow: hidden;
+        position: absolute;
+        display: inline-block;
+	top: 75%;
 	height: 20%;
 	width: 90%;
 	font-size: 70%;
 	color: #F2F2F2;
 }
 
-/* .element .showUri { */
+.item .predicate {
+	left: 5%;
+	overflow: visible;
+        position: absolute;
+        white-space: nowrap;
+	top: 75%;
+	height: 20%;
+	width: 90%;
+	font-size: 80%;
+	color: #F2F2F2;
+}
+
+/* .item .showUri { */
 /* 	overflow: hidden; */
 /* 	text-overflow: ellipsis; */
-/* 	-o-text-overflow: ellipsis; für Opera */
+/* 	-o-text-overflow: ellipsis; fï¿½r Opera */
 /* 	white-space: nowrap; */
 /* 	left: 0.5em; */
 /* 	width: 100px; */
@@ -330,7 +344,7 @@ html,body {
 /* 	font-size: 0.7em; */
 /* } */
 
-.element .number {
+.item .number {
 	font-size: 1.25em;
 	font-weight: bold;
 	color: hsla(0, 0%, 0%, .5);
@@ -457,4 +471,11 @@ html,body {
 
 .clearfix {
 	zoom: 1;
+}
+
+.widthCalc {
+    position: absolute;
+    visibility: hidden;
+    height: auto;
+    width: auto;
 }
