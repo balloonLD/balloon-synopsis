@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Plugin.View - visaRDF</title>
+    <title>Plugin.Layer - visaRDF</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -45,27 +45,21 @@
             
                 <li><a href="../classes/Plugin.html">Plugin</a></li>
             
-                <li><a href="../classes/Plugin.DetailView.html">Plugin.DetailView</a></li>
+                <li><a href="../classes/Plugin.DetailLayer.html">Plugin.DetailLayer</a></li>
             
                 <li><a href="../classes/Plugin.EventManager.html">Plugin.EventManager</a></li>
             
-                <li><a href="../classes/Plugin.InitView.html">Plugin.InitView</a></li>
+                <li><a href="../classes/Plugin.InitLayer.html">Plugin.InitLayer</a></li>
+            
+                <li><a href="../classes/Plugin.Layer.html">Plugin.Layer</a></li>
             
                 <li><a href="../classes/Plugin.LayoutEngine.html">Plugin.LayoutEngine</a></li>
-            
-                <li><a href="../classes/Plugin.Preview.html">Plugin.Preview</a></li>
-            
-                <li><a href="../classes/Plugin.PreviewInlay.html">Plugin.PreviewInlay</a></li>
-            
-                <li><a href="../classes/Plugin.PreviewOverlay.html">Plugin.PreviewOverlay</a></li>
             
                 <li><a href="../classes/Plugin.RdfStore.html">Plugin.RdfStore</a></li>
             
                 <li><a href="../classes/Plugin.RemoteDataLoader.html">Plugin.RemoteDataLoader</a></li>
             
                 <li><a href="../classes/Plugin.TemplatesLoader.html">Plugin.TemplatesLoader</a></li>
-            
-                <li><a href="../classes/Plugin.View.html">Plugin.View</a></li>
             
                 <li><a href="../classes/RemoteEngine.html">RemoteEngine</a></li>
             
@@ -116,7 +110,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>Plugin.View Class</h1>
+                        <h1>Plugin.Layer Class</h1>
 <div class="box meta">
     
 
@@ -124,7 +118,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/js_visaRDF.js.html#l759"><code>js\visaRDF.js:759</code></a>
+            Defined in: <a href="../files/js_visaRDF.js.html#l802"><code>js\visaRDF.js:802</code></a>
         </div>
     
 
@@ -140,15 +134,15 @@
 
 
 <div class="box intro">
-    <p>View of the RDF graph</p>
+    <p>Layer of the RDF graph</p>
 
 </div>
 
 
     <div class="constructor">
         <h2>Constructor</h2>
-        <div id="method_Plugin.View" class="method item">
-    <h3 class="name"><code>Plugin.View</code></h3>
+        <div id="method_Plugin.Layer" class="method item">
+    <h3 class="name"><code>Plugin.Layer</code></h3>
 
     
         <div class="args">
@@ -207,7 +201,7 @@
             
         
         
-        <a href="../files/js_visaRDF.js.html#l759"><code>js\visaRDF.js:759</code></a>
+        <a href="../files/js_visaRDF.js.html#l802"><code>js\visaRDF.js:802</code></a>
         
         </p>
 
@@ -333,27 +327,6 @@
                             </li>
                         
                             <li class="index-item method private">
-                                <a href="#method__generateBlanknode">_generateBlanknode</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method private">
-                                <a href="#method__generateItem">_generateItem</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method private">
-                                <a href="#method__generateLiteral">_generateLiteral</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method private">
                                 <a href="#method__initBrowsability">_initBrowsability</a>
 
                                 
@@ -362,20 +335,6 @@
                         
                             <li class="index-item method">
                                 <a href="#method_addItems">addItems</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method">
-                                <a href="#method_generateFilter">generateFilter</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method">
-                                <a href="#method_generateSorter">generateSorter</a>
 
                                 
                                 
@@ -420,7 +379,7 @@
             
                 <li class="arg">
                     
-                        <code>$items</code>
+                        <code>node</code>
                     
                 </li>
             
@@ -455,7 +414,7 @@
             
         
         
-        <a href="../files/js_visaRDF.js.html#l871"><code>js\visaRDF.js:871</code></a>
+        <a href="../files/js_visaRDF.js.html#l1087"><code>js\visaRDF.js:1087</code></a>
         
         </p>
 
@@ -466,7 +425,7 @@
     </div>
 
     <div class="description">
-        <p>Fetches and updates the predicate labels of the shown items</p>
+        <p>Fetches and updates the labels of the predicates of given node</p>
 
     </div>
 
@@ -478,297 +437,14 @@
             
                 <li class="param">
                     
-                        <code class="param-name">$items</code>
-                        <span class="type">JQuery</span>
+                        <code class="param-name">node</code>
+                        <span class="type">Plugin.Node</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>Items which should be updated</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="method__generateBlanknode" class="method item private">
-    <h3 class="name"><code>_generateBlanknode</code></h3>
-
-    
-        <span class="paren">()</span>
-    
-
-    
-
-    
-
-    
-        <span class="flag private">private</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_visaRDF.js.html#l1096"><code>js\visaRDF.js:1096</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Generate blanknode to be added to the view</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="method__generateItem" class="method item private">
-    <h3 class="name"><code>_generateItem</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>item</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>$tempDiv</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-
-    
-
-    
-        <span class="flag private">private</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_visaRDF.js.html#l974"><code>js\visaRDF.js:974</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Generate item to be added to the view</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">item</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Data of the item</p>
-
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">$tempDiv</code>
-                        <span class="type">JQuery</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Temporary item selection</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="method__generateLiteral" class="method item private">
-    <h3 class="name"><code>_generateLiteral</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>literal</code>
-                    
-                </li>
-            
-                <li class="arg">
-                    
-                        <code>$tempDiv</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-
-    
-
-    
-        <span class="flag private">private</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_visaRDF.js.html#l1056"><code>js\visaRDF.js:1056</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Generate literal to be added to the view</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">literal</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Data of the literal</p>
-
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">$tempDiv</code>
-                        <span class="type">JQuery</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Temporary item selection</p>
+                        <p>Node to fetch the predicate labels for</p>
 
                     </div>
 
@@ -794,7 +470,7 @@
             
                 <li class="arg">
                     
-                        <code>$items</code>
+                        <code>$tiles</code>
                     
                 </li>
             
@@ -829,7 +505,7 @@
             
         
         
-        <a href="../files/js_visaRDF.js.html#l829"><code>js\visaRDF.js:829</code></a>
+        <a href="../files/js_visaRDF.js.html#l1253"><code>js\visaRDF.js:1253</code></a>
         
         </p>
 
@@ -852,14 +528,14 @@
             
                 <li class="param">
                     
-                        <code class="param-name">$items</code>
+                        <code class="param-name">$tiles</code>
                         <span class="type">JQuery</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>Items which should be browsable</p>
+                        <p>Tiles which should be browsable</p>
 
                     </div>
 
@@ -885,7 +561,7 @@
             
                 <li class="arg">
                     
-                        <code>items</code>
+                        <code>resultSet</code>
                     
                 </li>
             
@@ -918,7 +594,7 @@
             
         
         
-        <a href="../files/js_visaRDF.js.html#l1280"><code>js\visaRDF.js:1280</code></a>
+        <a href="../files/js_visaRDF.js.html#l1119"><code>js\visaRDF.js:1119</code></a>
         
         </p>
 
@@ -929,7 +605,7 @@
     </div>
 
     <div class="description">
-        <p>Add given items to the view.</p>
+        <p>Look in given resultSet for Items to add to the model.</p>
 
     </div>
 
@@ -941,14 +617,14 @@
             
                 <li class="param">
                     
-                        <code class="param-name">items</code>
-                        <span class="type">JQuery</span>
+                        <code class="param-name">resultSet</code>
+                        <span class="type">Object</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>Items which are to be added to the view</p>
+                        <p>ResultSet of a Select query</p>
 
                     </div>
 
@@ -957,116 +633,6 @@
             
             </ul>
         </div>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="method_generateFilter" class="method item">
-    <h3 class="name"><code>generateFilter</code></h3>
-
-    
-        <span class="paren">()</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_visaRDF.js.html#l1185"><code>js\visaRDF.js:1185</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Generate filter interface</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="method_generateSorter" class="method item">
-    <h3 class="name"><code>generateSorter</code></h3>
-
-    
-        <span class="paren">()</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_visaRDF.js.html#l1108"><code>js\visaRDF.js:1108</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Generate sort interface</p>
-
-    </div>
-
     
 
     
@@ -1107,7 +673,7 @@
             
         
         
-        <a href="../files/js_visaRDF.js.html#l1333"><code>js\visaRDF.js:1333</code></a>
+        <a href="../files/js_visaRDF.js.html#l908"><code>js\visaRDF.js:908</code></a>
         
         </p>
 
@@ -1162,7 +728,7 @@
             
         
         
-        <a href="../files/js_visaRDF.js.html#l1246"><code>js\visaRDF.js:1246</code></a>
+        <a href="../files/js_visaRDF.js.html#l1187"><code>js\visaRDF.js:1187</code></a>
         
         </p>
 
@@ -1173,7 +739,7 @@
     </div>
 
     <div class="description">
-        <p>Update the view by querying the local store</p>
+        <p>Get data for the model by querying the local store</p>
 
     </div>
 

@@ -5,6 +5,19 @@
 
 <http://www.w3.org/TR/test> ex:homePage <http://www.w3.org/TR/rdf-syntax-grammar> .
 
+<http://www.w3.org/TR/test> rdfs:label "TestPerson"@en .
+
+<http://www.w3.org/TR/test> ex:homepage2 <http://www.w3.org/TR/rdf-syntax-grammar> .
+
+<http://www.w3.org/TR/something> ex:incoming <http://www.w3.org/TR/test>.
+
+<http://www.w3.org/TR/something> rdfs:label "SomethingIncoming"@en .
+
+<http://www.w3.org/TR/test> ex:bild <http://www.poweranimalsunleashed.com/images/forest-light-900.jpg> .
+<http://www.poweranimalsunleashed.com/images/forest-light-900.jpg> rdfs:label "Bild013201204013501461034GAs112-132ASDASDGGG" .
+
+<http://www.w3.org/TR/rdf-syntax-grammar> ex:hoho <http://www.w3.org/TR/test> .
+
 <http://www.w3.org/TR/rdf-syntax-grammar> dc:title "RDF/XML Syntax Specification (Revised)" .
 
 _:node17eqmqr9kx1 rdfs:label "Dave Beckett" ;

@@ -1,12 +1,14 @@
 		{{#if label}}
-			<h3 class="itemContent labelEn ellipsis">{{label.value}}</h3>
+			<h3 class="itemContent labelEn">{{label.value}}</h3>
 		{{/if}}
 		{{#ifLang description}}
-			<div class="itemContent descriptionEn ellipsis">{{description.value}}</div>
+			<div class="itemContent descriptionEn">{{description.value}}</div>
 		{{/ifLang}}
-		{{#if predicate}}
-			<div class="itemContent predicate" style="display:none">{{predicate.value}}</div>
-                        {{#predicateLabelRetriver predicate}}
-                            <div class="itemContent predicateLabel">{{predicate.label}}</div>
+                {{#if predicates}}
+		{{#each predicates}}
+			<img class="typeImage" src="img/{{type}}.png"><div class="itemContent predicate" style="display:none">{{value}}</div>
+                        {{#predicateLabelRetriver this}}
+                            <div class="itemContent predicateLabel">{{label}}</div>
                         {{/predicateLabelRetriver}}
-		{{/if}}
+		{{/each}}
+                {{/if}}

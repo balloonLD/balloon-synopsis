@@ -45,27 +45,21 @@
             
                 <li><a href="../classes/Plugin.html">Plugin</a></li>
             
-                <li><a href="../classes/Plugin.DetailView.html">Plugin.DetailView</a></li>
+                <li><a href="../classes/Plugin.DetailLayer.html">Plugin.DetailLayer</a></li>
             
                 <li><a href="../classes/Plugin.EventManager.html">Plugin.EventManager</a></li>
             
-                <li><a href="../classes/Plugin.InitView.html">Plugin.InitView</a></li>
+                <li><a href="../classes/Plugin.InitLayer.html">Plugin.InitLayer</a></li>
+            
+                <li><a href="../classes/Plugin.Layer.html">Plugin.Layer</a></li>
             
                 <li><a href="../classes/Plugin.LayoutEngine.html">Plugin.LayoutEngine</a></li>
-            
-                <li><a href="../classes/Plugin.Preview.html">Plugin.Preview</a></li>
-            
-                <li><a href="../classes/Plugin.PreviewInlay.html">Plugin.PreviewInlay</a></li>
-            
-                <li><a href="../classes/Plugin.PreviewOverlay.html">Plugin.PreviewOverlay</a></li>
             
                 <li><a href="../classes/Plugin.RdfStore.html">Plugin.RdfStore</a></li>
             
                 <li><a href="../classes/Plugin.RemoteDataLoader.html">Plugin.RemoteDataLoader</a></li>
             
                 <li><a href="../classes/Plugin.TemplatesLoader.html">Plugin.TemplatesLoader</a></li>
-            
-                <li><a href="../classes/Plugin.View.html">Plugin.View</a></li>
             
                 <li><a href="../classes/RemoteEngine.html">RemoteEngine</a></li>
             
@@ -138,10 +132,20 @@
     var cons = {
         
         // Part of CSS class to indicate a filterable
-        &quot;TYPE_TAG&quot; : &quot;-filter-_&quot;,
+        &quot;FA_TAG&quot; : &quot;-filter-_&quot;,
 
         // Part of CSS class to indicate a token
         &quot;TOKEN_TAG&quot; : &quot;token_&quot;,
+        
+        &quot;NODE_TYPES&quot; : {
+            literal : &quot;literal&quot;,
+            blankNode : &quot;blankNode&quot;,
+            resNode : &quot;resNode&quot;
+        },
+        
+        toFilterable : function(str) {
+                return cons.FA_TAG + str;
+            },
 
         // CSS classes to use
         &quot;CSS_CLASSES&quot; : {
@@ -171,12 +175,12 @@
                 }
                 return cons.TOKEN_TAG + it;
             },
-            toType : function(id) {
+            toFilterable : function(id) {
                 var idChain = id.split(&quot;.&quot;), it = this;
                 for ( var i = 0; i &lt; idChain.length; i++) {
                     it = it[idChain[i]];
                 }
-                return cons.TYPE_TAG + it;
+                return cons.FA_TAG + it;
             },
             toSelector : function(id) {
                 var idChain = id.split(&quot;.&quot;), it = this;
@@ -195,7 +199,6 @@
             storeModified : {
                 insert : &quot;dataInsert&quot;
             },
-            labelUpdate : &quot;labelUpdate&quot;,
             loading : {
                 loadingDone : &quot;loadingDone&quot;,
                 loadingStart : &quot;loadingStarted&quot;
@@ -223,6 +226,7 @@
             this.groupRows = {
                 x : 0,
                 y : 0,
+                gutter : 0,
                 height : 0,
                 currentGroup : null
             };
@@ -233,19 +237,32 @@
 
             $elems.each(function() {
                 var $this = $(this), atomW = $this.outerWidth(true), atomH = $this.outerHeight(true), group = $.data(this, &#x27;isotope-sort-data&#x27;)[sortBy];
-
+                
+                console.log(&quot;atomW&quot; + atomW);
+                console.log(&quot;atomH&quot; + atomH);
+                console.log(group);
+                
                 if (group !== props.currentGroup) {
                     // new group, new row
                     props.x = 0;
                     props.height += props.currentGroup ? instance.groupRows.gutter : 0;
+                    console.log(&quot;currentGroup&quot; + props.currentGroup)
+                    console.log(instance.groupRows.gutter)
                     props.y = props.height;
                     props.currentGroup = group;
+                    
+                    if (instance.groupRows.gutter &lt; atomH) {
+                        instance.groupRows.gutter = atomH;
+                    }
 
-                } else if (props.x !== 0 &amp;&amp; atomW + props.x &gt; containerWidth) {
+                } else {
+                    
+                    if (props.x !== 0 &amp;&amp; atomW + props.x &gt; containerWidth) {
 
-                    // if this item cannot fit in the current row
-                    props.x = 0;
-                    props.y = props.height;
+                        // if this item cannot fit in the current row
+                        props.x = 0;
+                        props.y = props.height;
+                    }
                 }
 
                 $this.find(&quot;.groupLabel&quot;).remove();
@@ -504,7 +521,7 @@
             });
         };
         
-    }
+    };
     
     /**
     * Method for querying the given url with given query. Executes given callback function with results.
@@ -516,7 +533,7 @@
     */
     RemoteEngine.prototype.executeQuery = function(query, url, callback) {
         this._requestSPARQLCrossDomain(query, url, callback);
-    }
+    };
         
     // ========================= Cache class ===============================
     /**
@@ -526,7 +543,7 @@
     * @constructor
     */
     var Cache = function() {
-        this.array = [];
+        this.values = {};
     };
     
     /**
@@ -537,7 +554,7 @@
     * @param {String} val Value to add to the cache
     */
     Cache.prototype.add = function(key, val) {
-        this.array[key] = val;
+        this.values[key] = val;
     };
     
     /**
@@ -548,7 +565,7 @@
     * @return {String} Value to which the key maps
     */
     Cache.prototype.retrieve = function(key) {
-        return this.array[key];
+        return this.values[key];
     };
 
 
@@ -560,8 +577,8 @@
     * @return {Boolean} true if cache contains a value for the given key
     */
     Cache.prototype.contains = function(key) {
-        return key in this.array;
-    }
+        return key in this.values;
+    };
 
     // ========================= Variables for all VisaRDF instances ===============================
     /**
@@ -621,6 +638,25 @@
     */
     function generateId() {
         return idCounter++;
+    };
+    
+    // ========================= VisaRDF: Event Class ==============================
+    Plugin.Event = function(sender) {
+        this._sender = sender;
+        this._listeners = [];
+    }
+    
+    Plugin.Event.prototype = {
+        attach : function (listener) {
+            this._listeners.push(listener);
+        },
+        notify : function (args) {
+            var index;
+
+            for (index = 0; index &lt; this._listeners.length; index += 1) {
+                this._listeners[index](this._sender, args);
+            }
+        }
     };
     
     // ========================= VisaRDF: eventManager Class ==============================
@@ -876,365 +912,736 @@
     Plugin.LayoutEngine.prototype.updateOptions = function(options) {
         this._container.isotope(options);
     };
-        
-    // ========================= VisaRDF: View Class ==================================
+    
+
+    // ========================= VisaRDF: Layer Class ==================================
     /**
-    * View of the RDF graph
+    * Layer of the RDF graph
     *
-    * @class Plugin.View
+    * @class Plugin.Layer
     * @constructor
     * @param {jQuery} $container    Parent div container
     * @param {Object} options      Options object of the view
     * @param {Plugin} plugin        Parent plugin
     * @param {Object} queries   Queries to use in the view
     */
-    Plugin.View = function($container, options, plugin, queries) {
-        
-        // List of added items.
-        this._itemHistory = {
-            length : 0
-        };
-
-        this._literalHistory = {
-            length : 0
-        };
-        this.previews = [];
-        this.viewQueries = queries;
-        this.$container = $container;
-        this.plugin = plugin;
-        this.options = options;
-        this.$outerContainer = $(&#x27;&lt;div class=&quot;&#x27; + cons.CSS_CLASSES.outerContainer + &#x27;&quot;&gt;&lt;/div&gt;&#x27;);
-        this.$viewContainer = $(&#x27;&lt;div class=&quot;&#x27; + cons.CSS_CLASSES.viewContainer + &#x27;&quot;&gt;&lt;/div&gt;&#x27;);
-
-        this.$container.append(this.$outerContainer);
-        this.$outerContainer.append(this.$viewContainer);
-        
-        this.layoutEngine = new Plugin.LayoutEngine(this.$viewContainer, options.layoutEngine);
-        
-        this.$optionsContainer = $(&#x27;&lt;section class=&quot;&#x27; + cons.CSS_CLASSES.options + &#x27;&quot; class=&quot;&#x27; + cons.CSS_CLASSES.clearfix + &#x27;&quot;&gt;&lt;/section&gt;&#x27;)
-        $container.prepend(this.$optionsContainer);
-        console.log(this.$optionsContainer)
-
-        if (options.generateSortOptions) {
-            this.generateSorter();
-        }
-        if (options.generateFilterOptions) {
-            this.generateFilter();
-        }
+    Plugin.Layer = function($container, options, plugin, queries) {
         
         var that = this;
+
+        this.plugin = plugin;
+        this.options = options;
+
+        this.model = new Plugin.Layer.Model(queries, options.modelOptions, plugin._queries.label);
+        this.view = new Plugin.Layer.View(this.model, $container, options.viewOptions);
         
-        // &lt;---- loading img ----&gt;
-        that.$outerContainer.prepend(&#x27;&lt;div class=&quot;&#x27; + cons.CSS_CLASSES.loader + &#x27;&quot;&gt;&#x27;);
-        that.$outerContainer.append(&#x27;&lt;div class=&quot;&#x27; + cons.CSS_CLASSES.loader + &#x27;&quot;&gt;&#x27;);
+        this.view.browseableNodeClicked.attach(function (sender, item) {
+            var $item = $(item);
+            if (that.options.usePreviews) {
+                that.openPreview($item);
+            } else {
+                $item.data(&#x27;isExpanded&#x27;, true);
+                that.addNewLayer($item);
+            }
+        });
 
-        // Add loading start listener
-        eventManagers[plugin.pluginID].addEventHandler(cons.EVENT_TYPES.loading.loadingStart, function(ev, $invoker) {
-            // console.log(this);
-            if ($invoker === that) {
-                if (that.$outerContainer.css(&quot;height&quot;) &lt; 120) {
-                    that.$outerContainer.css(&quot;height&quot;, &quot;20px&quot;);
+        if (options.generateSortOptions || options.generateFilterOptions || plugin.options.generateTimeline) {
+            this.view.addOptionsBox();
+            if (plugin.options.generateTimeline) {
+                this.view.addTimelineButton();
+                var item = templates.timelineItem(this);
+                plugin._$timeline.append(item);
+            }   
+            if (options.generateSortOptions) {
+                this.view.addSorter();
+            } 
+            if (options.generateFilterOptions) {
+                this.view.addFilter();
+            }
+        }
+    }
+    
+    Plugin.Layer.prototype.openPreview = function($item) {
+        var that = this;
+        var node = $item.data(&quot;node&quot;);
+        
+        //TODO Previews
+    }
+    
+    Plugin.Layer.prototype.update = function() {
+        this.model.update();
+    }
+    
+    Plugin.Layer.prototype.addNewLayer = function($item) {
+        
+        var $overlay = this.view.$container.find(cons.CSS_CLASSES.toSelector(&quot;overlay&quot;) + &#x27;_&#x27; + $item.index());
+        if ($overlay.length &lt; 1) {
+            var overlay = templates.overlayItem({
+                &quot;index&quot; : $item.index(),
+                &quot;cssClass&quot; : {
+                    &quot;overlay&quot; : cons.CSS_CLASSES.overlay,
+                    &quot;overlayContent&quot; : cons.CSS_CLASSES.overlayContent
                 }
-                that.$outerContainer.find(&#x27;&gt; &#x27; + cons.CSS_CLASSES.toSelector(&quot;loader&quot;)).css(&quot;visibility&quot;, &quot;visible&quot;);
+            });
+            this.view.$container.append(overlay);
+            $overlay = this.view.$container.find(&#x27;&gt; &#x27; + cons.CSS_CLASSES.toSelector(&quot;overlay&quot;) + &#x27;_&#x27; + $item.index());
+        }
+        
+        var newLayerOptions = $.extend(true, {}, this.options, {
+            layoutEngine : {
+                itemSelector : &#x27;.item&#x27;,
+                getSortData : {
+                    type : function($elem) {
+                        var classes = $elem.attr(&quot;class&quot;);
+                        return classes;
+                    },
+                    group : function($elem) {
+                        var classes = $elem.attr(&quot;class&quot;);
+                        var pattern = new RegExp(&quot;(\s)*[a-zA-Z0-9]*&quot; + cons.TOKEN_TAG + &quot;[a-zA-Z0-9]*(\s)*&quot;, &#x27;g&#x27;);
+                        var groups = classes.match(pattern), group = &quot;&quot;;
+                        for ( var i = 0; i &lt; groups.length; i++) {
+                            group += groups[i] + &quot; &quot;;
+                        }
+                        return group;
+                    }
+                }
+            },
+            filterBy : [ {
+                value : &quot;*&quot;,
+                label : &quot;showAll&quot;
+            }, {
+                value : cons.CSS_CLASSES.typeClasses.incoming,
+                label : &quot;in&quot;
+            }, {
+                value : cons.CSS_CLASSES.typeClasses.outgoing,
+                label : &quot;out&quot;
+            } ]
+        });
+        
+        this.plugin.addLayer(new Plugin.DetailLayer($overlay, newLayerOptions, this.plugin, $item));
+    }
+    
+    /**
+    * Clear the view
+    *
+    * @method removeAllItems
+    */
+    Plugin.Layer.prototype.removeAllItems = function() {
+        this.model.clearModel();
+    }
+        
+    
+    Plugin.Node = function(data) {
+        this.index = data.index;
+        this.label = data.label;
+        this.token = data.subject.token;
+        this.description = data.description;
+        this.filterables = [];
+        if(data.predicate) {
+            this.predicates = [];
+            this.filterables.push(cons.toFilterable(data.predicate.type));
+            this.predicates.push(data.predicate);
+        }
+    }
+    
+    Plugin.Node.prototype.hasType = function() {
+        return this.type;
+    }
+    
+    Plugin.Node.prototype.setPredicateLabel = function(i, label) {
+        this.predicates[i].label = label;
+    }
+    
+    Plugin.Node.prototype.merge = function(otherNode) {
+        var that = this, update = false;
+        $.each(otherNode, function(prop, propVal){
+            switch(prop) {
+                case &quot;label&quot; :
+                    if((propVal.lang &amp;&amp; propVal.lang === &quot;en&quot;) &amp;&amp; !(propVal.lang || propVal.lang === &quot;en&quot;)) {
+                        update = true;
+                        this.label = propVal
+                    }
+                    break;
+                
+                case &quot;predicates&quot; :
+                    var updatePred = true;
+                    $.each(that.predicates, function(i, predicate){
+                        if (predicate.value == propVal[0].value &amp;&amp; predicate.type == propVal[0].type) {
+                            updatePred = false;
+                        } else if(that.filterables.indexOf(cons.toFilterable(propVal[0].type)) == -1) {
+                            that.filterables.push(cons.toFilterable(propVal[0].type));
+                        }
+                    });
+                    if(updatePred) {
+                        update = true;
+                        that.predicates.push(propVal[0]);
+                    }
             }
         });
+        return update;
+    }
+    
+    Plugin.ResNode = function(data, itemStyle) {
+        Plugin.Node.call(this, data);
+        this.itemStyle = itemStyle;
+        this.type = cons.NODE_TYPES.resNode;
+        this.uri = data.subject.value;
+        if (isUndefinedOrNull(this.label)) {
+            this.label = {
+                value : this.uri
+            };
+        } else {
+            this.label.value = unescape(this.label.value);
+        }
+        
+        this._generateID = function(){
+            return this.uri;
+        };
+        this.id = this._generateID();
+    }
+    
+    Plugin.ResNode.prototype =  Object.create(Plugin.Node.prototype);
+    Plugin.ResNode.prototype.constructor = Plugin.ResNode;
+    
+    Plugin.LiteralNode = function(data, literalStyle) {
+        Plugin.Node.call(this, data);
+        this.label = data.subject;
+        this.label.value = unescape(this.label.value);
+        this.literalStyle = literalStyle;
+        this.type = cons.NODE_TYPES.literal;
+        this.value = data.subject.value;
+        
+        this._generateID = function(){
+        if(this.predicates) {
+            return this.predicates[0].value + this.value;
+            return &#x27;_&#x27; + Math.random().toString(36).substr(2, 9); //TODO literalID
+        }
+        };
+        this.id = this._generateID();
+    }
+    
+    Plugin.LiteralNode.prototype =  Object.create(Plugin.Node.prototype);
+    Plugin.LiteralNode.prototype.constructor = Plugin.LiteralNode;
+    
+    Plugin.BlankNode = function(data) {
+        Plugin.Node.call(this, data);
+        this.type = cons.NODE_TYPES.blankNode;
+        this.label = {
+            value : &quot;BlankNode - TODO&quot;
+        };
+        
+        this._generateID = function(){
+            return &#x27;_&#x27; + Math.random().toString(36).substr(2, 9); //TODO BlankNodeID
+        };
+        this.id = this._generateID();
+    }
+    
+    Plugin.BlankNode.prototype =  Object.create(Plugin.Node.prototype);
+    Plugin.BlankNode.prototype.constructor = Plugin.BlankNode;
+    
+    Plugin.NodeDecorator = function(node) {
+        
+    }
+    
+    Plugin.NodeFactory = {
+        makeNode : function(data, options) {
+            var node;
+            
+            switch(data.subject.token) {
+                case cons.CSS_CLASSES.toToken(&quot;patternClasses.blanknode&quot;):
+                    node = new Plugin.BlankNode(data);
+                    break;
+                case cons.CSS_CLASSES.toToken(&quot;patternClasses.literal&quot;):
+                    node = new Plugin.LiteralNode(data, options.literalStyle);
+                    break;
+                case cons.CSS_CLASSES.toToken(&quot;patternClasses.uri&quot;):
+                    if(data.label &amp;&amp; (data.label.lang === undefined || data.label.lang === &quot;en&quot;)) {
+                        node = new Plugin.ResNode(data, options.itemStyle);
+                    }
+                    break;
+                default :
+                    console.log(cons.MESSAGES.error.tokenType);
+            }
+       
+            return node;
+        }
+    }
+    
+    Plugin.Layer.Model = function(viewQueries, options, labelQuery) {
+        
+        var that = this;
+        this.viewQueries = viewQueries;
+        this.labelQuery = labelQuery;
+        this.options = options;
 
-        // Add loading done listener
-        eventManagers[plugin.pluginID].addEventHandler(cons.EVENT_TYPES.loading.loadingDone, function(ev, $invoker) {
-            if ($invoker === that) {
-                that.$outerContainer.find(&#x27;&gt; .loading&#x27;).text(&#x27;&#x27;);
-                that.$outerContainer.find(&#x27;&gt; &#x27; + cons.CSS_CLASSES.toSelector(&quot;loader&quot;)).css(&quot;visibility&quot;, &quot;hidden&quot;);
+        // List of added items.
+        this.nodes = {
+            resNodes : {
+                length : 0
+            },
+            blankNodes : {
+                length : 0
+            },
+            literalNodes : {
+                length : 0
+            },
+            length : 0
+        }
+        
+        this.itemsAdded = new Plugin.Event(this);
+        this.modelCleared = new Plugin.Event(this);
+        this.itemUpdated = new Plugin.Event(this);
+        
+        //Helper for batch adding
+        this._checkItemsHelp = function(items, batchSize) {
+            var rest = items.slice(batchSize);
+            if (rest.length &gt; 0) {
+                that.checkItems(rest);
+            }
+        }
+        
+        /**
+        * Fetches and updates the labels of the predicates of given node
+        *
+        * @private
+        * @method _fetchPredicateLabel
+        * @param {Plugin.Node} node Node to fetch the predicate labels for
+        */
+        this._fetchPredicateLabel = function(node) {
+            
+            if(node.predicates) {
+                $.each(node.predicates, function(i, predicate) {
+                    if (!labelCache.contains(predicate.value)) {
+                        var labelQuery = replaceDummy(that.labelQuery, predicate.value);
+                        rdfStore.executeQuery(labelQuery, function(results){
+                            if (results &amp;&amp; results[0]) {
+                                $.each(results, function(i, result){
+                                    node.setPredicateLabel(i, result.label.value);
+                                    labelCache.add(predicate.value, result.label.value);
+                                });
+                            }
+                        });
+                    } else {
+                        node.setPredicateLabel(i, labelCache.retrieve(predicate.value));
+                    }
+                })
+            }
+
+            return node;
+        }
+        
+    }
+    
+    /**
+    * Look in given resultSet for Items to add to the model.
+    *
+    * @method addItems
+    * @param {Object} resultSet ResultSet of a Select query
+    */
+    Plugin.Layer.Model.prototype.checkItems = function(resultSet) {
+        var length = resultSet.length, that = this, batchSize = ((length &lt; that.options.batchSize) ? length : that.options.batchSize);
+
+        // current batch
+        var batch = resultSet.slice(0, batchSize);
+        var addedNodes = {};
+        
+        $.each(batch, function(i, val) {
+            val.subject.token = cons.TOKEN_TAG + val.subject.token;
+            
+            val.index = that.nodes.length + 1;
+            
+            var node = Plugin.NodeFactory.makeNode(val, that.options);
+            
+            if(node) {
+                
+                switch (node.hasType()) {
+                    case cons.NODE_TYPES.resNode:
+                        if(!(node.id in that.nodes.resNodes)) {
+                            that.nodes.resNodes[node.id] = node;
+                            that.nodes.length++;
+                        } else {
+                            if(that.nodes.resNodes[node.id].merge(node)) {
+                                node = that.nodes.resNodes[node.id];
+                                that.itemUpdated.notify(node)
+                            } else {
+                                node = undefined;
+                        }
+                        }
+                        break;
+                    case cons.NODE_TYPES.literal:
+                        if(!(node.id in that.nodes.literalNodes)) {
+                            that.nodes.literalNodes[node.id] = node;
+                            that.nodes.length++;
+                        } else {
+                            //TODO check literal UPDATE
+                            node = undefined;
+                            console.log(&quot;literalupdate&quot;)
+                        }
+                        break;
+                    case cons.NODE_TYPES.blankNode:
+                        if(!(node.id in that.nodes.blankNodes)) {
+                            that.nodes.blankNodes[node.id] = node;
+                            that.nodes.length++;
+                        } else {
+                            //TODO check blankNode UPDATE ?
+                            console.log(node);
+                            console.log(&quot;blankNodeupdate&quot;)
+                            node = undefined;
+                        }
+                        break;
+                }
+                //node = that._fetchPredicateLabel(node);
+                if(node) {
+                    addedNodes[node.id] = node;
+                }
             }
         });
-        // &lt;!--- loading img ----&gt;
+        this.itemsAdded.notify(addedNodes);
+        that._checkItemsHelp(resultSet, batchSize);
+    }
+    
+    /**
+    * Get data for the model by querying the local store
+    *
+    * @method update
+    */
+    Plugin.Layer.Model.prototype.update = function() {
+        var that = this, emptyResults = true;
+        
+        //        rdfStore.executeQuery(&quot;CONSTRUCT { ?s rdfs:label ?o . ?s1 rdfs:description ?o1 . ?s2 rdfs:comment ?o2 . ?s3 rdfs:type ?o3} WHERE { ?s rdfs:label ?o . OPTIONAL { ?s1 rdfs:description ?o1 } . OPTIONAL { ?s2 rdfs:comment ?o2 }. OPTIONAL {?s3 rdfs:type ?o3}}&quot;, function(results) {
+        //            console.log(results);
+        //        } );
+        
+        for ( var i = 0; i &lt; this.viewQueries.length; i++) {
+            rdfStore.executeQuery(this.viewQueries[i].query, function(results) {
+                if (results &amp;&amp; results.length !== 0) {
+                    emptyResults = false;
+                    if (that.viewQueries[i].type) {
+                        // Add types for filtering
+                        for ( var j = 0; j &lt; results.length; j++) {
+                            results[j].predicate.type = that.viewQueries[i].type;
+                        }
+                    }
+                    that.checkItems(results);
+                } else if (i === that.viewQueries.length - 1 &amp;&amp; emptyResults) {
+                    console.log(&quot;nothing found&quot;);
+                }
+            });
+        }
+    }
+    
+    Plugin.Layer.Model.prototype.setSelected = function(id) {
 
+    }
+    
+    Plugin.Layer.Model.prototype.clearModel = function() {
+        this.nodes = {
+            resNodes : {
+                length : 0
+            },
+            blankNodes : {
+                length : 0
+            },
+            literalNodes : {
+                length : 0
+            },
+            length : 0
+        }
+        this.modelCleared.notify();
+    }
+    
+    Plugin.Layer.View = function(model, $container, viewOptions) {
+        
+        var that = this;
+        this.options = viewOptions;
+        
+        this._model = model;
+        
+        this.$container = $container;
+        this.$outerContainer = $(&#x27;&lt;div class=&quot;&#x27; + cons.CSS_CLASSES.outerContainer + &#x27;&quot;&gt;&lt;/div&gt;&#x27;);
+        this.$viewContainer = $(&#x27;&lt;div class=&quot;&#x27; + cons.CSS_CLASSES.viewContainer + &#x27;&quot;&gt;&lt;/div&gt;&#x27;);
+        this.$container.append(this.$outerContainer);
+        this.$outerContainer.append(this.$viewContainer);
+        this.layoutEngine = new Plugin.LayoutEngine(this.$viewContainer, viewOptions.layoutEngine);
+        
+        this.browseableNodeClicked = new Plugin.Event(this);
+        
         /**
         * Initializes the browsability of the given items
         *
         * @private
         * @method _initBrowsability
-        * @param {jQuery} $items Items which should be browsable
+        * @param {jQuery} $tiles Tiles which should be browsable
         */
-        this._initBrowsability = function($items) {
-            $items.each(function() {
-                var $item = $(this);
-                var color = new RGBColor(that.options.itemStyle.colors[$item.data(&quot;index&quot;) % that.options.itemStyle.colors.length]);
-                $item.css(&quot;background-color&quot;, &quot;rgba(&quot; + color.r + &quot;, &quot; + color.g + &quot;, &quot; + color.b + &quot; ,1)&quot;);
-                if (that.options.usePreviews) {
-                    if (that.options.previewAsOverlay) {
-                        // &lt;---- item click event ----&gt;
-                        eventManagers[plugin.pluginID].addEventHandler(&#x27;click&#x27;, function(e) {
-                            if(that.previews[$item.index()] === undefined) {
-                                that.previews[$item.index()] = new Plugin.PreviewOverlay(that, $item);
-                            }
-                            that.previews[$item.index()].open();
-                        }, $item);
-                    // &lt;!--- item click event ----&gt;
-                    } else {
-                        // &lt;---- item click event ----&gt;ä
-                        eventManagers[plugin.pluginID].addEventHandler(&#x27;click&#x27;, function(e) {
-                            if(that.previews[$item.index()] === undefined) {
-                                that.previews[$item.index()] = new Plugin.PreviewInlay(that, $item);
-                            }
-                            that.previews[$item.index()].open();
-                        }, $item);
-                    //that._addItemClickEvent($item, supportTransitions, transEndEventName);
-                    // &lt;!--- item click event ----&gt;
-                    }
-                } else {
-                    eventManagers[plugin.pluginID].addEventHandler(&#x27;click&#x27;, function() {
-                        plugin.addView(new Plugin.DetailView(that.$container, that.options, that.plugin, this));
-                    }, $item);
-                //that._addPreviewClickEvent($item, supportTransitions, transEndEventName);
-                }
+        this._initBrowsability = function($tiles) {
+            $tiles.each(function(i, $tile) {
+                $($tile).click(function () {
+                    that.browseableNodeClicked.notify($tile);
+                });
             });
         }
         
-        /**
-        * Fetches and updates the predicate labels of the shown items
-        *
-        * @private
-        * @method _fetchPredicateLabel
-        * @param {jQuery} $items Items which should be updated
-        */
-        this._fetchPredicateLabel = function($item) {
-            
-            var predicate = {};
-            
+        this._getCorrespondingTile = function(node) {
+            var $tile = this.$viewContainer.find(&quot;.&quot; + node.index);
+            return $tile;
+        }
+        
+        this._addPredURIShow = function($item) {
             var $predicate = $item.find(&quot;&gt; .predicate&quot;);
+            var $typeImage = $item.find(&quot;&gt; .typeImage&quot;);
             var $predicateLabel = $item.find(&quot;&gt; .predicateLabel&quot;);
             
             //Show full URI on mouse enter
             $predicateLabel.on(&quot;mouseenter&quot;, function(){
                 $predicate.css(&quot;display&quot;, &quot;inline-block&quot;);
+                $typeImage.css(&quot;display&quot;, &quot;none&quot;);
                 $predicateLabel.css(&quot;display&quot;, &quot;none&quot;);
-                
-                //TODO Clean fontresizing
-                $.each($predicate, function(i, item){
-                    var $item = $(item);
-                    var $fakeDiv = $(&quot;&lt;div class=&#x27;widthCalc&#x27;&gt;&quot;);
-                    $fakeDiv.css(&quot;font-size&quot;, $item.css(&quot;font-size&quot;));
-                    $fakeDiv.css(&quot;position&quot;, &quot;absolute&quot;);
-                    $fakeDiv.css(&quot;visibility&quot;, &quot;hidden&quot;);
-                    $fakeDiv.css(&quot;width&quot;, &quot;auto&quot;);
-                    $fakeDiv.css(&quot;height&quot;, &quot;auto&quot;);
-                    $fakeDiv.text($item.text());
-                    $container.append($fakeDiv);
-                    
-                    var done = false;
-                    var counter = 0;
-                    while (!done) {
-                        $fakeDiv.css(&quot;font-size&quot;, $item.css(&quot;font-size&quot;));
-                        counter++;
-                        if ($fakeDiv.width() &lt; $item.width() || counter == 100) {
-                            done = true;
-                        } else {
-                            $item.css(&quot;font-size&quot;, (parseFloat($item.css(&quot;font-size&quot;))-0.1) + &quot;px&quot;);
-                        }
-                    }
-                    
-                })
             });
             
             //Show label on mouse leave
             $predicate.on(&quot;mouseleave&quot;, function(){
                 $predicate.css(&quot;display&quot;, &quot;none&quot;);
+                $typeImage.css(&quot;display&quot;, &quot;inline-block&quot;);
                 $predicateLabel.css(&quot;display&quot;, &quot;inline-block&quot;);
             })
-            
-            predicate.value = $predicate.text();
-            
-            if (predicate.value != &quot;&quot;) {
-
-                if (!labelCache.contains(predicate.value)) {
-                    var labelQuery = replaceDummy(plugin._queries.label, predicate.value);
-                
-                    rdfStore.executeQuery(labelQuery, function(results){
-                        if (results &amp;&amp; results[0]) {
-                            $.each(results, function(i, result){
-                                predicate.label = result.label.value;
-                                labelCache.add(predicate.value, predicate.label);
-                                $predicateLabel.text(predicate.label);
-                            });
-                        } else if (that.options.remoteOptions.remoteLabels) {
-                                
-                            // Fetch label by remote query
-                            $.each(that.options.remoteOptions.remoteLabelBackend, function(i, val) {
-                                remoteEngine.executeQuery(labelQuery, val, function(results, success) {
-                                    if (success &amp;&amp; results &amp;&amp; results[0]) {
-                                        $.each(results, function(i, result){
-                                            if(result.label.language == &quot;en&quot; || result.label.language == undefined) {
-                                                predicate.label = result.label.value;
-                                                labelCache.add(predicate.value, predicate.label);
-                                                $predicateLabel.text(predicate.label);
-                                            }
-                                        });
-                                    }
-                                });
-                            });
-                            
-                        }
-                    });
-                } else {
-                    predicate.label = labelCache.retrieve(predicate.value);
-                    console.log(&quot;Cached label &quot; + predicate.label);
-                    $predicateLabel.text(predicate.label);
-                }
+        }
+        
+        this._addToAnchor = function($element, anchor, step, callback) {
+            $element.height(step);
+            $element.css(&quot;top&quot;, anchor);
+            anchor += step + 5;
+            if(callback) {
+                callback(anchor);
             }
         }
         
-        //Helper for batch adding
-        this._addItemsHelp = function(items, batchSize) {
-            var rest = items.slice(batchSize);
-            if (rest.length &gt; 0) {
-                that.addItems(rest);
-            } else {
-                eventManagers[that.plugin.pluginID].trigger(cons.EVENT_TYPES.loading.loadingDone, that, that.$container);
-            }
-        }
-        
-        /**
-        * Generate item to be added to the view
-        *
-        * @private
-        * @method _generateItem
-        * @param {Object} item Data of the item
-        * @param {jQuery} $tempDiv Temporary item selection
-        */
-        this._generateItem = function(item, $tempDiv) {
-            // If item isn&#x27;t a literal or blank node add it
-            var currentUri = item.subject.value;
-
-            // If item isn&#x27;t already created, create it
-            if (!(currentUri in that._itemHistory)) {
-                if (item.label) {
-
-                    // Only subjects with labels in english
-                    // or undefined language
-                    if (item.label.lang === undefined || item.label.lang === &quot;en&quot;) {
-
-                        item.index = (that._itemHistory.length++) + that._literalHistory.length;
-                                                
-                        var $item = $(templates.isotopeItem(item));
-                        $item.css({
-                            width : this.options.itemStyle.dimension.width,
-                            height : this.options.itemStyle.dimension.height
-                        });
-                        $item.css(&quot;background-color&quot;, &quot;rgba(125, 125, 125 ,0.2)&quot;);
-
-                        $item.data(&quot;uri&quot;, currentUri);
-                        $item.data(&quot;index&quot;, item.index);
-
-                        // Save added item in history
-                        that._itemHistory[currentUri] = item;
-                        
-                        this._fetchPredicateLabel($item);
-                        
-                        $tempDiv.append($item);
-                    }
-                }
-            } else {
-
-                // Check for item update
-                var update = false;
-                $.each(item, function(j, val) {
-                    if (val !== null) {
-                        if (that._itemHistory[currentUri][j] === null) {
-                            that._itemHistory[currentUri][j] = val;
-                            update = true;
+        this._setLiteralScale = function($tile, callback) {
+            var that = this;
+            var anchor = $tile.height() + this.options.literalStyle.topPadding;
+            var width = that.options.literalStyle.dimension.width;
+            $tile.width(width);
+            that._setLabelScale ($tile, anchor, that.options.literalStyle.value.height, width, function(anchor) {
+                that._setPredicateScale($tile, anchor, that.options.literalStyle.predicate.height, width, function(anchor) {
+                    $tile.height(anchor + that.options.literalStyle.bottomPadding);
+                        if (callback) {
+                            callback();
                         }
-                    }
                 });
-                
-                //TODO Same predicate
-
-                // Update element if needed
-                if (update) {
-
-                    // If element isn&#x27;t already added we
-                    // need to
-                    // remove it from the temporary Divbox
-                    $tempDiv.remove(&quot;.&quot; + that._itemHistory[currentUri].index);
-
-                    // If element is already added we need
-                    // to
-                    // remove it from isotope
-                    that.layoutEngine.remove($(that.$container).find(&quot;.&quot; + that._itemHistory[currentUri].index));
-
-                    var $updatedItem = $(templates.isotopeItem(that._itemHistory[currentUri]));
-                    $updatedItem.css({
-                        width : this.options.itemStyle.dimension.width,
-                        height : this.options.itemStyle.dimension.height
+            });
+        }
+        
+        this._setResNodeScale = function($tile, callback) {
+            var that = this;
+            var anchor = $tile.height() + this.options.itemStyle.topPadding;
+            var width = that.options.itemStyle.dimension.width;
+            $tile.width(width);
+            that._setLabelScale ($tile, anchor, that.options.itemStyle.label.height, width, function(anchor) {
+                that._setDescriptionScale($tile, anchor, that.options.itemStyle.description.height, width, function(anchor) {
+                    that._setPredicateScale($tile, anchor, that.options.itemStyle.predicate.height, width, function(anchor) {
+                        $tile.height(anchor + that.options.itemStyle.bottomPadding);
+                        if (callback) {
+                            callback();
+                        }
                     });
-                    $updatedItem.css(&quot;background-color&quot;, &quot;rgba(125, 125, 125 ,0.2)&quot;);
+                });
+            });
+        }
+        
+        this._setLabelScale = function($tile, anchor, height, width, callback) {
+            var $labelEn = $tile.find(&quot;&gt; .labelEn&quot;);
+            $labelEn.width(width*0.9);
+            this._addToAnchor($labelEn, anchor, height, callback);
+        }
+        
+        this._setPredicateScale = function($tile, anchor, height, width, callback) {
+            var that = this;
+            var $typeImage = $tile.find(&quot;&gt; .typeImage&quot;);
+            var $predicate = $tile.find(&quot;&gt; .predicate&quot;);
+            var $predicateLabel = $tile.find(&quot;&gt; .predicateLabel&quot;);
+            
+            var imageWidth = width*0.1;
+            $typeImage.css(&quot;padding-left&quot;, width*0.025);
+            $typeImage.width(imageWidth);
+            $predicateLabel.css(&quot;padding-left&quot;, imageWidth);
+            $predicateLabel.width((width*0.9)-imageWidth);
+            $predicate.width(width*0.9);
+
+            $.each($predicate, function(i, val){
+                $($typeImage[i]).height(height);
+                $($typeImage[i]).css(&quot;top&quot;, anchor);
+                that._addToAnchor($(val), anchor, height);
+                that._addToAnchor($($predicateLabel[i]), anchor, height, function(reAnchor) {
+                    anchor = reAnchor;
+                }); 
+            });
+            if (callback) {
+                callback(anchor);
+            }
+        }
+        
+        this._setDescriptionScale = function($tile, anchor, height, width, callback) {
+            var node = $tile.data(&quot;node&quot;);
+            if (node.description) {
+                var $descriptionEn = $tile.find(&quot;&gt; .descriptionEn&quot;);
+                $descriptionEn.width(width*0.9);
+                that._addToAnchor($descriptionEn, anchor, height, callback);
+            } else if (callback) {
+                callback(anchor);
+            }
+        }
+        
+        this._setImgBackground = function($tile) {
+            var node = $tile.data(&quot;node&quot;), image_url = &quot;&quot;;
+            
+            switch (node.hasType()) {
+                case cons.NODE_TYPES.resNode:
+                    image_url = node.uri;
+                    break;
                     
-                    $updatedItem.data(&quot;uri&quot;, currentUri);
-                    $updatedItem.data(&quot;index&quot;, that._itemHistory[currentUri].index);
-                    $tempDiv.append($updatedItem);
-                }
+                case cons.NODE_TYPES.literal:
+                    image_url = node.value;
+                    break;
             }
-        }
-        
-        /**
-        * Generate literal to be added to the view
-        *
-        * @private
-        * @method _generateLiteral
-        * @param {Object} literal Data of the literal
-        * @param {jQuery} $tempDiv Temporary item selection
-        */
-        this._generateLiteral = function(literal, $tempDiv) {
-            if (!(literal.predicate.value in that._literalHistory)) {
-                that._literalHistory[literal.predicate.value] = [];
-                
-                literal.index = that._literalHistory.length++ + that._itemHistory.length;
-                                        
-                var $literal = $(templates.isotopeItem(literal));
-                
-                $literal.css({
-                    width : this.options.literalStyle.dimension.width,
-                    height : this.options.literalStyle.dimension.height
-                });
-                var color = new RGBColor(that.options.literalStyle.colors[literal.index % that.options.literalStyle.colors.length]);
-                $literal.css(&quot;background-color&quot;, &quot;rgba(&quot; + color.r + &quot;, &quot; + color.g + &quot;, &quot; + color.b + &quot; ,1)&quot;);
-                                        
-                that._literalHistory[literal.predicate.value].push(literal.subject.value);
-                
-                this._fetchPredicateLabel($literal);
-                
-                $tempDiv.append($literal);
+            var tmpArray = image_url.replace(&quot;&gt;&quot;, &quot;&quot;).split(&quot;.&quot;);
+            image_url.replace(&quot;&lt;&quot;, &quot;&quot;);
+            switch (tmpArray[tmpArray.length-1]) {
+                case &quot;png&quot; :
+                case &quot;jpeg&quot; :
+                case &quot;svg&quot; :
+                case &quot;jpg&quot; :
+                    
+                    var image;
+                    if (image_url) {
+                        var $img = $(&#x27;&lt;img src=&quot;&#x27;+image_url+&#x27;&quot;&gt;&#x27;)
+                        $img.load(function () {
+                            var width = $img.width();
+                            var height = $img.height();
+                            var ratio = width/height;
+                            var tile_width = $tile.width();
+                            var tile_height = $tile.height();
+                            var tile_ration = tile_width / tile_height;
+                            var actual_width = 0;
 
-            } else {
-                if ($.inArray(literal.subject.value, that._literalHistory[literal.predicate.value]) === -1) {
-                //TODO Other value same predicate?
-                } else {
-                    // console.log(context[i]);
-                    // console.log(context.view._literalHistory)
-                    console.log(&quot;duplicated literal found&quot;);
-                }
+                            if(tile_ration &gt; ratio) {
+                                actual_width = tile_width/ratio;
+                                $img.width(tile_width/ratio);
+                                $img.height(tile_height);
+                            } else {
+                                $img.width(actual_width);
+                                $img.height(tile_width*ratio);
+                            }
+                            
+                            //TODO opacity variable
+                            $img.css({&quot;left&quot;: (tile_width-actual_width)/2, &quot;opacity&quot; : 0.5});
+                        });
+                        $tile.prepend($img);
+                    }
+                    break;
             }
         }
         
-        /**
-        * Generate blanknode to be added to the view
-        *
-        * @private
-        * @method _generateBlanknode
-        */
-        this._generateBlanknode = function() {
-            //TODO Blanknodes
-            console.log(&quot;TODO blanknode&quot;);
+        this._scaleText = function($tile) {
+            $tile.children().quickfit({min : 10});
+            $tile.css({&quot;line-height&quot; : 1});  
         }
+
+        this._generateTile = function(node, $resTiles, $literalTiles, $blankNodeTiles) {
+            var $tile = $(templates.isotopeItem(node)), color;
+            that._addPredURIShow($tile);
+            $tile.data(&quot;node&quot;, node);
+            switch (node.hasType()) {
+                
+                case cons.NODE_TYPES.resNode:
+                    color = new RGBColor(that.options.itemStyle.colors[node.index % that.options.itemStyle.colors.length]);
+                    $tile.css(&quot;background-color&quot;, &quot;rgba(&quot; + color.r + &quot;, &quot; + color.g + &quot;, &quot; + color.b + &quot; ,1)&quot;);
+                    this._setResNodeScale($tile, function() {
+                        that._setImgBackground($tile);
+                        that._scaleText($tile);
+                    });
+                    $resTiles.append($tile);
+                    break;
+                    
+                case cons.NODE_TYPES.literal:
+                    color = new RGBColor(that.options.literalStyle.colors[0]);
+                    $tile.css(&quot;background-color&quot;, &quot;rgba(&quot; + color.r + &quot;, &quot; + color.g + &quot;, &quot; + color.b + &quot; ,1)&quot;);
+                    this._setLiteralScale($tile, function() {
+                        that._setImgBackground($tile);
+                        that._scaleText($tile);
+                    });
+                            
+                    $literalTiles.append($tile);
+                    break;
+                    
+                case cons.NODE_TYPES.blankNode:
+                    //TODO Blanknode
+                    
+                    color = new RGBColor(that.options.literalStyle.colors[0]);
+                    $tile.css(&quot;background-color&quot;, &quot;rgba(&quot; + color.r + &quot;, &quot; + color.g + &quot;, &quot; + color.b + &quot; ,1)&quot;);
+                    this._setResNodeScale($tile, function() {
+                        that._setImgBackground($tile);
+                        that._scaleText($tile);
+                    }); //TODO BlankNodeScale
+                            
+                    $blankNodeTiles.append($tile);
+                    break;
+            }
+        }
+        
+        // attach model listeners
+        // on items added
+        this._model.itemsAdded.attach(
+            function(sender, nodes) {
+                
+                //Generate tiles for nodes
+                var $literalTiles = $(&quot;&lt;div&gt;&quot;);
+                var $resTiles = $(&quot;&lt;div&gt;&quot;);
+                var $blankNodeTiles = $(&quot;&lt;div&gt;&quot;);
+
+                $.each(nodes, function(i, node) {
+                    that._generateTile(node, $resTiles, $literalTiles, $blankNodeTiles);
+                })
+                
+                $literalTiles = $literalTiles.children();
+                $resTiles = $resTiles.children();
+                $blankNodeTiles = $blankNodeTiles.children();
+                var $allTiles = $().add($resTiles).add($blankNodeTiles).add($literalTiles);
+                var $browsableTiles = $().add($resTiles).add($blankNodeTiles);
+
+                //Add all tiles
+                that.layoutEngine.add($allTiles, function(){
+                    that._initBrowsability($browsableTiles);
+                });
+            });
+            
+        // on items update
+        this._model.itemUpdated.attach(
+            function(sender, node) {
+                var $tile = that._getCorrespondingTile(node);
+                that.layoutEngine.remove($tile);
+            });
+            
+        // on model clearing
+        this._model.modelCleared.attach(
+            function(sender) {
+                that.layoutEngine.remove($(&quot;.item&quot;), function() {
+                    console.log(&quot;view cleared&quot;);
+                });
+            });
     }
     
-    /**
-    * Generate sort interface
-    *
-    * @method generateSorter
-    */
-    Plugin.View.prototype.generateSorter = function() {
+    Plugin.Layer.View.prototype.addOptionsBox = function() {
+        this.$optionsContainer = $(&#x27;&lt;section class=&quot;&#x27; + cons.CSS_CLASSES.options + &#x27;&quot; class=&quot;&#x27; + cons.CSS_CLASSES.clearfix + &#x27;&quot;&gt;&lt;/section&gt;&#x27;)
+        this.$container.prepend(this.$optionsContainer);
+    }
+    
+    Plugin.Layer.View.prototype.addTimelineButton = function() {
+        
+    }
+    
+    Plugin.Layer.View.prototype.addSorter = function() {
         // Add sortoptions
         var that = this;
+        
         var sortData = $.extend({}, this.options.layoutEngine.getSortData);
         delete sortData[&quot;group&quot;];
         var sortOptions = templates.sortOptions(sortData);
@@ -1248,7 +1655,7 @@
         $sorter.append(templates.groupDropDown({
             type : {
                 label : &quot;type&quot;,
-                val : cons.TYPE_TAG
+                val : cons.FA_TAG
             },
             token : {
                 label : &quot;node-type&quot;,
@@ -1304,12 +1711,7 @@
         });
     }
     
-    /**
-    * Generate filter interface
-    *
-    * @method generateFilter
-    */
-    Plugin.View.prototype.generateFilter = function() {
+    Plugin.Layer.View.prototype.addFilter = function() {
         // Add options
         var that = this;
         var filterOptions = templates.filterOptions(that.options.filterBy);
@@ -1323,7 +1725,7 @@
             // get href attribute, minus the &#x27;#&#x27;
             var selector = $(this).attr(&#x27;data-filter-value&#x27;);
             if (selector !== &#x27;*&#x27;) {
-                selector = &quot;.&quot; + cons.TYPE_TAG + selector;
+                selector = &quot;.&quot; + cons.FA_TAG + selector;
             }
             that.$container.find(&#x27;.filter &gt; &gt; &gt; .selected&#x27;).removeClass(&#x27;selected&#x27;);
             $(this).addClass(&#x27;selected&#x27;);
@@ -1364,223 +1766,85 @@
             return false;
         });
     }
-    
-    /**
-    * Update the view by querying the local store
-    *
-    * @method update
-    */
-    Plugin.View.prototype.update = function() {
-        var that = this, emptyResults = true;
-        eventManagers[that.plugin.pluginID].trigger(cons.EVENT_TYPES.loading.loadingStart, that, that.$container);
-        
-        
-        rdfStore.executeQuery(&quot;CONSTRUCT { ?s rdfs:label ?o . ?s1 rdfs:description ?o1 . ?s2 rdfs:comment ?o2 . ?s3 rdfs:type ?o3} WHERE { ?s rdfs:label ?o . OPTIONAL { ?s1 rdfs:description ?o1 } . OPTIONAL { ?s2 rdfs:comment ?o2 }. OPTIONAL {?s3 rdfs:type ?o3}}&quot;, function(results) {
-            console.log(results);
-        } );
-        
-        for ( var i = 0; i &lt; this.viewQueries.length; i++) {
-            rdfStore.executeQuery(this.viewQueries[i].query, function(results) {
-                if (results &amp;&amp; results.length !== 0) {
-                    emptyResults = false;
-                    if (that.viewQueries[i].type) {
-                        // Add types for filtering
-                        for ( var j = 0; j &lt; results.length; j++) {
-                            results[j].type = {
-                                value : that.viewQueries[i].type
-                            };
-                        }
-                    }
-                    that.addItems(results);
-                } else if (i === that.viewQueries.length - 1 &amp;&amp; emptyResults) {
-                    eventManagers[that.plugin.pluginID].trigger(cons.EVENT_TYPES.loading.loadingDone, that, that.$container);
-                }
-            });
-        }
-    },
-    
-    /**
-    * Add given items to the view.
-    *
-    * @method addItems
-    * @param {jQuery} items Items which are to be added to the view
-    */
-    Plugin.View.prototype.addItems = function(items) {
-        var length = items.length, that = this, batchSize = ((length &lt; that.options.batchSize) ? length : that.options.batchSize);
 
-        this.$outerContainer.find(&#x27;&gt; .loading&#x27;).text(parseInt(batchSize / length * 100) + &quot;% -&quot;);
-
-        // current batch
-        var batch = items.slice(0, batchSize);
-
-        var $tempItemContainer = $(&quot;&lt;div&gt;&quot;);
-        var $tempLiteralContainer = $(&quot;&lt;div&gt;&quot;);
-        
-        $.each(batch, function(i, val) {
-            val.subject.token = cons.TOKEN_TAG + val.subject.token;
-            if (val.label) {
-                val.label.value = unescape(val.label.value);
-            }
-            switch (val.subject.token) {
-
-                case cons.CSS_CLASSES.toToken(&quot;patternClasses.uri&quot;):
-                    that._generateItem(val, $tempItemContainer);
-                    break;
-                case cons.CSS_CLASSES.toToken(&quot;patternClasses.literal&quot;):
-                    // use literal value as label on literals
-                    val.label = val.subject;
-                    if (val.label) {
-                        val.label.value = unescape(val.label.value);
-                    }
-                    that._generateLiteral(val, $tempLiteralContainer);
-                    break;
-                case  cons.CSS_CLASSES.toToken(&quot;patternClasses.blanknode&quot;):
-                    that._generateBlanknode(val);
-                    break;
-                default :
-                    console.log(cons.MESSAGES.error.tokenType);
-            }
-        });
-        var $items = $tempItemContainer.children();
-        var $literals = $tempLiteralContainer.children();
-        var $allNodes = $().add($items).add($literals);
-        that.layoutEngine.add($allNodes, function(){
-            that._initBrowsability($items);
-        });
-        
-                        
-        that._addItemsHelp(items, batchSize);
-    }
-    
-    /**
-    * Clear the view
-    *
-    * @method removeAllItems
-    */
-    Plugin.View.prototype.removeAllItems = function() {
-        var that = this;
-        that.layoutEngine.remove($(&quot;.item&quot;), function() {
-            that._itemHistory = {
-                length : 0
-            };
-            that._literalHistory = {};
-            console.log(&quot;view cleared&quot;);
-        });
-    }
-        
-    // ========================= VisaRDF: InitView Class ==============================
+    // ========================= VisaRDF: InitLayer Class ==============================
     /**
     * Initialization view of the plugin
     *
-    * @class Plugin.InitView
-    * @extends  Plugin.View
+    * @class Plugin.InitLayer
+    * @extends  Plugin.Layer
     * @constructor
     * @param {jQuery} $container    Container of the initialization view
     * @param {Object} options    Options object
     * @param {Plugin} plugin    The parent plugin of the initialization view
     */
-    Plugin.InitView = function($container, options, plugin) {
-        Plugin.View.call(this, $container, options, plugin, plugin.options.initQueries);
+    Plugin.InitLayer = function($container, options, plugin) {
+        if (plugin.options.generateTimeline) {
+            plugin._$timelineContainer = $(&#x27;&lt;div class=&quot;timelineContainer&quot;&gt;&#x27;);
+            plugin._$parent.prepend(plugin._$timelineContainer);
+            plugin._$timeline = $(&#x27;&lt;ul class=&quot;timeline&quot;&gt;&lt;/ul&gt;&#x27;);
+            plugin._$timelineContainer.append(plugin._$timeline);
+            //TODO Timeline
     }
         
-    //pseudo class inheritance of Preview
-    Plugin.InitView.prototype =  Object.create(Plugin.View.prototype);
-    Plugin.InitView.prototype.constructor = Plugin.InitView;
+        Plugin.Layer.call(this, $container, options, plugin, plugin.options.initQueries);
+    }
+        
+    //pseudo class inheritance
+    Plugin.InitLayer.prototype =  Object.create(Plugin.Layer.prototype);
+    Plugin.InitLayer.prototype.constructor = Plugin.InitLayer;
     
-    // ========================= VisaRDF: DetailView Class ==============================
+    // ========================= VisaRDF: DetailLayer Class ==============================
     /**
     * Detailed view of an subject / item
     *
-    * @class Plugin.DetailView
-    * @extends  Plugin.View
+    * @class Plugin.DetailLayer
+    * @extends  Plugin.Layer
     * @constructor
     * @param {jQuery} $container    Container of the detail view
     * @param {Object} options    Options object
     * @param {Plugin} plugin    The parent plugin of the detail view
-    * @param {jQuery} item    Item to get the detail view from
+    * @param {jQuery} $item    Item to get the detail view from
     */
-    Plugin.DetailView = function($container, options, plugin, item) {
+    Plugin.DetailLayer = function($container, options, plugin, $item) {
         var that = this;
-        this.$item = $(item);
-        this.uri = this.$item.find(&#x27;.showUri&#x27;).html();
-        this.plugin = plugin;
+        this.$item = $item;
+        this.node = $item.data(&quot;node&quot;);
         
-        var $overlay = $container.find(cons.CSS_CLASSES.toSelector(&quot;overlay&quot;) + &#x27;_&#x27; + that.$item.index());
-        if ($overlay.length &lt; 1) {
-            var overlay = templates.overlayItem({
-                &quot;index&quot; : that.$item.index(),
-                &quot;cssClass&quot; : {
-                    &quot;overlay&quot; : cons.CSS_CLASSES.overlay,
-                    &quot;overlayContent&quot; : cons.CSS_CLASSES.overlayContent
-                }
-            });
-            $container.append(overlay);
-            $overlay = $container.find(&#x27;&gt; &#x27; + cons.CSS_CLASSES.toSelector(&quot;overlay&quot;) + &#x27;_&#x27; + that.$item.index());
-        }
-        
-        // &lt;---- close click Event ----&gt;
-        var $overlayContent = $overlay.find(&#x27;&gt; &#x27; + cons.CSS_CLASSES.toSelector(&quot;overlayContent&quot;)), $close = $overlay.find(&#x27;&gt; span.close&#x27;);
-        eventManagers[that.plugin.pluginID].addEventHandler(&#x27;click&#x27;, function() {
-            that.close();
-        }, $close);
-        // &lt;!--- close click Event ----&gt;
-       
-        var subjectOfQuery = replaceDummy(plugin._queries.selectSubjectOf, this.uri), objectOfQuery = replaceDummy(plugin._queries.selectObjectOf, this.uri);
+        var subjectOfQuery = replaceDummy(plugin._queries.selectSubjectOf, this.node.uri), objectOfQuery = replaceDummy(plugin._queries.selectObjectOf, this.node.uri);
         var queries = [];
         queries.push({
             query : subjectOfQuery, 
-            type : cons.CSS_CLASSES.toType(&quot;typeClasses.outgoing&quot;)
+            type : cons.CSS_CLASSES.typeClasses.outgoing
         });
         queries.push({
             query : objectOfQuery, 
-            type : cons.CSS_CLASSES.toType(&quot;typeClasses.incoming&quot;)
+            type : cons.CSS_CLASSES.typeClasses.incoming
         });
+        
+        // &lt;---- close click Event ----&gt;
+        var $overlayContent = $container.find(&#x27;&gt; &#x27; + cons.CSS_CLASSES.toSelector(&quot;overlayContent&quot;)), $close = $container.find(&#x27;&gt; span.close&#x27;);
+        eventManagers[plugin.pluginID].addEventHandler(&#x27;click&#x27;, function() {
+            that.close();
+        }, $close);
+        // &lt;!--- close click Event ----&gt;
         
         // Input for the handlebar
         // template
         var input = {};
-        input.label = that.$item.find(&#x27;.labelEn&#x27;).text();
+        input.label = $item.find(&#x27;.labelEn&#x27;).text();
+
         // write new data
         $overlayContent.append($(templates.overlayContent(input)));
         
-        var newViewOptions = $.extend(true, {}, options, {
-            layoutEngine : {
-                itemSelector : &#x27;.item&#x27;,
-                getSortData : {
-                    type : function($elem) {
-                        var classes = $elem.attr(&quot;class&quot;);
-                        return classes;
-                    },
-                    group : function($elem) {
-                        var classes = $elem.attr(&quot;class&quot;);
-                        var pattern = new RegExp(&quot;(\s)*[a-zA-Z0-9]*&quot; + cons.TOKEN_TAG + &quot;[a-zA-Z0-9]*(\s)*&quot;, &#x27;g&#x27;);
-                        var groups = classes.match(pattern), group = &quot;&quot;;
-                        for ( var i = 0; i &lt; groups.length; i++) {
-                            group += groups[i] + &quot; &quot;;
-                        }
-                        return group;
-                    }
-                }
-            },
-            filterBy : [ {
-                value : &quot;*&quot;,
-                label : &quot;showAll&quot;
-            }, {
-                value : cons.CSS_CLASSES.typeClasses.incoming,
-                label : &quot;in&quot;
-            }, {
-                value : cons.CSS_CLASSES.typeClasses.outgoing,
-                label : &quot;out&quot;
-            } ]
-        });
         
-        Plugin.View.call(this, $overlayContent.find(&#x27;.innerScroll&#x27;), newViewOptions, plugin, queries);
+        Plugin.Layer.call(this, $overlayContent.find(&#x27;.innerScroll&#x27;), options, plugin, queries);
         
-        this.$overlay = $overlay;
+        this.$overlay = $container;
         this.$overlayContent = $overlayContent;
 
-        // Init content of given full view overlay.
-        this._initOverlayContent = function($overlay, callback) {
+        // Function to init content of given full view overlay.
+        this._initOverlayContent = function($container, callback) {
             
             that.update();
             
@@ -1588,20 +1852,9 @@
                 that.loadByRemote();
             }
 
-            // console.log($item.find(&#x27;.showUri&#x27;).html());
-
-            rdfStore.executeQuery(subjectOfQuery, function(subjectOf) {
-                rdfStore.executeQuery(objectOfQuery, function(objectOf) {
-
-                    var resultSet = $.merge($.merge([], subjectOf), objectOf);
-                    
-                    that.addItems(resultSet);
-                });
-            });
-
             // Set contet color
             var color = new RGBColor(that.$item.css(&quot;background-color&quot;));
-            $overlay.css(&quot;background-color&quot;, color.toRGB());
+            $container.css(&quot;background-color&quot;, color.toRGB());
             $.each($overlayContent.children(&#x27;div&#x27;), function(i, val) {
                 color.r -= 10;
                 color.b -= 10;
@@ -1614,19 +1867,19 @@
 
             // Set innerScrollBox width and height
             $overlayContent.find(&#x27;.innerScroll&#x27;).css(&quot;width&quot;,
-                ($window.width() - parseInt($overlay.css(&quot;padding-left&quot;)) - parseInt($overlay.css(&quot;padding-right&quot;))) + &quot;px&quot;);
+                ($window.width() - parseInt($container.css(&quot;padding-left&quot;)) - parseInt($container.css(&quot;padding-right&quot;))) + &quot;px&quot;);
             $overlayContent.find(&#x27;.innerScroll&#x27;).css(&quot;height&quot;, $window.height() * 0.95 + &quot;px&quot;);
 
             callback();
         }
 
         // Fill overlay with content
-        that._initOverlayContent($overlay, function() {
+        that._initOverlayContent($container, function() {
             // &lt;---- overlay show function ----&gt;
             var previewClip = getClip(cons.CSS_CLASSES.preview), overlayClip = getClip(cons.CSS_CLASSES.overlay);
 
             // Make overlay visible
-            $overlay.css({
+            $container.css({
                 clip : supportTransitions ? previewClip : overlayClip,
                 opacity : 1,
                 zIndex : 9999,
@@ -1634,13 +1887,13 @@
             });
 
             if (supportTransitions) {
-                $overlay.on(transEndEventName, function() {
+                $container.on(transEndEventName, function() {
 
-                    $overlay.off(transEndEventName);
+                    $container.off(transEndEventName);
 
                     setTimeout(function() {
-                        $overlay.css(&#x27;clip&#x27;, overlayClip).on(transEndEventName, function() {
-                            $overlay.off(transEndEventName);
+                        $container.css(&#x27;clip&#x27;, overlayClip).on(transEndEventName, function() {
+                            $container.off(transEndEventName);
                             plugin.$body.addClass(&#x27;noscroll&#x27;);
                         });
                     }, 25);
@@ -1651,19 +1904,19 @@
             }
         // &lt;!--- overlay show function ----&gt;
         });
-
     }
     
     //pseudo class inheritance of Preview
-    Plugin.DetailView.prototype =  Object.create(Plugin.View.prototype);
-    Plugin.DetailView.prototype.constructor = Plugin.DetailView;
+    //pseudo class inheritance of Preview
+    Plugin.DetailLayer.prototype =  Object.create(Plugin.Layer.prototype);
+    Plugin.DetailLayer.prototype.constructor = Plugin.DetailLayer;
 
     /**
     * Load children by remote service
     *
     * @method loadByRemote
     */
-    Plugin.DetailView.prototype.loadByRemote  = function() {
+    Plugin.DetailLayer.prototype.loadByRemote  = function() {
                 
         var that = this;
         
@@ -1674,13 +1927,11 @@
         // Get items who are in a relation to
         // current item
         var remoteSubjectOf = replaceDummy(
-            that.plugin._queries.remoteSubjectOf, that.uri), remoteObjectOf = replaceDummy(that.plugin._queries.remoteObjectOf, that.uri);
+            that.plugin._queries.remoteSubjectOf, that.node.uri), remoteObjectOf = replaceDummy(that.plugin._queries.remoteObjectOf, that.node.uri);
         
         //remote needed?
-        if (that.options.remoteOptions.remoteDynamically) {
-            that.remoteDataLoader.insertByQuery(remoteSubjectOf + &quot; LIMIT &quot; + that.options.remoteOptions.remoteLimit);
-            that.remoteDataLoader.insertByQuery(remoteObjectOf + &quot; LIMIT &quot; + that.options.remoteOptions.remoteLimit);
-        }
+        that.remoteDataLoader.insertByQuery(remoteSubjectOf + &quot; LIMIT &quot; + that.options.remoteOptions.remoteLimit);
+        that.remoteDataLoader.insertByQuery(remoteObjectOf + &quot; LIMIT &quot; + that.options.remoteOptions.remoteLimit);
     }
 
     /**
@@ -1688,11 +1939,11 @@
     *
     * @method close
     */
-    Plugin.DetailView.prototype.close = function() {
+    Plugin.DetailLayer.prototype.close = function() {
         var that = this;
             
         // clear old data
-        that.plugin.removeView(that);
+        that.plugin.removeLayer(that);
         that.$overlayContent.children().remove(&#x27;&#x27;);
 
         var layoutProp = getItemLayoutProp(that.$item), itemClip = &#x27;rect(&#x27; + layoutProp.top + &#x27;px &#x27; + (layoutProp.left + layoutProp.width) + &#x27;px &#x27;
@@ -1729,286 +1980,8 @@
     // &lt;!--- overlay hide ----&gt;
     }
 
-    // ========================= VisaRDF: View Class ==============================
-    /**
-    * Preview of an item in a view
-    *
-    * @class Plugin.Preview
-    * @constructor
-    * @param {Array} parentView    Parent view of the preview
-    * @param {jQuery} $item    Item to get the preview of
-    */
-    Plugin.Preview = function(parentView, $item) {
-        this.parentView = parentView;
-        this.$item = $item;
-    };
+    // ========================= VisaRDF: Preview Class ==============================
 
-    /**
-    * Closes the preview
-    *
-    * @method close
-    */
-    Plugin.Preview.prototype.close = function() {
-        this.$preview.data(&#x27;isShown&#x27;, false);
-    }
-    
-    /**
-    * Opens the preview
-    *
-    * @method open
-    */
-    Plugin.Preview.prototype.open = function() {
-        this.$preview.data(&#x27;isShown&#x27;, true);
-    }
-
-    /**
-    * On click function to be triggered
-    *
-    * @method click
-    */
-    Plugin.Preview.prototype.click = function() {
-        if (!this.$item.data(&#x27;isExpanded&#x27;)) {
-            this.$item.data(&#x27;isExpanded&#x27;, true);
-            this.parentView.plugin.addView(new Plugin.DetailView(this.parentView.$container, this.parentView.options, this.parentView.plugin, this.$item));
-        }
-    }
-
-    // ========================= VisaRDF: PreviewOverlay Class ==============================
-    /**
-    * Preview as an Overlay of an item in a view
-    *
-    * @class Plugin.PreviewOverlay
-    * @extends  Plugin.Preview
-    * @constructor
-    * @param {Array} parentView    Parent view of the preview
-    * @param {jQuery} $item    Item to get the preview of
-    */
-    Plugin.PreviewOverlay = function(parentView, $item) {
-        Plugin.Preview.call(this, parentView, $item);
-        var that = this;
-        var preview = templates.previewItem({
-            &quot;index&quot; : this.$item.index(),
-            &quot;cssClass&quot; : {
-                &quot;preview&quot; : cons.CSS_CLASSES.preview,
-                &quot;previewContent&quot; : cons.CSS_CLASSES.previewContent
-            }
-        });
-        parentView.$container.append(preview);
-        this.$preview = parentView.$container.find(&#x27;&gt; &#x27; + cons.CSS_CLASSES.toSelector(&quot;preview&quot;) + &#x27;_&#x27; + $item.index());
-        this.$preview.css(&#x27;background-color&#x27;, $item.css(&#x27;background-color&#x27;));
-        this.$previewContent = this.$preview.children(cons.CSS_CLASSES.toSelector(&quot;previewContent&quot;));
-        this.$previewContent.text(&quot;&quot; + $item.find(&#x27;.labelEn &gt; div&#x27;).html());
-    };
-        
-    //pseudo class inheritance of Preview
-    Plugin.PreviewOverlay.prototype =  Object.create(Plugin.Preview.prototype);
-    Plugin.PreviewOverlay.prototype.constructor = Plugin.PreviewOverlay;
-
-    /**
-    * On click function to be triggered
-    *
-    * @method click
-    * @extends Plugin.Preview.click
-    */
-    Plugin.PreviewOverlay.prototype.click = function() {
-        
-        //call super
-        Plugin.Preview.prototype.click.call(this);
-
-        // &lt;---- hide preview and deactivate transitions
-        // ----&gt;
-        this.close();
-    // &lt;!--- hide preview and deactivate transitions
-    // ----&gt;
-    }
-     
-    /**
-    * Opens the preview
-    *  
-    * @method open
-    * @extends Plugin.Preview.open
-    */
-    Plugin.PreviewOverlay.prototype.open = function(supportTransitions, transEndEventName) {
-        var that = this;
-        
-        if (!this.$preview.data(&#x27;isShown&#x27;)) {
-            
-            var layoutProp = getItemLayoutProp(that.$item), itemClip = &#x27;rect(&#x27; + layoutProp.top + &#x27;px &#x27; + (layoutProp.left + layoutProp.width) + &#x27;px &#x27;
-            + (layoutProp.top + layoutProp.height) + &#x27;px &#x27; + layoutProp.left + &#x27;px)&#x27;, previewClip = getClip(cons.CSS_CLASSES.preview);
-
-            // Make preview visible
-            that.$preview.css({
-                clip : supportTransitions ? itemClip : previewClip,
-                opacity : 1,
-                zIndex : 9998,
-                pointerEvents : &#x27;auto&#x27;
-            });
-
-        
-            // &lt;---- Add event on window click ----&gt;
-            eventManagers[that.parentView.plugin.pluginID].addEventHandler(&#x27;dblclick&#x27;, function() {
-                that.close();
-                eventManagers[that.parentView.plugin.pluginID].removeEventHandler(&#x27;dblclick&#x27;, &quot;previewOverlayClose&quot;);
-            }
-            , $window, &quot;previewOverlayClose&quot;);
-        
-            // &lt;!--- Add event on window click ----&gt;
-    
-            // &lt;---- preview click Event ----&gt;
-            eventManagers[that.parentView.plugin.pluginID].addEventHandler(&#x27;click&#x27;, function() {
-                that.click();
-                eventManagers[that.parentView.plugin.pluginID].removeEventHandler(&#x27;click&#x27;, &quot;previewOverlayClick&quot;);
-            }, that.$preview, &quot;previewOverlayClick&quot;);
-        // &lt;!--- preview click Event ----&gt;
-        }
-        Plugin.Preview.prototype.open.call(this);
-    }
-
-    /**
-    * Closes the preview
-    *  
-    * @method close
-    * @extends Plugin.Preview.close
-    */
-    Plugin.PreviewOverlay.prototype.close = function() {
-        
-        var that = this;
-        
-        //call super
-        Plugin.Preview.prototype.close.call(this);
-            
-        var layoutProp = getItemLayoutProp(this.$item), itemClip = &#x27;rect(&#x27; + layoutProp.top + &#x27;px &#x27; + (layoutProp.left + layoutProp.width) + &#x27;px &#x27;
-        + (layoutProp.top + layoutProp.height) + &#x27;px &#x27; + layoutProp.left + &#x27;px)&#x27;;
-
-        this.$preview.css({
-            opacity : 1,
-            pointerEvents : &#x27;none&#x27;,
-            clip : itemClip
-        });
-
-        if (supportTransitions) {
-            that.$preview.on(transEndEventName, function() {
-                that.$preview.off(transEndEventName);
-                setTimeout(function() {
-                    that.$preview.css(&#x27;opacity&#x27;, 0).on(transEndEventName, function() {
-                        that.$preview.off(transEndEventName).css({
-                            clip : &#x27;auto&#x27;,
-                            zIndex : -1
-                        });
-                    });
-                }, 25);
-
-            });
-        } else {
-            that.$preview.css({
-                opacity : 0,
-                zIndex : -1
-            });
-        }
-    };
-    
-    // ========================= VisaRDF: PreviewInlay Class ==============================
-    /**
-    * Preview as inlay change of given item in a view
-    *
-    * @class Plugin.PreviewInlay
-    * @extends  Plugin.Preview
-    * @constructor
-    * @param {Array} parentView    Parent view of the preview
-    * @param {jQuery} $item    Item to get the preview of
-    */
-    Plugin.PreviewInlay = function(parentView, $item) {
-        Plugin.Preview.call(this, parentView, $item);
-        this.$preview = this.$item;
-    };
-        
-    //pseudo class inheritance of Preview
-    Plugin.PreviewInlay.prototype = Object.create(Plugin.Preview.prototype);
-    Plugin.PreviewInlay.prototype.constructor = Plugin.PreviewInlay;
-
-    /**
-    * Opens the preview
-    *
-    * @method open
-    * @extends Plugin.Preview.open
-    */
-    Plugin.PreviewInlay.prototype.open = function() {
-        var that = this;
-        if (!this.$preview.data(&#x27;isShown&#x27;)) {
-
-            var newWidth, newHeight;
-
-            // get Isotope instance
-            // var isotopeInstance =
-            // that._$viewContainer.data(&#x27;isotope&#x27;);
-
-            newWidth = that.parentView.$viewContainer.width() - 100;
-            newHeight = $window.height() - 100;
-
-            this.$item.addClass(cons.CSS_CLASSES.previewItem);
-            this.$item.css({
-                &quot;width&quot; : newWidth,
-                &quot;height&quot; : newHeight
-            });
-
-            //            var previewQuery = replaceDummy(that.parentView.plugin._queries.previewQuery, this.$item.data(&quot;uri&quot;));
-            //
-            //            rdfStore.executeQuery(previewQuery, function(data) {
-            //                var content = templates.isotopeItemContent(data[0]);
-            //                this.$item.find(&quot;.itemContent&quot;).remove();
-            //                this.$item.append(content);
-            //            });
-            that.parentView.layoutEngine.reLayout();
-                                
-            eventManagers[that.parentView.plugin.pluginID].trigger(&#x27;closePreview&#x27;);
-                                
-            // &lt;---- Add close event ----&gt;
-            eventManagers[that.parentView.plugin.pluginID].addEventHandler(&#x27;closePreview&#x27;, function() {
-                that.close();
-                eventManagers[that.parentView.plugin.pluginID].removeEventHandler(&#x27;closePreview&#x27;, &quot;previewOverlayClose&quot;);
-                eventManagers[that.parentView.plugin.pluginID].removeEventHandler(&#x27;click&#x27;, &quot;previewOverlayClick&quot;);
-            }
-            , $window, &quot;previewOverlayClose&quot;);
-        
-            // &lt;!--- Add close event ----&gt;
-    
-            // &lt;---- preview click Event ----&gt;
-            eventManagers[that.parentView.plugin.pluginID].addEventHandler(&#x27;click&#x27;, function() {
-                that.click();
-                eventManagers[that.parentView.plugin.pluginID].trigger(&#x27;closePreview&#x27;);
-                eventManagers[that.parentView.plugin.pluginID].removeEventHandler(&#x27;click&#x27;, &quot;previewOverlayClick&quot;);
-            }, that.$preview, &quot;previewOverlayClick&quot;);
-        // &lt;!--- preview click Event ----&gt;
-        }
-            
-        Plugin.Preview.prototype.open.call(this);
-    }
-
-    /**
-    * On click function to be triggered
-    *
-    * @method click
-    * @extends Plugin.Preview.click
-    */
-    Plugin.PreviewInlay.prototype.click = function() {
-        Plugin.Preview.prototype.click.call(this);
-    }
-
-    /**
-    * Closes the preview
-    *  
-    * @method close
-    * @extends Plugin.Preview.close
-    */
-    Plugin.PreviewInlay.prototype.close = function() {
-        var that = this;
-        that.$item.css({
-            &quot;width&quot; : that.parentView.options.itemStyle.dimension.width,
-            &quot;height&quot; : that.parentView.options.itemStyle.dimension.height
-        });
-        that.parentView.layoutEngine.reLayout();
-        Plugin.Preview.prototype.close.call(this);
-    }
 
     // ========================= VisaRDF: TemplatesLoader Class ==============================
     /**
@@ -2119,6 +2092,10 @@
                         // console.log(&#x27;&lt;&#x27; + val.object.value + &#x27;&gt;
                         // rdfs:label &quot;&#x27; + val.labelObj.value + &#x27;&quot;.
                         // &#x27;);
+                        }
+                        if(val.labelPred) {
+                            //console.log(val.predicate.value + &quot; added &quot; + val.labelPred.value);
+                            labelCache.add(val.predicate.value , val.labelPred.value);
                         }
                     });
                     insertionQuery += &quot;}&quot;;
@@ -2232,6 +2209,15 @@
         sparqlData : undefined,
         
         /**
+        Flag to indicate whether a timeline should be generated and used.
+
+        @property defaults.generateTimeline
+        @type Boolean
+        @default true
+        **/
+        generateTimeline : false,
+        
+        /**
         Query/queries to use for the initialization view of the plugin.
 
         @property defaults.initQueries
@@ -2261,13 +2247,13 @@
         },
         
         /**
-        Options for the VisaRDF views.
+        Options for the VisaRDF view layer.
 
-        @property defaults.viewOptions 
+        @property defaults.layerOptions 
         @type Object
         **/
-        viewOptions : {
-            
+        layerOptions : {
+                    
             /**
             Flag to indicate whether the sort interface should be generated.
 
@@ -2287,13 +2273,13 @@
             usePreviews : false,
             
             /**
-            Flag to indicate which kind of previews should be used. The plugin uses inlay previews on false.
+            Flag to indicate which kind of previews should be used. Possible options are
 
             @property defaults.viewOptions.previewAsOverlay
             @type Boolean
-            @default false
+            @default Overlay
             **/
-            previewAsOverlay : false,
+            previewAsOverlay : true,
             
             /**
             Flag to indicate whether the filter interface should be generated.
@@ -2304,24 +2290,7 @@
             **/
             generateFilterOptions : true,
             
-            /**
-            Batch size of items which can be loaded simultaniosly in the view-
-
-            @property defaults.viewOptions.batchSize
-            @type Integer
-            @default 25
-            **/
-            batchSize : 25,
-            
-            /**
-            Flag to indicate whether the filter should use regular expressions.
-
-            @property defaults.viewOptions.supportRegExpFilter
-            @type Boolean
-            @default true
-            **/
-            supportRegExpFilter : true,
-            
+                        
             /**
             Default filter to be added to the filter interface.
 
@@ -2333,6 +2302,19 @@
                 value : &quot;*&quot;,
                 label : &quot;showAll&quot;
             } ],
+            
+            modelOptions : {
+                          
+                /**
+                Batch size of items which can be loaded simultaniosly in the view-
+
+                @property defaults.viewOptions.batchSize
+                @type Integer
+                @default 25
+                **/
+                batchSize : 25
+              
+            },
             
             /**
             Options for remote loading of data.
@@ -2396,109 +2378,154 @@
                 **/
                 remoteLabels : true
             },
-            
+        
             /**
-            Styles of literal items.
+            Options for the VisaRDF views.
 
-            @property defaults.viewOptions.literalStyle
+            @property defaults.layerOptions.viewOptions 
             @type Object
             **/
-            literalStyle : {
+            viewOptions : {
+            
                 /**
+                Flag to indicate whether the filter should use regular expressions.
+
+                @property defaults.viewOptions.supportRegExpFilter
+                @type Boolean
+                @default true
+                **/
+                supportRegExpFilter : true,
+
+            
+                /**
+                Styles of literal items.
+
+                @property defaults.viewOptions.literalStyle
+                @type Object
+                **/
+                literalStyle : {
+                    /**
                 Dimensions of literal items.
 
                 @property defaults.viewOptions.literalStyle.dimension
                 @type Object
                 **/
-                dimension : {
-                    /**
+                    dimension : {
+                        /**
                     Width of literal items.
 
                     @property defaults.viewOptions.literalStyle.dimension.width
                     @type Integer
                     @default 200
                     **/
-                    width : 200,
+                        width : 200,
                     
-                    /**
+                        /**
                     Height of literal items.
 
                     @property defaults.viewOptions.literalStyle.dimension.width
                     @type Integer
                     @default 100
                     **/
-                    height : 100
-                },
+                        height : 0
+                    },
+                    
+                    topPadding : 10,
+                    bottomPadding : 10,
+                    
+                    value : {
+                        height : 30
+                    },
+                    
+                    predicate : {
+                        height : 15
+                    },
                 
-                /**
+                    /**
                 Color of literal items.
 
                 @property defaults.viewOptions.literalStyle.colors
                 @type Array
                 @default [ &#x27;#777777&#x27; ]
                 **/
-                colors : [ &#x27;#777777&#x27; ]  
-            },
+                    colors : [ &#x27;#777777&#x27; ]  
+                },
             
-            /**
-            Styles of items.
-
-            @property defaults.viewOptions.itemStyle
-            @type Object
-            **/
-            itemStyle : {
                 /**
+                Styles of items.
+
+                @property defaults.viewOptions.itemStyle
+                @type Object
+                **/
+                itemStyle : {
+                    /**
                 Dimensions of items.
 
                 @property defaults.viewOptions.itemStyle.dimension
                 @type Object
                 **/
-                dimension : {
-                    /**
+                    dimension : {
+                        /**
                     Width of items.
 
                     @property defaults.viewOptions.itemStyle.dimension.width
                     @type Integer
                     @default 200
                     **/
-                    width : 200,
+                        width : 200,
                     
-                    /**
+                        /**
                     Height of items.
 
                     @property defaults.viewOptions.itemStyle.dimension.width
                     @type Integer
                     @default 200
                     **/
-                    height : 200
-                },
+                        height : 0
+                    },
+                    
+                    topPadding : 10,
+                    bottomPadding : 10,
+                    
+                    label : {
+                        height : 40
+                    },
+                    
+                    description : {
+                        height : 80
+                    },
+                    
+                    predicate : {
+                        height : 15
+                    },
                 
-                /**
+                    /**
                 Colors of items.
 
                 @property defaults.viewOptions.itemStyle.colors
                 @type Array
                 @default [ &#x27;#e2674a&#x27;, &#x27;#99CC99&#x27;, &#x27;#3399CC&#x27;, &#x27;#33CCCC&#x27;, &#x27;#996699&#x27;, &#x27;#C24747&#x27;, &#x27;#FFCC66&#x27;, &#x27;#669999&#x27;, &#x27;#CC6699&#x27;, &#x27;#339966&#x27;, &#x27;#666699&#x27; ]
                 **/
-                colors : [ &#x27;#e2674a&#x27;, &#x27;#99CC99&#x27;, &#x27;#3399CC&#x27;, &#x27;#33CCCC&#x27;, &#x27;#996699&#x27;, &#x27;#C24747&#x27;, &#x27;#FFCC66&#x27;, &#x27;#669999&#x27;, &#x27;#CC6699&#x27;, &#x27;#339966&#x27;, &#x27;#666699&#x27; ]
-            },
+                    colors : [ &#x27;#e2674a&#x27;, &#x27;#99CC99&#x27;, &#x27;#3399CC&#x27;, &#x27;#33CCCC&#x27;, &#x27;#996699&#x27;, &#x27;#C24747&#x27;, &#x27;#FFCC66&#x27;, &#x27;#669999&#x27;, &#x27;#CC6699&#x27;, &#x27;#339966&#x27;, &#x27;#666699&#x27; ]
+                },
+            
+                /**
+                Options for the layoutEngine. Uses isotope http://isotope.metafizzy.co/ options structure.
 
-            /**
-            Options for the layoutEngine. Uses isotope http://isotope.metafizzy.co/ options structure.
-
-            @property defaults.layoutEngine 
-            @type Object
-            **/
-            layoutEngine : {
-                sortBy : &#x27;number&#x27;,
-                getSortData : {
-                    number : function($elem) {
-                        var number = $elem.hasClass(&#x27;item&#x27;) ? $elem.find(&#x27;.number&#x27;).text() : $elem.attr(&#x27;data-number&#x27;);
-                        return parseInt(number, 10);
-                    },
-                    alphabetical : function($elem) {
-                        var labelEn = $elem.find(&#x27;.labelEn&#x27;), itemText = labelEn.length ? labelEn : $elem;
-                        return itemText.text();
+                @property defaults.layoutEngine 
+                @type Object
+                **/
+                layoutEngine : {
+                    sortBy : &#x27;number&#x27;,
+                    getSortData : {
+                        number : function($elem) {
+                            var number = $elem.hasClass(&#x27;item&#x27;) ? $elem.find(&#x27;.number&#x27;).text() : $elem.attr(&#x27;data-number&#x27;);
+                            return parseInt(number, 10);
+                        },
+                        alphabetical : function($elem) {
+                            var labelEn = $elem.find(&#x27;.labelEn&#x27;), itemText = labelEn.length ? labelEn : $elem;
+                            return itemText.text();
+                        }
                     }
                 }
             }
@@ -2591,16 +2618,16 @@
                 }
             });
             
-            Handlebars.registerHelper(&#x27;predicateLabelRetriver&#x27;, function(predicate, options) {
+            Handlebars.registerHelper(&#x27;predicateLabelRetriver&#x27;, function(ctx, options) {
                 
-                if (predicate) {
-                    var uriArray = predicate.value.split(&quot;#&quot;);
+                if (ctx &amp;&amp; !ctx.label) {
+                    var uriArray = ctx.value.split(&quot;#&quot;);
                     if (uriArray.length === 1) {
                         uriArray    = uriArray[0].split(&quot;/&quot;);
                     }
-                    predicate.label = uriArray[uriArray.length-1];
-                    return options.fn(this);
+                    ctx.label = uriArray[uriArray.length-1];
                 }
+                return options.fn(this);
             });
 
             var loader = new Plugin.TemplatesLoader(templateInitDfd);
@@ -2624,11 +2651,11 @@
             // Generate SPARQL queries
             that._queries = {
                 initQueries : this.options.initQueries,
-                defaultRemoteQuery : this.options.viewOptions.remoteOptions.defaultRemoteQuery,
-                remoteSubjectOf : &quot; SELECT ?subject ?predicate ?object ?labelObj WHERE { BIND (&lt;&quot; + cons.DUMMY
-                + &quot;&gt; as ?subject) ?subject ?predicate ?object. OPTIONAL { ?object rdfs:label ?labelObj }}&quot;,
-                remoteObjectOf : &quot; SELECT ?subject ?predicate ?object ?labelSub WHERE {BIND (&lt;&quot; + cons.DUMMY
-                + &quot;&gt; as ?object) ?subject ?predicate ?object. OPTIONAL { ?subject rdfs:label ?labelSub }}&quot;,
+                defaultRemoteQuery : this.options.layerOptions.remoteOptions.defaultRemoteQuery,
+                remoteSubjectOf : &quot; SELECT ?subject ?predicate ?object ?labelObj ?labelPred WHERE { BIND (&lt;&quot; + cons.DUMMY
+                + &quot;&gt; as ?subject) ?subject ?predicate ?object. OPTIONAL { ?object rdfs:label ?labelObj }. OPTIONAL { ?predicate rdfs:label ?labelPred }}&quot;,
+                remoteObjectOf : &quot; SELECT ?subject ?predicate ?object ?labelSub ?labelPred WHERE {BIND (&lt;&quot; + cons.DUMMY
+                + &quot;&gt; as ?object) ?subject ?predicate ?object. OPTIONAL { ?subject rdfs:label ?labelSub }. OPTIONAL { ?predicate rdfs:label ?labelPred }}&quot;,
                 selectSubjectOf : &quot; SELECT ?subject ?predicate ?label ?description WHERE {&lt;&quot;
                 + cons.DUMMY
                 + &quot;&gt; ?predicate ?subject. OPTIONAL { ?subject rdfs:label ?label}. OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }}&quot;,
@@ -2656,7 +2683,6 @@
         _checkInsertion : function() {
             var that = this, inserted = false;
             if (!isUndefinedOrNull(that.options.dataFormat)) {
-                // console.log(this);
                 if (!isUndefinedOrNull(that.options.dataLoc)) {
                     inserted = true;
                     that._ajaxLoadData(that.options.dataLoc, that.options.dataFormat, function(rdfData, dataFormat) {
@@ -2735,21 +2761,7 @@
                 // &lt;!--- overlay modification ----&gt;
 
                 // &lt;---- preview modification ----&gt;
-                if (that.options.previewAsDiv) {
-                    var $previews = that._$parent.children(cons.CSS_CLASSES.toSelector(&quot;preview&quot;));
-                    $previews.css(&#x27;clip&#x27;, getClip(cons.CSS_CLASSES.preview));
-                } else {
-                    var $previews = that._$viewContainer.children(cons.CSS_CLASSES.toSelector(&quot;previewItem&quot;));
-
-                    var newWidth, newHeight;
-                    newWidth = that._$viewContainer.width() - 100;
-                    newHeight = $window.height() - 100;
-                    $previews.css({
-                        &quot;width&quot; : newWidth,
-                        &quot;height&quot; : newHeight
-                    });
-                    that._view.reLayout();
-                }
+                //TODO Preview Mod
             // &lt;!--- preview modification ----&gt;
             }, $window);
 
@@ -2765,9 +2777,9 @@
             // is to be inserted
             $.when(globalInitDfd.promise()).done(function() {
 
-                // Init View
+                // Init Layer
                 that._views = [];
-                that._views.push(new Plugin.InitView(that._$parent, that.options.viewOptions, that));
+                that._views.push(new Plugin.InitLayer(that._$parent, that.options.layerOptions, that));
             
                 if (!that._checkInsertion()) {
                     if (that.options.sparqlData === undefined) {
@@ -2780,22 +2792,22 @@
         },
 
         /**
-        * Add given View object to the plugin
+        * Add given Layer object to the plugin
         *
-        * @method addView
-        * @param {Plugin.View} view View object to add to the plugin
+        * @method addLayer
+        * @param {Plugin.Layer} view Layer object to add to the plugin
         */
-        addView : function(view) {
+        addLayer : function(view) {
             this._views.push(view);
         },
 
         /**
-        * Remove given View object from the plugin
+        * Remove given Layer object from the plugin
         *
-        * @method removeView
-        * @param {Plugin.View} view View object to remove from the plugin
+        * @method removeLayer
+        * @param {Plugin.Layer} view Layer object to remove from the plugin
         */
-        removeView : function(view) {
+        removeLayer : function(view) {
             for (var i =0; i &lt; this._views.length; i++)
                 if (this._views[i] === view) {
                     this._views.splice(i,1);
@@ -2823,7 +2835,7 @@
         },
 
         /**
-        * Insert rdf-data of given location in the store.
+        * Insert rdf-data of given location in the store. Consider cross domain restrictions when using this method.
         *
         * @method insertDataPath
         * @param {String} dataURL URL where rdf data is to be found
@@ -2875,7 +2887,7 @@
         },
 
         /**
-        * Clear the store and Views.
+        * Clear the store and Layers.
         *
         * @method clearStore
         */

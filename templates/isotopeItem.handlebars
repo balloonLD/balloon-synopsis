@@ -1,4 +1,4 @@
-	<div class="item {{subject.token}} {{#if type}}{{type.value}}{{/if}} {{index}}">
+	<div class="item {{#each filterables}}{{.}} {{/each}}{{#if token}}{{token}}{{/if}} {{index}}">
 		{{#if subject}}
 			<h2 class="showUri" style="display:none">{{subject.value}}</h2>
 		{{/if}}

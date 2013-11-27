@@ -45,27 +45,21 @@
             
                 <li><a href="../classes/Plugin.html">Plugin</a></li>
             
-                <li><a href="../classes/Plugin.DetailView.html">Plugin.DetailView</a></li>
+                <li><a href="../classes/Plugin.DetailLayer.html">Plugin.DetailLayer</a></li>
             
                 <li><a href="../classes/Plugin.EventManager.html">Plugin.EventManager</a></li>
             
-                <li><a href="../classes/Plugin.InitView.html">Plugin.InitView</a></li>
+                <li><a href="../classes/Plugin.InitLayer.html">Plugin.InitLayer</a></li>
+            
+                <li><a href="../classes/Plugin.Layer.html">Plugin.Layer</a></li>
             
                 <li><a href="../classes/Plugin.LayoutEngine.html">Plugin.LayoutEngine</a></li>
-            
-                <li><a href="../classes/Plugin.Preview.html">Plugin.Preview</a></li>
-            
-                <li><a href="../classes/Plugin.PreviewInlay.html">Plugin.PreviewInlay</a></li>
-            
-                <li><a href="../classes/Plugin.PreviewOverlay.html">Plugin.PreviewOverlay</a></li>
             
                 <li><a href="../classes/Plugin.RdfStore.html">Plugin.RdfStore</a></li>
             
                 <li><a href="../classes/Plugin.RemoteDataLoader.html">Plugin.RemoteDataLoader</a></li>
             
                 <li><a href="../classes/Plugin.TemplatesLoader.html">Plugin.TemplatesLoader</a></li>
-            
-                <li><a href="../classes/Plugin.View.html">Plugin.View</a></li>
             
                 <li><a href="../classes/RemoteEngine.html">RemoteEngine</a></li>
             
@@ -124,7 +118,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/js_visaRDF.js.html#l2041"><code>js\visaRDF.js:2041</code></a>
+            Defined in: <a href="../files/js_visaRDF.js.html#l2024"><code>js\visaRDF.js:2024</code></a>
         </div>
     
 
@@ -195,7 +189,7 @@
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2041"><code>js\visaRDF.js:2041</code></a>
+        <a href="../files/js_visaRDF.js.html#l2024"><code>js\visaRDF.js:2024</code></a>
         
         </p>
 
@@ -326,7 +320,7 @@
                             </li>
                         
                             <li class="index-item method">
-                                <a href="#method_addView">addView</a>
+                                <a href="#method_addLayer">addLayer</a>
 
                                 
                                 
@@ -382,7 +376,7 @@
                             </li>
                         
                             <li class="index-item method">
-                                <a href="#method_removeView">removeView</a>
+                                <a href="#method_removeLayer">removeLayer</a>
 
                                 
                                 
@@ -427,7 +421,28 @@
                             </li>
                         
                             <li class="index-item property">
+                                <a href="#property_defaults.generateTimeline">defaults.generateTimeline</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
                                 <a href="#property_defaults.initQueries">defaults.initQueries</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_defaults.layerOptions">defaults.layerOptions</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_defaults.layerOptions.viewOptions">defaults.layerOptions.viewOptions</a>
 
                                 
                                 
@@ -463,13 +478,6 @@
                         
                             <li class="index-item property">
                                 <a href="#property_defaults.templatesPrecompiled">defaults.templatesPrecompiled</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property">
-                                <a href="#property_defaults.viewOptions">defaults.viewOptions</a>
 
                                 
                                 
@@ -717,7 +725,7 @@
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2555"><code>js\visaRDF.js:2555</code></a>
+        <a href="../files/js_visaRDF.js.html#l2587"><code>js\visaRDF.js:2587</code></a>
         
         </p>
 
@@ -846,7 +854,7 @@
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2526"><code>js\visaRDF.js:2526</code></a>
+        <a href="../files/js_visaRDF.js.html#l2559"><code>js\visaRDF.js:2559</code></a>
         
         </p>
 
@@ -916,7 +924,7 @@ call insertion methods if needed.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2493"><code>js\visaRDF.js:2493</code></a>
+        <a href="../files/js_visaRDF.js.html#l2526"><code>js\visaRDF.js:2526</code></a>
         
         </p>
 
@@ -973,7 +981,7 @@ call insertion methods if needed.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2430"><code>js\visaRDF.js:2430</code></a>
+        <a href="../files/js_visaRDF.js.html#l2463"><code>js\visaRDF.js:2463</code></a>
         
         </p>
 
@@ -1030,7 +1038,7 @@ call insertion methods if needed.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2447"><code>js\visaRDF.js:2447</code></a>
+        <a href="../files/js_visaRDF.js.html#l2480"><code>js\visaRDF.js:2480</code></a>
         
         </p>
 
@@ -1101,7 +1109,7 @@ call insertion methods if needed.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2388"><code>js\visaRDF.js:2388</code></a>
+        <a href="../files/js_visaRDF.js.html#l2421"><code>js\visaRDF.js:2421</code></a>
         
         </p>
 
@@ -1161,8 +1169,8 @@ widget context.</p>
 </div>
 
                 
-                    <div id="method_addView" class="method item">
-    <h3 class="name"><code>addView</code></h3>
+                    <div id="method_addLayer" class="method item">
+    <h3 class="name"><code>addLayer</code></h3>
 
     
         <div class="args">
@@ -1203,7 +1211,7 @@ widget context.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2660"><code>js\visaRDF.js:2660</code></a>
+        <a href="../files/js_visaRDF.js.html#l2678"><code>js\visaRDF.js:2678</code></a>
         
         </p>
 
@@ -1214,7 +1222,7 @@ widget context.</p>
     </div>
 
     <div class="description">
-        <p>Add given View object to the plugin</p>
+        <p>Add given Layer object to the plugin</p>
 
     </div>
 
@@ -1227,13 +1235,13 @@ widget context.</p>
                 <li class="param">
                     
                         <code class="param-name">view</code>
-                        <span class="type"><a href="..\classes\Plugin.View.html" class="crosslink">Plugin.View</a></span>
+                        <span class="type"><a href="..\classes\Plugin.Layer.html" class="crosslink">Plugin.Layer</a></span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>View object to add to the plugin</p>
+                        <p>Layer object to add to the plugin</p>
 
                     </div>
 
@@ -1282,7 +1290,7 @@ widget context.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2755"><code>js\visaRDF.js:2755</code></a>
+        <a href="../files/js_visaRDF.js.html#l2773"><code>js\visaRDF.js:2773</code></a>
         
         </p>
 
@@ -1293,7 +1301,7 @@ widget context.</p>
     </div>
 
     <div class="description">
-        <p>Clear the store and Views.</p>
+        <p>Clear the store and Layers.</p>
 
     </div>
 
@@ -1337,7 +1345,7 @@ widget context.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2770"><code>js\visaRDF.js:2770</code></a>
+        <a href="../files/js_visaRDF.js.html#l2788"><code>js\visaRDF.js:2788</code></a>
         
         </p>
 
@@ -1392,7 +1400,7 @@ widget context.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2584"><code>js\visaRDF.js:2584</code></a>
+        <a href="../files/js_visaRDF.js.html#l2616"><code>js\visaRDF.js:2616</code></a>
         
         </p>
 
@@ -1463,7 +1471,7 @@ widget context.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2687"><code>js\visaRDF.js:2687</code></a>
+        <a href="../files/js_visaRDF.js.html#l2705"><code>js\visaRDF.js:2705</code></a>
         
         </p>
 
@@ -1574,7 +1582,7 @@ widget context.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2717"><code>js\visaRDF.js:2717</code></a>
+        <a href="../files/js_visaRDF.js.html#l2735"><code>js\visaRDF.js:2735</code></a>
         
         </p>
 
@@ -1685,7 +1693,7 @@ widget context.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2703"><code>js\visaRDF.js:2703</code></a>
+        <a href="../files/js_visaRDF.js.html#l2721"><code>js\visaRDF.js:2721</code></a>
         
         </p>
 
@@ -1696,7 +1704,7 @@ widget context.</p>
     </div>
 
     <div class="description">
-        <p>Insert rdf-data of given location in the store.</p>
+        <p>Insert rdf-data of given location in the store. Consider cross domain restrictions when using this method.</p>
 
     </div>
 
@@ -1796,7 +1804,7 @@ widget context.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2735"><code>js\visaRDF.js:2735</code></a>
+        <a href="../files/js_visaRDF.js.html#l2753"><code>js\visaRDF.js:2753</code></a>
         
         </p>
 
@@ -1860,8 +1868,8 @@ given query. Is no query given use the default query.</p>
 </div>
 
                 
-                    <div id="method_removeView" class="method item">
-    <h3 class="name"><code>removeView</code></h3>
+                    <div id="method_removeLayer" class="method item">
+    <h3 class="name"><code>removeLayer</code></h3>
 
     
         <div class="args">
@@ -1902,7 +1910,7 @@ given query. Is no query given use the default query.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2670"><code>js\visaRDF.js:2670</code></a>
+        <a href="../files/js_visaRDF.js.html#l2688"><code>js\visaRDF.js:2688</code></a>
         
         </p>
 
@@ -1913,7 +1921,7 @@ given query. Is no query given use the default query.</p>
     </div>
 
     <div class="description">
-        <p>Remove given View object from the plugin</p>
+        <p>Remove given Layer object from the plugin</p>
 
     </div>
 
@@ -1926,13 +1934,13 @@ given query. Is no query given use the default query.</p>
                 <li class="param">
                     
                         <code class="param-name">view</code>
-                        <span class="type"><a href="..\classes\Plugin.View.html" class="crosslink">Plugin.View</a></span>
+                        <span class="type"><a href="..\classes\Plugin.Layer.html" class="crosslink">Plugin.Layer</a></span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>View object to remove from the plugin</p>
+                        <p>Layer object to remove from the plugin</p>
 
                     </div>
 
@@ -1980,7 +1988,7 @@ given query. Is no query given use the default query.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2051"><code>js\visaRDF.js:2051</code></a>
+        <a href="../files/js_visaRDF.js.html#l2034"><code>js\visaRDF.js:2034</code></a>
         
         </p>
 
@@ -2025,7 +2033,7 @@ given query. Is no query given use the default query.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2058"><code>js\visaRDF.js:2058</code></a>
+        <a href="../files/js_visaRDF.js.html#l2041"><code>js\visaRDF.js:2041</code></a>
         
         </p>
 
@@ -2072,7 +2080,7 @@ given query. Is no query given use the default query.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2077"><code>js\visaRDF.js:2077</code></a>
+        <a href="../files/js_visaRDF.js.html#l2060"><code>js\visaRDF.js:2060</code></a>
         
         </p>
 
@@ -2119,7 +2127,7 @@ given query. Is no query given use the default query.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2067"><code>js\visaRDF.js:2067</code></a>
+        <a href="../files/js_visaRDF.js.html#l2050"><code>js\visaRDF.js:2050</code></a>
         
         </p>
 
@@ -2136,6 +2144,53 @@ and loaded into the store.</p>
 
     
         <p><strong>Default:</strong> undefined</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_defaults.generateTimeline" class="property item">
+    <h3 class="name"><code>defaults.generateTimeline</code></h3>
+    <span class="type">Boolean</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_visaRDF.js.html#l2095"><code>js\visaRDF.js:2095</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Flag to indicate whether a timeline should be generated and used.</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> true</p>
     
 
     
@@ -2167,7 +2222,7 @@ and loaded into the store.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2112"><code>js\visaRDF.js:2112</code></a>
+        <a href="../files/js_visaRDF.js.html#l2104"><code>js\visaRDF.js:2104</code></a>
         
         </p>
 
@@ -2183,6 +2238,96 @@ and loaded into the store.</p>
 
     
         <p><strong>Default:</strong> [ { query : &quot;SELECT ?subject ?label ?description ?type WHERE { ?subject rdfs:label ?label . OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }. OPTIONAL {?subject rdfs:type ?type}}&quot; } ]</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_defaults.layerOptions" class="property item">
+    <h3 class="name"><code>defaults.layerOptions</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_visaRDF.js.html#l2133"><code>js\visaRDF.js:2133</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Options for the VisaRDF view layer.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_defaults.layerOptions.viewOptions" class="property item">
+    <h3 class="name"><code>defaults.layerOptions.viewOptions</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_visaRDF.js.html#l2266"><code>js\visaRDF.js:2266</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Options for the VisaRDF views.</p>
+
+    </div>
+
     
 
     
@@ -2214,7 +2359,7 @@ and loaded into the store.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2364"><code>js\visaRDF.js:2364</code></a>
+        <a href="../files/js_visaRDF.js.html#l2396"><code>js\visaRDF.js:2396</code></a>
         
         </p>
 
@@ -2259,7 +2404,7 @@ and loaded into the store.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2123"><code>js\visaRDF.js:2123</code></a>
+        <a href="../files/js_visaRDF.js.html#l2115"><code>js\visaRDF.js:2115</code></a>
         
         </p>
 
@@ -2304,7 +2449,7 @@ and loaded into the store.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2103"><code>js\visaRDF.js:2103</code></a>
+        <a href="../files/js_visaRDF.js.html#l2086"><code>js\visaRDF.js:2086</code></a>
         
         </p>
 
@@ -2351,7 +2496,7 @@ and loaded into the store.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2095"><code>js\visaRDF.js:2095</code></a>
+        <a href="../files/js_visaRDF.js.html#l2078"><code>js\visaRDF.js:2078</code></a>
         
         </p>
 
@@ -2398,7 +2543,7 @@ and loaded into the store.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2086"><code>js\visaRDF.js:2086</code></a>
+        <a href="../files/js_visaRDF.js.html#l2069"><code>js\visaRDF.js:2069</code></a>
         
         </p>
 
@@ -2414,51 +2559,6 @@ and loaded into the store.</p>
 
     
         <p><strong>Default:</strong> true</p>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_defaults.viewOptions" class="property item">
-    <h3 class="name"><code>defaults.viewOptions</code></h3>
-    <span class="type">Object</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_visaRDF.js.html#l2141"><code>js\visaRDF.js:2141</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Options for the VisaRDF views.</p>
-
-    </div>
-
     
 
     
@@ -2490,7 +2590,7 @@ and loaded into the store.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2185"><code>js\visaRDF.js:2185</code></a>
+        <a href="../files/js_visaRDF.js.html#l2192"><code>js\visaRDF.js:2192</code></a>
         
         </p>
 
@@ -2537,7 +2637,7 @@ and loaded into the store.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2176"><code>js\visaRDF.js:2176</code></a>
+        <a href="../files/js_visaRDF.js.html#l2168"><code>js\visaRDF.js:2168</code></a>
         
         </p>
 
@@ -2548,53 +2648,6 @@ and loaded into the store.</p>
 
     <div class="description">
         <p>Flag to indicate whether the filter interface should be generated.</p>
-
-    </div>
-
-    
-        <p><strong>Default:</strong> true</p>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_defaults.viewOptions.generateSortOptions" class="property item">
-    <h3 class="name"><code>defaults.viewOptions.generateSortOptions</code></h3>
-    <span class="type">Boolean</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_visaRDF.js.html#l2158"><code>js\visaRDF.js:2158</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Flag to indicate whether previews should be used.</p>
 
     </div>
 
@@ -2631,7 +2684,7 @@ and loaded into the store.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2203"><code>js\visaRDF.js:2203</code></a>
+        <a href="../files/js_visaRDF.js.html#l2178"><code>js\visaRDF.js:2178</code></a>
         
         </p>
 
@@ -2678,7 +2731,54 @@ and loaded into the store.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2149"><code>js\visaRDF.js:2149</code></a>
+        <a href="../files/js_visaRDF.js.html#l2150"><code>js\visaRDF.js:2150</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Flag to indicate whether previews should be used.</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> true</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_defaults.viewOptions.generateSortOptions" class="property item">
+    <h3 class="name"><code>defaults.viewOptions.generateSortOptions</code></h3>
+    <span class="type">Boolean</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_visaRDF.js.html#l2141"><code>js\visaRDF.js:2141</code></a>
         
         </p>
 
@@ -2725,7 +2825,7 @@ and loaded into the store.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2321"><code>js\visaRDF.js:2321</code></a>
+        <a href="../files/js_visaRDF.js.html#l2338"><code>js\visaRDF.js:2338</code></a>
         
         </p>
 
@@ -2770,7 +2870,7 @@ and loaded into the store.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2354"><code>js\visaRDF.js:2354</code></a>
+        <a href="../files/js_visaRDF.js.html#l2386"><code>js\visaRDF.js:2386</code></a>
         
         </p>
 
@@ -2817,7 +2917,7 @@ and loaded into the store.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2328"><code>js\visaRDF.js:2328</code></a>
+        <a href="../files/js_visaRDF.js.html#l2345"><code>js\visaRDF.js:2345</code></a>
         
         </p>
 
@@ -2862,7 +2962,7 @@ and loaded into the store.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2344"><code>js\visaRDF.js:2344</code></a>
+        <a href="../files/js_visaRDF.js.html#l2361"><code>js\visaRDF.js:2361</code></a>
         
         </p>
 
@@ -2909,7 +3009,7 @@ and loaded into the store.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2335"><code>js\visaRDF.js:2335</code></a>
+        <a href="../files/js_visaRDF.js.html#l2352"><code>js\visaRDF.js:2352</code></a>
         
         </p>
 
@@ -2956,7 +3056,7 @@ and loaded into the store.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2278"><code>js\visaRDF.js:2278</code></a>
+        <a href="../files/js_visaRDF.js.html#l2284"><code>js\visaRDF.js:2284</code></a>
         
         </p>
 
@@ -3001,7 +3101,7 @@ and loaded into the store.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2311"><code>js\visaRDF.js:2311</code></a>
+        <a href="../files/js_visaRDF.js.html#l2328"><code>js\visaRDF.js:2328</code></a>
         
         </p>
 
@@ -3048,7 +3148,7 @@ and loaded into the store.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2285"><code>js\visaRDF.js:2285</code></a>
+        <a href="../files/js_visaRDF.js.html#l2291"><code>js\visaRDF.js:2291</code></a>
         
         </p>
 
@@ -3093,7 +3193,7 @@ and loaded into the store.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2292"><code>js\visaRDF.js:2292</code></a>
+        <a href="../files/js_visaRDF.js.html#l2298"><code>js\visaRDF.js:2298</code></a>
         
         </p>
 
@@ -3140,7 +3240,7 @@ and loaded into the store.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2301"><code>js\visaRDF.js:2301</code></a>
+        <a href="../files/js_visaRDF.js.html#l2307"><code>js\visaRDF.js:2307</code></a>
         
         </p>
 
@@ -3187,7 +3287,7 @@ and loaded into the store.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2167"><code>js\visaRDF.js:2167</code></a>
+        <a href="../files/js_visaRDF.js.html#l2159"><code>js\visaRDF.js:2159</code></a>
         
         </p>
 
@@ -3197,12 +3297,12 @@ and loaded into the store.</p>
     </div>
 
     <div class="description">
-        <p>Flag to indicate which kind of previews should be used. The plugin uses inlay previews on false.</p>
+        <p>Flag to indicate which kind of previews should be used. Possible options are</p>
 
     </div>
 
     
-        <p><strong>Default:</strong> false</p>
+        <p><strong>Default:</strong> Overlay</p>
     
 
     
@@ -3234,7 +3334,7 @@ and loaded into the store.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2215"><code>js\visaRDF.js:2215</code></a>
+        <a href="../files/js_visaRDF.js.html#l2203"><code>js\visaRDF.js:2203</code></a>
         
         </p>
 
@@ -3279,7 +3379,7 @@ and loaded into the store.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2223"><code>js\visaRDF.js:2223</code></a>
+        <a href="../files/js_visaRDF.js.html#l2211"><code>js\visaRDF.js:2211</code></a>
         
         </p>
 
@@ -3326,7 +3426,7 @@ and loaded into the store.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2232"><code>js\visaRDF.js:2232</code></a>
+        <a href="../files/js_visaRDF.js.html#l2220"><code>js\visaRDF.js:2220</code></a>
         
         </p>
 
@@ -3373,7 +3473,7 @@ and loaded into the store.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2250"><code>js\visaRDF.js:2250</code></a>
+        <a href="../files/js_visaRDF.js.html#l2238"><code>js\visaRDF.js:2238</code></a>
         
         </p>
 
@@ -3420,7 +3520,7 @@ and loaded into the store.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2259"><code>js\visaRDF.js:2259</code></a>
+        <a href="../files/js_visaRDF.js.html#l2247"><code>js\visaRDF.js:2247</code></a>
         
         </p>
 
@@ -3467,7 +3567,7 @@ and loaded into the store.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2268"><code>js\visaRDF.js:2268</code></a>
+        <a href="../files/js_visaRDF.js.html#l2256"><code>js\visaRDF.js:2256</code></a>
         
         </p>
 
@@ -3514,7 +3614,7 @@ and loaded into the store.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2241"><code>js\visaRDF.js:2241</code></a>
+        <a href="../files/js_visaRDF.js.html#l2229"><code>js\visaRDF.js:2229</code></a>
         
         </p>
 
@@ -3561,7 +3661,7 @@ and loaded into the store.</p>
             
         
         
-        <a href="../files/js_visaRDF.js.html#l2194"><code>js\visaRDF.js:2194</code></a>
+        <a href="../files/js_visaRDF.js.html#l2274"><code>js\visaRDF.js:2274</code></a>
         
         </p>
 
