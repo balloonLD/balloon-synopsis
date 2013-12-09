@@ -1,312 +1,122 @@
-this["visaRDF"] = this["visaRDF"] || {};
-this["visaRDF"]["templates"] = this["visaRDF"]["templates"] || {};
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>js/plugin/visaRDF.js - visaRDF</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <link rel="shortcut icon" type="image/png" href="../assets/favicon.png">
+    <script src="http://yui.yahooapis.com/combo?3.9.1/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
 
-Handlebars.registerPartial("isotopeItemContent", Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, stack2, options, functionType="function", escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
+<div id="doc">
+    <div id="hd" class="yui3-g header">
+        <div class="yui3-u-3-4">
+            
+                <h1><img src="../assets/css/logo.png" title="visaRDF"></h1>
+            
+        </div>
+        <div class="yui3-u-1-4 version">
+            <em>API Docs for: 0.1.0</em>
+        </div>
+    </div>
+    <div id="bd" class="yui3-g">
 
-function program1(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\r\n			<h3 class=\"itemContent labelEn\">"
-    + escapeExpression(((stack1 = ((stack1 = depth0.label),stack1 == null || stack1 === false ? stack1 : stack1.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</h3>\r\n		";
-  return buffer;
-  }
+        <div class="yui3-u-1-4">
+            <div id="docs-sidebar" class="sidebar apidocs">
+                <div id="api-list">
+    <h2 class="off-left">APIs</h2>
+    <div id="api-tabview" class="tabview">
+        <ul class="tabs">
+            <li><a href="#api-classes">Classes</a></li>
+            <li><a href="#api-modules">Modules</a></li>
+        </ul>
 
-function program3(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\r\n			<div class=\"itemContent descriptionEn\">"
-    + escapeExpression(((stack1 = ((stack1 = depth0.description),stack1 == null || stack1 === false ? stack1 : stack1.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</div>\r\n		";
-  return buffer;
-  }
+        <div id="api-tabview-filter">
+            <input type="search" id="api-filter" placeholder="Type to filter APIs">
+        </div>
 
-function program5(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\r\n		";
-  stack1 = helpers.each.call(depth0, depth0.predicates, {hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n                ";
-  return buffer;
-  }
-function program6(depth0,data) {
-  
-  var buffer = "", stack1, stack2, options;
-  buffer += "\r\n			<img class=\"typeImage\" src=\"img/";
-  if (stack1 = helpers.type) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.type; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + ".png\"><div class=\"itemContent predicate\" style=\"display:none\">";
-  if (stack1 = helpers.value) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.value; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "</div>\r\n                        ";
-  options = {hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data};
-  stack2 = ((stack1 = helpers.predicateLabelRetriver || depth0.predicateLabelRetriver),stack1 ? stack1.call(depth0, depth0, options) : helperMissing.call(depth0, "predicateLabelRetriver", depth0, options));
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += "\r\n		";
-  return buffer;
-  }
-function program7(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\r\n                            <div class=\"itemContent predicateLabel\">";
-  if (stack1 = helpers.label) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.label; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "</div>\r\n                        ";
-  return buffer;
-  }
+        <div id="api-tabview-panel">
+            <ul id="api-classes" class="apis classes">
+            
+                <li><a href="../classes/Cache.html">Cache</a></li>
+            
+                <li><a href="../classes/Plugin.html">Plugin</a></li>
+            
+                <li><a href="../classes/Plugin.DetailLayer.html">Plugin.DetailLayer</a></li>
+            
+                <li><a href="../classes/Plugin.EventManager.html">Plugin.EventManager</a></li>
+            
+                <li><a href="../classes/Plugin.InitLayer.html">Plugin.InitLayer</a></li>
+            
+                <li><a href="../classes/Plugin.Layer.html">Plugin.Layer</a></li>
+            
+                <li><a href="../classes/Plugin.LayoutEngine.html">Plugin.LayoutEngine</a></li>
+            
+                <li><a href="../classes/Plugin.Node.html">Plugin.Node</a></li>
+            
+                <li><a href="../classes/Plugin.RdfStore.html">Plugin.RdfStore</a></li>
+            
+                <li><a href="../classes/Plugin.RemoteDataLoader.html">Plugin.RemoteDataLoader</a></li>
+            
+                <li><a href="../classes/Plugin.TemplatesLoader.html">Plugin.TemplatesLoader</a></li>
+            
+                <li><a href="../classes/RemoteEngine.html">RemoteEngine</a></li>
+            
+                <li><a href="../classes/VisaRDF_GLOBAL.html">VisaRDF_GLOBAL</a></li>
+            
+                <li><a href="../classes/VisaRDF_GLOBAL_UTIL.html">VisaRDF_GLOBAL_UTIL</a></li>
+            
+                <li><a href="../classes/VisaRDF_JQuery_Custom.html">VisaRDF_JQuery_Custom</a></li>
+            
+            </ul>
 
-  buffer += "		";
-  stack1 = helpers['if'].call(depth0, depth0.label, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n		";
-  options = {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data};
-  stack2 = ((stack1 = helpers.ifLang || depth0.ifLang),stack1 ? stack1.call(depth0, depth0.description, options) : helperMissing.call(depth0, "ifLang", depth0.description, options));
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += "\r\n                ";
-  stack2 = helpers['if'].call(depth0, depth0.predicates, {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  return buffer;
-  }));
+            <ul id="api-modules" class="apis modules">
+            
+                <li><a href="../modules/VisaRDF.html">VisaRDF</a></li>
+            
+            </ul>
+        </div>
+    </div>
+</div>
 
-this["visaRDF"]["templates"]["filterOptions"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
+            </div>
+        </div>
+        <div class="yui3-u-3-4">
+                <div id="api-options">
+        Show:
+        <label for="api-show-inherited">
+            <input type="checkbox" id="api-show-inherited" checked>
+            Inherited
+        </label>
 
-function program1(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\r\n				<li><a data-filter-value=\"";
-  if (stack1 = helpers.value) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.value; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "\" class=\"";
-  if (stack1 = helpers.value) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.value; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "\">";
-  if (stack1 = helpers.label) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.label; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "</a></li>\r\n			";
-  return buffer;
-  }
+        <label for="api-show-protected">
+            <input type="checkbox" id="api-show-protected">
+            Protected
+        </label>
 
-  buffer += "	<div class=\"option-combo filter\">\r\n		<h2>Filter:</h2>\r\n		<ul class=\"option-set clearfix\" data-option-key=\"filter\">\r\n			";
-  stack1 = helpers.each.call(depth0, depth0, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n		</ul>\r\n	</div>";
-  return buffer;
-  });
+        <label for="api-show-private">
+            <input type="checkbox" id="api-show-private">
+            Private
+        </label>
+        <label for="api-show-deprecated">
+            <input type="checkbox" id="api-show-deprecated">
+            Deprecated
+        </label>
 
-this["visaRDF"]["templates"]["groupDropDown"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
-
-function program1(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\r\n      		<option value=";
-  if (stack1 = helpers.val) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.val; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + ">";
-  if (stack1 = helpers.label) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.label; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "</option>\r\n		";
-  return buffer;
-  }
-
-  buffer += "	<select id=\"GroupDropDown\">\r\n		";
-  stack1 = helpers.each.call(depth0, depth0, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n    </select>";
-  return buffer;
-  });
-
-this["visaRDF"]["templates"]["isotopeItem"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); partials = this.merge(partials, Handlebars.partials); data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
-
-function program1(depth0,data) {
-  
-  var buffer = "";
-  buffer += escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))
-    + " ";
-  return buffer;
-  }
-
-function program3(depth0,data) {
-  
-  var stack1;
-  if (stack1 = helpers.token) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.token; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  return escapeExpression(stack1);
-  }
-
-function program5(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\r\n			<h2 class=\"showUri\" style=\"display:none\">"
-    + escapeExpression(((stack1 = ((stack1 = depth0.subject),stack1 == null || stack1 === false ? stack1 : stack1.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</h2>\r\n		";
-  return buffer;
-  }
-
-  buffer += "	<div class=\"item ";
-  stack1 = helpers.each.call(depth0, depth0.filterables, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  stack1 = helpers['if'].call(depth0, depth0.token, {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += " ";
-  if (stack1 = helpers.index) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.index; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "\">\r\n		";
-  stack1 = helpers['if'].call(depth0, depth0.subject, {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n		<p class=\"number\" style=\"display:none\">";
-  if (stack1 = helpers.index) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.index; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "</p>\r\n		";
-  stack1 = self.invokePartial(partials.isotopeItemContent, 'isotopeItemContent', depth0, helpers, partials, data);
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n	</div>";
-  return buffer;
-  });
-
-this["visaRDF"]["templates"]["overlayContent"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
-
-function program1(depth0,data) {
-  
-  var buffer = "", stack1, stack2;
-  buffer += "\r\n		<h2>"
-    + escapeExpression(((stack1 = ((stack1 = depth0.label),stack1 == null || stack1 === false ? stack1 : stack1.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " </h2>";
-  if (stack2 = helpers.uri) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
-  else { stack2 = depth0.uri; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
-  buffer += escapeExpression(stack2)
-    + "\r\n		<div class=\"innerScroll\">\r\n			<div></div>\r\n		</div>\r\n	";
-  return buffer;
-  }
-
-  buffer += "	";
-  stack1 = helpers['if'].call(depth0, depth0.label, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  return buffer;
-  });
-
-this["visaRDF"]["templates"]["overlayItem"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression;
+    </div>
 
 
-  buffer += "		<div class=\""
-    + escapeExpression(((stack1 = ((stack1 = depth0.cssClass),stack1 == null || stack1 === false ? stack1 : stack1.overlay)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " "
-    + escapeExpression(((stack1 = ((stack1 = depth0.cssClass),stack1 == null || stack1 === false ? stack1 : stack1.overlay)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "_";
-  if (stack2 = helpers.index) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
-  else { stack2 = depth0.index; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
-  buffer += escapeExpression(stack2)
-    + "\">\r\n			<span class=\"close\">close</span>\r\n			<div class=\""
-    + escapeExpression(((stack1 = ((stack1 = depth0.cssClass),stack1 == null || stack1 === false ? stack1 : stack1.overlayContent)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">\r\n			</div>\r\n		</div>";
-  return buffer;
-  });
+            <div class="apidocs">
+                <div id="docs-main">
+                    <div class="content">
+                        <h1 class="file-heading">File: js/plugin/visaRDF.js</h1>
 
-this["visaRDF"]["templates"]["plugin"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression;
-
-
-  buffer += "		<div class=\""
-    + escapeExpression(((stack1 = ((stack1 = depth0.cssClass),stack1 == null || stack1 === false ? stack1 : stack1.overlay)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " "
-    + escapeExpression(((stack1 = ((stack1 = depth0.cssClass),stack1 == null || stack1 === false ? stack1 : stack1.overlay)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "_";
-  if (stack2 = helpers.index) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
-  else { stack2 = depth0.index; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
-  buffer += escapeExpression(stack2)
-    + "\">\r\n			<span class=\"close\">close</span>\r\n			<div class=\""
-    + escapeExpression(((stack1 = ((stack1 = depth0.cssClass),stack1 == null || stack1 === false ? stack1 : stack1.overlayContent)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">\r\n			</div>\r\n		</div>";
-  return buffer;
-  });
-
-this["visaRDF"]["templates"]["previewItem"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression;
-
-
-  buffer += "		<div class=\""
-    + escapeExpression(((stack1 = ((stack1 = depth0.cssClass),stack1 == null || stack1 === false ? stack1 : stack1.preview)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " "
-    + escapeExpression(((stack1 = ((stack1 = depth0.cssClass),stack1 == null || stack1 === false ? stack1 : stack1.preview)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "_";
-  if (stack2 = helpers.index) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
-  else { stack2 = depth0.index; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
-  buffer += escapeExpression(stack2)
-    + "\">\r\n			<div class=\""
-    + escapeExpression(((stack1 = ((stack1 = depth0.cssClass),stack1 == null || stack1 === false ? stack1 : stack1.previewContent)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">\r\n                            TODO\r\n			</div>\r\n		</div>";
-  return buffer;
-  });
-
-this["visaRDF"]["templates"]["sortOptions"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, stack2, options, functionType="function", escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
-
-function program1(depth0,data) {
-  
-  var buffer = "";
-  buffer += "\r\n				<li><a data-sort-value=\""
-    + escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))
-    + "\" class=\""
-    + escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))
-    + "\">"
-    + escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))
-    + "</a></li>\r\n			";
-  return buffer;
-  }
-
-  buffer += "	<div class=\"option-combo sorter\">\r\n		<h2>Sort:</h2>\r\n		<ul class=\"option-set clearfix\" data-option-key=\"sortBy\">\r\n			";
-  options = {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data};
-  stack2 = ((stack1 = helpers.keysEach || depth0.keysEach),stack1 ? stack1.call(depth0, depth0, options) : helperMissing.call(depth0, "keysEach", depth0, options));
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += "\r\n		</ul>\r\n	</div>";
-  return buffer;
-  });
-
-this["visaRDF"]["templates"]["timelineItem"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
-
-
-  buffer += "<li>\r\n    "
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.label)),stack1 == null || stack1 === false ? stack1 : stack1.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\r\n</li>";
-  return buffer;
-  });;/**
+<div class="file">
+    <pre class="code prettyprint linenums">
+/**
 * VisaRDF is a JQuery Plugin for RDF visualization.
 * 
 * @module VisaRDF
@@ -324,15 +134,15 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     var cons = {
         
         // Part of CSS class to indicate a filterable
-        "FA_TAG" : "-filter-_",
+        &quot;FA_TAG&quot; : &quot;-filter-_&quot;,
 
         // Part of CSS class to indicate a token
-        "TOKEN_TAG" : "token_",
+        &quot;TOKEN_TAG&quot; : &quot;token_&quot;,
         
-        "NODE_TYPES" : {
-            literal : "literal",
-            blankNode : "blankNode",
-            resNode : "resNode"
+        &quot;NODE_TYPES&quot; : {
+            literal : &quot;literal&quot;,
+            blankNode : &quot;blankNode&quot;,
+            resNode : &quot;resNode&quot;
         },
         
         toFilterable : function(str) {
@@ -340,69 +150,69 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             },
 
         // CSS classes to use
-        "CSS_CLASSES" : {
-            outerContainer : "outerContainer",
-            viewContainer : "container",
-            options : "options",
-            clearfix : "clearfix",
-            loader : "loading",
-            preview : "preview",
-            previewItem : "preview-item",
-            previewContent : "previewContent",
-            overlay : "overlay",
-            overlayContent : "overlayContent",
+        &quot;CSS_CLASSES&quot; : {
+            outerContainer : &quot;outerContainer&quot;,
+            viewContainer : &quot;container&quot;,
+            options : &quot;options&quot;,
+            clearfix : &quot;clearfix&quot;,
+            loader : &quot;loading&quot;,
+            preview : &quot;preview&quot;,
+            previewItem : &quot;preview-item&quot;,
+            previewContent : &quot;previewContent&quot;,
+            overlay : &quot;overlay&quot;,
+            overlayContent : &quot;overlayContent&quot;,
             typeClasses : {
-                incoming : "incoming",
-                outgoing : "outgoing"
+                incoming : &quot;incoming&quot;,
+                outgoing : &quot;outgoing&quot;
             },
             patternClasses : {
-                uri : "uri",
-                literal : "literal",
-                blanknode : "blank"
+                uri : &quot;uri&quot;,
+                literal : &quot;literal&quot;,
+                blanknode : &quot;blank&quot;
             },
             toToken : function(id) {
-                var idChain = id.split("."), it = this;
-                for ( var i = 0; i < idChain.length; i++) {
+                var idChain = id.split(&quot;.&quot;), it = this;
+                for ( var i = 0; i &lt; idChain.length; i++) {
                     it = it[idChain[i]];
                 }
                 return cons.TOKEN_TAG + it;
             },
             toFilterable : function(id) {
-                var idChain = id.split("."), it = this;
-                for ( var i = 0; i < idChain.length; i++) {
+                var idChain = id.split(&quot;.&quot;), it = this;
+                for ( var i = 0; i &lt; idChain.length; i++) {
                     it = it[idChain[i]];
                 }
                 return cons.FA_TAG + it;
             },
             toSelector : function(id) {
-                var idChain = id.split("."), it = this;
-                for ( var i = 0; i < idChain.length; i++) {
+                var idChain = id.split(&quot;.&quot;), it = this;
+                for ( var i = 0; i &lt; idChain.length; i++) {
                     it = it[idChain[i]];
                 }
-                return "." + it;
+                return &quot;.&quot; + it;
             }
         },
 
         // Placeholder in query strings
-        "DUMMY" : "#replaceMe#",
+        &quot;DUMMY&quot; : &quot;#replaceMe#&quot;,
         
         // Event types for Pub/Sub system
-        "EVENT_TYPES" : {
+        &quot;EVENT_TYPES&quot; : {
             storeModified : {
-                insert : "dataInsert"
+                insert : &quot;dataInsert&quot;
             },
             loading : {
-                loadingDone : "loadingDone",
-                loadingStart : "loadingStarted"
+                loadingDone : &quot;loadingDone&quot;,
+                loadingStart : &quot;loadingStarted&quot;
             }
         },
 
-        "MESSAGES" : {
+        &quot;MESSAGES&quot; : {
             error : {
-                ajax : "Error on loading data.",
-                remote : "Error on loading remote data.",
-                template : "Error on loading template data.",
-                tokenType : "Unkown token type of item."
+                ajax : &quot;Error on loading data.&quot;,
+                remote : &quot;Error on loading remote data.&quot;,
+                template : &quot;Error on loading template data.&quot;,
+                tokenType : &quot;Unkown token type of item.&quot;
             }
         }
     };
@@ -428,28 +238,28 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             var instance = this, containerWidth = this.element.width(), sortBy = this.options.sortBy, props = this.groupRows;
 
             $elems.each(function() {
-                var $this = $(this), atomW = $this.outerWidth(true), atomH = $this.outerHeight(true), group = $.data(this, 'isotope-sort-data')[sortBy];
+                var $this = $(this), atomW = $this.outerWidth(true), atomH = $this.outerHeight(true), group = $.data(this, &#x27;isotope-sort-data&#x27;)[sortBy];
                 
-                console.log("atomW" + atomW);
-                console.log("atomH" + atomH);
+                console.log(&quot;atomW&quot; + atomW);
+                console.log(&quot;atomH&quot; + atomH);
                 console.log(group);
                 
                 if (group !== props.currentGroup) {
                     // new group, new row
                     props.x = 0;
                     props.height += props.currentGroup ? instance.groupRows.gutter : 0;
-                    console.log("currentGroup" + props.currentGroup)
+                    console.log(&quot;currentGroup&quot; + props.currentGroup)
                     console.log(instance.groupRows.gutter)
                     props.y = props.height;
                     props.currentGroup = group;
                     
-                    if (instance.groupRows.gutter < atomH) {
+                    if (instance.groupRows.gutter &lt; atomH) {
                         instance.groupRows.gutter = atomH;
                     }
 
                 } else {
                     
-                    if (props.x !== 0 && atomW + props.x > containerWidth) {
+                    if (props.x !== 0 &amp;&amp; atomW + props.x &gt; containerWidth) {
 
                         // if this item cannot fit in the current row
                         props.x = 0;
@@ -457,15 +267,15 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                     }
                 }
 
-                $this.find(".groupLabel").remove();
+                $this.find(&quot;.groupLabel&quot;).remove();
                 // label for new group
-                if (group !== '') {
-                    var prefix = group.split("_")[0] + "_";
-                    var groups = group.split(prefix), divBox = "<div class='groupLabel'>";
-                    for ( var i = 1; i < groups.length; i++) {
+                if (group !== &#x27;&#x27;) {
+                    var prefix = group.split(&quot;_&quot;)[0] + &quot;_&quot;;
+                    var groups = group.split(prefix), divBox = &quot;&lt;div class=&#x27;groupLabel&#x27;&gt;&quot;;
+                    for ( var i = 1; i &lt; groups.length; i++) {
                         divBox += groups[i];
                     }
-                    divBox += "</div>";
+                    divBox += &quot;&lt;/div&gt;&quot;;
                     $this.append(divBox);
                 }
 
@@ -503,11 +313,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     * @param {} index 
     * @param {} match 
     */
-    $.expr[':']['class-prefix'] = function(ele, index, match) {
+    $.expr[&#x27;:&#x27;][&#x27;class-prefix&#x27;] = function(ele, index, match) {
         var prefix = match[3];
 
         if (prefix) {
-            var sel = '[class^="' + prefix + '"], [class*=" ' + prefix + '"]';
+            var sel = &#x27;[class^=&quot;&#x27; + prefix + &#x27;&quot;], [class*=&quot; &#x27; + prefix + &#x27;&quot;]&#x27;;
             return $(ele).is(sel);
         } else {
             return true;
@@ -522,13 +332,13 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     * @param {} index 
     * @param {} match 
     */
-    $.expr[':'].regex = function(elem, index, match) {
-        var matchParams = match[3].split(','), validLabels = /^(data|css):/, attr = {
-            method : matchParams[0].match(validLabels) ? matchParams[0].split(':')[0] : 'attr',
-            property : matchParams.shift().replace(validLabels, '')
-        }, regexFlags = 'ig', regex;
+    $.expr[&#x27;:&#x27;].regex = function(elem, index, match) {
+        var matchParams = match[3].split(&#x27;,&#x27;), validLabels = /^(data|css):/, attr = {
+            method : matchParams[0].match(validLabels) ? matchParams[0].split(&#x27;:&#x27;)[0] : &#x27;attr&#x27;,
+            property : matchParams.shift().replace(validLabels, &#x27;&#x27;)
+        }, regexFlags = &#x27;ig&#x27;, regex;
         try {
-            regex = new RegExp(matchParams.join('').replace(/^\s+|\s+$/g, ''), regexFlags);
+            regex = new RegExp(matchParams.join(&#x27;&#x27;).replace(/^\s+|\s+$/g, &#x27;&#x27;), regexFlags);
         } catch (e) {
             return false;
         }
@@ -549,7 +359,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     * @return {Boolean} Returns true on success
     */
     function isUndefinedOrNull(a) {
-        return ((typeof a === "undefined") || (a === null));
+        return ((typeof a === &quot;undefined&quot;) || (a === null));
     }
 
     /**
@@ -561,7 +371,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     * @return {String} Returns the query with replaced DUMMY constants
     */
     function replaceDummy(query, replacement) {
-        return query.replace(new RegExp(cons.DUMMY, "g"), replacement);
+        return query.replace(new RegExp(cons.DUMMY, &quot;g&quot;), replacement);
     }
 
     /**
@@ -574,12 +384,12 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     function getWindowSize(withoutScrollbar) {
         var w = null, h = null;
         if (withoutScrollbar) {
-            if ($('BODY').hasClass('noscroll')) {
+            if ($(&#x27;BODY&#x27;).hasClass(&#x27;noscroll&#x27;)) {
                 w = $window.width(), h = $window.height();
             } else {
-                $('BODY').addClass('noscroll');
+                $(&#x27;BODY&#x27;).addClass(&#x27;noscroll&#x27;);
                 w = $window.width(), h = $window.height();
-                $('BODY').removeClass('noscroll');
+                $(&#x27;BODY&#x27;).removeClass(&#x27;noscroll&#x27;);
             }
         } else {
             w = $window.width(), h = $window.height();
@@ -602,15 +412,15 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         switch (name) {
             case cons.CSS_CLASSES.overlay:
                 winsize = getWindowSize(true);
-                return 'rect(0px ' + winsize.width + 'px ' + winsize.height + 'px 0px)';
+                return &#x27;rect(0px &#x27; + winsize.width + &#x27;px &#x27; + winsize.height + &#x27;px 0px)&#x27;;
                 break;
             case cons.CSS_CLASSES.preview:
                 winsize = getWindowSize(false);
-                return 'rect(' + winsize.height * 0.25 + 'px ' + winsize.width * 0.75 + 'px ' + winsize.height * 0.75 + 'px ' + winsize.width * 0.25 + 'px)';
+                return &#x27;rect(&#x27; + winsize.height * 0.25 + &#x27;px &#x27; + winsize.width * 0.75 + &#x27;px &#x27; + winsize.height * 0.75 + &#x27;px &#x27; + winsize.width * 0.25 + &#x27;px)&#x27;;
                 break;
             default:
-                console.log("No clip data found.");
-                return "";
+                console.log(&quot;No clip data found.&quot;);
+                return &quot;&quot;;
         }
     }
 
@@ -639,14 +449,14 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     */
     function getTransEndEventName() {
         var transEndEventNames = {
-            'WebkitTransition' : 'webkitTransitionEnd',
-            'MozTransition' : 'transitionend',
-            'OTransition' : 'oTransitionEnd',
-            'msTransition' : 'MSTransitionEnd',
-            'transition' : 'transitionend'
+            &#x27;WebkitTransition&#x27; : &#x27;webkitTransitionEnd&#x27;,
+            &#x27;MozTransition&#x27; : &#x27;transitionend&#x27;,
+            &#x27;OTransition&#x27; : &#x27;oTransitionEnd&#x27;,
+            &#x27;msTransition&#x27; : &#x27;MSTransitionEnd&#x27;,
+            &#x27;transition&#x27; : &#x27;transitionend&#x27;
         };
         // transition end event name
-        return transEndEventNames[Modernizr.prefixed('transition')];
+        return transEndEventNames[Modernizr.prefixed(&#x27;transition&#x27;)];
     }
     
     // ========================= VisaRDF: RemoteEngine Class ==============================
@@ -666,45 +476,45 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             var that = this, success = false, cnt = counter++;
             
             // Use cnt to stop callbackoverwriting on simultan calls
-            window["cbFunc"+cnt] = function(data, textStatus, jqXHR) {
+            window[&quot;cbFunc&quot;+cnt] = function(data, textStatus, jqXHR) {
 
                 // If we have something to work with...
-                if (data && data.query && data.query.results) {
+                if (data &amp;&amp; data.query &amp;&amp; data.query.results) {
                     success = true;
                     callback(data.query.results.sparql.result, success);
                 }
 
-                // Else, Maybe we requested a site that doesn't exist, and
+                // Else, Maybe we requested a site that doesn&#x27;t exist, and
                 // nothing returned.
                 else
-                    console.log('Nothing returned from getJSON.');
+                    console.log(&#x27;Nothing returned from getJSON.&#x27;);
                 callback(null, success);
                 
                 // Delete old callbackfunction
-                window["cbFunc"+cnt] = undefined;
+                window[&quot;cbFunc&quot;+cnt] = undefined;
             };
 
             // If no query was passed, exit.
             if (!query) {
-                alert('No query was passed.');
+                alert(&#x27;No query was passed.&#x27;);
             }
 
             // Take the provided url, and add it to a YQL query. Make sure you
             // encode it!
-            var yql = 'http://query.yahooapis.com/v1/public/yql?q='
-            + encodeURIComponent('use "http://triplr.org/sparyql/sparql.xml" as sparql; select * from sparql where query="' + query + '" and service="'
-                + url) + '"&format=json&callback=cbFunc' + cnt;
+            var yql = &#x27;http://query.yahooapis.com/v1/public/yql?q=&#x27;
+            + encodeURIComponent(&#x27;use &quot;http://triplr.org/sparyql/sparql.xml&quot; as sparql; select * from sparql where query=&quot;&#x27; + query + &#x27;&quot; and service=&quot;&#x27;
+                + url) + &#x27;&quot;&amp;format=json&amp;callback=cbFunc&#x27; + cnt;
 
             // Request that YSQL string, and run a callback function.
             // Pass a defined function to prevent cache-busting.
             // $.getJSONP(yql, cbFunc);
             $.ajax({
-                dataType : 'jsonp',
+                dataType : &#x27;jsonp&#x27;,
                 url : yql,
                 success : window.cbFunc,
                 error : function(jqXHR, textStatus, errorThrown) {
                     // console.log(yql);
-                    console.log("Error on yql query.");
+                    console.log(&quot;Error on yql query.&quot;);
                     // console.log(textStatus);
                     // console.log(jqXHR);
                     console.log(errorThrown);
@@ -782,7 +592,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     var globalInitDfd = $.Deferred(),
 
     // Name of the plugin
-    pluginName = "visaRDF",
+    pluginName = &quot;visaRDF&quot;,
 
     // rdf store instance(SPARQL endpoint)
     rdfStore,
@@ -803,16 +613,16 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
     //namespaces variable with defaultnamespaces
     namespaces = {
-        'rdf' : 'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
-        'rdfs' : 'http://www.w3.org/2000/01/rdf-schema#',
-        'owl' : 'http://www.w3.org/2002/07/owl#',
-        'rif' : 'http://www.w3.org/2007/rif#',
-        'foaf' : 'http://xmlns.com/foaf/0.1/',
-        'dbpedia' : 'http://dbpedia.org/resource/',
-        'dbpedia-owl' : 'http://dbpedia.org/ontology/',
-        'dbpprop' : 'http://dbpedia.org/property/',
-        'geo' : 'http://www.w3.org/2003/01/geo/wgs84_pos#',
-        'dc' : 'http://purl.org/dc/terms/'
+        &#x27;rdf&#x27; : &#x27;http://www.w3.org/1999/02/22-rdf-syntax-ns#&#x27;,
+        &#x27;rdfs&#x27; : &#x27;http://www.w3.org/2000/01/rdf-schema#&#x27;,
+        &#x27;owl&#x27; : &#x27;http://www.w3.org/2002/07/owl#&#x27;,
+        &#x27;rif&#x27; : &#x27;http://www.w3.org/2007/rif#&#x27;,
+        &#x27;foaf&#x27; : &#x27;http://xmlns.com/foaf/0.1/&#x27;,
+        &#x27;dbpedia&#x27; : &#x27;http://dbpedia.org/resource/&#x27;,
+        &#x27;dbpedia-owl&#x27; : &#x27;http://dbpedia.org/ontology/&#x27;,
+        &#x27;dbpprop&#x27; : &#x27;http://dbpedia.org/property/&#x27;,
+        &#x27;geo&#x27; : &#x27;http://www.w3.org/2003/01/geo/wgs84_pos#&#x27;,
+        &#x27;dc&#x27; : &#x27;http://purl.org/dc/terms/&#x27;
     },
 
     // handlebars templates for the plugin
@@ -845,7 +655,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         notify : function (args) {
             var index;
 
-            for (index = 0; index < this._listeners.length; index += 1) {
+            for (index = 0; index &lt; this._listeners.length; index += 1) {
                 this._listeners[index](this._sender, args);
             }
         }
@@ -861,7 +671,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     */
     Plugin.EventManager = function(stdObject) {
         if (!stdObject) {
-            console.log("EventManager not created")
+            console.log(&quot;EventManager not created&quot;)
             return false;
         }    
         this.stdObject = stdObject;
@@ -888,9 +698,9 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             that._evHandlerHistory[eventType] = [];
         }
         that._evHandlerHistory[eventType].push({
-            "id" : id,
-            "object" : object,
-            "handler" : handler
+            &quot;id&quot; : id,
+            &quot;object&quot; : object,
+            &quot;handler&quot; : handler
         });
         object.on(eventType, handler);
     }
@@ -966,10 +776,10 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         this._store = null;
 
         // Prefixes for SPARQL queries
-        this._queryPrefixes = "";
+        this._queryPrefixes = &quot;&quot;;
 
         this._generateQueryPrefix = function(prefix, uri) {
-            that._queryPrefixes += "PREFIX " + prefix + ": <" + uri + "> ";
+            that._queryPrefixes += &quot;PREFIX &quot; + prefix + &quot;: &lt;&quot; + uri + &quot;&gt; &quot;;
         };
 
         $.each(namespaces, function(i, val) {
@@ -994,20 +804,20 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     Plugin.RdfStore.prototype.insertData = function(data, dataFormat, callback) {
         var that = this;
 
-        if (dataFormat === "text/turtle" || dataFormat === "text/plain" || dataFormat === "text/n3") {
+        if (dataFormat === &quot;text/turtle&quot; || dataFormat === &quot;text/plain&quot; || dataFormat === &quot;text/n3&quot;) {
             // get prefix terms and update namespaces
-            var prefixTerms = data.match(/.*@prefix.*>(\s)*./g);
+            var prefixTerms = data.match(/.*@prefix.*&gt;(\s)*./g);
             $.each(prefixTerms, function(i, val) {
-                var prefixTerm = (val.split(/>(\s)*./)[0]).split(/:(\s)*</);
-                var prefix = prefixTerm[0].replace(/@prefix(\s)*/, "");
+                var prefixTerm = (val.split(/&gt;(\s)*./)[0]).split(/:(\s)*&lt;/);
+                var prefix = prefixTerm[0].replace(/@prefix(\s)*/, &quot;&quot;);
                 var uri = prefixTerm[2];
                 if (isUndefinedOrNull(namespaces[prefix])) {
                     namespaces[prefix] = uri;
                     that._generateQueryPrefix(prefix, uri);
                 }
             });
-        } else if (dataFormat === "application/ld+json" || dataFormat === "application/json") {
-            var prefixes = data["@context"];
+        } else if (dataFormat === &quot;application/ld+json&quot; || dataFormat === &quot;application/json&quot;) {
+            var prefixes = data[&quot;@context&quot;];
             $.each(prefixes, function(i, val) {
                 if (isUndefinedOrNull(namespaces[prefix])) {
                     namespaces[i] = val;
@@ -1033,7 +843,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             if (success) {
                 callback(results);
             } else {
-                console.log("Error on executing: " + query);
+                console.log(&quot;Error on executing: &quot; + query);
                 fail();
             }
         });
@@ -1061,7 +871,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     * @param {Function} callback Callback function
     */
     Plugin.LayoutEngine.prototype.add = function(items, callback) {
-        this._container.isotope("insert", items, callback);
+        this._container.isotope(&quot;insert&quot;, items, callback);
     };
         
     /**
@@ -1070,7 +880,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     * @method reLayout
     */
     Plugin.LayoutEngine.prototype.reLayout = function() {
-        this._container.isotope("reLayout");
+        this._container.isotope(&quot;reLayout&quot;);
     };
         
     /**
@@ -1081,7 +891,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     * @param {Function} callback Callback function
     */
     Plugin.LayoutEngine.prototype.remove = function(items, callback) {
-        this._container.isotope("remove", items, callback);
+        this._container.isotope(&quot;remove&quot;, items, callback);
     };
         
     /**
@@ -1091,7 +901,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     * @param {item} item Items for which sort data should be updated
     */
     Plugin.LayoutEngine.prototype.updateSortData = function(item) {
-        this._container.isotope("updateSortData", item);
+        this._container.isotope(&quot;updateSortData&quot;, item);
     };
         
     /**
@@ -1131,7 +941,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             if (that.options.usePreviews) {
                 that.openPreview($item);
             } else {
-                $item.data('isExpanded', true);
+                $item.data(&#x27;isExpanded&#x27;, true);
                 that.addNewLayer($item);
             }
         });
@@ -1154,7 +964,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     
     Plugin.Layer.prototype.openPreview = function($item) {
         var that = this;
-        var node = $item.data("node");
+        var node = $item.data(&quot;node&quot;);
         
         //TODO Previews
     }
@@ -1165,47 +975,47 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     
     Plugin.Layer.prototype.addNewLayer = function($item) {
         
-        var $overlay = this.view.$container.find(cons.CSS_CLASSES.toSelector("overlay") + '_' + $item.index());
-        if ($overlay.length < 1) {
+        var $overlay = this.view.$container.find(cons.CSS_CLASSES.toSelector(&quot;overlay&quot;) + &#x27;_&#x27; + $item.index());
+        if ($overlay.length &lt; 1) {
             var overlay = templates.overlayItem({
-                "index" : $item.index(),
-                "cssClass" : {
-                    "overlay" : cons.CSS_CLASSES.overlay,
-                    "overlayContent" : cons.CSS_CLASSES.overlayContent
+                &quot;index&quot; : $item.index(),
+                &quot;cssClass&quot; : {
+                    &quot;overlay&quot; : cons.CSS_CLASSES.overlay,
+                    &quot;overlayContent&quot; : cons.CSS_CLASSES.overlayContent
                 }
             });
             this.view.$container.append(overlay);
-            $overlay = this.view.$container.find('> ' + cons.CSS_CLASSES.toSelector("overlay") + '_' + $item.index());
+            $overlay = this.view.$container.find(&#x27;&gt; &#x27; + cons.CSS_CLASSES.toSelector(&quot;overlay&quot;) + &#x27;_&#x27; + $item.index());
         }
         
         var newLayerOptions = $.extend(true, {}, this.options, {
             layoutEngine : {
-                itemSelector : '.item',
+                itemSelector : &#x27;.item&#x27;,
                 getSortData : {
                     type : function($elem) {
-                        var classes = $elem.attr("class");
+                        var classes = $elem.attr(&quot;class&quot;);
                         return classes;
                     },
                     group : function($elem) {
-                        var classes = $elem.attr("class");
-                        var pattern = new RegExp("(\s)*[a-zA-Z0-9]*" + cons.TOKEN_TAG + "[a-zA-Z0-9]*(\s)*", 'g');
-                        var groups = classes.match(pattern), group = "";
-                        for ( var i = 0; i < groups.length; i++) {
-                            group += groups[i] + " ";
+                        var classes = $elem.attr(&quot;class&quot;);
+                        var pattern = new RegExp(&quot;(\s)*[a-zA-Z0-9]*&quot; + cons.TOKEN_TAG + &quot;[a-zA-Z0-9]*(\s)*&quot;, &#x27;g&#x27;);
+                        var groups = classes.match(pattern), group = &quot;&quot;;
+                        for ( var i = 0; i &lt; groups.length; i++) {
+                            group += groups[i] + &quot; &quot;;
                         }
                         return group;
                     }
                 }
             },
             filterBy : [ {
-                value : "*",
-                label : "showAll"
+                value : &quot;*&quot;,
+                label : &quot;showAll&quot;
             }, {
                 value : cons.CSS_CLASSES.typeClasses.incoming,
-                label : "in"
+                label : &quot;in&quot;
             }, {
                 value : cons.CSS_CLASSES.typeClasses.outgoing,
-                label : "out"
+                label : &quot;out&quot;
             } ]
         });
         
@@ -1271,17 +1081,17 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         var that = this, update = false;
         $.each(otherNode, function(prop, propVal){
             switch(prop) {
-                case "label" :
-                    if((propVal.lang && propVal.lang === "en") && !(propVal.lang || propVal.lang === "en")) {
+                case &quot;label&quot; :
+                    if((propVal.lang &amp;&amp; propVal.lang === &quot;en&quot;) &amp;&amp; !(propVal.lang || propVal.lang === &quot;en&quot;)) {
                         update = true;
                         this.label = propVal
                     }
                     break;
                 
-                case "predicates" :
+                case &quot;predicates&quot; :
                     var updatePred = true;
                     $.each(that.predicates, function(i, predicate){
-                        if (predicate.value == propVal[0].value && predicate.type == propVal[0].type) {
+                        if (predicate.value == propVal[0].value &amp;&amp; predicate.type == propVal[0].type) {
                             updatePred = false;
                         } else if(that.filterables.indexOf(cons.toFilterable(propVal[0].type)) == -1) {
                             that.filterables.push(cons.toFilterable(propVal[0].type));
@@ -1329,7 +1139,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         this._generateID = function(){
         if(this.predicates) {
             return this.predicates[0].value + this.value;
-            return '_' + Math.random().toString(36).substr(2, 9); //TODO literalID
+            return &#x27;_&#x27; + Math.random().toString(36).substr(2, 9); //TODO literalID
         }
         };
         this.id = this._generateID();
@@ -1342,11 +1152,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         Plugin.Node.call(this, data);
         this.type = cons.NODE_TYPES.blankNode;
         this.label = {
-            value : "BlankNode - TODO"
+            value : &quot;BlankNode - TODO&quot;
         };
         
         this._generateID = function(){
-            return '_' + Math.random().toString(36).substr(2, 9); //TODO BlankNodeID
+            return &#x27;_&#x27; + Math.random().toString(36).substr(2, 9); //TODO BlankNodeID
         };
         this.id = this._generateID();
     }
@@ -1359,14 +1169,14 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             var node;
             
             switch(data.subject.token) {
-                case cons.CSS_CLASSES.toToken("patternClasses.blanknode"):
+                case cons.CSS_CLASSES.toToken(&quot;patternClasses.blanknode&quot;):
                     node = new Plugin.BlankNode(data);
                     break;
-                case cons.CSS_CLASSES.toToken("patternClasses.literal"):
+                case cons.CSS_CLASSES.toToken(&quot;patternClasses.literal&quot;):
                     node = new Plugin.LiteralNode(data, options.literalStyle);
                     break;
-                case cons.CSS_CLASSES.toToken("patternClasses.uri"):
-                    if(data.label && (data.label.lang === undefined || data.label.lang === "en")) {
+                case cons.CSS_CLASSES.toToken(&quot;patternClasses.uri&quot;):
+                    if(data.label &amp;&amp; (data.label.lang === undefined || data.label.lang === &quot;en&quot;)) {
                         node = new Plugin.ResNode(data, options.itemStyle);
                     }
                     break;
@@ -1406,7 +1216,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         //Helper for batch adding
         this._checkItemsHelp = function(items, batchSize) {
             var rest = items.slice(batchSize);
-            if (rest.length > 0) {
+            if (rest.length &gt; 0) {
                 that.checkItems(rest);
             }
         }
@@ -1425,7 +1235,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                     if (!labelCache.contains(predicate.value)) {
                         var labelQuery = replaceDummy(that.labelQuery, predicate.value);
                         rdfStore.executeQuery(labelQuery, function(results){
-                            if (results && results[0]) {
+                            if (results &amp;&amp; results[0]) {
                                 $.each(results, function(i, result){
                                     node.setPredicateLabel(i, result.label.value);
                                     labelCache.add(predicate.value, result.label.value);
@@ -1450,7 +1260,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     * @param {Object} resultSet ResultSet of a Select query
     */
     Plugin.Layer.Model.prototype.checkItems = function(resultSet) {
-        var length = resultSet.length, that = this, batchSize = ((length < that.options.batchSize) ? length : that.options.batchSize);
+        var length = resultSet.length, that = this, batchSize = ((length &lt; that.options.batchSize) ? length : that.options.batchSize);
 
         // current batch
         var batch = resultSet.slice(0, batchSize);
@@ -1486,7 +1296,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                         } else {
                             //TODO check literal UPDATE
                             node = undefined;
-                            console.log("literalupdate")
+                            console.log(&quot;literalupdate&quot;)
                         }
                         break;
                     case cons.NODE_TYPES.blankNode:
@@ -1496,7 +1306,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                         } else {
                             //TODO check blankNode UPDATE ?
                             console.log(node);
-                            console.log("blankNodeupdate")
+                            console.log(&quot;blankNodeupdate&quot;)
                             node = undefined;
                         }
                         break;
@@ -1519,23 +1329,23 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     Plugin.Layer.Model.prototype.update = function() {
         var that = this, emptyResults = true;
         
-        //        rdfStore.executeQuery("CONSTRUCT { ?s rdfs:label ?o . ?s1 rdfs:description ?o1 . ?s2 rdfs:comment ?o2 . ?s3 rdfs:type ?o3} WHERE { ?s rdfs:label ?o . OPTIONAL { ?s1 rdfs:description ?o1 } . OPTIONAL { ?s2 rdfs:comment ?o2 }. OPTIONAL {?s3 rdfs:type ?o3}}", function(results) {
+        //        rdfStore.executeQuery(&quot;CONSTRUCT { ?s rdfs:label ?o . ?s1 rdfs:description ?o1 . ?s2 rdfs:comment ?o2 . ?s3 rdfs:type ?o3} WHERE { ?s rdfs:label ?o . OPTIONAL { ?s1 rdfs:description ?o1 } . OPTIONAL { ?s2 rdfs:comment ?o2 }. OPTIONAL {?s3 rdfs:type ?o3}}&quot;, function(results) {
         //            console.log(results);
         //        } );
         
-        for ( var i = 0; i < this.viewQueries.length; i++) {
+        for ( var i = 0; i &lt; this.viewQueries.length; i++) {
             rdfStore.executeQuery(this.viewQueries[i].query, function(results) {
-                if (results && results.length !== 0) {
+                if (results &amp;&amp; results.length !== 0) {
                     emptyResults = false;
                     if (that.viewQueries[i].type) {
                         // Add types for filtering
-                        for ( var j = 0; j < results.length; j++) {
+                        for ( var j = 0; j &lt; results.length; j++) {
                             results[j].predicate.type = that.viewQueries[i].type;
                         }
                     }
                     that.checkItems(results);
-                } else if (i === that.viewQueries.length - 1 && emptyResults) {
-                    console.log("nothing found");
+                } else if (i === that.viewQueries.length - 1 &amp;&amp; emptyResults) {
+                    console.log(&quot;nothing found&quot;);
                 }
             });
         }
@@ -1569,8 +1379,8 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         this._model = model;
         
         this.$container = $container;
-        this.$outerContainer = $('<div class="' + cons.CSS_CLASSES.outerContainer + '"></div>');
-        this.$viewContainer = $('<div class="' + cons.CSS_CLASSES.viewContainer + '"></div>');
+        this.$outerContainer = $(&#x27;&lt;div class=&quot;&#x27; + cons.CSS_CLASSES.outerContainer + &#x27;&quot;&gt;&lt;/div&gt;&#x27;);
+        this.$viewContainer = $(&#x27;&lt;div class=&quot;&#x27; + cons.CSS_CLASSES.viewContainer + &#x27;&quot;&gt;&lt;/div&gt;&#x27;);
         this.$container.append(this.$outerContainer);
         this.$outerContainer.append(this.$viewContainer);
         this.layoutEngine = new Plugin.LayoutEngine(this.$viewContainer, viewOptions.layoutEngine);
@@ -1593,33 +1403,33 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         }
         
         this._getCorrespondingTile = function(node) {
-            var $tile = this.$viewContainer.find("." + node.index);
+            var $tile = this.$viewContainer.find(&quot;.&quot; + node.index);
             return $tile;
         }
         
         this._addPredURIShow = function($item) {
-            var $predicate = $item.find("> .predicate");
-            var $typeImage = $item.find("> .typeImage");
-            var $predicateLabel = $item.find("> .predicateLabel");
+            var $predicate = $item.find(&quot;&gt; .predicate&quot;);
+            var $typeImage = $item.find(&quot;&gt; .typeImage&quot;);
+            var $predicateLabel = $item.find(&quot;&gt; .predicateLabel&quot;);
             
             //Show full URI on mouse enter
-            $predicateLabel.on("mouseenter", function(){
-                $predicate.css("display", "inline-block");
-                $typeImage.css("display", "none");
-                $predicateLabel.css("display", "none");
+            $predicateLabel.on(&quot;mouseenter&quot;, function(){
+                $predicate.css(&quot;display&quot;, &quot;inline-block&quot;);
+                $typeImage.css(&quot;display&quot;, &quot;none&quot;);
+                $predicateLabel.css(&quot;display&quot;, &quot;none&quot;);
             });
             
             //Show label on mouse leave
-            $predicate.on("mouseleave", function(){
-                $predicate.css("display", "none");
-                $typeImage.css("display", "inline-block");
-                $predicateLabel.css("display", "inline-block");
+            $predicate.on(&quot;mouseleave&quot;, function(){
+                $predicate.css(&quot;display&quot;, &quot;none&quot;);
+                $typeImage.css(&quot;display&quot;, &quot;inline-block&quot;);
+                $predicateLabel.css(&quot;display&quot;, &quot;inline-block&quot;);
             })
         }
         
         this._addToAnchor = function($element, anchor, step, callback) {
             $element.height(step);
-            $element.css("top", anchor);
+            $element.css(&quot;top&quot;, anchor);
             anchor += step + 5;
             if(callback) {
                 callback(anchor);
@@ -1659,27 +1469,27 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         }
         
         this._setLabelScale = function($tile, anchor, height, width, callback) {
-            var $labelEn = $tile.find("> .labelEn");
+            var $labelEn = $tile.find(&quot;&gt; .labelEn&quot;);
             $labelEn.width(width*0.9);
             this._addToAnchor($labelEn, anchor, height, callback);
         }
         
         this._setPredicateScale = function($tile, anchor, height, width, callback) {
             var that = this;
-            var $typeImage = $tile.find("> .typeImage");
-            var $predicate = $tile.find("> .predicate");
-            var $predicateLabel = $tile.find("> .predicateLabel");
+            var $typeImage = $tile.find(&quot;&gt; .typeImage&quot;);
+            var $predicate = $tile.find(&quot;&gt; .predicate&quot;);
+            var $predicateLabel = $tile.find(&quot;&gt; .predicateLabel&quot;);
             
             var imageWidth = width*0.1;
-            $typeImage.css("padding-left", width*0.025);
+            $typeImage.css(&quot;padding-left&quot;, width*0.025);
             $typeImage.width(imageWidth);
-            $predicateLabel.css("padding-left", imageWidth);
+            $predicateLabel.css(&quot;padding-left&quot;, imageWidth);
             $predicateLabel.width((width*0.9)-imageWidth);
             $predicate.width(width*0.9);
 
             $.each($predicate, function(i, val){
                 $($typeImage[i]).height(height);
-                $($typeImage[i]).css("top", anchor);
+                $($typeImage[i]).css(&quot;top&quot;, anchor);
                 that._addToAnchor($(val), anchor, height);
                 that._addToAnchor($($predicateLabel[i]), anchor, height, function(reAnchor) {
                     anchor = reAnchor;
@@ -1691,9 +1501,9 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         }
         
         this._setDescriptionScale = function($tile, anchor, height, width, callback) {
-            var node = $tile.data("node");
+            var node = $tile.data(&quot;node&quot;);
             if (node.description) {
-                var $descriptionEn = $tile.find("> .descriptionEn");
+                var $descriptionEn = $tile.find(&quot;&gt; .descriptionEn&quot;);
                 $descriptionEn.width(width*0.9);
                 that._addToAnchor($descriptionEn, anchor, height, callback);
             } else if (callback) {
@@ -1702,7 +1512,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         }
         
         this._setImgBackground = function($tile) {
-            var node = $tile.data("node"), image_url = "";
+            var node = $tile.data(&quot;node&quot;), image_url = &quot;&quot;;
             
             switch (node.hasType()) {
                 case cons.NODE_TYPES.resNode:
@@ -1713,17 +1523,17 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                     image_url = node.value;
                     break;
             }
-            var tmpArray = image_url.replace(">", "").split(".");
-            image_url.replace("<", "");
+            var tmpArray = image_url.replace(&quot;&gt;&quot;, &quot;&quot;).split(&quot;.&quot;);
+            image_url.replace(&quot;&lt;&quot;, &quot;&quot;);
             switch (tmpArray[tmpArray.length-1]) {
-                case "png" :
-                case "jpeg" :
-                case "svg" :
-                case "jpg" :
+                case &quot;png&quot; :
+                case &quot;jpeg&quot; :
+                case &quot;svg&quot; :
+                case &quot;jpg&quot; :
                     
                     var image;
                     if (image_url) {
-                        var $img = $('<img src="'+image_url+'">')
+                        var $img = $(&#x27;&lt;img src=&quot;&#x27;+image_url+&#x27;&quot;&gt;&#x27;)
                         $img.load(function () {
                             var width = $img.width();
                             var height = $img.height();
@@ -1733,7 +1543,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                             var tile_ration = tile_width / tile_height;
                             var actual_width = 0;
 
-                            if(tile_ration > ratio) {
+                            if(tile_ration &gt; ratio) {
                                 actual_width = tile_width/ratio;
                                 $img.width(tile_width/ratio);
                                 $img.height(tile_height);
@@ -1743,7 +1553,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                             }
                             
                             //TODO opacity variable
-                            $img.css({"left": (tile_width-actual_width)/2, "opacity" : 0.5});
+                            $img.css({&quot;left&quot;: (tile_width-actual_width)/2, &quot;opacity&quot; : 0.5});
                         });
                         $tile.prepend($img);
                     }
@@ -1753,18 +1563,18 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         
         this._scaleText = function($tile) {
             $tile.children().quickfit({min : 10});
-            $tile.css({"line-height" : 1});  
+            $tile.css({&quot;line-height&quot; : 1});  
         }
 
         this._generateTile = function(node, $resTiles, $literalTiles, $blankNodeTiles) {
             var $tile = $(templates.isotopeItem(node)), color;
             that._addPredURIShow($tile);
-            $tile.data("node", node);
+            $tile.data(&quot;node&quot;, node);
             switch (node.hasType()) {
                 
                 case cons.NODE_TYPES.resNode:
                     color = new RGBColor(that.options.itemStyle.colors[node.index % that.options.itemStyle.colors.length]);
-                    $tile.css("background-color", "rgba(" + color.r + ", " + color.g + ", " + color.b + " ,1)");
+                    $tile.css(&quot;background-color&quot;, &quot;rgba(&quot; + color.r + &quot;, &quot; + color.g + &quot;, &quot; + color.b + &quot; ,1)&quot;);
                     this._setResNodeScale($tile, function() {
                         that._setImgBackground($tile);
                         that._scaleText($tile);
@@ -1774,7 +1584,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                     
                 case cons.NODE_TYPES.literal:
                     color = new RGBColor(that.options.literalStyle.colors[0]);
-                    $tile.css("background-color", "rgba(" + color.r + ", " + color.g + ", " + color.b + " ,1)");
+                    $tile.css(&quot;background-color&quot;, &quot;rgba(&quot; + color.r + &quot;, &quot; + color.g + &quot;, &quot; + color.b + &quot; ,1)&quot;);
                     this._setLiteralScale($tile, function() {
                         that._setImgBackground($tile);
                         that._scaleText($tile);
@@ -1787,7 +1597,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                     //TODO Blanknode
                     
                     color = new RGBColor(that.options.literalStyle.colors[0]);
-                    $tile.css("background-color", "rgba(" + color.r + ", " + color.g + ", " + color.b + " ,1)");
+                    $tile.css(&quot;background-color&quot;, &quot;rgba(&quot; + color.r + &quot;, &quot; + color.g + &quot;, &quot; + color.b + &quot; ,1)&quot;);
                     this._setResNodeScale($tile, function() {
                         that._setImgBackground($tile);
                         that._scaleText($tile);
@@ -1804,9 +1614,9 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             function(sender, nodes) {
                 
                 //Generate tiles for nodes
-                var $literalTiles = $("<div>");
-                var $resTiles = $("<div>");
-                var $blankNodeTiles = $("<div>");
+                var $literalTiles = $(&quot;&lt;div&gt;&quot;);
+                var $resTiles = $(&quot;&lt;div&gt;&quot;);
+                var $blankNodeTiles = $(&quot;&lt;div&gt;&quot;);
 
                 $.each(nodes, function(i, node) {
                     that._generateTile(node, $resTiles, $literalTiles, $blankNodeTiles);
@@ -1834,14 +1644,14 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         // on model clearing
         this._model.modelCleared.attach(
             function(sender) {
-                that.layoutEngine.remove($(".item"), function() {
-                    console.log("view cleared");
+                that.layoutEngine.remove($(&quot;.item&quot;), function() {
+                    console.log(&quot;view cleared&quot;);
                 });
             });
     }
     
     Plugin.Layer.View.prototype.addOptionsBox = function() {
-        this.$optionsContainer = $('<section class="' + cons.CSS_CLASSES.options + '" class="' + cons.CSS_CLASSES.clearfix + '"></section>')
+        this.$optionsContainer = $(&#x27;&lt;section class=&quot;&#x27; + cons.CSS_CLASSES.options + &#x27;&quot; class=&quot;&#x27; + cons.CSS_CLASSES.clearfix + &#x27;&quot;&gt;&lt;/section&gt;&#x27;)
         this.$container.prepend(this.$optionsContainer);
     }
     
@@ -1854,68 +1664,68 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         var that = this;
         
         var sortData = $.extend({}, this.options.layoutEngine.getSortData);
-        delete sortData["group"];
+        delete sortData[&quot;group&quot;];
         var sortOptions = templates.sortOptions(sortData);
         this.$optionsContainer.prepend(sortOptions);
-        var $sorter = this.$optionsContainer.find(' > .sorter');
+        var $sorter = this.$optionsContainer.find(&#x27; &gt; .sorter&#x27;);
 
         // Set selected on view
-        $sorter.find('.' + this.options.layoutEngine.sortBy).addClass("selected");
-        var $sortLinks = this.$optionsContainer.find('a');
+        $sorter.find(&#x27;.&#x27; + this.options.layoutEngine.sortBy).addClass(&quot;selected&quot;);
+        var $sortLinks = this.$optionsContainer.find(&#x27;a&#x27;);
 
         $sorter.append(templates.groupDropDown({
             type : {
-                label : "type",
+                label : &quot;type&quot;,
                 val : cons.FA_TAG
             },
             token : {
-                label : "node-type",
+                label : &quot;node-type&quot;,
                 val : cons.TOKEN_TAG
             }
         }));
-        var $sorterGroup = $sorter.find('#GroupDropDown');
+        var $sorterGroup = $sorter.find(&#x27;#GroupDropDown&#x27;);
 
         // Add onChange
         $sorterGroup.change(function(e) {
 
-            // get href attribute, minus the '#'
+            // get href attribute, minus the &#x27;#&#x27;
             var groupBy = $(this).val();
 
-            that.$container.find('.sorter > > > .selected').removeClass('selected');
+            that.$container.find(&#x27;.sorter &gt; &gt; &gt; .selected&#x27;).removeClass(&#x27;selected&#x27;);
             that.layoutEngine.updateOptions({
                 getSortData : {
                     group : function($elem) {
-                        var classes = $elem.attr("class");
-                        var pattern = new RegExp("(\s)*[a-zA-Z0-9]*" + groupBy + "[a-zA-Z0-9]*(\s)*", 'g');
-                        var groups = classes.match(pattern), group = "";
+                        var classes = $elem.attr(&quot;class&quot;);
+                        var pattern = new RegExp(&quot;(\s)*[a-zA-Z0-9]*&quot; + groupBy + &quot;[a-zA-Z0-9]*(\s)*&quot;, &#x27;g&#x27;);
+                        var groups = classes.match(pattern), group = &quot;&quot;;
                         if (groups !== null) {
-                            for ( var i = 0; i < groups.length; i++) {
-                                group += groups[i] + " ";
+                            for ( var i = 0; i &lt; groups.length; i++) {
+                                group += groups[i] + &quot; &quot;;
                             }
                         }
                         return group;
                     }
                 }
             });
-            that.layoutEngine.updateSortData(that.$viewContainer.find(".item"));
-            that.$container.find("> > .groupLabel").remove();
+            that.layoutEngine.updateSortData(that.$viewContainer.find(&quot;.item&quot;));
+            that.$container.find(&quot;&gt; &gt; .groupLabel&quot;).remove();
             that.layoutEngine.updateOptions({
-                layoutMode : 'groupRows',
-                sortBy : "group"
+                layoutMode : &#x27;groupRows&#x27;,
+                sortBy : &quot;group&quot;
             });
             return false;
         });
 
         // Add onClick
         $sortLinks.click(function() {
-            // get href attribute, minus the '#'
-            var sortName = $(this).attr('data-sort-value');
-            $sorterGroup.val("Group by...");
-            that.$optionsContainer.find('.sorter > > > .selected').removeClass("selected");
-            that.$container.find("> > .groupLabel").remove();
-            $(this).addClass("selected");
+            // get href attribute, minus the &#x27;#&#x27;
+            var sortName = $(this).attr(&#x27;data-sort-value&#x27;);
+            $sorterGroup.val(&quot;Group by...&quot;);
+            that.$optionsContainer.find(&#x27;.sorter &gt; &gt; &gt; .selected&#x27;).removeClass(&quot;selected&quot;);
+            that.$container.find(&quot;&gt; &gt; .groupLabel&quot;).remove();
+            $(this).addClass(&quot;selected&quot;);
             that.layoutEngine.updateOptions({
-                layoutMode : 'masonry',
+                layoutMode : &#x27;masonry&#x27;,
                 sortBy : sortName
             });
             return false;
@@ -1928,49 +1738,49 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         var filterOptions = templates.filterOptions(that.options.filterBy);
         this.$optionsContainer.append(filterOptions);
 
-        var $filter = this.$optionsContainer.find(' > .filter');
-        var $filterLinks = $filter.find('a');
+        var $filter = this.$optionsContainer.find(&#x27; &gt; .filter&#x27;);
+        var $filterLinks = $filter.find(&#x27;a&#x27;);
 
         // Add onClick
         $filterLinks.click(function() {
-            // get href attribute, minus the '#'
-            var selector = $(this).attr('data-filter-value');
-            if (selector !== '*') {
-                selector = "." + cons.FA_TAG + selector;
+            // get href attribute, minus the &#x27;#&#x27;
+            var selector = $(this).attr(&#x27;data-filter-value&#x27;);
+            if (selector !== &#x27;*&#x27;) {
+                selector = &quot;.&quot; + cons.FA_TAG + selector;
             }
-            that.$container.find('.filter > > > .selected').removeClass('selected');
-            $(this).addClass('selected');
+            that.$container.find(&#x27;.filter &gt; &gt; &gt; .selected&#x27;).removeClass(&#x27;selected&#x27;);
+            $(this).addClass(&#x27;selected&#x27;);
             that.layoutEngine.updateOptions({
                 filter : selector
             });
             return false;
         });
 
-        $filter.append('<input id="filterField" type="text" size="25" value="Enter search here.">');
-        var $filterBox = $filter.find('#filterField');
+        $filter.append(&#x27;&lt;input id=&quot;filterField&quot; type=&quot;text&quot; size=&quot;25&quot; value=&quot;Enter search here.&quot;&gt;&#x27;);
+        var $filterBox = $filter.find(&#x27;#filterField&#x27;);
 
         // Add onKey
         $filterBox.keyup(function(e) {
 
-            // get href attribute, minus the '#'
+            // get href attribute, minus the &#x27;#&#x27;
             var selector = $(this).val();
-            if (selector !== '') {
-                if (selector !== '*') {
+            if (selector !== &#x27;&#x27;) {
+                if (selector !== &#x27;*&#x27;) {
                     if (that.options.supportRegExpFilter) {
                         try {
-                            selector = "div:regex(class, " + selector + "), div > div:contains(" + selector + ")";
+                            selector = &quot;div:regex(class, &quot; + selector + &quot;), div &gt; div:contains(&quot; + selector + &quot;)&quot;;
                         } catch (e) {
-                            selector = "div > div:contains(" + selector + ")";
+                            selector = &quot;div &gt; div:contains(&quot; + selector + &quot;)&quot;;
                         }
                     } else {
-                        selector = "div > div:contains(" + selector + ")";
+                        selector = &quot;div &gt; div:contains(&quot; + selector + &quot;)&quot;;
                     }
                 }
             } else {
-                selector = '*';
+                selector = &#x27;*&#x27;;
             }
 
-            that.$container.find('.filter > > > .selected').removeClass('selected');
+            that.$container.find(&#x27;.filter &gt; &gt; &gt; .selected&#x27;).removeClass(&#x27;selected&#x27;);
             that.layoutEngine.updateOptions({
                 filter : selector
             });
@@ -1991,9 +1801,9 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     */
     Plugin.InitLayer = function($container, options, plugin) {
         if (plugin.options.generateTimeline) {
-            plugin._$timelineContainer = $('<div class="timelineContainer">');
+            plugin._$timelineContainer = $(&#x27;&lt;div class=&quot;timelineContainer&quot;&gt;&#x27;);
             plugin._$parent.prepend(plugin._$timelineContainer);
-            plugin._$timeline = $('<ul class="timeline"></ul>');
+            plugin._$timeline = $(&#x27;&lt;ul class=&quot;timeline&quot;&gt;&lt;/ul&gt;&#x27;);
             plugin._$timelineContainer.append(plugin._$timeline);
             //TODO Timeline
     }
@@ -2020,7 +1830,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     Plugin.DetailLayer = function($container, options, plugin, $item) {
         var that = this;
         this.$item = $item;
-        this.node = $item.data("node");
+        this.node = $item.data(&quot;node&quot;);
         
         var subjectOfQuery = replaceDummy(plugin._queries.selectSubjectOf, this.node.uri), objectOfQuery = replaceDummy(plugin._queries.selectObjectOf, this.node.uri);
         var queries = [];
@@ -2033,23 +1843,23 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             type : cons.CSS_CLASSES.typeClasses.incoming
         });
         
-        // <---- close click Event ---->
-        var $overlayContent = $container.find('> ' + cons.CSS_CLASSES.toSelector("overlayContent")), $close = $container.find('> span.close');
-        eventManagers[plugin.pluginID].addEventHandler('click', function() {
+        // &lt;---- close click Event ----&gt;
+        var $overlayContent = $container.find(&#x27;&gt; &#x27; + cons.CSS_CLASSES.toSelector(&quot;overlayContent&quot;)), $close = $container.find(&#x27;&gt; span.close&#x27;);
+        eventManagers[plugin.pluginID].addEventHandler(&#x27;click&#x27;, function() {
             that.close();
         }, $close);
-        // <!--- close click Event ---->
+        // &lt;!--- close click Event ----&gt;
         
         // Input for the handlebar
         // template
         var input = {};
-        input.label = $item.find('.labelEn').text();
+        input.label = $item.find(&#x27;.labelEn&#x27;).text();
 
         // write new data
         $overlayContent.append($(templates.overlayContent(this.node)));
         
         
-        Plugin.Layer.call(this, $overlayContent.find('.innerScroll'), options, plugin, queries);
+        Plugin.Layer.call(this, $overlayContent.find(&#x27;.innerScroll&#x27;), options, plugin, queries);
         
         this.$overlay = $container;
         this.$overlayContent = $overlayContent;
@@ -2064,29 +1874,29 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             }
 
             // Set contet color
-            var color = new RGBColor(that.$item.css("background-color"));
-            $container.css("background-color", color.toRGB());
-            $.each($overlayContent.children('div'), function(i, val) {
+            var color = new RGBColor(that.$item.css(&quot;background-color&quot;));
+            $container.css(&quot;background-color&quot;, color.toRGB());
+            $.each($overlayContent.children(&#x27;div&#x27;), function(i, val) {
                 color.r -= 10;
                 color.b -= 10;
                 color.g -= 10;
-                $(val).css("background", color.toRGB());
+                $(val).css(&quot;background&quot;, color.toRGB());
             });
 
             // Set content width
-            $overlayContent.find('> .overlayColumn').css("width", 100 + "%");
+            $overlayContent.find(&#x27;&gt; .overlayColumn&#x27;).css(&quot;width&quot;, 100 + &quot;%&quot;);
 
             // Set innerScrollBox width and height
-            $overlayContent.find('.innerScroll').css("width",
-                ($window.width() - parseInt($container.css("padding-left")) - parseInt($container.css("padding-right"))) + "px");
-            $overlayContent.find('.innerScroll').css("height", $window.height() * 0.95 + "px");
+            $overlayContent.find(&#x27;.innerScroll&#x27;).css(&quot;width&quot;,
+                ($window.width() - parseInt($container.css(&quot;padding-left&quot;)) - parseInt($container.css(&quot;padding-right&quot;))) + &quot;px&quot;);
+            $overlayContent.find(&#x27;.innerScroll&#x27;).css(&quot;height&quot;, $window.height() * 0.95 + &quot;px&quot;);
 
             callback();
         }
 
         // Fill overlay with content
         that._initOverlayContent($container, function() {
-            // <---- overlay show function ---->
+            // &lt;---- overlay show function ----&gt;
             var previewClip = getClip(cons.CSS_CLASSES.preview), overlayClip = getClip(cons.CSS_CLASSES.overlay);
 
             // Make overlay visible
@@ -2094,7 +1904,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                 clip : supportTransitions ? previewClip : overlayClip,
                 opacity : 1,
                 zIndex : 9999,
-                pointerEvents : 'auto'
+                pointerEvents : &#x27;auto&#x27;
             });
 
             if (supportTransitions) {
@@ -2103,17 +1913,17 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                     $container.off(transEndEventName);
 
                     setTimeout(function() {
-                        $container.css('clip', overlayClip).on(transEndEventName, function() {
+                        $container.css(&#x27;clip&#x27;, overlayClip).on(transEndEventName, function() {
                             $container.off(transEndEventName);
-                            plugin.$body.addClass('noscroll');
+                            plugin.$body.addClass(&#x27;noscroll&#x27;);
                         });
                     }, 25);
 
                 });
             } else {
-                plugin.$body.addClass('noscroll');
+                plugin.$body.addClass(&#x27;noscroll&#x27;);
             }
-        // <!--- overlay show function ---->
+        // &lt;!--- overlay show function ----&gt;
         });
     }
     
@@ -2141,8 +1951,8 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             that.plugin._queries.remoteSubjectOf, that.node.uri), remoteObjectOf = replaceDummy(that.plugin._queries.remoteObjectOf, that.node.uri);
         
         //remote needed?
-        that.remoteDataLoader.insertByQuery(remoteSubjectOf + " LIMIT " + that.options.remoteOptions.remoteLimit);
-        that.remoteDataLoader.insertByQuery(remoteObjectOf + " LIMIT " + that.options.remoteOptions.remoteLimit);
+        that.remoteDataLoader.insertByQuery(remoteSubjectOf + &quot; LIMIT &quot; + that.options.remoteOptions.remoteLimit);
+        that.remoteDataLoader.insertByQuery(remoteObjectOf + &quot; LIMIT &quot; + that.options.remoteOptions.remoteLimit);
     }
 
     /**
@@ -2155,29 +1965,29 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             
         // clear old data
         that.plugin.removeLayer(that);
-        that.$overlayContent.children().remove('');
+        that.$overlayContent.children().remove(&#x27;&#x27;);
 
-        var layoutProp = getItemLayoutProp(that.$item), itemClip = 'rect(' + layoutProp.top + 'px ' + (layoutProp.left + layoutProp.width) + 'px '
-        + (layoutProp.top + layoutProp.height) + 'px ' + layoutProp.left + 'px)';
+        var layoutProp = getItemLayoutProp(that.$item), itemClip = &#x27;rect(&#x27; + layoutProp.top + &#x27;px &#x27; + (layoutProp.left + layoutProp.width) + &#x27;px &#x27;
+        + (layoutProp.top + layoutProp.height) + &#x27;px &#x27; + layoutProp.left + &#x27;px)&#x27;;
 
         that.$overlay.css({
             clip : itemClip,
             opacity : 1,
-            pointerEvents : 'none'
+            pointerEvents : &#x27;none&#x27;
         });
 
-        // <---- overlay hide ---->
+        // &lt;---- overlay hide ----&gt;
 
         if (supportTransitions) {
             that.$overlay.on(transEndEventName, function() {
                 that.$overlay.off(transEndEventName);
                 setTimeout(function() {
-                    that.$overlay.css('opacity', 0).on(transEndEventName, function() {
+                    that.$overlay.css(&#x27;opacity&#x27;, 0).on(transEndEventName, function() {
                         that.$overlay.off(transEndEventName).css({
-                            clip : 'auto',
+                            clip : &#x27;auto&#x27;,
                             zIndex : -1
                         });
-                        that.$item.data('isExpanded', false);
+                        that.$item.data(&#x27;isExpanded&#x27;, false);
                     });
                 }, 25);
 
@@ -2188,7 +1998,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                 zIndex : -1
             });
         }
-    // <!--- overlay hide ---->
+    // &lt;!--- overlay hide ----&gt;
     }
 
     // ========================= VisaRDF: Preview Class ==============================
@@ -2204,12 +2014,12 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     */
     Plugin.TemplatesLoader = function(dfd) {
         this._templateInitDfd = dfd;
-        this._neededTemps = [ "filterOptions", "sortOptions", "isotopeItem", "groupDropDown", "overlayContent", "overlayItem", "previewItem" ];
+        this._neededTemps = [ &quot;filterOptions&quot;, &quot;sortOptions&quot;, &quot;isotopeItem&quot;, &quot;groupDropDown&quot;, &quot;overlayContent&quot;, &quot;overlayItem&quot;, &quot;previewItem&quot; ];
 
         this._methodIsLoaded = function(/* array of templatenames which must be loaded */) {
             var i = 0, methodName;
             while ((methodName = arguments[0[i++]])) {
-                if (typeof templates[methodName] != 'function') {
+                if (typeof templates[methodName] != &#x27;function&#x27;) {
                     return false;
                 }
             }
@@ -2230,11 +2040,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         // Get external template file
         var _that = this;
         $.get(path, function(data) {
-            var $fakeDiv = $("<div>");
+            var $fakeDiv = $(&quot;&lt;div&gt;&quot;);
             $fakeDiv.append(data);
 
             $fakeDiv.children().each(function(i, val) {
-                var partial = (val.id.indexOf("par_") !== -1);
+                var partial = (val.id.indexOf(&quot;par_&quot;) !== -1);
                 if (partial) {
                     val.id = val.id.slice(4);
                 }
@@ -2244,11 +2054,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                 }
             });
             _that._isLoaded();
-        }, "html");
+        }, &quot;html&quot;);
     };
 
     Plugin.TemplatesLoader.prototype.checkPrecompiled = function() {
-        templates = window["visaRDF"]["templates"];
+        templates = window[&quot;visaRDF&quot;][&quot;templates&quot;];
         this._isLoaded();
     };
     
@@ -2276,40 +2086,40 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                     if (data.subject !== undefined) {
                         data = [ data ];
                     }
-                    var insertionQuery = "INSERT DATA {";
+                    var insertionQuery = &quot;INSERT DATA {&quot;;
                     $.each(data, function(i, val) {
                         if (val.subject === undefined) {
-                            console.log("Resultset disfigured.");
-                        } else if (val.subject.type === "uri") {
-                            insertionQuery += "<" + val.subject.value + "> ";
+                            console.log(&quot;Resultset disfigured.&quot;);
+                        } else if (val.subject.type === &quot;uri&quot;) {
+                            insertionQuery += &quot;&lt;&quot; + val.subject.value + &quot;&gt; &quot;;
                         } else {
                             // TODO BlankNodes
-                            insertionQuery += "<" + val.subject.value + "> ";
+                            insertionQuery += &quot;&lt;&quot; + val.subject.value + &quot;&gt; &quot;;
                         }
-                        insertionQuery += "<" + val.predicate.value + "> ";
-                        if (val.object.type === "uri") {
-                            insertionQuery += "<" + val.object.value + ">. ";
-                        } else if (val.object.type === "literal") {
-                            insertionQuery += '"' + escape(val.object.value) + '". ';
+                        insertionQuery += &quot;&lt;&quot; + val.predicate.value + &quot;&gt; &quot;;
+                        if (val.object.type === &quot;uri&quot;) {
+                            insertionQuery += &quot;&lt;&quot; + val.object.value + &quot;&gt;. &quot;;
+                        } else if (val.object.type === &quot;literal&quot;) {
+                            insertionQuery += &#x27;&quot;&#x27; + escape(val.object.value) + &#x27;&quot;. &#x27;;
                         }
                         if (val.labelSub) {
-                            insertionQuery += '<' + val.subject.value + '> rdfs:label "' + val.labelSub.value + '". ';
-                        // console.log('<' + val.subject.value + '>
-                        // rdfs:label "' + val.labelSub.value + '".
-                        // ');
+                            insertionQuery += &#x27;&lt;&#x27; + val.subject.value + &#x27;&gt; rdfs:label &quot;&#x27; + val.labelSub.value + &#x27;&quot;. &#x27;;
+                        // console.log(&#x27;&lt;&#x27; + val.subject.value + &#x27;&gt;
+                        // rdfs:label &quot;&#x27; + val.labelSub.value + &#x27;&quot;.
+                        // &#x27;);
                         }
                         if (val.labelObj) {
-                            insertionQuery += '<' + val.object.value + '> rdfs:label "' + val.labelObj.value + '". ';
-                        // console.log('<' + val.object.value + '>
-                        // rdfs:label "' + val.labelObj.value + '".
-                        // ');
+                            insertionQuery += &#x27;&lt;&#x27; + val.object.value + &#x27;&gt; rdfs:label &quot;&#x27; + val.labelObj.value + &#x27;&quot;. &#x27;;
+                        // console.log(&#x27;&lt;&#x27; + val.object.value + &#x27;&gt;
+                        // rdfs:label &quot;&#x27; + val.labelObj.value + &#x27;&quot;.
+                        // &#x27;);
                         }
                         if(val.labelPred) {
-                            //console.log(val.predicate.value + " added " + val.labelPred.value);
+                            //console.log(val.predicate.value + &quot; added &quot; + val.labelPred.value);
                             labelCache.add(val.predicate.value , val.labelPred.value);
                         }
                     });
-                    insertionQuery += "}";
+                    insertionQuery += &quot;}&quot;;
 
                     // Execute insertion
                     rdfStore.executeQuery(insertionQuery, function() {
@@ -2407,9 +2217,9 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
         @property defaults.templatesPath 
         @type String
-        @default "templates_wrapped/templates.html"
+        @default &quot;templates_wrapped/templates.html&quot;
         **/
-        templatesPath : "templates_wrapped/templates.html",
+        templatesPath : &quot;templates_wrapped/templates.html&quot;,
         /**
         SPARQL resultset which can be used to insert data into the store on init.
 
@@ -2433,10 +2243,10 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
         @property defaults.initQueries
         @type Object
-        @default [ { query : "SELECT ?subject ?label ?description ?type WHERE { ?subject rdfs:label ?label . OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }. OPTIONAL {?subject rdfs:type ?type}}" } ]
+        @default [ { query : &quot;SELECT ?subject ?label ?description ?type WHERE { ?subject rdfs:label ?label . OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }. OPTIONAL {?subject rdfs:type ?type}}&quot; } ]
         **/
         initQueries : [ {
-            query : "SELECT ?subject ?label ?description ?type WHERE { ?subject rdfs:label ?label . OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }. OPTIONAL {?subject rdfs:type ?type}}"
+            query : &quot;SELECT ?subject ?label ?description ?type WHERE { ?subject rdfs:label ?label . OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }. OPTIONAL {?subject rdfs:type ?type}}&quot;
         } ],
 
         /**
@@ -2447,12 +2257,12 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         **/
         rdfstoreOptions : {
             persistence : true,
-            name : '',
+            name : &#x27;&#x27;,
             overwrite : true,
-            engine : '',
+            engine : &#x27;&#x27;,
             engineData : {
-                mongoDomain : '',
-                mongoPort : '',
+                mongoDomain : &#x27;&#x27;,
+                mongoPort : &#x27;&#x27;,
                 mongoOptions : {}
             }
         },
@@ -2507,11 +2317,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
             @property defaults.viewOptions.generateSortOptions
             @type Object
-            @default [ { value : "*", label : "showAll" } ]
+            @default [ { value : &quot;*&quot;, label : &quot;showAll&quot; } ]
             **/
             filterBy : [ {
-                value : "*",
-                label : "showAll"
+                value : &quot;*&quot;,
+                label : &quot;showAll&quot;
             } ],
             
             modelOptions : {
@@ -2540,18 +2350,18 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
                 @property defaults.viewOptions.remoteOptions.defaultRemoteQuery
                 @type String
-                @default "SELECT ?subject ?predicate ?object { BIND( rdfs:label as ?predicate) ?subject ?predicate ?object. ?subject a <http://dbpedia.org/ontology/Place> . ?subject <http://dbpedia.org/property/rulingParty> ?x } LIMIT 500"
+                @default &quot;SELECT ?subject ?predicate ?object { BIND( rdfs:label as ?predicate) ?subject ?predicate ?object. ?subject a &lt;http://dbpedia.org/ontology/Place&gt; . ?subject &lt;http://dbpedia.org/property/rulingParty&gt; ?x } LIMIT 500&quot;
                 **/
-                defaultRemoteQuery : "SELECT ?subject ?predicate ?object { BIND( rdfs:label as ?predicate) ?subject ?predicate ?object. ?subject a <http://dbpedia.org/ontology/Place> . ?subject <http://dbpedia.org/property/rulingParty> ?x } LIMIT 500",
+                defaultRemoteQuery : &quot;SELECT ?subject ?predicate ?object { BIND( rdfs:label as ?predicate) ?subject ?predicate ?object. ?subject a &lt;http://dbpedia.org/ontology/Place&gt; . ?subject &lt;http://dbpedia.org/property/rulingParty&gt; ?x } LIMIT 500&quot;,
                 
                 /**
                 Backend services to query on remote loading.
 
                 @property defaults.viewOptions.remoteOptions.remoteBackend
                 @type Array
-                @default ["http://zaire.dimis.fim.uni-passau.de:8080/bigdata/sparql"]
+                @default [&quot;http://zaire.dimis.fim.uni-passau.de:8080/bigdata/sparql&quot;]
                 **/
-                remoteBackend : ["http://zaire.dimis.fim.uni-passau.de:8080/bigdata/sparql"],
+                remoteBackend : [&quot;http://zaire.dimis.fim.uni-passau.de:8080/bigdata/sparql&quot;],
                 
                 /**
                 Limit for items loaded by a single remote load.
@@ -2576,9 +2386,9 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
                 @property defaults.viewOptions.remoteOptions.remoteLabelBackend
                 @type Array
-                @default ["http://zaire.dimis.fim.uni-passau.de:8080/bigdata/sparql","http://dbpedia.org/sparql"]
+                @default [&quot;http://zaire.dimis.fim.uni-passau.de:8080/bigdata/sparql&quot;,&quot;http://dbpedia.org/sparql&quot;]
                 **/
-                remoteLabelBackend : ["http://zaire.dimis.fim.uni-passau.de:8080/bigdata/sparql","http://dbpedia.org/sparql"],
+                remoteLabelBackend : [&quot;http://zaire.dimis.fim.uni-passau.de:8080/bigdata/sparql&quot;,&quot;http://dbpedia.org/sparql&quot;],
                 
                 /**
                 Flag to indicate whether remote label information should be loaded if needed.
@@ -2657,9 +2467,9 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
                 @property defaults.viewOptions.literalStyle.colors
                 @type Array
-                @default [ '#777777' ]
+                @default [ &#x27;#777777&#x27; ]
                 **/
-                    colors : [ '#777777' ]  
+                    colors : [ &#x27;#777777&#x27; ]  
                 },
             
                 /**
@@ -2715,9 +2525,9 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
                 @property defaults.viewOptions.itemStyle.colors
                 @type Array
-                @default [ '#e2674a', '#99CC99', '#3399CC', '#33CCCC', '#996699', '#C24747', '#FFCC66', '#669999', '#CC6699', '#339966', '#666699' ]
+                @default [ &#x27;#e2674a&#x27;, &#x27;#99CC99&#x27;, &#x27;#3399CC&#x27;, &#x27;#33CCCC&#x27;, &#x27;#996699&#x27;, &#x27;#C24747&#x27;, &#x27;#FFCC66&#x27;, &#x27;#669999&#x27;, &#x27;#CC6699&#x27;, &#x27;#339966&#x27;, &#x27;#666699&#x27; ]
                 **/
-                    colors : [ '#e2674a', '#99CC99', '#3399CC', '#33CCCC', '#996699', '#C24747', '#FFCC66', '#669999', '#CC6699', '#339966', '#666699' ]
+                    colors : [ &#x27;#e2674a&#x27;, &#x27;#99CC99&#x27;, &#x27;#3399CC&#x27;, &#x27;#33CCCC&#x27;, &#x27;#996699&#x27;, &#x27;#C24747&#x27;, &#x27;#FFCC66&#x27;, &#x27;#669999&#x27;, &#x27;#CC6699&#x27;, &#x27;#339966&#x27;, &#x27;#666699&#x27; ]
                 },
             
                 /**
@@ -2727,14 +2537,14 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                 @type Object
                 **/
                 layoutEngine : {
-                    sortBy : 'number',
+                    sortBy : &#x27;number&#x27;,
                     getSortData : {
                         number : function($elem) {
-                            var number = $elem.hasClass('item') ? $elem.find('.number').text() : $elem.attr('data-number');
+                            var number = $elem.hasClass(&#x27;item&#x27;) ? $elem.find(&#x27;.number&#x27;).text() : $elem.attr(&#x27;data-number&#x27;);
                             return parseInt(number, 10);
                         },
                         alphabetical : function($elem) {
-                            var labelEn = $elem.find('.labelEn'), itemText = labelEn.length ? labelEn : $elem;
+                            var labelEn = $elem.find(&#x27;.labelEn&#x27;), itemText = labelEn.length ? labelEn : $elem;
                             return itemText.text();
                         }
                     }
@@ -2744,7 +2554,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     };
 
     function Plugin(obj, options) {
-        // <---- private utility functions ---->
+        // &lt;---- private utility functions ----&gt;
         /**
         * Uses $.proxy() to overwrite the context of a given function with the
         * widget context.
@@ -2757,18 +2567,18 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         this._selfProxy = function(fn) {
             return $.proxy(fn, this);
         };
-        // <!--- instance private utility functions ---->
+        // &lt;!--- instance private utility functions ----&gt;
 
 
         this.pluginID = generateId();
 
         this._$parent = $(obj);
-        this.$body = $('BODY');
+        this.$body = $(&#x27;BODY&#x27;);
         
         eventManagers[this.pluginID] = new Plugin.EventManager(this._$parent);
 
         // Give parentobj of the plugin a correspondending plugin class
-        this._$parent.addClass(pluginName + "_" + this.pluginID);
+        this._$parent.addClass(pluginName + &quot;_&quot; + this.pluginID);
 
         // Use $.extend to merge the given plugin options with the defaults
         this.options = $.extend(true, {}, defaults, options);
@@ -2785,7 +2595,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
     Plugin.prototype = {
         
-        // <---- private functions ---->
+        // &lt;---- private functions ----&gt;
 
         /**
         * Initializes the rdf store
@@ -2795,7 +2605,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         */
         _initRdfStore : function() {
             var that = this, rdfStoreInitDfd = $.Deferred();
-            // console.log("Init RDFSTORE");
+            // console.log(&quot;Init RDFSTORE&quot;);
             if (isUndefinedOrNull(rdfStore)) {
                 rdfStore = new Plugin.RdfStore(that.options.rdfstoreOptions, function(store) {
                     rdfStoreInitDfd.resolve();
@@ -2814,27 +2624,27 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             var that = this, templateInitDfd = $.Deferred();
 
             // Helper to iterate over keys of given context
-            Handlebars.registerHelper('keysEach', function(context, options) {
-                var out = '';
+            Handlebars.registerHelper(&#x27;keysEach&#x27;, function(context, options) {
+                var out = &#x27;&#x27;;
                 for ( var key in context) {
                     out += options.fn(key);
                 }
                 return out;
             });
 
-            // Helper to check if language of given context is undefined or "en"
-            Handlebars.registerHelper('ifLang', function(context, options) {
-                if (context && (context.lang === undefined || context.lang === "en")) {
+            // Helper to check if language of given context is undefined or &quot;en&quot;
+            Handlebars.registerHelper(&#x27;ifLang&#x27;, function(context, options) {
+                if (context &amp;&amp; (context.lang === undefined || context.lang === &quot;en&quot;)) {
                     return options.fn(this);
                 }
             });
             
-            Handlebars.registerHelper('predicateLabelRetriver', function(ctx, options) {
+            Handlebars.registerHelper(&#x27;predicateLabelRetriver&#x27;, function(ctx, options) {
                 
-                if (ctx && !ctx.label) {
-                    var uriArray = ctx.value.split("#");
+                if (ctx &amp;&amp; !ctx.label) {
+                    var uriArray = ctx.value.split(&quot;#&quot;);
                     if (uriArray.length === 1) {
-                        uriArray    = uriArray[0].split("/");
+                        uriArray    = uriArray[0].split(&quot;/&quot;);
                     }
                     ctx.label = uriArray[uriArray.length-1];
                 }
@@ -2863,23 +2673,23 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             that._queries = {
                 initQueries : this.options.initQueries,
                 defaultRemoteQuery : this.options.layerOptions.remoteOptions.defaultRemoteQuery,
-                remoteSubjectOf : " SELECT ?subject ?predicate ?object ?labelObj ?labelPred WHERE { BIND (<" + cons.DUMMY
-                + "> as ?subject) ?subject ?predicate ?object. OPTIONAL { ?object rdfs:label ?labelObj }. OPTIONAL { ?predicate rdfs:label ?labelPred }}",
-                remoteObjectOf : " SELECT ?subject ?predicate ?object ?labelSub ?labelPred WHERE {BIND (<" + cons.DUMMY
-                + "> as ?object) ?subject ?predicate ?object. OPTIONAL { ?subject rdfs:label ?labelSub }. OPTIONAL { ?predicate rdfs:label ?labelPred }}",
-                selectSubjectOf : " SELECT ?subject ?predicate ?label ?description WHERE {<"
+                remoteSubjectOf : &quot; SELECT ?subject ?predicate ?object ?labelObj ?labelPred WHERE { BIND (&lt;&quot; + cons.DUMMY
+                + &quot;&gt; as ?subject) ?subject ?predicate ?object. OPTIONAL { ?object rdfs:label ?labelObj }. OPTIONAL { ?predicate rdfs:label ?labelPred }}&quot;,
+                remoteObjectOf : &quot; SELECT ?subject ?predicate ?object ?labelSub ?labelPred WHERE {BIND (&lt;&quot; + cons.DUMMY
+                + &quot;&gt; as ?object) ?subject ?predicate ?object. OPTIONAL { ?subject rdfs:label ?labelSub }. OPTIONAL { ?predicate rdfs:label ?labelPred }}&quot;,
+                selectSubjectOf : &quot; SELECT ?subject ?predicate ?label ?description WHERE {&lt;&quot;
                 + cons.DUMMY
-                + "> ?predicate ?subject. OPTIONAL { ?subject rdfs:label ?label}. OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }}",
-                selectObjectOf : " SELECT ?subject ?predicate ?type ?label ?description WHERE {?subject ?predicate <"
+                + &quot;&gt; ?predicate ?subject. OPTIONAL { ?subject rdfs:label ?label}. OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }}&quot;,
+                selectObjectOf : &quot; SELECT ?subject ?predicate ?type ?label ?description WHERE {?subject ?predicate &lt;&quot;
                 + cons.DUMMY
-                + ">. OPTIONAL { ?subject rdfs:label ?label}. OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }}",
-                previewQuery : " SELECT ?label ?description ?type WHERE { <" + cons.DUMMY + "> rdfs:label ?label . OPTIONAL { <" + cons.DUMMY
-                + "> rdfs:description ?description } . OPTIONAL { <" + cons.DUMMY + "> rdfs:comment ?description } . OPTIONAL { <" + cons.DUMMY
-                + "> rdfs:type ?type}}",
-                label : "SELECT ?label WHERE { <" + cons.DUMMY + "> rdfs:label ?label . FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), 'en'))}",
+                + &quot;&gt;. OPTIONAL { ?subject rdfs:label ?label}. OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }}&quot;,
+                previewQuery : &quot; SELECT ?label ?description ?type WHERE { &lt;&quot; + cons.DUMMY + &quot;&gt; rdfs:label ?label . OPTIONAL { &lt;&quot; + cons.DUMMY
+                + &quot;&gt; rdfs:description ?description } . OPTIONAL { &lt;&quot; + cons.DUMMY + &quot;&gt; rdfs:comment ?description } . OPTIONAL { &lt;&quot; + cons.DUMMY
+                + &quot;&gt; rdfs:type ?type}}&quot;,
+                label : &quot;SELECT ?label WHERE { &lt;&quot; + cons.DUMMY + &quot;&gt; rdfs:label ?label . FILTER(LANG(?label) = &#x27;&#x27; || LANGMATCHES(LANG(?label), &#x27;en&#x27;))}&quot;,
             
                 //TODO blanknodes
-                blankNodeQuery : "SELECT ?object WHERE {<" + cons.DUMMY + "> ?predicate ?object}"
+                blankNodeQuery : &quot;SELECT ?object WHERE {&lt;&quot; + cons.DUMMY + &quot;&gt; ?predicate ?object}&quot;
             };
         },
 
@@ -2925,10 +2735,10 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             var that = this;
             eventManagers[that.pluginID].trigger(cons.EVENT_TYPES.loading.loadingStart, that);
 
-            // console.log("_ajaxLoadData");
+            // console.log(&quot;_ajaxLoadData&quot;);
             $.ajax({
                 url : dataURL,
-                dataType : "text",
+                dataType : &quot;text&quot;,
                 success : function(rdfData) {
                     callback(rdfData, dataFormat);
                 }
@@ -2938,7 +2748,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             });
         },
 
-        // <!--- instance private functions ---->
+        // &lt;!--- instance private functions ----&gt;
 
         /**
         * Init the plugin. Called by the constructor.
@@ -2955,29 +2765,29 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             eventManagers[this.pluginID].addEventHandler(cons.EVENT_TYPES.storeModified.insert, function(ev) {
                 $.each(that._views, function(key, view) {
                     view.update();
-                    console.log("view " + key +  " is updating");
+                    console.log(&quot;view &quot; + key +  &quot; is updating&quot;);
                 });
             });
 
             // Add a smartresize listener (smartresize to be found in
             // jQuery.isotope)
-            eventManagers[this.pluginID].addEventHandler('smartresize', function(ev, $invoker) {
+            eventManagers[this.pluginID].addEventHandler(&#x27;smartresize&#x27;, function(ev, $invoker) {
 
-                // <---- overlay modification ---->
-                var $overlays = that._$parent.children(cons.CSS_CLASSES.toSelector("overlay"));
-                $overlays.css('clip', getClip(cons.CSS_CLASSES.overlay));
-                var innerScrolls = $overlays.find('.innerScroll');
-                innerScrolls.css("width", ($window.width() - parseInt($overlays.css("padding-left")) - parseInt($overlays.css("padding-right"))) + "px");
-                innerScrolls.css("height", $window.height() * 0.95 + "px");
-                // <!--- overlay modification ---->
+                // &lt;---- overlay modification ----&gt;
+                var $overlays = that._$parent.children(cons.CSS_CLASSES.toSelector(&quot;overlay&quot;));
+                $overlays.css(&#x27;clip&#x27;, getClip(cons.CSS_CLASSES.overlay));
+                var innerScrolls = $overlays.find(&#x27;.innerScroll&#x27;);
+                innerScrolls.css(&quot;width&quot;, ($window.width() - parseInt($overlays.css(&quot;padding-left&quot;)) - parseInt($overlays.css(&quot;padding-right&quot;))) + &quot;px&quot;);
+                innerScrolls.css(&quot;height&quot;, $window.height() * 0.95 + &quot;px&quot;);
+                // &lt;!--- overlay modification ----&gt;
 
-                // <---- preview modification ---->
+                // &lt;---- preview modification ----&gt;
                 //TODO Preview Mod
-            // <!--- preview modification ---->
+            // &lt;!--- preview modification ----&gt;
             }, $window);
 
             // Init templating and RdfStore if needed
-            if (globalInitDfd.state() === "pending") {
+            if (globalInitDfd.state() === &quot;pending&quot;) {
                 globalInitDfd = $.Deferred();
                 $.when(that._initRdfStore(), that._initTemplating()).done(function() {
                     globalInitDfd.resolve();
@@ -3019,11 +2829,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         * @param {Plugin.Layer} view Layer object to remove from the plugin
         */
         removeLayer : function(view) {
-            for (var i =0; i < this._views.length; i++)
+            for (var i =0; i &lt; this._views.length; i++)
                 if (this._views[i] === view) {
                     this._views.splice(i,1);
                     if(this._views.length == 1) {
-                        this.$body.removeClass('noscroll');
+                        this.$body.removeClass(&#x27;noscroll&#x27;);
                     }
                     break;
                 }
@@ -3090,7 +2900,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             var that = this;
 
             $.when(globalInitDfd.promise()).done(function() {
-                if (query === undefined || query === "") {
+                if (query === undefined || query === &quot;&quot;) {
                     query = that._queries.defaultRemoteQuery;
                 }
                 new Plugin.RemoteDataLoader([url], that.pluginID).insertByQuery(query);
@@ -3104,8 +2914,8 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         */
         clearStore : function() {
             var that = this;
-            rdfStore.executeQuery("CLEAR ALL", function() {
-                console.log("store cleared");
+            rdfStore.executeQuery(&quot;CLEAR ALL&quot;, function() {
+                console.log(&quot;store cleared&quot;);
                 $.each(that._views, function(i, view) {
                     view.removeAllItems();
                 });
@@ -3128,8 +2938,8 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     // Lightweight plugin frame.
     $.fn[pluginName] = function(options) {
         return this.each(function() {
-            if (!$.data(this, "plugin_" + pluginName)) {
-                $.data(this, "plugin_" + pluginName, new Plugin(this, options));
+            if (!$.data(this, &quot;plugin_&quot; + pluginName)) {
+                $.data(this, &quot;plugin_&quot; + pluginName, new Plugin(this, options));
             }
         });
     };
@@ -3138,14 +2948,34 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
     // Copyright 2013 Thomas Weissgerber
     //	
-    // Licensed under the Apache License, Version 2.0 (the "License");
+    // Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);
     // you may not use this file except in compliance with the License.
     // You may obtain a copy of the License at
     //	
     // http://www.apache.org/licenses/LICENSE-2.0
     //	
     // Unless required by applicable law or agreed to in writing, software
-    // distributed under the License is distributed on an "AS IS" BASIS,
+    // distributed under the License is distributed on an &quot;AS IS&quot; BASIS,
     // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     // See the License for the specific language governing permissions and
     // limitations under the License.
+
+    </pre>
+</div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+<script src="../assets/../api.js"></script>
+<script src="../assets/js/api-filter.js"></script>
+<script src="../assets/js/api-list.js"></script>
+<script src="../assets/js/api-search.js"></script>
+<script src="../assets/js/apidocs.js"></script>
+</body>
+</html>

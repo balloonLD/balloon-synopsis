@@ -6,8 +6,8 @@
         "url": ""
     },
     "files": {
-        "js\\visaRDF.js": {
-            "name": "js\\visaRDF.js",
+        "js/plugin/visaRDF.js": {
+            "name": "js/plugin/visaRDF.js",
             "modules": {
                 "VisaRDF": 1
             },
@@ -21,6 +21,7 @@
                 "Plugin.RdfStore": 1,
                 "Plugin.LayoutEngine": 1,
                 "Plugin.Layer": 1,
+                "Plugin.Node": 1,
                 "Plugin.InitLayer": 1,
                 "Plugin.DetailLayer": 1,
                 "Plugin.TemplatesLoader": 1,
@@ -45,6 +46,7 @@
                 "Plugin.RdfStore": 1,
                 "Plugin.LayoutEngine": 1,
                 "Plugin.Layer": 1,
+                "Plugin.Node": 1,
                 "Plugin.InitLayer": 1,
                 "Plugin.DetailLayer": 1,
                 "Plugin.TemplatesLoader": 1,
@@ -54,8 +56,8 @@
             "fors": {},
             "namespaces": {},
             "tag": "module",
-            "file": "js\\visaRDF.js",
-            "line": 2024,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2043,
             "description": "VisaRDF is a JQuery Plugin for RDF visualization.",
             "itemtype": "main"
         }
@@ -71,7 +73,7 @@
             "extension_for": [],
             "module": "VisaRDF",
             "namespace": "",
-            "file": "js\\visaRDF.js",
+            "file": "js/plugin/visaRDF.js",
             "line": 185,
             "description": "class JQuery custom selectors"
         },
@@ -85,7 +87,7 @@
             "extension_for": [],
             "module": "VisaRDF",
             "namespace": "",
-            "file": "js\\visaRDF.js",
+            "file": "js/plugin/visaRDF.js",
             "line": 231,
             "description": "class private utility functions"
         },
@@ -99,7 +101,7 @@
             "extension_for": [],
             "module": "VisaRDF",
             "namespace": "",
-            "file": "js\\visaRDF.js",
+            "file": "js/plugin/visaRDF.js",
             "line": 345,
             "description": "Class to provide a function for SPARQL querying of the service located at the given url. YQL is used to fetch the queryresults.",
             "is_constructor": 1
@@ -114,7 +116,7 @@
             "extension_for": [],
             "module": "VisaRDF",
             "namespace": "",
-            "file": "js\\visaRDF.js",
+            "file": "js/plugin/visaRDF.js",
             "line": 423,
             "description": "This class defines a cache.",
             "is_constructor": 1
@@ -129,7 +131,7 @@
             "extension_for": [],
             "module": "VisaRDF",
             "namespace": "",
-            "file": "js\\visaRDF.js",
+            "file": "js/plugin/visaRDF.js",
             "line": 468,
             "description": "class public functions"
         },
@@ -143,7 +145,7 @@
             "extension_for": [],
             "module": "VisaRDF",
             "namespace": "",
-            "file": "js\\visaRDF.js",
+            "file": "js/plugin/visaRDF.js",
             "line": 547,
             "description": "Class to manage eventHandlers",
             "is_constructor": 1,
@@ -165,7 +167,7 @@
             "extension_for": [],
             "module": "VisaRDF",
             "namespace": "",
-            "file": "js\\visaRDF.js",
+            "file": "js/plugin/visaRDF.js",
             "line": 648,
             "description": "Class to wrap and create a rdfStore Object. Default: rdfstore-js https://github.com/antoniogarrote/rdfstore-js",
             "is_constructor": 1,
@@ -192,8 +194,8 @@
             "extension_for": [],
             "module": "VisaRDF",
             "namespace": "",
-            "file": "js\\visaRDF.js",
-            "line": 736,
+            "file": "js/plugin/visaRDF.js",
+            "line": 735,
             "description": "Layout engine to add items to. Default: jQuery.isotope http://isotope.metafizzy.co/",
             "is_constructor": 1,
             "params": [
@@ -219,8 +221,8 @@
             "extension_for": [],
             "module": "VisaRDF",
             "namespace": "",
-            "file": "js\\visaRDF.js",
-            "line": 802,
+            "file": "js/plugin/visaRDF.js",
+            "line": 801,
             "description": "Layer of the RDF graph",
             "is_constructor": 1,
             "params": [
@@ -246,6 +248,28 @@
                 }
             ]
         },
+        "Plugin.Node": {
+            "name": "Plugin.Node",
+            "shortname": "Plugin.Node",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "VisaRDF",
+            "namespace": "",
+            "file": "js/plugin/visaRDF.js",
+            "line": 918,
+            "description": "Node to represent an abstract element of the rdf graph.",
+            "is_constructor": 1,
+            "params": [
+                {
+                    "name": "data",
+                    "description": "Data of a single resource of a select query. Must contain label and index.",
+                    "type": "Object"
+                }
+            ]
+        },
         "Plugin.InitLayer": {
             "name": "Plugin.InitLayer",
             "shortname": "Plugin.InitLayer",
@@ -256,8 +280,8 @@
             "extension_for": [],
             "module": "VisaRDF",
             "namespace": "",
-            "file": "js\\visaRDF.js",
-            "line": 1655,
+            "file": "js/plugin/visaRDF.js",
+            "line": 1674,
             "description": "Initialization view of the plugin",
             "extends": "Plugin.Layer",
             "is_constructor": 1,
@@ -289,8 +313,8 @@
             "extension_for": [],
             "module": "VisaRDF",
             "namespace": "",
-            "file": "js\\visaRDF.js",
-            "line": 1682,
+            "file": "js/plugin/visaRDF.js",
+            "line": 1701,
             "description": "Detailed view of an subject / item",
             "extends": "Plugin.Layer",
             "is_constructor": 1,
@@ -327,8 +351,8 @@
             "extension_for": [],
             "module": "VisaRDF",
             "namespace": "",
-            "file": "js\\visaRDF.js",
-            "line": 1871,
+            "file": "js/plugin/visaRDF.js",
+            "line": 1890,
             "description": "Handlebars templates loader to load precompiled or nonprecompiled templates",
             "is_constructor": 1,
             "params": [
@@ -349,8 +373,8 @@
             "extension_for": [],
             "module": "VisaRDF",
             "namespace": "",
-            "file": "js\\visaRDF.js",
-            "line": 1929,
+            "file": "js/plugin/visaRDF.js",
+            "line": 1948,
             "description": "Loader to load remote data from services at the given urls and add them to the view",
             "is_constructor": 1,
             "params": [
@@ -376,8 +400,8 @@
             "extension_for": [],
             "module": "VisaRDF",
             "namespace": "",
-            "file": "js\\visaRDF.js",
-            "line": 2024,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2043,
             "description": "Main plugin class of VisaRDF",
             "is_constructor": 1,
             "params": [
@@ -396,7 +420,7 @@
     },
     "classitems": [
         {
-            "file": "js\\visaRDF.js",
+            "file": "js/plugin/visaRDF.js",
             "line": 190,
             "description": "JQuery custom class prefix selector.",
             "itemtype": "method",
@@ -419,7 +443,7 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
+            "file": "js/plugin/visaRDF.js",
             "line": 209,
             "description": "JQuery custom regex selector. (modified the version of James Padolsey - http://james.padolsey.com/javascript/regex-selector-for-jquery/)",
             "itemtype": "method",
@@ -442,7 +466,7 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
+            "file": "js/plugin/visaRDF.js",
             "line": 236,
             "description": "Checks if given variable is undenfined or null.",
             "itemtype": "method",
@@ -462,7 +486,7 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
+            "file": "js/plugin/visaRDF.js",
             "line": 247,
             "description": "Replace the DUMMY constants of given query with the given replacementstring.",
             "itemtype": "method",
@@ -487,7 +511,7 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
+            "file": "js/plugin/visaRDF.js",
             "line": 259,
             "description": "Gets the current window size of the browser.",
             "itemtype": "method",
@@ -507,7 +531,7 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
+            "file": "js/plugin/visaRDF.js",
             "line": 285,
             "description": "Gets the clip data of given type of div box",
             "itemtype": "method",
@@ -527,7 +551,7 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
+            "file": "js/plugin/visaRDF.js",
             "line": 309,
             "description": "Gets the layoutprop of given item",
             "itemtype": "method",
@@ -547,7 +571,7 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
+            "file": "js/plugin/visaRDF.js",
             "line": 326,
             "description": "Get browser dependent event names. (Uses Modernizr)",
             "itemtype": "method",
@@ -560,7 +584,7 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
+            "file": "js/plugin/visaRDF.js",
             "line": 410,
             "description": "Method for querying the given url with given query. Executes given callback function with results.",
             "itemtype": "method",
@@ -586,7 +610,7 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
+            "file": "js/plugin/visaRDF.js",
             "line": 433,
             "description": "Adds the key and value to the cache.",
             "itemtype": "method",
@@ -607,7 +631,7 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
+            "file": "js/plugin/visaRDF.js",
             "line": 444,
             "description": "Retrives the to the key correspondending value",
             "itemtype": "method",
@@ -627,7 +651,7 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
+            "file": "js/plugin/visaRDF.js",
             "line": 456,
             "description": "Check if the cache contains a value for the given key",
             "itemtype": "method",
@@ -647,7 +671,7 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
+            "file": "js/plugin/visaRDF.js",
             "line": 517,
             "description": "Generate an ID for the plugin.",
             "itemtype": "method",
@@ -660,7 +684,7 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
+            "file": "js/plugin/visaRDF.js",
             "line": 565,
             "description": "Add an event handler to given object. Save it in the history for cleanup purposes.",
             "itemtype": "method",
@@ -691,7 +715,7 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
+            "file": "js/plugin/visaRDF.js",
             "line": 590,
             "description": "Remove an event handler from given object and history. Removal by id is possible.",
             "itemtype": "method",
@@ -717,7 +741,7 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
+            "file": "js/plugin/visaRDF.js",
             "line": 618,
             "description": "Trigger the event with given parameters on given object.",
             "itemtype": "method",
@@ -743,7 +767,7 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
+            "file": "js/plugin/visaRDF.js",
             "line": 634,
             "description": "Destroy this event manager and all his event handlers.",
             "itemtype": "method",
@@ -752,7 +776,7 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
+            "file": "js/plugin/visaRDF.js",
             "line": 678,
             "description": "Inserts given data in the store",
             "itemtype": "method",
@@ -778,8 +802,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 716,
+            "file": "js/plugin/visaRDF.js",
+            "line": 715,
             "description": "Executes given query on the store",
             "itemtype": "method",
             "name": "executeQuery",
@@ -804,8 +828,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 749,
+            "file": "js/plugin/visaRDF.js",
+            "line": 748,
             "description": "Adds items to the layout engine",
             "itemtype": "method",
             "name": "add",
@@ -825,8 +849,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 760,
+            "file": "js/plugin/visaRDF.js",
+            "line": 759,
             "description": "Repaint the layout of the div boxes",
             "itemtype": "method",
             "name": "reLayout",
@@ -834,8 +858,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 769,
+            "file": "js/plugin/visaRDF.js",
+            "line": 768,
             "description": "Remove items from the layout engine",
             "itemtype": "method",
             "name": "remove",
@@ -855,8 +879,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 780,
+            "file": "js/plugin/visaRDF.js",
+            "line": 779,
             "description": "Update the sort data of the layout engine on specified items",
             "itemtype": "method",
             "name": "updateSortData",
@@ -871,8 +895,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 790,
+            "file": "js/plugin/visaRDF.js",
+            "line": 789,
             "description": "Update the options of the layout engine",
             "itemtype": "method",
             "name": "updateSortData",
@@ -887,8 +911,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 908,
+            "file": "js/plugin/visaRDF.js",
+            "line": 907,
             "description": "Clear the view",
             "itemtype": "method",
             "name": "removeAllItems",
@@ -896,8 +920,38 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 1087,
+            "file": "js/plugin/visaRDF.js",
+            "line": 938,
+            "description": "Return type of node",
+            "itemtype": "method",
+            "name": "hasType",
+            "class": "Plugin.Node",
+            "module": "VisaRDF"
+        },
+        {
+            "file": "js/plugin/visaRDF.js",
+            "line": 947,
+            "description": "Set label of predicate with given position number.",
+            "itemtype": "method",
+            "name": "setPredicateLabel",
+            "class": "Plugin.Node",
+            "module": "VisaRDF"
+        },
+        {
+            "file": "js/plugin/visaRDF.js",
+            "line": 956,
+            "description": "Merges data of given node with own data.",
+            "itemtype": "method",
+            "name": "setPredicateLabel",
+            "return": {
+                "description": ""
+            },
+            "class": "Plugin.Node",
+            "module": "VisaRDF"
+        },
+        {
+            "file": "js/plugin/visaRDF.js",
+            "line": 1106,
             "description": "Fetches and updates the labels of the predicates of given node",
             "access": "private",
             "tagname": "",
@@ -910,15 +964,15 @@
                     "type": "Plugin.Node"
                 }
             ],
-            "class": "Plugin.Layer",
+            "class": "Plugin.Node",
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 1119,
+            "file": "js/plugin/visaRDF.js",
+            "line": 1138,
             "description": "Look in given resultSet for Items to add to the model.",
             "itemtype": "method",
-            "name": "addItems",
+            "name": "checkItems",
             "params": [
                 {
                     "name": "resultSet",
@@ -926,21 +980,21 @@
                     "type": "Object"
                 }
             ],
-            "class": "Plugin.Layer",
+            "class": "Plugin.Node",
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 1187,
+            "file": "js/plugin/visaRDF.js",
+            "line": 1206,
             "description": "Get data for the model by querying the local store",
             "itemtype": "method",
             "name": "update",
-            "class": "Plugin.Layer",
+            "class": "Plugin.Node",
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 1253,
+            "file": "js/plugin/visaRDF.js",
+            "line": 1272,
             "description": "Initializes the browsability of the given items",
             "access": "private",
             "tagname": "",
@@ -953,12 +1007,12 @@
                     "type": "JQuery"
                 }
             ],
-            "class": "Plugin.Layer",
+            "class": "Plugin.Node",
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 1798,
+            "file": "js/plugin/visaRDF.js",
+            "line": 1817,
             "description": "Load children by remote service",
             "itemtype": "method",
             "name": "loadByRemote",
@@ -966,8 +1020,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 1821,
+            "file": "js/plugin/visaRDF.js",
+            "line": 1840,
             "description": "Closes the view",
             "itemtype": "method",
             "name": "close",
@@ -975,8 +1029,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2034,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2053,
             "description": "Default options for visaRDF.",
             "itemtype": "property",
             "name": "defaults",
@@ -985,8 +1039,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2041,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2060,
             "description": "Raw RDF data given on plugin startup. This data will be loaded into the store.",
             "itemtype": "property",
             "name": "defaults.data",
@@ -996,8 +1050,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2050,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2069,
             "description": "Path to file with Raw RDF data given on plugin startup. This file will be parsed\nand loaded into the store.",
             "itemtype": "property",
             "name": "defaults.dataLoc",
@@ -1007,8 +1061,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2060,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2079,
             "description": "Format of the RDF data which is given on plugin startup.",
             "itemtype": "property",
             "name": "defaults.dataFormat",
@@ -1018,8 +1072,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2069,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2088,
             "description": "Flag to activate the usage of precompiled handlebars templates.",
             "itemtype": "property",
             "name": "defaults.templatesPrecompiled",
@@ -1029,8 +1083,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2078,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2097,
             "description": "Path of the html file which can be used to load handlebars templates dynamically.",
             "itemtype": "property",
             "name": "defaults.templatesPath",
@@ -1040,8 +1094,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2086,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2105,
             "description": "SPARQL resultset which can be used to insert data into the store on init.",
             "itemtype": "property",
             "name": "defaults.sparqlData",
@@ -1051,8 +1105,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2095,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2114,
             "description": "Flag to indicate whether a timeline should be generated and used.",
             "itemtype": "property",
             "name": "defaults.generateTimeline",
@@ -1062,8 +1116,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2104,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2123,
             "description": "Query/queries to use for the initialization view of the plugin.",
             "itemtype": "property",
             "name": "defaults.initQueries",
@@ -1073,8 +1127,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2115,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2134,
             "description": "Options for the rdf store class. Uses rdfstore-js https://github.com/antoniogarrote/rdfstore-js options structure.",
             "itemtype": "property",
             "name": "defaults.rdfstoreOptions",
@@ -1083,8 +1137,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2133,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2152,
             "description": "Options for the VisaRDF view layer.",
             "itemtype": "property",
             "name": "defaults.layerOptions",
@@ -1093,8 +1147,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2141,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2160,
             "description": "Flag to indicate whether the sort interface should be generated.",
             "itemtype": "property",
             "name": "defaults.viewOptions.generateSortOptions",
@@ -1104,8 +1158,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2150,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2169,
             "description": "Flag to indicate whether previews should be used.",
             "itemtype": "property",
             "name": "defaults.viewOptions.generateSortOptions",
@@ -1115,8 +1169,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2159,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2178,
             "description": "Flag to indicate which kind of previews should be used. Possible options are",
             "itemtype": "property",
             "name": "defaults.viewOptions.previewAsOverlay",
@@ -1126,8 +1180,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2168,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2187,
             "description": "Flag to indicate whether the filter interface should be generated.",
             "itemtype": "property",
             "name": "defaults.viewOptions.generateFilterOptions",
@@ -1137,8 +1191,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2178,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2197,
             "description": "Default filter to be added to the filter interface.",
             "itemtype": "property",
             "name": "defaults.viewOptions.generateSortOptions",
@@ -1148,8 +1202,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2192,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2211,
             "description": "Batch size of items which can be loaded simultaniosly in the view-",
             "itemtype": "property",
             "name": "defaults.viewOptions.batchSize",
@@ -1159,8 +1213,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2203,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2222,
             "description": "Options for remote loading of data.",
             "itemtype": "property",
             "name": "defaults.viewOptions.remoteOptions",
@@ -1169,8 +1223,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2211,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2230,
             "description": "Default remote load query. Used on insertRemoteData() if no query parameter is given.",
             "itemtype": "property",
             "name": "defaults.viewOptions.remoteOptions.defaultRemoteQuery",
@@ -1180,8 +1234,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2220,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2239,
             "description": "Backend services to query on remote loading.",
             "itemtype": "property",
             "name": "defaults.viewOptions.remoteOptions.remoteBackend",
@@ -1191,8 +1245,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2229,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2248,
             "description": "Limit for items loaded by a single remote load.",
             "itemtype": "property",
             "name": "defaults.viewOptions.remoteOptions.remoteLimit",
@@ -1202,8 +1256,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2238,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2257,
             "description": "Flag to indicate whether automatic remote load on detail view should be done.",
             "itemtype": "property",
             "name": "defaults.viewOptions.remoteOptions.remoteDynamically",
@@ -1213,8 +1267,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2247,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2266,
             "description": "Remote backends to query for predicate label information.",
             "itemtype": "property",
             "name": "defaults.viewOptions.remoteOptions.remoteLabelBackend",
@@ -1224,8 +1278,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2256,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2275,
             "description": "Flag to indicate whether remote label information should be loaded if needed.",
             "itemtype": "property",
             "name": "defaults.viewOptions.remoteOptions.remoteLabels",
@@ -1235,8 +1289,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2266,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2285,
             "description": "Options for the VisaRDF views.",
             "itemtype": "property",
             "name": "defaults.layerOptions.viewOptions",
@@ -1245,8 +1299,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2274,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2293,
             "description": "Flag to indicate whether the filter should use regular expressions.",
             "itemtype": "property",
             "name": "defaults.viewOptions.supportRegExpFilter",
@@ -1256,8 +1310,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2284,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2303,
             "description": "Styles of literal items.",
             "itemtype": "property",
             "name": "defaults.viewOptions.literalStyle",
@@ -1266,8 +1320,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2291,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2310,
             "description": "Dimensions of literal items.",
             "itemtype": "property",
             "name": "defaults.viewOptions.literalStyle.dimension",
@@ -1276,8 +1330,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2298,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2317,
             "description": "Width of literal items.",
             "itemtype": "property",
             "name": "defaults.viewOptions.literalStyle.dimension.width",
@@ -1287,8 +1341,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2307,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2326,
             "description": "Height of literal items.",
             "itemtype": "property",
             "name": "defaults.viewOptions.literalStyle.dimension.width",
@@ -1298,8 +1352,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2328,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2347,
             "description": "Color of literal items.",
             "itemtype": "property",
             "name": "defaults.viewOptions.literalStyle.colors",
@@ -1309,8 +1363,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2338,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2357,
             "description": "Styles of items.",
             "itemtype": "property",
             "name": "defaults.viewOptions.itemStyle",
@@ -1319,8 +1373,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2345,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2364,
             "description": "Dimensions of items.",
             "itemtype": "property",
             "name": "defaults.viewOptions.itemStyle.dimension",
@@ -1329,8 +1383,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2352,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2371,
             "description": "Width of items.",
             "itemtype": "property",
             "name": "defaults.viewOptions.itemStyle.dimension.width",
@@ -1340,8 +1394,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2361,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2380,
             "description": "Height of items.",
             "itemtype": "property",
             "name": "defaults.viewOptions.itemStyle.dimension.width",
@@ -1351,8 +1405,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2386,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2405,
             "description": "Colors of items.",
             "itemtype": "property",
             "name": "defaults.viewOptions.itemStyle.colors",
@@ -1362,8 +1416,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2396,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2415,
             "description": "Options for the layoutEngine. Uses isotope http://isotope.metafizzy.co/ options structure.",
             "itemtype": "property",
             "name": "defaults.layoutEngine",
@@ -1372,8 +1426,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2421,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2440,
             "description": "Uses $.proxy() to overwrite the context of a given function with the\nwidget context.",
             "access": "private",
             "tagname": "",
@@ -1393,8 +1447,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2463,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2482,
             "description": "Initializes the rdf store",
             "access": "private",
             "tagname": "",
@@ -1404,8 +1458,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2480,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2499,
             "description": "Initializes the templating",
             "access": "private",
             "tagname": "",
@@ -1415,8 +1469,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2526,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2545,
             "description": "Generate the queries of the Plugin",
             "access": "private",
             "tagname": "",
@@ -1426,22 +1480,23 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2559,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2578,
             "description": "Check whether the plugin is initialized with insertion options and\ncall insertion methods if needed.",
             "access": "private",
             "tagname": "",
             "itemtype": "method",
             "name": "_checkInsertion",
             "return": {
-                "description": "inserted true if data was inserted, false if not"
+                "description": "true if data was inserted, false if not",
+                "type": "Boolean"
             },
             "class": "Plugin",
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2587,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2606,
             "description": "Loads file at dataURL and invokes callback with loaded data",
             "access": "private",
             "tagname": "",
@@ -1471,8 +1526,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2616,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2635,
             "description": "Init the plugin. Called by the constructor.",
             "itemtype": "method",
             "name": "init",
@@ -1480,8 +1535,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2678,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2697,
             "description": "Add given Layer object to the plugin",
             "itemtype": "method",
             "name": "addLayer",
@@ -1496,8 +1551,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2688,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2707,
             "description": "Remove given Layer object from the plugin",
             "itemtype": "method",
             "name": "removeLayer",
@@ -1512,8 +1567,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2705,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2724,
             "description": "Insert given rdf-data in the store.",
             "itemtype": "method",
             "name": "insertData",
@@ -1533,8 +1588,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2721,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2740,
             "description": "Insert rdf-data of given location in the store. Consider cross domain restrictions when using this method.",
             "itemtype": "method",
             "name": "insertDataPath",
@@ -1554,8 +1609,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2735,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2754,
             "description": "Insert rdf-data of given file in the store.",
             "itemtype": "method",
             "name": "insertDataFile",
@@ -1575,8 +1630,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2753,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2772,
             "description": "Insert rdf-data of given url SPARQL service in the store. Use the\ngiven query. Is no query given use the default query.",
             "itemtype": "method",
             "name": "insertRemoteDataQuery",
@@ -1596,8 +1651,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2773,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2792,
             "description": "Clear the store and Layers.",
             "itemtype": "method",
             "name": "clearStore",
@@ -1605,8 +1660,8 @@
             "module": "VisaRDF"
         },
         {
-            "file": "js\\visaRDF.js",
-            "line": 2788,
+            "file": "js/plugin/visaRDF.js",
+            "line": 2807,
             "description": "Clean up after plugin (destroy bindings, clear events..)",
             "itemtype": "method",
             "name": "destroy",
@@ -1617,7 +1672,11 @@
     "warnings": [
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " js\\visaRDF.js:2559"
+            "line": " js/plugin/visaRDF.js:956"
+        },
+        {
+            "message": "replacing incorrect tag: returns with return",
+            "line": " js/plugin/visaRDF.js:2578"
         }
     ]
 }

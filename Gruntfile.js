@@ -16,7 +16,7 @@ module.exports = function(grunt) {
 					partialRegex : /^par_/
 				},
 				files : {
-					"js/templates.js" : [ "templates/*.handlebars" ]
+					"js/plugin/templates.js" : [ "templates/*.handlebars" ]
 				}
 			}
 		},
@@ -27,7 +27,7 @@ module.exports = function(grunt) {
 			  version: '<%= pkg.version %>',
 			  url: '<%= pkg.homepage %>',
 			  options: {
-				paths: 'js/',
+				paths: 'js/plugin/',
 				outdir: 'documentation/'
 			  }
 			}
@@ -37,7 +37,7 @@ module.exports = function(grunt) {
 				separator : ';'
 			},
 			dist : {
-				src : [ 'js/*.js' ],
+				src : [ 'js/plugin/*.js' ],
 				dest : 'build/<%= pkg.name %>.js'
 			}
 		},
@@ -62,7 +62,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-yuidoc');
 
 	// Load the plugin that provides the "uglify" task.
-	//grunt.loadNpmTasks('grunt-contrib-uglify');
+	grunt.loadNpmTasks('grunt-contrib-uglify');
 
 	// Default task(s).
 	grunt.registerTask('default', [ 'handlebars', 'yuidoc', 'concat' ]);

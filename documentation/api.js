@@ -8,6 +8,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "Plugin.InitLayer",
         "Plugin.Layer",
         "Plugin.LayoutEngine",
+        "Plugin.Node",
         "Plugin.RdfStore",
         "Plugin.RemoteDataLoader",
         "Plugin.TemplatesLoader",

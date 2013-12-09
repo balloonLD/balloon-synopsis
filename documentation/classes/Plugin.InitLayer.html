@@ -55,6 +55,8 @@
             
                 <li><a href="../classes/Plugin.LayoutEngine.html">Plugin.LayoutEngine</a></li>
             
+                <li><a href="../classes/Plugin.Node.html">Plugin.Node</a></li>
+            
                 <li><a href="../classes/Plugin.RdfStore.html">Plugin.RdfStore</a></li>
             
                 <li><a href="../classes/Plugin.RemoteDataLoader.html">Plugin.RemoteDataLoader</a></li>
@@ -116,13 +118,13 @@
 
     
         <div class="extends">
-            Extends <a href="..\classes\Plugin.Layer.html" class="crosslink">Plugin.Layer</a>
+            Extends <a href="../classes/Plugin.Layer.html" class="crosslink">Plugin.Layer</a>
         </div>
     
 
     
         <div class="foundat">
-            Defined in: <a href="../files/js_visaRDF.js.html#l1655"><code>js\visaRDF.js:1655</code></a>
+            Defined in: <a href="../files/js_plugin_visaRDF.js.html#l1674"><code>js&#x2F;plugin&#x2F;visaRDF.js:1674</code></a>
         </div>
     
 
@@ -199,7 +201,7 @@
             
         
         
-        <a href="../files/js_visaRDF.js.html#l1655"><code>js\visaRDF.js:1655</code></a>
+        <a href="../files/js_plugin_visaRDF.js.html#l1674"><code>js&#x2F;plugin&#x2F;visaRDF.js:1674</code></a>
         
         </p>
 
@@ -254,7 +256,7 @@
                 <li class="param">
                     
                         <code class="param-name">plugin</code>
-                        <span class="type"><a href="..\classes\Plugin.html" class="crosslink">Plugin</a></span>
+                        <span class="type"><a href="../classes/Plugin.html" class="crosslink">Plugin</a></span>
                     
 
                     
@@ -301,36 +303,8 @@
 
                     <ul class="index-list methods extends">
                         
-                            <li class="index-item method private inherited">
-                                <a href="#method__fetchPredicateLabel">_fetchPredicateLabel</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method private inherited">
-                                <a href="#method__initBrowsability">_initBrowsability</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method inherited">
-                                <a href="#method_addItems">addItems</a>
-
-                                
-                                
-                            </li>
-                        
                             <li class="index-item method inherited">
                                 <a href="#method_removeAllItems">removeAllItems</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method inherited">
-                                <a href="#method_update">update</a>
 
                                 
                                 
@@ -350,268 +324,6 @@
         
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
-
-                
-                    <div id="method__fetchPredicateLabel" class="method item private inherited">
-    <h3 class="name"><code>_fetchPredicateLabel</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>node</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-
-    
-
-    
-        <span class="flag private">private</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..\classes\Plugin.Layer.html#method__fetchPredicateLabel">Plugin.Layer</a>:
-            
-        
-        
-        <a href="../files/js_visaRDF.js.html#l1087"><code>js\visaRDF.js:1087</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Fetches and updates the labels of the predicates of given node</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">node</code>
-                        <span class="type">Plugin.Node</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Node to fetch the predicate labels for</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="method__initBrowsability" class="method item private inherited">
-    <h3 class="name"><code>_initBrowsability</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>$tiles</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-
-    
-
-    
-        <span class="flag private">private</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..\classes\Plugin.Layer.html#method__initBrowsability">Plugin.Layer</a>:
-            
-        
-        
-        <a href="../files/js_visaRDF.js.html#l1253"><code>js\visaRDF.js:1253</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Initializes the browsability of the given items</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">$tiles</code>
-                        <span class="type">JQuery</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Tiles which should be browsable</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="method_addItems" class="method item inherited">
-    <h3 class="name"><code>addItems</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>resultSet</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..\classes\Plugin.Layer.html#method_addItems">Plugin.Layer</a>:
-            
-        
-        
-        <a href="../files/js_visaRDF.js.html#l1119"><code>js\visaRDF.js:1119</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Look in given resultSet for Items to add to the model.</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">resultSet</code>
-                        <span class="type">Object</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>ResultSet of a Select query</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-
-    
-</div>
 
                 
                     <div id="method_removeAllItems" class="method item inherited">
@@ -639,11 +351,11 @@
         
             
                 <p>Inherited from
-                <a href="..\classes\Plugin.Layer.html#method_removeAllItems">Plugin.Layer</a>:
+                <a href="../classes/Plugin.Layer.html#method_removeAllItems">Plugin.Layer</a>:
             
         
         
-        <a href="../files/js_visaRDF.js.html#l908"><code>js\visaRDF.js:908</code></a>
+        <a href="../files/js_plugin_visaRDF.js.html#l907"><code>js&#x2F;plugin&#x2F;visaRDF.js:907</code></a>
         
         </p>
 
@@ -655,58 +367,6 @@
 
     <div class="description">
         <p>Clear the view</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="method_update" class="method item inherited">
-    <h3 class="name"><code>update</code></h3>
-
-    
-        <span class="paren">()</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                <p>Inherited from
-                <a href="..\classes\Plugin.Layer.html#method_update">Plugin.Layer</a>:
-            
-        
-        
-        <a href="../files/js_visaRDF.js.html#l1187"><code>js\visaRDF.js:1187</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Get data for the model by querying the local store</p>
 
     </div>
 
