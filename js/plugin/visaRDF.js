@@ -3,6 +3,10 @@
 * 
 * @module VisaRDF
 * @main Plugin
+* @param {} $
+* @param {} window
+* @param {} document
+* @param {} undefined 
 **/
 
 // safety net for unclosed plugins and/or chained functions
@@ -122,16 +126,10 @@
             $elems.each(function() {
                 var $this = $(this), atomW = $this.outerWidth(true), atomH = $this.outerHeight(true), group = $.data(this, 'isotope-sort-data')[sortBy];
                 
-                console.log("atomW" + atomW);
-                console.log("atomH" + atomH);
-                console.log(group);
-                
                 if (group !== props.currentGroup) {
                     // new group, new row
                     props.x = 0;
                     props.height += props.currentGroup ? instance.groupRows.gutter : 0;
-                    console.log("currentGroup" + props.currentGroup)
-                    console.log(instance.groupRows.gutter)
                     props.y = props.height;
                     props.currentGroup = group;
                     
@@ -191,7 +189,7 @@
     * JQuery custom class prefix selector.
     *
     * @method class-prefix
-    * @param {} elem 
+    * @param {} ele
     * @param {} index 
     * @param {} match 
     */
@@ -322,7 +320,7 @@
             height : $item.outerHeight()
         };
     }
-
+    
     /**
     *  Get browser dependent event names. (Uses Modernizr)
     *
@@ -528,7 +526,7 @@
     Plugin.Event = function(sender) {
         this._sender = sender;
         this._listeners = [];
-    }
+    };
     
     Plugin.Event.prototype = {
         attach : function (listener) {
@@ -553,14 +551,14 @@
     */
     Plugin.EventManager = function(stdObject) {
         if (!stdObject) {
-            console.log("EventManager not created")
+            console.log("EventManager not created");
             return false;
-        }    
+        }
         this.stdObject = stdObject;
         
         // History of event handler bindings
         this._evHandlerHistory = {};
-    }
+    };
    
     /**
     * Add an event handler to given object. Save it in the history for cleanup purposes.  
@@ -585,7 +583,7 @@
             "handler" : handler
         });
         object.on(eventType, handler);
-    }
+    };
     
     /**
     * Remove an event handler from given object and history. Removal by id is possible.
@@ -613,7 +611,7 @@
                 }
             }
         });
-    }
+    };
    
     /**
     * Trigger the event with given parameters on given object.
@@ -629,7 +627,7 @@
         } else {
             this.stdObject.trigger(eventType, param);
         }
-    }
+    };
     
     /**
     * Destroy this event manager and all his event handlers.
@@ -642,7 +640,7 @@
                 val.object.off(eventType, val.handler);
             });
         });
-    }
+    };
 
     // ========================= VisaRDF: rdfStore Class ==============================
     /**
@@ -743,7 +741,7 @@
     Plugin.LayoutEngine = function(container, options) {
         this._container = container;
         container.isotope(options);
-    }
+    };
 
     /**
     * Adds items to the layout engine
@@ -842,18 +840,18 @@
                 this.view.addFilter();
             }
         }
-    }
+    };
     
     Plugin.Layer.prototype.openPreview = function($item) {
         var that = this;
         var node = $item.data("node");
         
         //TODO Previews
-    }
+    };
     
     Plugin.Layer.prototype.update = function() {
         this.model.update();
-    }
+    };
     
     Plugin.Layer.prototype.addNewLayer = function($item) {
         
@@ -902,7 +900,7 @@
         });
         
         this.plugin.addLayer(new Plugin.DetailLayer($overlay, newLayerOptions, this.plugin, $item));
-    }
+    };
     
     /**
     * Clear the view
@@ -911,7 +909,7 @@
     */
     Plugin.Layer.prototype.removeAllItems = function() {
         this.model.clearModel();
-    }
+    };
         
     
     // ========================= VisaRDF: Node Class ==============================
@@ -933,7 +931,7 @@
             this.filterables.push(cons.toFilterable(data.predicate.type));
             this.predicates.push(data.predicate);
         }
-    }
+    };
     
     /**
     * Return type of node
@@ -942,21 +940,24 @@
     */
     Plugin.Node.prototype.hasType = function() {
         return this.type;
-    }
+    };
     
     /**
     * Set label of predicate with given position number.
     *
     * @method setPredicateLabel
+    * @param {Integer} ind
+    * @param{String} label
     */
-    Plugin.Node.prototype.setPredicateLabel = function(i, label) {
-        this.predicates[i].label = label;
-    }
+    Plugin.Node.prototype.setPredicateLabel = function(ind, label) {
+        this.predicates[ind].label = label;
+    };
     
     /**
     * Merges data of given node with own data.
     *
     * @method setPredicateLabel
+    * @param {Node} otherNode 
     * @returns {}
     */
     Plugin.Node.prototype.merge = function(otherNode) {
@@ -966,16 +967,16 @@
                 case "label" :
                     if((propVal.lang && propVal.lang === "en") && !(propVal.lang || propVal.lang === "en")) {
                         update = true;
-                        this.label = propVal
+                        this.label = propVal;
                     }
                     break;
                 
                 case "predicates" :
                     var updatePred = true;
                     $.each(that.predicates, function(i, predicate){
-                        if (predicate.value == propVal[0].value && predicate.type == propVal[0].type) {
+                        if (predicate.value === propVal[0].value && predicate.type === propVal[0].type) {
                             updatePred = false;
-                        } else if(that.filterables.indexOf(cons.toFilterable(propVal[0].type)) == -1) {
+                        } else if(that.filterables.indexOf(cons.toFilterable(propVal[0].type)) === -1) {
                             that.filterables.push(cons.toFilterable(propVal[0].type));
                         }
                     });
@@ -986,7 +987,7 @@
             }
         });
         return update;
-    }
+    };
     
     Plugin.ResNode = function(data, itemStyle) {
         Plugin.Node.call(this, data);
@@ -1005,7 +1006,7 @@
             return this.uri;
         };
         this.id = this._generateID();
-    }
+    };
     
     Plugin.ResNode.prototype =  Object.create(Plugin.Node.prototype);
     Plugin.ResNode.prototype.constructor = Plugin.ResNode;
@@ -1025,7 +1026,7 @@
         }
         };
         this.id = this._generateID();
-    }
+    };
     
     Plugin.LiteralNode.prototype =  Object.create(Plugin.Node.prototype);
     Plugin.LiteralNode.prototype.constructor = Plugin.LiteralNode;
@@ -1041,7 +1042,7 @@
             return '_' + Math.random().toString(36).substr(2, 9); //TODO BlankNodeID
         };
         this.id = this._generateID();
-    }
+    };
     
     Plugin.BlankNode.prototype =  Object.create(Plugin.Node.prototype);
     Plugin.BlankNode.prototype.constructor = Plugin.BlankNode;
@@ -1068,7 +1069,7 @@
        
             return node;
         }
-    }
+    };
     
     Plugin.Layer.Model = function(viewQueries, options, labelQuery) {
         
@@ -1089,7 +1090,7 @@
                 length : 0
             },
             length : 0
-        }
+        };
         
         this.itemsAdded = new Plugin.Event(this);
         this.modelCleared = new Plugin.Event(this);
@@ -1101,7 +1102,7 @@
             if (rest.length > 0) {
                 that.checkItems(rest);
             }
-        }
+        };
         
         /**
         * Fetches and updates the labels of the predicates of given node
@@ -1127,13 +1128,13 @@
                     } else {
                         node.setPredicateLabel(i, labelCache.retrieve(predicate.value));
                     }
-                })
+                });
             }
 
             return node;
-        }
+        };
         
-    }
+    };
     
     /**
     * Look in given resultSet for Items to add to the model.
@@ -1165,7 +1166,7 @@
                         } else {
                             if(that.nodes.resNodes[node.id].merge(node)) {
                                 node = that.nodes.resNodes[node.id];
-                                that.itemUpdated.notify(node)
+                                that.itemUpdated.notify(node);
                             } else {
                                 node = undefined;
                         }
@@ -1178,7 +1179,7 @@
                         } else {
                             //TODO check literal UPDATE
                             node = undefined;
-                            console.log("literalupdate")
+                            console.log("literalupdate");
                         }
                         break;
                     case cons.NODE_TYPES.blankNode:
@@ -1188,7 +1189,7 @@
                         } else {
                             //TODO check blankNode UPDATE ?
                             console.log(node);
-                            console.log("blankNodeupdate")
+                            console.log("blankNodeupdate");
                             node = undefined;
                         }
                         break;
@@ -1201,7 +1202,7 @@
         });
         this.itemsAdded.notify(addedNodes);
         that._checkItemsHelp(resultSet, batchSize);
-    }
+    };
     
     /**
     * Get data for the model by querying the local store
@@ -1231,11 +1232,7 @@
                 }
             });
         }
-    }
-    
-    Plugin.Layer.Model.prototype.setSelected = function(id) {
-
-    }
+    };
     
     Plugin.Layer.Model.prototype.clearModel = function() {
         this.nodes = {
@@ -1249,9 +1246,9 @@
                 length : 0
             },
             length : 0
-        }
+        };
         this.modelCleared.notify();
-    }
+    };
     
     Plugin.Layer.View = function(model, $container, viewOptions) {
         
@@ -1282,12 +1279,12 @@
                     that.browseableNodeClicked.notify($tile);
                 });
             });
-        }
+        };
         
         this._getCorrespondingTile = function(node) {
             var $tile = this.$viewContainer.find("." + node.index);
             return $tile;
-        }
+        };
         
         this._addPredURIShow = function($item) {
             var $predicate = $item.find("> .predicate");
@@ -1306,8 +1303,8 @@
                 $predicate.css("display", "none");
                 $typeImage.css("display", "inline-block");
                 $predicateLabel.css("display", "inline-block");
-            })
-        }
+            });
+        };
         
         this._addToAnchor = function($element, anchor, step, callback) {
             $element.height(step);
@@ -1316,7 +1313,7 @@
             if(callback) {
                 callback(anchor);
             }
-        }
+        };
         
         this._setLiteralScale = function($tile, callback) {
             var that = this;
@@ -1331,7 +1328,7 @@
                         }
                 });
             });
-        }
+        };
         
         this._setResNodeScale = function($tile, callback) {
             var that = this;
@@ -1348,13 +1345,13 @@
                     });
                 });
             });
-        }
+        };
         
         this._setLabelScale = function($tile, anchor, height, width, callback) {
             var $labelEn = $tile.find("> .labelEn");
             $labelEn.width(width*0.9);
             this._addToAnchor($labelEn, anchor, height, callback);
-        }
+        };
         
         this._setPredicateScale = function($tile, anchor, height, width, callback) {
             var that = this;
@@ -1380,7 +1377,7 @@
             if (callback) {
                 callback(anchor);
             }
-        }
+        };
         
         this._setDescriptionScale = function($tile, anchor, height, width, callback) {
             var node = $tile.data("node");
@@ -1391,7 +1388,7 @@
             } else if (callback) {
                 callback(anchor);
             }
-        }
+        };
         
         this._setImgBackground = function($tile) {
             var node = $tile.data("node"), image_url = "";
@@ -1415,7 +1412,7 @@
                     
                     var image;
                     if (image_url) {
-                        var $img = $('<img src="'+image_url+'">')
+                        var $img = $('<img src="'+image_url+'">');
                         $img.load(function () {
                             var width = $img.width();
                             var height = $img.height();
@@ -1441,12 +1438,12 @@
                     }
                     break;
             }
-        }
+        };
         
         this._scaleText = function($tile) {
             $tile.children().quickfit({min : 10});
             $tile.css({"line-height" : 1});  
-        }
+        };
 
         this._generateTile = function(node, $resTiles, $literalTiles, $blankNodeTiles) {
             var $tile = $(templates.isotopeItem(node)), color;
@@ -1488,7 +1485,7 @@
                     $blankNodeTiles.append($tile);
                     break;
             }
-        }
+        };
         
         // attach model listeners
         // on items added
@@ -1502,7 +1499,7 @@
 
                 $.each(nodes, function(i, node) {
                     that._generateTile(node, $resTiles, $literalTiles, $blankNodeTiles);
-                })
+                });
                 
                 $literalTiles = $literalTiles.children();
                 $resTiles = $resTiles.children();
@@ -1530,16 +1527,16 @@
                     console.log("view cleared");
                 });
             });
-    }
+    };
     
     Plugin.Layer.View.prototype.addOptionsBox = function() {
-        this.$optionsContainer = $('<section class="' + cons.CSS_CLASSES.options + '" class="' + cons.CSS_CLASSES.clearfix + '"></section>')
+        this.$optionsContainer = $('<section class="' + cons.CSS_CLASSES.options + '" class="' + cons.CSS_CLASSES.clearfix + '"></section>');
         this.$container.prepend(this.$optionsContainer);
-    }
+    };
     
     Plugin.Layer.View.prototype.addTimelineButton = function() {
         
-    }
+    };
     
     Plugin.Layer.View.prototype.addSorter = function() {
         // Add sortoptions
@@ -1612,7 +1609,7 @@
             });
             return false;
         });
-    }
+    };
     
     Plugin.Layer.View.prototype.addFilter = function() {
         // Add options
@@ -1668,7 +1665,7 @@
             });
             return false;
         });
-    }
+    };
 
     // ========================= VisaRDF: InitLayer Class ==============================
     /**
@@ -1691,7 +1688,7 @@
     }
         
         Plugin.Layer.call(this, $container, options, plugin, plugin.options.initQueries);
-    }
+    };
         
     //pseudo class inheritance
     Plugin.InitLayer.prototype =  Object.create(Plugin.Layer.prototype);
@@ -1774,7 +1771,7 @@
             $overlayContent.find('.innerScroll').css("height", $window.height() * 0.95 + "px");
 
             callback();
-        }
+        };
 
         // Fill overlay with content
         that._initOverlayContent($container, function() {
@@ -1807,7 +1804,7 @@
             }
         // <!--- overlay show function ---->
         });
-    }
+    };
     
     //pseudo class inheritance of Preview
     //pseudo class inheritance of Preview
@@ -1835,7 +1832,7 @@
         //remote needed?
         that.remoteDataLoader.insertByQuery(remoteSubjectOf + " LIMIT " + that.options.remoteOptions.remoteLimit);
         that.remoteDataLoader.insertByQuery(remoteObjectOf + " LIMIT " + that.options.remoteOptions.remoteLimit);
-    }
+    };
 
     /**
     * Closes the view
@@ -1881,7 +1878,7 @@
             });
         }
     // <!--- overlay hide ---->
-    }
+    };
 
     // ========================= VisaRDF: Preview Class ==============================
 
@@ -1900,8 +1897,8 @@
 
         this._methodIsLoaded = function(/* array of templatenames which must be loaded */) {
             var i = 0, methodName;
-            while ((methodName = arguments[0[i++]])) {
-                if (typeof templates[methodName] != 'function') {
+            while ((methodName === arguments[0[i++]])) {
+                if (typeof templates[methodName] !== 'function') {
                     return false;
                 }
             }
@@ -2015,8 +2012,8 @@
                     }
                 }
             });
-        }
-    }
+        };
+    };
     
     // Inserts Data by querying all services
     Plugin.RemoteDataLoader.prototype.insertByQuery = function(query) {
@@ -2714,7 +2711,7 @@
             for (var i =0; i < this._views.length; i++)
                 if (this._views[i] === view) {
                     this._views.splice(i,1);
-                    if(this._views.length == 1) {
+                    if(this._views.length === 1) {
                         this.$body.removeClass('noscroll');
                     }
                     break;

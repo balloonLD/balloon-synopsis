@@ -17,7 +17,7 @@ You will need to install following Grunt plugins:
 
  * [jQuery](http://jquery.com/) 1.8.3
  * [jQuery.isotope](http://isotope.metafizzy.co/)
- * [jQuery.quickFit]
+ * [jQuery.quickFit](https://github.com/chunksnbits/jquery-quickfit)
  * [handlebars](http://handlebarsjs.com/)
  * [modernizr](http://modernizr.com/)
  * [rdfstore-js](https://github.com/antoniogarrote/rdfstore-js)
