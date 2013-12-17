@@ -52,7 +52,22 @@
 	<script type="text/javascript">
 
 		$(function() {
-			$('.visaRDF').visaRDF();
+			$('.visaRDF').visaRDF({
+                            nodeFilters : {
+                                actor: {
+                 fn: function(plugin, nodes, config) {
+                      $.each(nodes, function(i, node) {
+                          if(node.id === "http://www.w3.org/TR/test"){
+                              //TODO real actor
+                              node.useTemplateIdentifier = "actor";
+                          }
+                      });
+                      return nodes;
+                 },
+                 template:"<div class='item {{#each filterables}}{{.}} {{/each}}{{#if token}}{{token}}{{/if}} {{index}}'>{{#if subject}}<h2 class='showUri' style='display:none'>{{subject.value}}</h2>{{/if}}<p class='number' style='display:none'>{{index}}</p><div>I'm an actor!</div></div>"
+            }
+                            }
+                        });
 		});
 	</script>
 </body>

@@ -141,13 +141,13 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = "", stack1, stack2;
-  buffer += "\r\n		<h2>"
+  buffer += "\r\n                                        <div class=\"innerNoScroll\">\r\n		<h2>"
     + escapeExpression(((stack1 = ((stack1 = depth0.label),stack1 == null || stack1 === false ? stack1 : stack1.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + " </h2>";
   if (stack2 = helpers.uri) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
   else { stack2 = depth0.uri; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
   buffer += escapeExpression(stack2)
-    + "\r\n		<div class=\"innerScroll\">\r\n			<div></div>\r\n		</div>\r\n	";
+    + "\r\n                                        </div>\r\n		<div class=\"innerScroll\">\r\n			<div></div>\r\n		</div>\r\n	";
   return buffer;
   }
 

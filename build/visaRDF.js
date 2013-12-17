@@ -141,13 +141,13 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = "", stack1, stack2;
-  buffer += "\r\n		<h2>"
+  buffer += "\r\n                                        <div class=\"innerNoScroll\">\r\n		<h2>"
     + escapeExpression(((stack1 = ((stack1 = depth0.label),stack1 == null || stack1 === false ? stack1 : stack1.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + " </h2>";
   if (stack2 = helpers.uri) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
   else { stack2 = depth0.uri; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
   buffer += escapeExpression(stack2)
-    + "\r\n		<div class=\"innerScroll\">\r\n			<div></div>\r\n		</div>\r\n	";
+    + "\r\n                                        </div>\r\n		<div class=\"innerScroll\">\r\n			<div></div>\r\n		</div>\r\n	";
   return buffer;
   }
 
@@ -1159,55 +1159,6 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         this.model.update();
     };
 
-    Plugin.Layer.prototype.addNewLayer = function($item) {
-
-        var $overlay = this.view.$container.find(cons.CSS_CLASSES.toSelector("overlay") + '_' + $item.index());
-        if ($overlay.length < 1) {
-            var overlay = templates.overlayItem({
-                "index": $item.index(),
-                "cssClass": {
-                    "overlay": cons.CSS_CLASSES.overlay,
-                    "overlayContent": cons.CSS_CLASSES.overlayContent
-                }
-            });
-            this.view.$container.append(overlay);
-            $overlay = this.view.$container.find('> ' + cons.CSS_CLASSES.toSelector("overlay") + '_' + $item.index());
-        }
-
-        var newLayerOptions = $.extend(true, {}, this.options, {
-            layoutEngine: {
-                itemSelector: '.item',
-                getSortData: {
-                    type: function($elem) {
-                        var classes = $elem.attr("class");
-                        return classes;
-                    },
-                    group: function($elem) {
-                        var classes = $elem.attr("class");
-                        var pattern = new RegExp("(\s)*[a-zA-Z0-9]*" + cons.TOKEN_TAG + "[a-zA-Z0-9]*(\s)*", 'g');
-                        var groups = classes.match(pattern), group = "";
-                        for (var i = 0; i < groups.length; i++) {
-                            group += groups[i] + " ";
-                        }
-                        return group;
-                    }
-                }
-            },
-            filterBy: [{
-                    value: "*",
-                    label: "showAll"
-                }, {
-                    value: cons.CSS_CLASSES.typeClasses.incoming,
-                    label: "in"
-                }, {
-                    value: cons.CSS_CLASSES.typeClasses.outgoing,
-                    label: "out"
-                }]
-        });
-
-        this.plugin.addLayer(new Plugin.DetailLayer($overlay, newLayerOptions, this.plugin, $item));
-    };
-
     /**
      * Clear the view
      *
@@ -1885,7 +1836,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             // Set contet color
             var color = new RGBColor(that.$item.css("background-color"));
             $container.css("background-color", color.toRGB());
-            $.each($overlayContent.children('div'), function(i, val) {
+            $.each($overlayContent.children('div.innerScroll'), function(i, val) {
                 color.r -= 10;
                 color.b -= 10;
                 color.g -= 10;
@@ -1898,7 +1849,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             // Set innerScrollBox width and height
             $overlayContent.find('.innerScroll').css("width",
                     ($window.width() - parseInt($container.css("padding-left")) - parseInt($container.css("padding-right"))) + "px");
-            $overlayContent.find('.innerScroll').css("height", $window.height() * 0.95 + "px");
+            $overlayContent.find('.innerScroll').css("height", $window.height()-$overlayContent.find('.innerNoScroll').height() + "px");
 
             callback();
         };
@@ -2216,26 +2167,6 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             },
             
             /**
-             * Actor Demo to show of template insertion
-             *
-             * @property defaults.nodeFilters.actor
-             * @type Object
-             */
-            actor: {
-                 fn: function(plugin, nodes, config) {
-                      $.each(nodes, function(i, node) {
-                          if(node.id === "http://www.w3.org/TR/test"){
-                              //TODO real actor
-                              //TODO nodeType etc easier
-                              node.useTemplateIdentifier = "actor";
-                          }
-                      });
-                      return nodes;
-                 },
-                 template:"<div class='item {{#each filterables}}{{.}} {{/each}}{{#if token}}{{token}}{{/if}} {{index}}'>{{#if subject}}<h2 class='showUri' style='display:none'>{{subject.value}}</h2>{{/if}}<p class='number' style='display:none'>{{index}}</p><div>I'm an actor!</div></div>"
-            },
-            
-            /**
              * Merges nodes representing the same resource over a diffrent predicate
              *
              * @property defaults.nodeFilters.predicateConcat
@@ -2356,7 +2287,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                         var node = $tile.data("node");
                        switch (node.getType()) {
                             case cons.NODE_TYPES.resNode:
-                                that._setResNodeScale($tile);
+                                that._setResNodeScale($tile                                                                                                                                                                                                                                                                                                                                                             );
                                 break;
                             case cons.NODE_TYPES.literal:
                                 that._setLiteralScale($tile);
@@ -2609,7 +2540,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                         $predicate.on("mouseleave", function() {
                             $predicateLabel.stop(true, true);
                         });
-                        
+                       
                         $predicateLabel.on("mouseleave", function() {
                             $predicateLabel.stop(true, true);
                             
@@ -3160,7 +3091,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                 $overlays.css('clip', getClip(cons.CSS_CLASSES.overlay));
                 var innerScrolls = $overlays.find('.innerScroll');
                 innerScrolls.css("width", ($window.width() - parseInt($overlays.css("padding-left")) - parseInt($overlays.css("padding-right"))) + "px");
-                innerScrolls.css("height", $window.height() * 0.95 + "px");
+                innerScrolls.css("height", $window.height()-$overlays.find('.innerNoScroll').height() + "px");
                 // <!--- overlay modification ---->
 
                 // <---- preview modification ---->
