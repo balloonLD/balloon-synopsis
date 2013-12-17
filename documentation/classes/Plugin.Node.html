@@ -120,7 +120,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/js_plugin_visaRDF.js.html#l918"><code>js&#x2F;plugin&#x2F;visaRDF.js:918</code></a>
+            Defined in: <a href="../files/js_plugin_visaRDF.js.html#l916"><code>js&#x2F;plugin&#x2F;visaRDF.js:916</code></a>
         </div>
     
 
@@ -185,7 +185,7 @@
             
         
         
-        <a href="../files/js_plugin_visaRDF.js.html#l918"><code>js&#x2F;plugin&#x2F;visaRDF.js:918</code></a>
+        <a href="../files/js_plugin_visaRDF.js.html#l916"><code>js&#x2F;plugin&#x2F;visaRDF.js:916</code></a>
         
         </p>
 
@@ -262,13 +262,6 @@
                                 
                             </li>
                         
-                            <li class="index-item method private">
-                                <a href="#method__initBrowsability">_initBrowsability</a>
-
-                                
-                                
-                            </li>
-                        
                             <li class="index-item method">
                                 <a href="#method_checkItems">checkItems</a>
 
@@ -277,7 +270,7 @@
                             </li>
                         
                             <li class="index-item method">
-                                <a href="#method_hasType">hasType</a>
+                                <a href="#method_getType">getType</a>
 
                                 
                                 
@@ -364,7 +357,7 @@
             
         
         
-        <a href="../files/js_plugin_visaRDF.js.html#l1106"><code>js&#x2F;plugin&#x2F;visaRDF.js:1106</code></a>
+        <a href="../files/js_plugin_visaRDF.js.html#l1136"><code>js&#x2F;plugin&#x2F;visaRDF.js:1136</code></a>
         
         </p>
 
@@ -395,97 +388,6 @@
 
                     <div class="param-description">
                         <p>Node to fetch the predicate labels for</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="method__initBrowsability" class="method item private">
-    <h3 class="name"><code>_initBrowsability</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>$tiles</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-
-    
-
-    
-        <span class="flag private">private</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_plugin_visaRDF.js.html#l1272"><code>js&#x2F;plugin&#x2F;visaRDF.js:1272</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Initializes the browsability of the given items</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">$tiles</code>
-                        <span class="type">JQuery</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>Tiles which should be browsable</p>
 
                     </div>
 
@@ -544,7 +446,7 @@
             
         
         
-        <a href="../files/js_plugin_visaRDF.js.html#l1138"><code>js&#x2F;plugin&#x2F;visaRDF.js:1138</code></a>
+        <a href="../files/js_plugin_visaRDF.js.html#l1168"><code>js&#x2F;plugin&#x2F;visaRDF.js:1168</code></a>
         
         </p>
 
@@ -591,8 +493,8 @@
 </div>
 
                 
-                    <div id="method_hasType" class="method item">
-    <h3 class="name"><code>hasType</code></h3>
+                    <div id="method_getType" class="method item">
+    <h3 class="name"><code>getType</code></h3>
 
     
         <span class="paren">()</span>
@@ -650,7 +552,23 @@
     <h3 class="name"><code>setPredicateLabel</code></h3>
 
     
-        <span class="paren">()</span>
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>ind</code>
+                    
+                </li>
+            
+                <li class="arg">
+                    
+                        <code>label</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
     
 
     
@@ -678,7 +596,7 @@
             
         
         
-        <a href="../files/js_plugin_visaRDF.js.html#l947"><code>js&#x2F;plugin&#x2F;visaRDF.js:947</code></a>
+        <a href="../files/js_plugin_visaRDF.js.html#l951"><code>js&#x2F;plugin&#x2F;visaRDF.js:951</code></a>
         
         </p>
 
@@ -694,6 +612,44 @@
     </div>
 
     
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">ind</code>
+                        <span class="type">Integer</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+                <li class="param">
+                    
+                        <code class="param-name">label</code>
+                        <span class="type">String</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
 
     
 
@@ -705,7 +661,17 @@
     <h3 class="name"><code>setPredicateLabel</code></h3>
 
     
-        <span class="paren">()</span>
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>otherNode</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
     
 
     
@@ -737,7 +703,7 @@
             
         
         
-        <a href="../files/js_plugin_visaRDF.js.html#l956"><code>js&#x2F;plugin&#x2F;visaRDF.js:956</code></a>
+        <a href="../files/js_plugin_visaRDF.js.html#l962"><code>js&#x2F;plugin&#x2F;visaRDF.js:962</code></a>
         
         </p>
 
@@ -752,6 +718,29 @@
 
     </div>
 
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">otherNode</code>
+                        <span class="type">Node</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                         
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
     
 
     
@@ -802,7 +791,7 @@
             
         
         
-        <a href="../files/js_plugin_visaRDF.js.html#l1206"><code>js&#x2F;plugin&#x2F;visaRDF.js:1206</code></a>
+        <a href="../files/js_plugin_visaRDF.js.html#l1236"><code>js&#x2F;plugin&#x2F;visaRDF.js:1236</code></a>
         
         </p>
 

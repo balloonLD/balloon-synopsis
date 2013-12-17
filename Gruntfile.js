@@ -65,6 +65,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 
 	// Default task(s).
-	grunt.registerTask('default', [ 'handlebars', 'yuidoc', 'concat','uglify']);
+	grunt.registerTask('default', [ 'handlebars', 'yuidoc', 'concat'/*,'uglify'*/]);
 
 };
