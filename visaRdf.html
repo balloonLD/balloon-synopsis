@@ -1,74 +1,74 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>visaRDF</title>
-<!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-<script type="text/javascript" src="js/libs/jquery-1.8.3.js"></script>
-<script type="text/javascript" src="js/libs/handlebars-v1.1.2.js"></script>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+        <title>visaRDF</title>
+        <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+        <script type="text/javascript" src="js/libs/jquery-1.8.3.js"></script>
+        <script type="text/javascript" src="js/libs/handlebars-v1.1.2.js"></script>
 
-<script type="text/javascript" src="js/libs/jquery.quickfit.js"></script>
-<script type="text/javascript" src="js/libs/jquery.isotope.js"></script>
+        <script type="text/javascript" src="js/libs/jquery.quickfit.js"></script>
+        <script type="text/javascript" src="js/libs/jquery.isotope.js"></script>
 
-<script type="text/javascript" src="js/libs/modernizr.js"></script>
-<script type="text/javascript" src="js/libs/rdf_store.js"></script>
-<script type="text/javascript" src="js/libs/rgbcolor.js"></script>
-<script type="text/javascript" src="build/visaRDF.js"></script>
-<link rel="stylesheet" href="css/visaRdf.css" type="text/css" />
+        <script type="text/javascript" src="js/libs/modernizr.js"></script>
+        <script type="text/javascript" src="js/libs/rdf_store.js"></script>
+        <script type="text/javascript" src="js/libs/rgbcolor.js"></script>
+        <script type="text/javascript" src="build/visaRDF.js"></script>
+        <link rel="stylesheet" href="css/visaRdf.css" type="text/css" />
 
-</head>
-<body>
-	<div class="visaRDF"></div>
-	<form>
-		<label for="inputbox">DataURL:</label> <input type="text"
-			name="inputbox" value="data/turtle.ttl">
-		<p>
-			<input type="button" name="insert" value="Insert data"
-				onclick="$('.visaRDF').data('plugin_visaRDF').insertDataPath(this.form.inputbox.value, 'text/turtle');">
-	</form>
-	<form>
-			<label for="inputFile">Local turtle file:</label>
-		<input type="file" id="inputFile"  onchange="$('.visaRDF').data('plugin_visaRDF').insertDataFile(this.files[0], 'text/turtle');">
-	</form>
-	<form>
-		<label for="serviceinputbox">Remote data service:</label> <input
-			type="text" name="serviceinputbox"
-			value="http://zaire.dimis.fim.uni-passau.de:8080/bigdata/sparql">
-			<p>
-			<label for="queryinputbox">Remote data query:</label>
-			<textarea type="text" name="queryinputbox">SELECT ?subject ?predicate ?object { BIND( rdfs:label as ?predicate) ?subject ?predicate ?object. ?subject a <http://dbpedia.org/ontology/Place> . ?subject <http://dbpedia.org/property/rulingParty> ?x } LIMIT 500
-			</textarea>
-			<p>
-			<input type="button" name="insertRemote" value="Insert remote data"
-				onclick="$('.visaRDF').data('plugin_visaRDF').insertRemoteDataQuery(this.form.serviceinputbox.value, this.form.queryinputbox.value);">
-	</form>
-	<form>
-			<input type="button" name="clearStore" value="clearStore"
-			onclick="$('.visaRDF').data('plugin_visaRDF').clearStore();">
-	</form>
+    </head>
+    <body>
+        <div class="visaRDF"></div>
+        <form>
+            <label for="inputbox">DataURL:</label> <input type="text"
+                                                          name="inputbox" value="data/turtle.ttl">
+            <p>
+                <input type="button" name="insert" value="Insert data"
+                       onclick="$('.visaRDF').data('plugin_visaRDF').insertDataPath(this.form.inputbox.value, 'text/turtle');">
+        </form>
+        <form>
+            <label for="inputFile">Local turtle file:</label>
+            <input type="file" id="inputFile"  onchange="$('.visaRDF').data('plugin_visaRDF').insertDataFile(this.files[0], 'text/turtle');">
+        </form>
+        <form>
+            <label for="serviceinputbox">Remote data service:</label> <input
+                type="text" name="serviceinputbox"
+                value="http://zaire.dimis.fim.uni-passau.de:8080/bigdata/sparql">
+            <p>
+                <label for="queryinputbox">Remote data query:</label>
+                <textarea type="text" name="queryinputbox">SELECT ?subject ?predicate ?object { BIND( rdfs:label as ?predicate) ?subject ?predicate ?object. ?subject a <http://dbpedia.org/ontology/Place> . ?subject <http://dbpedia.org/property/rulingParty> ?x } LIMIT 500
+                            </textarea>
+                            <p>
+                                <input type="button" name="insertRemote" value="Insert remote data"
+                                       onclick="$('.visaRDF').data('plugin_visaRDF').insertRemoteDataQuery(this.form.serviceinputbox.value, this.form.queryinputbox.value);">
+                                </form>
+                            <form>
+                                <input type="button" name="clearStore" value="clearStore"
+                                       onclick="$('.visaRDF').data('plugin_visaRDF').clearStore();">
+                            </form>
 
 
 
-	<script type="text/javascript">
+                            <script type="text/javascript">
 
-		$(function() {
-			$('.visaRDF').visaRDF({
-                            nodeFilters : {
-                                actor: {
-                 fn: function(plugin, nodes, config) {
-                      $.each(nodes, function(i, node) {
-                          if(node.id === "http://www.w3.org/TR/test"){
-                              //TODO real actor
-                              node.useTemplateIdentifier = "actor";
-                          }
-                      });
-                      return nodes;
-                 },
-                 template:"<div class='item {{#each filterables}}{{.}} {{/each}}{{#if token}}{{token}}{{/if}} {{index}}'>{{#if subject}}<h2 class='showUri' style='display:none'>{{subject.value}}</h2>{{/if}}<p class='number' style='display:none'>{{index}}</p><div>I'm an actor!</div></div>"
-            }
-                            }
-                        });
-		});
-	</script>
-</body>
-</html>
+                                $(function() {
+                                    $('.visaRDF').visaRDF({
+                                        nodeFilters: {
+                                            actor: {
+                                                fn: function(plugin, nodes, config) {
+                                                    $.each(nodes, function(i, node) {
+                                                        if (node.id === "http://www.w3.org/TR/test") {
+                                                            //TODO real actor
+                                                            node.useTemplateIdentifier = "actor";
+                                                        }
+                                                    });
+                                                    return nodes;
+                                                },
+                                                template: "<div>I'm an actor!</div>"
+                                            }
+                                        }
+                                    });
+                                });
+                            </script>
+                            </body>
+                            </html>

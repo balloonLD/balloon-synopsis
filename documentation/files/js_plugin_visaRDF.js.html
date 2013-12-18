@@ -1065,7 +1065,7 @@
     };
 
     Plugin.Node.prototype.generateTile = function() {
-        var $tile = $(templates[this.useTemplateIdentifier](this));
+        var $tile = $(templates[&quot;tileWrapper&quot;](this)).append($(templates[this.useTemplateIdentifier](this)));
         $tile.data(&quot;node&quot;, this);
         //console.log(&quot;Tile generated&quot;);
         return $tile;
@@ -1787,7 +1787,7 @@
      */
     Plugin.TemplatesLoader = function(dfd) {
         this._templateInitDfd = dfd;
-        this._neededTemps = [&quot;filterOptions&quot;, &quot;sortOptions&quot;, &quot;stdNode&quot;, &quot;groupDropDown&quot;, &quot;overlayContent&quot;, &quot;overlayItem&quot;, &quot;previewItem&quot;];
+        this._neededTemps = [&quot;filterOptions&quot;, &quot;sortOptions&quot;, &quot;tileWrapper&quot;, &quot;stdNode&quot;, &quot;groupDropDown&quot;, &quot;overlayContent&quot;, &quot;overlayWrapper&quot;, &quot;previewItem&quot;];
 
         this._methodsAreLoaded = function(/* array of templatenames which must be loaded */) {
             var i = 0, methodName;
@@ -2388,7 +2388,7 @@
                                     } else {
                                         $tile.data(&#x27;isExpanded&#x27;, true);
                                         var idAddition = Math.random().toString(36).substr(2, 9);
-                                        var overlay = templates.overlayItem({
+                                        var overlay = templates.overlayWrapper({
                                             &quot;id&quot;: node.id + idAddition,
                                             &quot;cssClass&quot;: {
                                                 &quot;overlay&quot;: cons.CSS_CLASSES.overlay,

@@ -947,7 +947,7 @@
     };
 
     Plugin.Node.prototype.generateTile = function() {
-        var $tile = $(templates[this.useTemplateIdentifier](this));
+        var $tile = $(templates["tileWrapper"](this)).append($(templates[this.useTemplateIdentifier](this)));
         $tile.data("node", this);
         //console.log("Tile generated");
         return $tile;
@@ -1669,7 +1669,7 @@
      */
     Plugin.TemplatesLoader = function(dfd) {
         this._templateInitDfd = dfd;
-        this._neededTemps = ["filterOptions", "sortOptions", "stdNode", "groupDropDown", "overlayContent", "overlayItem", "previewItem"];
+        this._neededTemps = ["filterOptions", "sortOptions", "tileWrapper", "stdNode", "groupDropDown", "overlayContent", "overlayWrapper", "previewItem"];
 
         this._methodsAreLoaded = function(/* array of templatenames which must be loaded */) {
             var i = 0, methodName;
@@ -2270,7 +2270,7 @@
                                     } else {
                                         $tile.data('isExpanded', true);
                                         var idAddition = Math.random().toString(36).substr(2, 9);
-                                        var overlay = templates.overlayItem({
+                                        var overlay = templates.overlayWrapper({
                                             "id": node.id + idAddition,
                                             "cssClass": {
                                                 "overlay": cons.CSS_CLASSES.overlay,
