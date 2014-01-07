@@ -1938,7 +1938,30 @@
          **/
         nodeFilters: {
             /**
-             * Filters blacklisted resources defined by URIs in config options
+             * Filters blacklisted resources defined by predicate URIs in config options. RegEx allowed.
+             *
+             * @property defaults.nodeFilters.blacklistPredURI
+             * @type Object
+             */
+            blacklistPredURI: {
+                fn: function(plugin, nodes, config) {
+                    $.each(nodes, function(i, node) {
+                        if (node.predicates) {
+                        $.each(config, function(j, exp) {
+                            var regExp = new RegExp(exp);
+                            var res = regExp.exec(node.predicates[0].value);
+                            if (res !== null) {
+                                delete nodes[i];
+                            }
+                        });
+                    }
+                    });
+                    return nodes;
+                },
+                config: new Array(".*homepage2.*", "somethingelse")
+            },
+            /**
+             * Filters blacklisted resources defined by URIs in config options. RegEx allowed.
              *
              * @property defaults.nodeFilters.blacklistURI
              * @type Object
@@ -1946,11 +1969,13 @@
             blacklistURI: {
                 fn: function(plugin, nodes, config) {
                     $.each(nodes, function(i, node) {
-                        //TODO predicatefiltering
-                        if (node.uri && config.indexOf(node.uri) > -1) {
-                            delete nodes[i];
-                            console.log("blacklisted node deleted");
-                        }
+                        $.each(config, function(j, exp) {
+                            var regExp = new RegExp(exp);
+                            var res = regExp.exec(node.uri);
+                            if (res !== null) {
+                                delete nodes[i];
+                            }
+                        });
                     });
                     return nodes;
                 },
