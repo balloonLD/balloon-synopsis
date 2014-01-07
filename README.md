@@ -17,6 +17,8 @@ You will need to install following Grunt plugins:
 
  * [jQuery](http://jquery.com/) 1.8.3
  * [jQuery.isotope](http://isotope.metafizzy.co/)
+ * [deepCopy](http://oranlooney.com/deep-copy-javascript/)
+ * [jQuery.multiSelect](http://www.erichynds.com/blog/jquery-ui-multiselect-widget)
  * [jQuery.quickFit](https://github.com/chunksnbits/jquery-quickfit)
  * [handlebars](http://handlebarsjs.com/)
  * [modernizr](http://modernizr.com/)
