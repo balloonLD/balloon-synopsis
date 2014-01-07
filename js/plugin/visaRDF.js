@@ -87,6 +87,9 @@
             }
         },
         "MESSAGES": {
+            out: {
+                selectAllFilters: "Select All"
+            },
             error: {
                 ajax: "Error on loading data.",
                 remote: "Error on loading remote data.",
@@ -94,7 +97,8 @@
                 tokenType: "Unkown token type of item."
             },
             warn: {
-                filterInput: "Filterinput is empty"
+                filterInput: "Filterinput is empty",
+                filterName: "Filtername duplicate found"
             }
         }
     };
@@ -796,35 +800,26 @@
 
         this.plugin = plugin;
         this.options = options;
+        
+        // Use this node filters
+        this.filterNames = [];
+        $.each(plugin.options.nodeFilters, function(i, filter){
+            that.filterNames.push(i);
+        });
+        $.each(plugin.options.tileFilters, function(i, filter){
+            if(that.filterNames[i]) {
+                console.log(cons.MESSAGES.warn.filterName);
+            } else {
+                that.filterNames.push(i);
+            }
+        });
 
         this.model = new Plugin.Layer.Model(queries, options.modelOptions, plugin._queries.label);
         this.view = new Plugin.Layer.View(this.model, $container, options.viewOptions);
 
-        this.model.itemsAdded.attach(
-                function(sender, nodes) {
-
-                    //Run nodeFilters on nodes
-                    $.each(that.plugin.nodeFilters, function(i, filter) {
-                        if (!$.isEmptyObject(nodes)) {
-                            nodes = filter.fn(that.plugin, nodes, filter.config);
-                        } else {
-                            console.log(cons.MESSAGES.warn.filterInput);
-                        }
-                    });
-
-                    //Generate all tiles
-                    var $tiles = $("<div>");
-                    $.each(nodes, function(i, node) {
-                        $tiles.append($(node.generateTile()));
-                    });
-
-                    //Run tileFilters on tiles
-                    $tiles = $tiles.children();
-                    $.each(that.plugin.tileFilters, function(i, filter) {
-                        $tiles = filter.fn(that.plugin, $tiles, filter.config);
-                    });
-                    that.view.addTiles($tiles);
-                });
+        this.model.itemsAdded.attach(function(sender, args) { 
+            that.view.paint(args.addedNodes, that.plugin);
+        });
 
         if (options.generateSortOptions || options.generateFilterOptions || plugin.options.generateTimeline) {
             this.view.addOptionsBox();
@@ -851,6 +846,48 @@
 
     Plugin.Layer.prototype.update = function() {
         this.model.update();
+    };
+    
+    Plugin.Layer.prototype.switchFilterState = function(filterName) {
+        var that = this;
+
+        if (filterName === "on") {
+            that.filterNames = [];
+            $.each(that.plugin.options.nodeFilters, function(i, filter) {
+                that.filterNames.push(i);
+            });
+            $.each(that.plugin.options.tileFilters, function(i, filter) {
+                if (that.filterNames[i]) {
+                    console.log(cons.MESSAGES.warn.filterName);
+                } else {
+                    that.filterNames.push(i);
+                }
+            });
+        } else {
+
+        if (this.filterNames.indexOf(filterName) !== -1) {
+            this.filterNames.splice(this.filterNames.indexOf(filterName), 1);
+        } else {
+            this.filterNames.push(filterName);
+        }
+        }
+
+        var nodeFilters = {};
+        var tileFilters = {};
+        $.each(this.filterNames, function(i, val) {
+            if (that.plugin.options.nodeFilters[val]) {
+                nodeFilters[val] = that.plugin.options.nodeFilters[val];
+            }
+            if (that.plugin.options.tileFilters[val]) {
+                tileFilters[val] = that.plugin.options.tileFilters[val];
+            }
+        });
+
+        console.log(nodeFilters);
+        console.log(tileFilters);
+        this.view.clearView(function() {
+            that.view.paint(that.model.getNodes(), that.plugin, nodeFilters, tileFilters);
+        });
     };
 
     /**
@@ -884,6 +921,7 @@
             this.filterables.push(cons.toFilterable(data.predicate.type));
             this.predicates.push(data.predicate);
         }
+        console.log(this);
     };
 
     /**
@@ -919,6 +957,52 @@
      */
     Plugin.Node.prototype.merge = function(otherNode) {
         var that = this, update = false;
+        //TODO
+        return update;
+    };
+
+    Plugin.Node.prototype.generateTile = function() {
+        var $tile = $(templates["tileWrapper"](this)).append($(templates[this.useTemplateIdentifier](this)));
+        $tile.data("node", this);
+        //console.log("Tile generated");
+        return $tile;
+    };
+
+    Plugin.ResNode = function(data, itemStyle) {
+        Plugin.Node.call(this, data);
+        this.itemStyle = itemStyle;
+        this.type = cons.NODE_TYPES.resNode;
+        this.uri = data.subject.value;
+        if (isUndefinedOrNull(this.label)) {
+            this.label = {
+                value: this.uri
+            };
+        } else {
+            this.label.value = unescape(this.label.value);
+        }
+
+        this._generateID = function() {
+            var id = this.uri;
+            if (this.predicates) {
+                id += this.predicates[0].value;
+            }
+            return id;
+        };
+        this.id = this._generateID();
+    };
+
+    Plugin.ResNode.prototype = Object.create(Plugin.Node.prototype);
+    Plugin.ResNode.prototype.constructor = Plugin.ResNode;
+
+    /**
+     * Merges data of given node with own data.
+     *
+     * @method setPredicateLabel
+     * @param {Node} otherNode 
+     * @returns {}
+     */
+    Plugin.ResNode.prototype.merge = function(otherNode) {
+        var that = this, update = false;
         $.each(otherNode, function(prop, propVal) {
             switch (prop) {
                 case "label" :
@@ -945,34 +1029,6 @@
         });
         return update;
     };
-
-    Plugin.Node.prototype.generateTile = function() {
-        var $tile = $(templates["tileWrapper"](this)).append($(templates[this.useTemplateIdentifier](this)));
-        $tile.data("node", this);
-        //console.log("Tile generated");
-        return $tile;
-    },
-            Plugin.ResNode = function(data, itemStyle) {
-                Plugin.Node.call(this, data);
-                this.itemStyle = itemStyle;
-                this.type = cons.NODE_TYPES.resNode;
-                this.uri = data.subject.value;
-                if (isUndefinedOrNull(this.label)) {
-                    this.label = {
-                        value: this.uri
-                    };
-                } else {
-                    this.label.value = unescape(this.label.value);
-                }
-
-                this._generateID = function() {
-                    return this.uri;
-                };
-                this.id = this._generateID();
-            };
-
-    Plugin.ResNode.prototype = Object.create(Plugin.Node.prototype);
-    Plugin.ResNode.prototype.constructor = Plugin.ResNode;
 
     Plugin.ResNode.prototype.generateTile = function() {
         var $tile = Plugin.Node.prototype.generateTile.call(this);
@@ -1026,7 +1082,7 @@
         var $tile = Plugin.Node.prototype.generateTile.call(this);
         //console.log("BlankNode Tile generated");
         return $tile;
-    }
+    };
 
     Plugin.NodeFactory = {
         makeNode: function(data, options) {
@@ -1059,18 +1115,9 @@
         this.options = options;
 
         // List of added items.
-        this.nodes = {
-            resNodes: {
-                length: 0
-            },
-            blankNodes: {
-                length: 0
-            },
-            literalNodes: {
-                length: 0
-            },
-            length: 0
+        this._nodes = {
         };
+        this.nodesLength = 0;
 
         this.itemsAdded = new Plugin.Event(this);
         this.modelCleared = new Plugin.Event(this);
@@ -1115,6 +1162,15 @@
         };
 
     };
+    
+     /**
+     * Give back a copy of in model stored nodes
+     *
+     * @return {Object} nodes A copy of the stored nodes
+     */
+    Plugin.Layer.Model.prototype.getNodes = function() {
+        return owl.deepCopy(this._nodes);
+    };
 
     /**
      * Look in given resultSet for Items to add to the model.
@@ -1132,7 +1188,7 @@
         $.each(batch, function(i, val) {
             val.subject.token = cons.TOKEN_TAG + val.subject.token;
 
-            val.index = that.nodes.length + 1;
+            val.index = that.nodesLength + 1;
 
             var node = Plugin.NodeFactory.makeNode(val, that.options);
 
@@ -1140,12 +1196,12 @@
 
                 switch (node.getType()) {
                     case cons.NODE_TYPES.resNode:
-                        if (!(node.id in that.nodes.resNodes)) {
-                            that.nodes.resNodes[node.id] = node;
-                            that.nodes.length++;
+                        if (!(node.id in that._nodes)) {
+                            that._nodes[node.id] = node;
+                            that.nodesLength++;
                         } else {
-                            if (that.nodes.resNodes[node.id].merge(node)) {
-                                node = that.nodes.resNodes[node.id];
+                            if (that._nodes[node.id].merge(node)) {
+                                node = that._nodes[node.id];
                                 that.itemUpdated.notify(node);
                             } else {
                                 node = undefined;
@@ -1153,9 +1209,9 @@
                         }
                         break;
                     case cons.NODE_TYPES.literal:
-                        if (!(node.id in that.nodes.literalNodes)) {
-                            that.nodes.literalNodes[node.id] = node;
-                            that.nodes.length++;
+                        if (!(node.id in that._nodes)) {
+                            that._nodes[node.id] = node;
+                            that.nodesLength++;
                         } else {
                             //TODO check literal UPDATE
                             node = undefined;
@@ -1163,9 +1219,9 @@
                         }
                         break;
                     case cons.NODE_TYPES.blankNode:
-                        if (!(node.id in that.nodes.blankNodes)) {
-                            that.nodes.blankNodes[node.id] = node;
-                            that.nodes.length++;
+                        if (!(node.id in that._nodes)) {
+                            that._nodes[node.id] = node;
+                            that.nodesLength++;
                         } else {
                             //TODO check blankNode UPDATE ?
                             console.log(node);
@@ -1180,7 +1236,7 @@
                 }
             }
         });
-        this.itemsAdded.notify(addedNodes);
+        this.itemsAdded.notify({"addedNodes" : owl.deepCopy(addedNodes), "allNodes" : owl.deepCopy(this._nodes)});
         that._checkItemsHelp(resultSet, batchSize);
     };
 
@@ -1190,42 +1246,33 @@
      * @method update
      */
     Plugin.Layer.Model.prototype.update = function() {
-        var that = this, emptyResults = true;
-
-        //        rdfStore.executeQuery("CONSTRUCT { ?s rdfs:label ?o . ?s1 rdfs:description ?o1 . ?s2 rdfs:comment ?o2 . ?s3 rdfs:type ?o3} WHERE { ?s rdfs:label ?o . OPTIONAL { ?s1 rdfs:description ?o1 } . OPTIONAL { ?s2 rdfs:comment ?o2 }. OPTIONAL {?s3 rdfs:type ?o3}}", function(results) {
-        //            console.log(results);
-        //        } );
-
+        var that = this; 
+        this.allResults = [];
+        
+        // Concat all results for filtering before adding
         for (var i = 0; i < this.viewQueries.length; i++) {
             rdfStore.executeQuery(this.viewQueries[i].query, function(results) {
                 if (results && results.length !== 0) {
-                    emptyResults = false;
-                    if (that.viewQueries[i].type) {
-                        // Add types for filtering
                         for (var j = 0; j < results.length; j++) {
-                            results[j].predicate.type = that.viewQueries[i].type;
-                        }
+                            // Add types for filtering
+                             if (that.viewQueries[i].type) {
+                                results[j].predicate.type = that.viewQueries[i].type;
+                             }
+                            that.allResults.push(results[j]);
                     }
-                    that.checkItems(results);
-                } else if (i === that.viewQueries.length - 1 && emptyResults) {
-                    console.log("nothing found");
                 }
             });
+        }
+
+        if(this.allResults.length > 0) {
+            that.checkItems(this.allResults);
+        } else {
+            console.log("Nothing to add to View");
         }
     };
 
     Plugin.Layer.Model.prototype.clearModel = function() {
-        this.nodes = {
-            resNodes: {
-                length: 0
-            },
-            blankNodes: {
-                length: 0
-            },
-            literalNodes: {
-                length: 0
-            },
-            length: 0
+        this._nodes = {
         };
         this.modelCleared.notify();
     };
@@ -1251,8 +1298,8 @@
 
         // attach model listeners
         // on items added
-        this._model.itemsAdded.attach(
-                function(sender, nodes) {
+//     this._model.itemsAdded.attach(
+//           function(sender, nodes) {
 
 //                //Generate tiles for nodes
 //                var $literalTiles = $("<div>");
@@ -1274,34 +1321,83 @@
 //                    that._initBrowsability($browsableTiles);
 //                });
 
-                });
+//           });
 
-//        // on items update
+        // on items update
 //        this._model.itemUpdated.attach(
 //            function(sender, node) {
 //                var $tile = that._getCorrespondingTile(node);
 //                that.layoutEngine.remove($tile);
 //            });
-//            
-//        // on model clearing
-//        this._model.modelCleared.attach(
-//            function(sender) {
-//                that.layoutEngine.remove($(".item"), function() {
-//                    console.log("view cleared");
-//                });
-//            });
+            
+        // on model clearing
+        this._model.modelCleared.attach(
+            function(sender) {
+                that.layoutEngine.remove($(".item"), function() {
+                    console.log("view cleared");
+                });
+            });
+    };
+
+    Plugin.Layer.View.prototype.paint = function(nodes, plugin, nodeFilters, tileFilters) {
+        
+        console.log(nodes);
+        var filters;
+        if (nodeFilters) {
+            filters = nodeFilters;
+        } else {
+            filters = plugin.nodeFilters;
+        }
+
+        //Run nodeFilters on nodes
+        $.each(filters, function(i, filter) {
+            if (!$.isEmptyObject(nodes)) {
+                nodes = filter.fn(plugin, nodes, filter.config);
+            } else {
+                console.log(cons.MESSAGES.warn.filterInput);
+            }
+        });
+
+        //Generate all tiles
+        var $tiles = $("<div>");
+        $.each(nodes, function(i, node) {
+            $tiles.append($(node.generateTile()));
+        });
+
+        if (tileFilters) {
+            filters = tileFilters;
+        } else {
+            filters = plugin.tileFilters;
+        }
+        
+        //Run tileFilters on tiles
+        $tiles = $tiles.children();
+        $.each(filters, function(i, filter) {
+            $tiles = filter.fn(plugin, $tiles, filter.config);
+        });
+        this.addTiles($tiles);
+    };
+    
+    Plugin.Layer.View.prototype.clearView = function(callback) {
+        this.removeTiles(this.$viewContainer.find(".item"));
+//        this.$viewContainer.find(".item").remove();
+//        this.layoutEngine.reLayout();
+        if(callback) {
+            callback();
+        }
+    };
+    
+    Plugin.Layer.View.prototype.removeTiles = function($tiles, callback) {
+        var that = this;
+        $.each($tiles, function(i, tile) {
+        var $tile = $(tile);
+         that.layoutEngine.remove($tile);
+         });
     };
 
     Plugin.Layer.View.prototype.addTiles = function($tiles) {
         var that = this;
-        this.layoutEngine.add($tiles, function() {
-            $.each($tiles, function(i, tile) {
-                var $tile = $(tile);
-                if ($tile.data("Browsable")) {
-                    that._initBrowsability($tile);
-                }
-            });
-        });
+        this.layoutEngine.add($tiles);
     };
 
     Plugin.Layer.View.prototype.addOptionsBox = function() {
@@ -1311,6 +1407,8 @@
 
     Plugin.Layer.View.prototype.addTimelineButton = function() {
         //TODO timelinebutton
+        //Dropit http://dev7studios.com/dropit/
+        
     };
 
     Plugin.Layer.View.prototype.addSorter = function() {
@@ -1543,7 +1641,7 @@
             // Set innerScrollBox width and height
             $overlayContent.find('.innerScroll').css("width",
                     ($window.width() - parseInt($container.css("padding-left")) - parseInt($container.css("padding-right"))) + "px");
-            $overlayContent.find('.innerScroll').css("height", $window.height()-$overlayContent.find('.innerNoScroll').height() + "px");
+            $overlayContent.find('.innerScroll').css("height", $window.height() - $overlayContent.find('.innerNoScroll').height() + "px");
 
             callback();
         };
@@ -1669,7 +1767,7 @@
      */
     Plugin.TemplatesLoader = function(dfd) {
         this._templateInitDfd = dfd;
-        this._neededTemps = ["filterOptions", "sortOptions", "tileWrapper", "stdNode", "groupDropDown", "overlayContent", "overlayWrapper", "previewItem"];
+        this._neededTemps = ["filterOptions", "sortOptions", "tileWrapper", "stdNode", "groupDropDown", "overlayContent", "overlayWrapper", "previewItem", "timelineWrapper", "timelineItem"];
 
         this._methodsAreLoaded = function(/* array of templatenames which must be loaded */) {
             var i = 0, methodName;
@@ -1833,13 +1931,12 @@
      **/
     var defaults = {
         /**
-         Filters to be used before node display
+         Filters to be used before node display. Filters only work on single batches. The batchSize should be chosen big enough if Nodefilters are to be used. New filters must have a unique identifier.
          
          @property defaults.filters 
          @type Object
          **/
         nodeFilters: {
-
             /**
              * Filters blacklisted resources defined by URIs in config options
              *
@@ -1850,16 +1947,38 @@
                 fn: function(plugin, nodes, config) {
                     $.each(nodes, function(i, node) {
                         //TODO predicatefiltering
-                        if(node.url && config.indexOf(node.url) > -1){
-                                delete nodes[i];
-                                console.log("blacklisted node deleted");
+                        if (node.uri && config.indexOf(node.uri) > -1) {
+                            delete nodes[i];
+                            console.log("blacklisted node deleted");
                         }
                     });
                     return nodes;
                 },
-                config : new Array("blackListUrl1", "blackListUrl2")
+                config: new Array("blackListUrl1", "blackListUrl2")
             },
-            
+            /**
+             * Merges resNodes talking about the same resource (subject or object).
+             *
+             * @property defaults.nodeFilters.multiResNode
+             * @type Object
+             */
+            multiResNode: {
+                fn: function(plugin, nodes, config) {
+                    var tempArray = new Array();
+                    //TODO rework
+                    $.each(nodes, function(i, node){
+                        if(node.uri in tempArray) {
+                             tempArray[node.uri].nodeType = "multiResNode";
+                             tempArray[node.uri].merge(node);
+                             delete nodes[i];
+                        } else {
+                            tempArray[node.uri] = node;
+                        }
+                    });
+                    return nodes;
+                },
+                lookAtAddedNodes : true
+            },
             /**
              * Merges nodes representing the same resource over a diffrent predicate
              *
@@ -1874,7 +1993,6 @@
             }
 
         },
-        
         /**
          * Filters for tiles
          *
@@ -1882,7 +2000,6 @@
          * @type Object
          */
         tileFilters: {
-            
             /**
              * Scales tiles
              *
@@ -1979,9 +2096,9 @@
                     $.each($tiles, function(i, tile) {
                         var $tile = $(tile);
                         var node = $tile.data("node");
-                       switch (node.getType()) {
+                        switch (node.getType()) {
                             case cons.NODE_TYPES.resNode:
-                                that._setResNodeScale($tile                                                                                                                                                                                                                                                                                                                                                             );
+                                that._setResNodeScale($tile);
                                 break;
                             case cons.NODE_TYPES.literal:
                                 that._setLiteralScale($tile);
@@ -1993,7 +2110,7 @@
                     });
                     return $tiles;
                 },
-                config : {
+                config: {
                     /**
                      Styles of literal items.
                      
@@ -2032,7 +2149,7 @@
                         },
                         predicate: {
                             height: 15
-                        },
+                        }
                     },
                     /**
                      Styles of items.
@@ -2075,12 +2192,11 @@
                         },
                         predicate: {
                             height: 15
-                        },
+                        }
                     }
                 }
             },
-            
-           /**
+            /**
              * Scales text of tiles
              *
              * @property defaults.tileFilters.backgroundColor
@@ -2094,7 +2210,7 @@
                 }
             },
             
-           /**
+            /**
              * Sets backgroundColor for tiles
              *
              * @property defaults.tileFilters.backgroundColor
@@ -2147,7 +2263,7 @@
                 }
             },
             
-           /**
+            /**
              * Loads background images
              *
              * @property defaults.tileFilters.backgroundImg
@@ -2234,28 +2350,27 @@
                         $predicate.on("mouseleave", function() {
                             $predicateLabel.stop(true, true);
                         });
-                       
+
                         $predicateLabel.on("mouseleave", function() {
                             $predicateLabel.stop(true, true);
-                            
+
                             //Timeout prevents flickering on mousemovement
-                            window.setTimeout(function(){
+                            window.setTimeout(function() {
                                 $predicate.css("display", "none");
                                 $typeImage.css("display", "inline-block");
                                 $predicateLabel.css("display", "inline-block");
-                            },100);
+                            }, 100);
                         });
                     });
                     return $tiles;
                 }
             },
-            
-        /**
-         * Initializes the browsability of tiles
-         *
-         * @property defaults.tileFilters.browsablity
-         * @type Object
-         */
+            /**
+             * Initializes the browsability of tiles
+             *
+             * @property defaults.tileFilters.browsablity
+             * @type Object
+             */
             browsablity: {
                 fn: function(plugin, $tiles) {
                     $.each($tiles, function(i, tile) {
@@ -2275,11 +2390,12 @@
                                             "cssClass": {
                                                 "overlay": cons.CSS_CLASSES.overlay,
                                                 "overlayContent": cons.CSS_CLASSES.overlayContent
-                                            }
+                                            },
+                                            "nodeFilters": plugin.options.nodeFilters,
+                                            "tileFitlers": plugin.options.tileFilters
                                         });
                                         plugin._$parent.append(overlay);
                                         var $overlay = plugin._$parent.find(cons.CSS_CLASSES.toSelector("overlay")).find("div:contains('" + node.id + idAddition + "')").parent();
-
                                         var newLayerOptions = $.extend(true, {}, plugin.options.layerOptions, {
                                             layoutEngine: {
                                                 itemSelector: '.item',
@@ -2310,7 +2426,13 @@
                                                     label: "out"
                                                 }]
                                         });
-                                        plugin.addLayer(new Plugin.DetailLayer($overlay, newLayerOptions, plugin, $tile));
+                                        var newLayer = new Plugin.DetailLayer($overlay, newLayerOptions, plugin, $tile);
+                                        plugin.addLayer(newLayer);
+                                        
+                                        //JQuery multiSelect http://www.erichynds.com/blog/jquery-ui-multiselect-widget
+                                        $overlay.find("#filterSelect").multiSelect({'selectAllText': cons.MESSAGES.out.selectAllFilters}, function(select) {
+                                        newLayer.switchFilterState(select.val());
+                                        });
                                     }
                                 });
                                 break;
@@ -2459,7 +2581,7 @@
                 }],
             modelOptions: {
                 /**
-                 Batch size of items which can be loaded simultaniosly in the view-
+                 Batch size of items which can be loaded simultaniosly in the view. Filters only work on single batches. The batchSize should be chosen big enough if Nodefilters are to be used.
                  
                  @property defaults.viewOptions.batchSize
                  @type Integer
@@ -2539,7 +2661,7 @@
                  @default true
                  **/
                 supportRegExpFilter: true,
-               
+                
                 /**
                  Options for the layoutEngine. Uses isotope http://isotope.metafizzy.co/ options structure.
                  
@@ -2785,7 +2907,7 @@
                 $overlays.css('clip', getClip(cons.CSS_CLASSES.overlay));
                 var innerScrolls = $overlays.find('.innerScroll');
                 innerScrolls.css("width", ($window.width() - parseInt($overlays.css("padding-left")) - parseInt($overlays.css("padding-right"))) + "px");
-                innerScrolls.css("height", $window.height()-$overlays.find('.innerNoScroll').height() + "px");
+                innerScrolls.css("height", $window.height() - $overlays.find('.innerNoScroll').height() + "px");
                 // <!--- overlay modification ---->
 
                 // <---- preview modification ---->
