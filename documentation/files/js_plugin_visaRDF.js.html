@@ -2056,9 +2056,9 @@
          **/
         nodeFilters: {
             /**
-             * Filters blacklisted resources defined by predicate URIs in config options. Wildcards are allowed.
+             * Filters blacklisted resources defined by predicate URIs in config options. RegEx allowed.
              *
-             * @property defaults.nodeFilters.blacklistURI
+             * @property defaults.nodeFilters.blacklistPredURI
              * @type Object
              */
             blacklistPredURI: {
@@ -2079,7 +2079,7 @@
                 config: new Array(&quot;.*homepage2.*&quot;, &quot;somethingelse&quot;)
             },
             /**
-             * Filters blacklisted resources defined by URIs in config options
+             * Filters blacklisted resources defined by URIs in config options. RegEx allowed.
              *
              * @property defaults.nodeFilters.blacklistURI
              * @type Object
@@ -2087,11 +2087,13 @@
             blacklistURI: {
                 fn: function(plugin, nodes, config) {
                     $.each(nodes, function(i, node) {
-                        //TODO predicatefiltering
-                        if (node.uri &amp;&amp; config.indexOf(node.uri) &gt; -1) {
-                            delete nodes[i];
-                            console.log(&quot;blacklisted node deleted&quot;);
-                        }
+                        $.each(config, function(j, exp) {
+                            var regExp = new RegExp(exp);
+                            var res = regExp.exec(node.uri);
+                            if (res !== null) {
+                                delete nodes[i];
+                            }
+                        });
                     });
                     return nodes;
                 },
@@ -2108,14 +2110,18 @@
                     var tempArray = new Array();
                     //TODO rework
                     $.each(nodes, function(i, node){
-                        if(node.uri in tempArray) {
-                             tempArray[node.uri].nodeType = &quot;multiResNode&quot;;
-                             tempArray[node.uri].merge(node);
-                             delete nodes[i];
-                        } else {
-                            tempArray[node.uri] = node;
+                        if(node.type === &quot;resNode&quot;) {
+                            if(node.uri in tempArray) {
+                                console.log(tempArray[node.uri])
+                                 tempArray[node.uri].nodeType = &quot;multiResNode&quot;;
+                                 tempArray[node.uri].merge(node);
+                                 delete nodes[i];
+                            } else {
+                                tempArray[node.uri] = node;
+                            }
                         }
                     });
+                    console.log(nodes)
                     return nodes;
                 },
                 lookAtAddedNodes : true

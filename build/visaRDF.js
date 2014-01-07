@@ -2249,9 +2249,9 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
          **/
         nodeFilters: {
             /**
-             * Filters blacklisted resources defined by predicate URIs in config options. Wildcards are allowed.
+             * Filters blacklisted resources defined by predicate URIs in config options. RegEx allowed.
              *
-             * @property defaults.nodeFilters.blacklistURI
+             * @property defaults.nodeFilters.blacklistPredURI
              * @type Object
              */
             blacklistPredURI: {
@@ -2272,7 +2272,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                 config: new Array(".*homepage2.*", "somethingelse")
             },
             /**
-             * Filters blacklisted resources defined by URIs in config options
+             * Filters blacklisted resources defined by URIs in config options. RegEx allowed.
              *
              * @property defaults.nodeFilters.blacklistURI
              * @type Object
@@ -2280,11 +2280,13 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             blacklistURI: {
                 fn: function(plugin, nodes, config) {
                     $.each(nodes, function(i, node) {
-                        //TODO predicatefiltering
-                        if (node.uri && config.indexOf(node.uri) > -1) {
-                            delete nodes[i];
-                            console.log("blacklisted node deleted");
-                        }
+                        $.each(config, function(j, exp) {
+                            var regExp = new RegExp(exp);
+                            var res = regExp.exec(node.uri);
+                            if (res !== null) {
+                                delete nodes[i];
+                            }
+                        });
                     });
                     return nodes;
                 },
@@ -2301,14 +2303,18 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                     var tempArray = new Array();
                     //TODO rework
                     $.each(nodes, function(i, node){
-                        if(node.uri in tempArray) {
-                             tempArray[node.uri].nodeType = "multiResNode";
-                             tempArray[node.uri].merge(node);
-                             delete nodes[i];
-                        } else {
-                            tempArray[node.uri] = node;
+                        if(node.type === "resNode") {
+                            if(node.uri in tempArray) {
+                                console.log(tempArray[node.uri])
+                                 tempArray[node.uri].nodeType = "multiResNode";
+                                 tempArray[node.uri].merge(node);
+                                 delete nodes[i];
+                            } else {
+                                tempArray[node.uri] = node;
+                            }
                         }
                     });
+                    console.log(nodes)
                     return nodes;
                 },
                 lookAtAddedNodes : true

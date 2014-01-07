@@ -1990,16 +1990,19 @@
             multiResNode: {
                 fn: function(plugin, nodes, config) {
                     var tempArray = new Array();
-                    //TODO rework
                     $.each(nodes, function(i, node){
-                        if(node.uri in tempArray) {
-                             tempArray[node.uri].nodeType = "multiResNode";
-                             tempArray[node.uri].merge(node);
-                             delete nodes[i];
-                        } else {
-                            tempArray[node.uri] = node;
+                        if(node.type === "resNode") {
+                            if(node.uri in tempArray) {
+                                console.log(tempArray[node.uri])
+                                 tempArray[node.uri].nodeType = "multiResNode";
+                                 tempArray[node.uri].merge(node);
+                                 delete nodes[i];
+                            } else {
+                                tempArray[node.uri] = node;
+                            }
                         }
                     });
+                    console.log(nodes)
                     return nodes;
                 },
                 lookAtAddedNodes : true
