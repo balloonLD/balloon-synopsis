@@ -1,6 +1,6 @@
-	<div class="item {{#each filterables}}{{.}} {{/each}}{{#if token}}{{token}}{{/if}} {{index}}">
-		{{#if subject}}
-			<h2 class="showUri" style="display:none">{{subject.value}}</h2>
+	<div class="{{CSS_CLASSES.tileClasses.tile}} {{#each node.filterables}}{{.}} {{/each}}{{#if node.token}}{{node.token}}{{/if}} {{node.index}}">
+		{{#if node.subject}}
+			<h2 class="{{CSS_CLASSES.tileClasses.showURI}}" style="display:none">{{node.subject.value}}</h2>
 		{{/if}}
-		<p class="number" style="display:none">{{index}}</p>
+		<p class="{{CSS_CLASSES.tileClasses.number}}" style="display:none">{{node.index}}</p>
 	</div>

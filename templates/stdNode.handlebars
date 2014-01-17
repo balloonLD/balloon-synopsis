@@ -1,14 +1,15 @@
-            {{#if label}}
-                    <h3 class="itemContent labelEn">{{label.value}}</h3>
+            {{#if node.label}}
+                    <h3 class="{{CSS_CLASSES.tileClasses.content}} {{CSS_CLASSES.tileClasses.labelEN}}">{{node.label.value}}</h3>
             {{/if}}
-            {{#ifLang description}}
-                    <div class="itemContent descriptionEn">{{description.value}}</div>
+            {{#ifLang node.description}}
+                    <div class="{{CSS_CLASSES.tileClasses.content}} {{CSS_CLASSES.tileClasses.descriptionEn}}">{{node.description.value}}</div>
             {{/ifLang}}
-            {{#if predicates}}
-            {{#each predicates}}
-                    <img class="typeImage" src="img/{{type}}.png"><div class="itemContent predicate" style="display:none">{{value}}</div>
+            {{#if node.predicates}}
+            {{#each node.predicates}}
+                    <img class="{{../CSS_CLASSES.tileClasses.typeImage}}" src="img/{{type}}.png">
+                    <div class="{{../CSS_CLASSES.tileClasses.content}} {{../CSS_CLASSES.tileClasses.predicate}}" style="display:none">{{value}}</div>
                     {{#predicateLabelRetriver this}}
-                        <div class="itemContent predicateLabel">{{label}}</div>
+                        <div class="{{../../CSS_CLASSES.tileClasses.content}} {{../../CSS_CLASSES.tileClasses.predicateLabel}}">{{label}}</div>
                     {{/predicateLabelRetriver}}
             {{/each}}
             {{/if}}

@@ -4,20 +4,21 @@
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
         <title>visaRDF</title>
         <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
-        <script type="text/javascript" src="js/libs/jquery-1.8.3.js"></script>
-        <script type="text/javascript" src="js/libs/handlebars-v1.1.2.js"></script>
-        <script type="text/javascript" src="js/libs/deepCopy.js"></script>
-        <script type="text/javascript" src="js/libs/dropit.js"></script>
+        <script type="text/javascript" src="../../js/libs/jquery-1.8.3.js"></script>
+        <script type="text/javascript" src="../../js/libs/handlebars-v1.1.2.js"></script>
+        <script type="text/javascript" src="../../js/libs/deepCopy.js"></script>
+        <script type="text/javascript" src="../../js/libs/dropit.js"></script>
 
-        <script type="text/javascript" src="js/libs/jquery.quickfit.js"></script>
-         <script type="text/javascript" src="js/libs/jquery.multiSelect.js"></script>
-        <script type="text/javascript" src="js/libs/jquery.isotope.js"></script>
+        <script type="text/javascript" src="../../js/libs/jquery.quickfit.js"></script>
+         <script type="text/javascript" src="../../js/libs/jquery.multiSelect.js"></script>
+        <script type="text/javascript" src="../../js/libs/jquery.isotope.js"></script>
 
-        <script type="text/javascript" src="js/libs/modernizr.js"></script>
-        <script type="text/javascript" src="js/libs/rdf_store.js"></script>
-        <script type="text/javascript" src="js/libs/rgbcolor.js"></script>
-        <script type="text/javascript" src="build/visaRDF.js"></script>
-        <link rel="stylesheet" href="css/visaRdf.css" type="text/css" />
+        <script type="text/javascript" src="../../js/libs/modernizr.js"></script>
+        <script type="text/javascript" src="../../js/libs/rdf_store.js"></script>
+        <script type="text/javascript" src="../../js/libs/rgbcolor.js"></script>
+        <script type="text/javascript" src="../../build/visaRDF.js"></script>
+        <link rel="stylesheet" href="../../css/visaRdf.css" type="text/css" />
+        <link rel="stylesheet" href="demo.css" type="text/css" />
 
     </head>
     <body>
@@ -57,6 +58,9 @@
                                 $(function() {
                                     $('.visaRDF').visaRDF({
                                         nodeFilters: {
+                                            blacklistURI: {
+                                                config: new Array(".*someRegExp.*")
+                                            },
                                             actor: {
                                                 fn: function(plugin, nodes, config) {
                                                     $.each(nodes, function(i, node) {
@@ -68,6 +72,11 @@
                                                     return nodes;
                                                 },
                                                 template: "<div>I'm an actor!</div>"
+                                            }
+                                        },
+                                        layerOptions : {
+                                            remoteOptions : {
+                                                remoteLimit: 1000
                                             }
                                         }
                                     });

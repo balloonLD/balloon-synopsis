@@ -1,7 +1,7 @@
-	<div class="option-combo sorter">
+	<div class="{{CSS_CLASSES.optionCombo}} {{CSS_CLASSES.sorter}}">
 		<h2>Sort:</h2>
-		<ul class="option-set clearfix" data-option-key="sortBy">
-			{{#keysEach .}}
+		<ul class="{{CSS_CLASSES.optionSet}} {{CSS_CLASSES.clearfix}}" data-option-key="sortBy">
+			{{#keysEach optionSet}}
 				<li><a data-sort-value="{{.}}" class="{{.}}">{{.}}</a></li>
 			{{/keysEach}}
 		</ul>

@@ -4,7 +4,7 @@ this["visaRDF"]["templates"] = this["visaRDF"]["templates"] || {};
 this["visaRDF"]["templates"]["filterOptions"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
@@ -25,9 +25,17 @@ function program1(depth0,data) {
   return buffer;
   }
 
-  buffer += "    <div class=\"option-combo filter\">\r\n            <h2>Filter:</h2>\r\n            <ul class=\"option-set clearfix\" data-option-key=\"filter\">\r\n                    ";
-  stack1 = helpers.each.call(depth0, depth0, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "    <div class=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.optionCombo)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " "
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.filter)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">\r\n            <h2>Filter:</h2>\r\n            <ul class=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.optionSet)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " "
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.clearfix)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\" data-option-key=\"filter\">\r\n                    ";
+  stack2 = helpers.each.call(depth0, depth0.filterOptions, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack2 || stack2 === 0) { buffer += stack2; }
   buffer += "\r\n            </ul>\r\n    </div>";
   return buffer;
   });
@@ -62,24 +70,26 @@ function program1(depth0,data) {
 this["visaRDF"]["templates"]["overlayContent"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
-  var buffer = "", stack1, stack2;
-  buffer += "\r\n            <div class=\"innerNoScroll\">\r\n                <h2>\r\n                    "
-    + escapeExpression(((stack1 = ((stack1 = depth0.label),stack1 == null || stack1 === false ? stack1 : stack1.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\r\n                </h2>\r\n                ";
-  if (stack2 = helpers.uri) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
-  else { stack2 = depth0.uri; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
-  buffer += escapeExpression(stack2)
-    + "\r\n            </div>\r\n            <div class=\"innerScroll\">\r\n                    <div></div>\r\n            </div>\r\n    ";
+  var buffer = "", stack1;
+  buffer += "\r\n            <div class=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.innerNoScroll)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">\r\n                <h2>\r\n                    "
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.label)),stack1 == null || stack1 === false ? stack1 : stack1.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\r\n                </h2>\r\n                "
+    + escapeExpression(((stack1 = ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.uri)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\r\n            </div>\r\n            <div class=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.innerScroll)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">\r\n                    <div></div>\r\n            </div>\r\n    ";
   return buffer;
   }
 
   buffer += "    ";
-  stack1 = helpers['if'].call(depth0, depth0.label, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
+  stack2 = helpers['if'].call(depth0, ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.label), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack2 || stack2 === 0) { buffer += stack2; }
   return buffer;
   });
 
@@ -100,7 +110,7 @@ function program1(depth0,data) {
   }
 
   buffer += "		<div class=\""
-    + escapeExpression(((stack1 = ((stack1 = depth0.cssClass),stack1 == null || stack1 === false ? stack1 : stack1.overlay)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.overlay)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\">\r\n                                                            <div style=\"visibility:hidden\">";
   if (stack2 = helpers.id) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
   else { stack2 = depth0.id; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
@@ -111,8 +121,10 @@ function program1(depth0,data) {
   buffer += "\r\n                                                            ";
   stack2 = helpers.each.call(depth0, depth0.tileFilters, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += "\r\n                                                            </select>\r\n			<span class=\"close\">close</span>\r\n			<div class=\""
-    + escapeExpression(((stack1 = ((stack1 = depth0.cssClass),stack1 == null || stack1 === false ? stack1 : stack1.overlayContent)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+  buffer += "\r\n                                                            </select>\r\n			<span class=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.close)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">close</span>\r\n			<div class=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.overlayContent)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\">\r\n			</div>\r\n		</div>";
   return buffer;
   });
@@ -155,9 +167,17 @@ function program1(depth0,data) {
   return buffer;
   }
 
-  buffer += "	<div class=\"option-combo sorter\">\r\n		<h2>Sort:</h2>\r\n		<ul class=\"option-set clearfix\" data-option-key=\"sortBy\">\r\n			";
+  buffer += "	<div class=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.optionCombo)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " "
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.sorter)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">\r\n		<h2>Sort:</h2>\r\n		<ul class=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.optionSet)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " "
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.clearfix)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\" data-option-key=\"sortBy\">\r\n			";
   options = {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data};
-  stack2 = ((stack1 = helpers.keysEach || depth0.keysEach),stack1 ? stack1.call(depth0, depth0, options) : helperMissing.call(depth0, "keysEach", depth0, options));
+  stack2 = ((stack1 = helpers.keysEach || depth0.keysEach),stack1 ? stack1.call(depth0, depth0.optionSet, options) : helperMissing.call(depth0, "keysEach", depth0.optionSet, options));
   if(stack2 || stack2 === 0) { buffer += stack2; }
   buffer += "\r\n		</ul>\r\n	</div>";
   return buffer;
@@ -171,8 +191,12 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\r\n                    <h3 class=\"itemContent labelEn\">"
-    + escapeExpression(((stack1 = ((stack1 = depth0.label),stack1 == null || stack1 === false ? stack1 : stack1.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+  buffer += "\r\n                    <h3 class=\""
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.content)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " "
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.labelEN)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">"
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.label)),stack1 == null || stack1 === false ? stack1 : stack1.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</h3>\r\n            ";
   return buffer;
   }
@@ -180,59 +204,73 @@ function program1(depth0,data) {
 function program3(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\r\n                    <div class=\"itemContent descriptionEn\">"
-    + escapeExpression(((stack1 = ((stack1 = depth0.description),stack1 == null || stack1 === false ? stack1 : stack1.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+  buffer += "\r\n                    <div class=\""
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.content)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " "
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.descriptionEn)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">"
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.description)),stack1 == null || stack1 === false ? stack1 : stack1.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</div>\r\n            ";
   return buffer;
   }
 
 function program5(depth0,data) {
   
-  var buffer = "", stack1;
+  var buffer = "", stack1, stack2;
   buffer += "\r\n            ";
-  stack1 = helpers.each.call(depth0, depth0.predicates, {hash:{},inverse:self.noop,fn:self.program(6, program6, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
+  stack2 = helpers.each.call(depth0, ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.predicates), {hash:{},inverse:self.noop,fn:self.programWithDepth(6, program6, data, depth0),data:data});
+  if(stack2 || stack2 === 0) { buffer += stack2; }
   buffer += "\r\n            ";
   return buffer;
   }
-function program6(depth0,data) {
+function program6(depth0,data,depth1) {
   
   var buffer = "", stack1, stack2, options;
-  buffer += "\r\n                    <img class=\"typeImage\" src=\"img/";
-  if (stack1 = helpers.type) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.type; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + ".png\"><div class=\"itemContent predicate\" style=\"display:none\">";
-  if (stack1 = helpers.value) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.value; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
+  buffer += "\r\n                    <img class=\""
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth1.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.typeImage)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\" src=\"img/";
+  if (stack2 = helpers.type) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.type; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
+    + ".png\">\r\n                    <div class=\""
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth1.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.content)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " "
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth1.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.predicate)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\" style=\"display:none\">";
+  if (stack2 = helpers.value) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.value; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
     + "</div>\r\n                    ";
-  options = {hash:{},inverse:self.noop,fn:self.program(7, program7, data),data:data};
+  options = {hash:{},inverse:self.noop,fn:self.programWithDepth(7, program7, data, depth1),data:data};
   stack2 = ((stack1 = helpers.predicateLabelRetriver || depth0.predicateLabelRetriver),stack1 ? stack1.call(depth0, depth0, options) : helperMissing.call(depth0, "predicateLabelRetriver", depth0, options));
   if(stack2 || stack2 === 0) { buffer += stack2; }
   buffer += "\r\n            ";
   return buffer;
   }
-function program7(depth0,data) {
+function program7(depth0,data,depth2) {
   
-  var buffer = "", stack1;
-  buffer += "\r\n                        <div class=\"itemContent predicateLabel\">";
-  if (stack1 = helpers.label) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.label; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
+  var buffer = "", stack1, stack2;
+  buffer += "\r\n                        <div class=\""
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth2.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.content)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " "
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth2.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.predicateLabel)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">";
+  if (stack2 = helpers.label) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.label; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
     + "</div>\r\n                    ";
   return buffer;
   }
 
   buffer += "            ";
-  stack1 = helpers['if'].call(depth0, depth0.label, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n            ";
-  options = {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data};
-  stack2 = ((stack1 = helpers.ifLang || depth0.ifLang),stack1 ? stack1.call(depth0, depth0.description, options) : helperMissing.call(depth0, "ifLang", depth0.description, options));
+  stack2 = helpers['if'].call(depth0, ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.label), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack2 || stack2 === 0) { buffer += stack2; }
   buffer += "\r\n            ";
-  stack2 = helpers['if'].call(depth0, depth0.predicates, {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
+  options = {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data};
+  stack2 = ((stack1 = helpers.ifLang || depth0.ifLang),stack1 ? stack1.call(depth0, ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.description), options) : helperMissing.call(depth0, "ifLang", ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.description), options));
+  if(stack2 || stack2 === 0) { buffer += stack2; }
+  buffer += "\r\n            ";
+  stack2 = helpers['if'].call(depth0, ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.predicates), {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
   if(stack2 || stack2 === 0) { buffer += stack2; }
   return buffer;
   });
@@ -240,7 +278,7 @@ function program7(depth0,data) {
 this["visaRDF"]["templates"]["tileWrapper"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression, self=this;
 
 function program1(depth0,data) {
   
@@ -253,36 +291,36 @@ function program1(depth0,data) {
 function program3(depth0,data) {
   
   var stack1;
-  if (stack1 = helpers.token) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.token; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  return escapeExpression(stack1);
+  return escapeExpression(((stack1 = ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.token)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1));
   }
 
 function program5(depth0,data) {
   
   var buffer = "", stack1;
-  buffer += "\r\n			<h2 class=\"showUri\" style=\"display:none\">"
-    + escapeExpression(((stack1 = ((stack1 = depth0.subject),stack1 == null || stack1 === false ? stack1 : stack1.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+  buffer += "\r\n			<h2 class=\""
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.showURI)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\" style=\"display:none\">"
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.subject)),stack1 == null || stack1 === false ? stack1 : stack1.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</h2>\r\n		";
   return buffer;
   }
 
-  buffer += "	<div class=\"item ";
-  stack1 = helpers.each.call(depth0, depth0.filterables, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  stack1 = helpers['if'].call(depth0, depth0.token, {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += " ";
-  if (stack1 = helpers.index) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.index; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
+  buffer += "	<div class=\""
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.tile)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " ";
+  stack2 = helpers.each.call(depth0, ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.filterables), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack2 || stack2 === 0) { buffer += stack2; }
+  stack2 = helpers['if'].call(depth0, ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.token), {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
+  if(stack2 || stack2 === 0) { buffer += stack2; }
+  buffer += " "
+    + escapeExpression(((stack1 = ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.index)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\">\r\n		";
-  stack1 = helpers['if'].call(depth0, depth0.subject, {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n		<p class=\"number\" style=\"display:none\">";
-  if (stack1 = helpers.index) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.index; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
+  stack2 = helpers['if'].call(depth0, ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.subject), {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
+  if(stack2 || stack2 === 0) { buffer += stack2; }
+  buffer += "\r\n		<p class=\""
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.number)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\" style=\"display:none\">"
+    + escapeExpression(((stack1 = ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.index)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "</p>\r\n	</div>";
   return buffer;
   });
@@ -330,10 +368,10 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     // ========================= VisaRDF Constants ===============================
     var cons = {
         // Part of CSS class to indicate a filterable
-        "FA_TAG": "-filter-_",
+        FA_TAG: "synopsis_filter_",
         // Part of CSS class to indicate a token
-        "TOKEN_TAG": "token_",
-        "NODE_TYPES": {
+        TOKEN_TAG: "synopsis_token_",
+        NODE_TYPES: {
             stdNode: "stdNode",
             literal: "literal",
             blankNode: "blankNode",
@@ -342,11 +380,41 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         toFilterable: function(str) {
             return cons.FA_TAG + str;
         },
+        CSS_PREFIX : "synopsis_",
+        CSS_UTIL : {
+            _getCssString : function(id){
+                var idChain = id.split("."), it = cons.CSS_CLASSES;
+                for (var i = 0; i < idChain.length; i++) {
+                    it = it[idChain[i]];
+                }
+                return it;
+            },
+           strToCss : function(str){
+                return cons.CSS_PREFIX + str;
+            },
+            strToToken: function(str) {
+                return cons.TOKEN_TAG + str;
+            },
+            toToken: function(id) {
+                return cons.TOKEN_TAG + cons.CSS_UTIL._getCssString(id);
+            },
+            toFilterable: function(id) {
+                return cons.FA_TAG + cons.CSS_UTIL._getCssString(id);
+            },
+            toSelector: function(id) {
+                return "." + cons.CSS_UTIL._getCssString(id);
+            }
+        },
+        
         // CSS classes to use
-        "CSS_CLASSES": {
+        CSS_CLASSES: {
             outerContainer: "outerContainer",
             viewContainer: "container",
             options: "options",
+            optionCombo: "option-combo",
+            optionSet: "option-set",
+            groupLabel: "groupLabel",
+            filter : "filter",
             clearfix: "clearfix",
             loader: "loading",
             preview: "preview",
@@ -354,6 +422,23 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             previewContent: "previewContent",
             overlay: "overlay",
             overlayContent: "overlayContent",
+            innerScroll: "innerScroll",
+            innerNoScroll: "innerNoScroll",
+            close: "close",
+            timelineContainer: "timelineContainer",
+            timeline: "timeline",
+            sorter: "sorter",
+            tileClasses : {
+                tile : "tile",
+                content : "tileContent",
+                labelEN : "labelEN",
+                showURI : "showURI",
+                descriptionEn : "descriptionEn",
+                predicate : "predicate",
+                predicateLabel : "predicateLabel",
+                typeImage : "typeImage",
+                number : "number"
+            },
             typeClasses: {
                 incoming: "incoming",
                 outgoing: "outgoing"
@@ -362,33 +447,12 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                 uri: "uri",
                 literal: "literal",
                 blanknode: "blank"
-            },
-            toToken: function(id) {
-                var idChain = id.split("."), it = this;
-                for (var i = 0; i < idChain.length; i++) {
-                    it = it[idChain[i]];
-                }
-                return cons.TOKEN_TAG + it;
-            },
-            toFilterable: function(id) {
-                var idChain = id.split("."), it = this;
-                for (var i = 0; i < idChain.length; i++) {
-                    it = it[idChain[i]];
-                }
-                return cons.FA_TAG + it;
-            },
-            toSelector: function(id) {
-                var idChain = id.split("."), it = this;
-                for (var i = 0; i < idChain.length; i++) {
-                    it = it[idChain[i]];
-                }
-                return "." + it;
             }
         },
         // Placeholder in query strings
-        "DUMMY": "#replaceMe#",
+        DUMMY: "#replaceMe#",
         // Event types for Pub/Sub system
-        "EVENT_TYPES": {
+        EVENT_TYPES: {
             storeModified: {
                 insert: "dataInsert"
             },
@@ -397,7 +461,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                 loadingStart: "loadingStarted"
             }
         },
-        "MESSAGES": {
+        MESSAGES: {
             out: {
                 selectAllFilters: "Select All"
             },
@@ -405,15 +469,30 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                 ajax: "Error on loading data.",
                 remote: "Error on loading remote data.",
                 template: "Error on loading template data.",
-                tokenType: "Unkown token type of item."
+                tokenType: "Unknown token type of item."
             },
             warn: {
+                cssAppend: "CSS classes already defined",
                 filterInput: "Filterinput is empty",
                 filterName: "Filtername duplicate found"
             }
         }
     };
 
+    //Add prefix to given objects strings
+    function objPrefixer(prefix, obj) {
+        $.each(obj, function(i,val) {
+            if (typeof val === "string") {
+                obj[i] = prefix + val;
+            } else {
+                objPrefixer(prefix, val);
+            }
+        });
+    }
+
+    //Add css_prefix to css_classes
+    objPrefixer(cons.CSS_PREFIX, cons.CSS_CLASSES);
+    
     // ========================= Extend Isotope ===============================
 
     // Extend Isotope - groupRows custom layout mode
@@ -456,11 +535,12 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                     }
                 }
 
-                $this.find(".groupLabel").remove();
+                $this.find(cons.CSS_UTIL.toSelector("groupLabel")).remove();
                 // label for new group
                 if (group !== '') {
+                    console.log(group)
                     var prefix = group.split("_")[0] + "_";
-                    var groups = group.split(prefix), divBox = "<div class='groupLabel'>";
+                    var groups = group.split(prefix), divBox = "<div class='"+ cons.CSS_CLASSES.groupLabel + "' >";
                     for (var i = 1; i < groups.length; i++) {
                         divBox += groups[i];
                     }
@@ -548,6 +628,17 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     function isUndefinedOrNull(a) {
         return ((typeof a === "undefined") || (a === null));
     }
+    
+    function appendCssClasses(obj) {
+        if(obj) {
+            if(!obj.CSS_CLASSES) {
+                obj.CSS_CLASSES = cons.CSS_CLASSES;
+            } else {
+                console.log(cons.MESSAGES.warn.cssAppend);
+            }
+        }
+        return obj;
+    }
 
     /**
      * Replace the DUMMY constants of given query with the given replacementstring.
@@ -560,6 +651,19 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     function replaceDummy(query, replacement) {
         return query.replace(new RegExp(cons.DUMMY, "g"), replacement);
     }
+    
+    /**
+     * Used to deepCopy a javascript object.
+     *
+     * @private
+     * @method deepCopy
+     * @param {Object} obj Object to clone
+     * @return copy of the object
+     */
+    function deepCopy(obj) {
+        //TODO fn copy?
+        return owl.deepCopy(obj); 
+   }
 
     /**
      * Gets the current window size of the browser.
@@ -1136,7 +1240,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             this.view.addOptionsBox();
             if (plugin.options.generateTimeline) {
                 this.view.addTimelineButton();
-                var item = templates.timelineItem(this);
+                var item = templates.timelineItem(appendCssClasses({layer: this}));
                 plugin._$timeline.append(item);
             }
             if (options.generateSortOptions) {
@@ -1196,6 +1300,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
         console.log(nodeFilters);
         console.log(tileFilters);
+         console.log("after switch");
         this.view.clearView(function() {
             that.view.paint(that.model.getNodes(), that.plugin, nodeFilters, tileFilters);
         });
@@ -1232,7 +1337,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             this.filterables.push(cons.toFilterable(data.predicate.type));
             this.predicates.push(data.predicate);
         }
-        console.log(this);
+        //TODO Multiple calls? Check select query
     };
 
     /**
@@ -1273,7 +1378,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     };
 
     Plugin.Node.prototype.generateTile = function() {
-        var $tile = $(templates["tileWrapper"](this)).append($(templates[this.useTemplateIdentifier](this)));
+        var $tile = $(templates["tileWrapper"](appendCssClasses({node: this}))).append($(templates[this.useTemplateIdentifier](appendCssClasses({node: this}))));
         $tile.data("node", this);
         //console.log("Tile generated");
         return $tile;
@@ -1398,15 +1503,14 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     Plugin.NodeFactory = {
         makeNode: function(data, options) {
             var node;
-
             switch (data.subject.token) {
-                case cons.CSS_CLASSES.toToken("patternClasses.blanknode"):
+                case cons.CSS_UTIL.toToken("patternClasses.blanknode"):
                     node = new Plugin.BlankNode(data);
                     break;
-                case cons.CSS_CLASSES.toToken("patternClasses.literal"):
+                case cons.CSS_UTIL.toToken("patternClasses.literal"):
                     node = new Plugin.LiteralNode(data, options.literalStyle);
                     break;
-                case cons.CSS_CLASSES.toToken("patternClasses.uri"):
+                case cons.CSS_UTIL.toToken("patternClasses.uri"):
                     if (data.label && (data.label.lang === undefined || data.label.lang === "en")) {
                         node = new Plugin.ResNode(data, options.itemStyle);
                     }
@@ -1468,7 +1572,6 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                     }
                 });
             }
-
             return node;
         };
 
@@ -1480,7 +1583,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
      * @return {Object} nodes A copy of the stored nodes
      */
     Plugin.Layer.Model.prototype.getNodes = function() {
-        return owl.deepCopy(this._nodes);
+        return deepCopy(this._nodes);
     };
 
     /**
@@ -1497,7 +1600,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         var addedNodes = {};
 
         $.each(batch, function(i, val) {
-            val.subject.token = cons.TOKEN_TAG + val.subject.token;
+            val.subject.token = cons.CSS_UTIL.strToToken(cons.CSS_UTIL.strToCss(val.subject.token));
 
             val.index = that.nodesLength + 1;
 
@@ -1541,13 +1644,13 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                         }
                         break;
                 }
-                //node = that._fetchPredicateLabel(node);
                 if (node) {
+                    node = that._fetchPredicateLabel(node);
                     addedNodes[node.id] = node;
                 }
             }
         });
-        this.itemsAdded.notify({"addedNodes" : owl.deepCopy(addedNodes), "allNodes" : owl.deepCopy(this._nodes)});
+        this.itemsAdded.notify({"addedNodes" : deepCopy(addedNodes), "allNodes" : this.getNodes()});
         that._checkItemsHelp(resultSet, batchSize);
     };
 
@@ -1644,7 +1747,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         // on model clearing
         this._model.modelCleared.attach(
             function(sender) {
-                that.layoutEngine.remove($(".item"), function() {
+                that.layoutEngine.remove($(cons.CSS_UTIL.toSelector("tileClasses.tile")), function() {
                     console.log("view cleared");
                 });
             });
@@ -1653,6 +1756,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     Plugin.Layer.View.prototype.paint = function(nodes, plugin, nodeFilters, tileFilters) {
         
         console.log(nodes);
+        
         var filters;
         if (nodeFilters) {
             filters = nodeFilters;
@@ -1690,7 +1794,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     };
     
     Plugin.Layer.View.prototype.clearView = function(callback) {
-        this.removeTiles(this.$viewContainer.find(".item"));
+        this.removeTiles(this.$viewContainer.find(cons.CSS_UTIL.toSelector("tileClasses.tile")));
 //        this.$viewContainer.find(".item").remove();
 //        this.layoutEngine.reLayout();
         if(callback) {
@@ -1728,15 +1832,15 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
         var sortData = $.extend({}, this.options.layoutEngine.getSortData);
         delete sortData["group"];
-        var sortOptions = templates.sortOptions(sortData);
+        var sortOptions = templates.sortOptions(appendCssClasses({optionSet : sortData}));
         this.$optionsContainer.prepend(sortOptions);
-        var $sorter = this.$optionsContainer.find(' > .sorter');
+        var $sorter = this.$optionsContainer.find(' > ' + cons.CSS_UTIL.toSelector("sorter"));
 
         // Set selected on view
         $sorter.find('.' + this.options.layoutEngine.sortBy).addClass("selected");
         var $sortLinks = this.$optionsContainer.find('a');
 
-        $sorter.append(templates.groupDropDown({
+        $sorter.append(templates.groupDropDown(appendCssClasses({
             type: {
                 label: "type",
                 val: cons.FA_TAG
@@ -1745,7 +1849,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                 label: "node-type",
                 val: cons.TOKEN_TAG
             }
-        }));
+        })));
         var $sorterGroup = $sorter.find('#GroupDropDown');
 
         // Add onChange
@@ -1754,12 +1858,12 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             // get href attribute, minus the '#'
             var groupBy = $(this).val();
 
-            that.$container.find('.sorter > > > .selected').removeClass('selected');
+            that.$container.find(cons.CSS_UTIL.toSelector("sorter") + ' > > > .selected').removeClass('selected');
             that.layoutEngine.updateOptions({
                 getSortData: {
                     group: function($elem) {
                         var classes = $elem.attr("class");
-                        var pattern = new RegExp("(\s)*[a-zA-Z0-9]*" + groupBy + "[a-zA-Z0-9]*(\s)*", 'g');
+                        var pattern = new RegExp("(\s)*[a-zA-Z0-9]*" + groupBy + "[a-zA-Z0-9_]*(\s)*", 'g');
                         var groups = classes.match(pattern), group = "";
                         if (groups !== null) {
                             for (var i = 0; i < groups.length; i++) {
@@ -1770,8 +1874,8 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                     }
                 }
             });
-            that.layoutEngine.updateSortData(that.$viewContainer.find(".item"));
-            that.$container.find("> > .groupLabel").remove();
+            that.layoutEngine.updateSortData(that.$viewContainer.find(cons.CSS_UTIL.toSelector("tileClasses.tile")));
+            that.$container.find("> > " + cons.CSS_UTIL.toSelector("groupLabel")).remove();
             that.layoutEngine.updateOptions({
                 layoutMode: 'groupRows',
                 sortBy: "group"
@@ -1784,8 +1888,8 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             // get href attribute, minus the '#'
             var sortName = $(this).attr('data-sort-value');
             $sorterGroup.val("Group by...");
-            that.$optionsContainer.find('.sorter > > > .selected').removeClass("selected");
-            that.$container.find("> > .groupLabel").remove();
+            that.$optionsContainer.find(cons.CSS_UTIL.toSelector("sorter") + ' > > > .selected').removeClass("selected");
+            that.$container.find("> > " + cons.CSS_UTIL.toSelector("groupLabel")).remove();
             $(this).addClass("selected");
             that.layoutEngine.updateOptions({
                 layoutMode: 'masonry',
@@ -1798,10 +1902,10 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     Plugin.Layer.View.prototype.addIsotopeFilter = function() {
         // Add options
         var that = this;
-        var filterOptions = templates.filterOptions(that.options.filterBy);
+        var filterOptions = templates.filterOptions(appendCssClasses({filterOptions : that.options.filterBy}));
         this.$optionsContainer.append(filterOptions);
 
-        var $filter = this.$optionsContainer.find(' > .filter');
+        var $filter = this.$optionsContainer.find(' > ' + cons.CSS_UTIL.toSelector("filter"));
         var $filterLinks = $filter.find('a');
 
         // Add onClick
@@ -1811,7 +1915,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             if (selector !== '*') {
                 selector = "." + cons.FA_TAG + selector;
             }
-            that.$container.find('.filter > > > .selected').removeClass('selected');
+            that.$container.find(cons.CSS_UTIL.toSelector("filter") + ' > > > .selected').removeClass('selected');
             $(this).addClass('selected');
             that.layoutEngine.updateOptions({
                 filter: selector
@@ -1843,7 +1947,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                 selector = '*';
             }
 
-            that.$container.find('.filter > > > .selected').removeClass('selected');
+            that.$container.find(cons.CSS_UTIL.toSelector("filter") + ' > > > .selected').removeClass('selected');
             that.layoutEngine.updateOptions({
                 filter: selector
             });
@@ -1864,9 +1968,9 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
      */
     Plugin.InitLayer = function($container, options, plugin) {
         if (plugin.options.generateTimeline) {
-            plugin._$timelineContainer = $('<div class="timelineContainer">');
+            plugin._$timelineContainer = $('<div class="'+cons.CSS_CLASSES.timelineContainer +'">');
             plugin._$parent.prepend(plugin._$timelineContainer);
-            plugin._$timeline = $('<ul class="timeline"></ul>');
+            plugin._$timeline = $('<ul class="'+cons.CSS_CLASSES.timeline +'"></ul>');
             plugin._$timelineContainer.append(plugin._$timeline);
             //TODO Timeline
         }
@@ -1907,7 +2011,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         });
 
         // <---- close click Event ---->
-        var $overlayContent = $container.find('> ' + cons.CSS_CLASSES.toSelector("overlayContent")), $close = $container.find('> span.close');
+        var $overlayContent = $container.find('> ' + cons.CSS_UTIL.toSelector("overlayContent")), $close = $container.find('> span' + cons.CSS_UTIL.toSelector("close"));
         eventManagers[plugin.pluginID].addEventHandler('click', function() {
             that.close();
         }, $close);
@@ -1916,13 +2020,13 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         // Input for the handlebar
         // template
         var input = {};
-        input.label = $item.find('.labelEn').text();
+        input.label = $item.find(cons.CSS_UTIL.toSelector("tileClasses.labelEN")).text();
 
         // write new data
-        $overlayContent.append($(templates.overlayContent(this.node)));
+        $overlayContent.append($(templates.overlayContent(appendCssClasses({node : this.node}))));
 
 
-        Plugin.Layer.call(this, $overlayContent.find('.innerScroll'), options, plugin, queries);
+        Plugin.Layer.call(this, $overlayContent.find(cons.CSS_UTIL.toSelector("innerScroll")), options, plugin, queries);
 
         this.$overlay = $container;
         this.$overlayContent = $overlayContent;
@@ -1939,7 +2043,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             // Set contet color
             var color = new RGBColor(that.$item.css("background-color"));
             $container.css("background-color", color.toRGB());
-            $.each($overlayContent.children('div.innerScroll'), function(i, val) {
+            $.each($overlayContent.children('div'+cons.CSS_UTIL.toSelector("innerScroll")), function(i, val) {
                 color.r -= 10;
                 color.b -= 10;
                 color.g -= 10;
@@ -1947,12 +2051,12 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             });
 
             // Set content width
-            $overlayContent.find('> .overlayColumn').css("width", 100 + "%");
+            //$overlayContent.find('> .overlayColumn').css("width", 100 + "%");
 
             // Set innerScrollBox width and height
-            $overlayContent.find('.innerScroll').css("width",
+            $overlayContent.find(cons.CSS_UTIL.toSelector("innerScroll")).css("width",
                     ($window.width() - parseInt($container.css("padding-left")) - parseInt($container.css("padding-right"))) + "px");
-            $overlayContent.find('.innerScroll').css("height", $window.height() - $overlayContent.find('.innerNoScroll').height() + "px");
+            $overlayContent.find(cons.CSS_UTIL.toSelector("innerScroll")).css("height", $window.height() - $overlayContent.find(cons.CSS_UTIL.toSelector("innerNoScroll")).height() + "px");
 
             callback();
         };
@@ -2124,7 +2228,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     };
 
     Plugin.TemplatesLoader.prototype.getPrecompiledTemplates = function() {
-        templates = window["visaRDF"]["templates"];
+        templates = window[pluginName]["templates"];
         return this._isLoaded();
     };
 
@@ -2301,11 +2405,9 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             multiResNode: {
                 fn: function(plugin, nodes, config) {
                     var tempArray = new Array();
-                    //TODO rework
                     $.each(nodes, function(i, node){
                         if(node.type === "resNode") {
                             if(node.uri in tempArray) {
-                                console.log(tempArray[node.uri])
                                  tempArray[node.uri].nodeType = "multiResNode";
                                  tempArray[node.uri].merge(node);
                                  delete nodes[i];
@@ -2314,7 +2416,6 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                             }
                         }
                     });
-                    console.log(nodes)
                     return nodes;
                 },
                 lookAtAddedNodes : true
@@ -2390,16 +2491,16 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                     };
 
                     this._setLabelScale = function($tile, anchor, height, width, callback) {
-                        var $labelEn = $tile.find("> .labelEn");
+                        var $labelEn = $tile.find("> " + cons.CSS_UTIL.toSelector("tileClasses.labelEN"));
                         $labelEn.width(width * 0.9);
                         this._addToAnchor($labelEn, anchor, height, callback);
                     };
 
                     this._setPredicateScale = function($tile, anchor, height, width, callback) {
                         var that = this;
-                        var $typeImage = $tile.find("> .typeImage");
-                        var $predicate = $tile.find("> .predicate");
-                        var $predicateLabel = $tile.find("> .predicateLabel");
+                        var $typeImage = $tile.find("> "+ cons.CSS_UTIL.toSelector("tileClasses.typeImage"));
+                        var $predicate = $tile.find("> " +  cons.CSS_UTIL.toSelector("tileClasses.predicate"));
+                        var $predicateLabel = $tile.find("> " +  cons.CSS_UTIL.toSelector("tileClasses.predicateLabel"));
 
                         var imageWidth = width * 0.1;
                         $typeImage.css("padding-left", width * 0.025);
@@ -2424,7 +2525,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                     this._setDescriptionScale = function($tile, anchor, height, width, callback) {
                         var node = $tile.data("node");
                         if (node.description) {
-                            var $descriptionEn = $tile.find("> .descriptionEn");
+                            var $descriptionEn = $tile.find("> " +  cons.CSS_UTIL.toSelector("tileClasses.descriptionEn"));
                             $descriptionEn.width(width * 0.9);
                             that._addToAnchor($descriptionEn, anchor, height, callback);
                         } else if (callback) {
@@ -2675,9 +2776,9 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                 fn: function(plugin, $tiles) {
                     $.each($tiles, function(i, tile) {
                         var $tile = $(tile);
-                        var $predicate = $tile.find("> .predicate");
-                        var $typeImage = $tile.find("> .typeImage");
-                        var $predicateLabel = $tile.find("> .predicateLabel");
+                        var $predicate = $tile.find("> " + cons.CSS_UTIL.toSelector("tileClasses.predicate"));
+                        var $typeImage = $tile.find("> " + cons.CSS_UTIL.toSelector("tileClasses.typeImage"));
+                        var $predicateLabel = $tile.find("> " + cons.CSS_UTIL.toSelector("tileClasses.predicateLabel"));
 
                         //Show full URI on mouse enter
                         $predicateLabel.on("mouseenter", function() {
@@ -2725,20 +2826,16 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                                     } else {
                                         $tile.data('isExpanded', true);
                                         var idAddition = Math.random().toString(36).substr(2, 9);
-                                        var overlay = templates.overlayWrapper({
+                                        var overlay = templates.overlayWrapper(appendCssClasses({
                                             "id": node.id + idAddition,
-                                            "cssClass": {
-                                                "overlay": cons.CSS_CLASSES.overlay,
-                                                "overlayContent": cons.CSS_CLASSES.overlayContent
-                                            },
                                             "nodeFilters": plugin.options.nodeFilters,
-                                            "tileFitlers": plugin.options.tileFilters
-                                        });
+                                            "tileFilters": plugin.options.tileFilters
+                                        }));
                                         plugin._$parent.append(overlay);
-                                        var $overlay = plugin._$parent.find(cons.CSS_CLASSES.toSelector("overlay")).find("div:contains('" + node.id + idAddition + "')").parent();
+                                        var $overlay = plugin._$parent.find(cons.CSS_UTIL.toSelector("overlay")).find("div:contains('" + node.id + idAddition + "')").parent();
                                         var newLayerOptions = $.extend(true, {}, plugin.options.layerOptions, {
                                             layoutEngine: {
-                                                itemSelector: '.item',
+                                                itemSelector: cons.CSS_UTIL.toSelector("tileClasses.tile"),
                                                 getSortData: {
                                                     type: function($elem) {
                                                         var classes = $elem.attr("class");
@@ -2755,16 +2852,18 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                                                     }
                                                 }
                                             },
-                                            filterBy: [{
-                                                    value: "*",
-                                                    label: "showAll"
-                                                }, {
-                                                    value: cons.CSS_CLASSES.typeClasses.incoming,
-                                                    label: "in"
-                                                }, {
-                                                    value: cons.CSS_CLASSES.typeClasses.outgoing,
-                                                    label: "out"
-                                                }]
+                                            viewOptions : {
+                                                filterBy: [{
+                                                        value: "*",
+                                                        label: "showAll"
+                                                    }, {
+                                                        value: cons.CSS_CLASSES.typeClasses.incoming,
+                                                        label: "in"
+                                                    }, {
+                                                        value: cons.CSS_CLASSES.typeClasses.outgoing,
+                                                        label: "out"
+                                                    }]
+                                            }
                                         });
                                         var newLayer = new Plugin.DetailLayer($overlay, newLayerOptions, plugin, $tile);
                                         plugin.addLayer(newLayer);
@@ -2879,7 +2978,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             /**
              Flag to indicate whether the sort interface should be generated.
              
-             @property defaults.viewOptions.generateSortOptions
+             @property defaults.layerOptions.generateSortOptions
              @type Boolean
              @default true
              **/
@@ -2887,7 +2986,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             /**
              Flag to indicate whether previews should be used.
              
-             @property defaults.viewOptions.generateSortOptions
+             @property defaults.layerOptions.generateSortOptions
              @type Boolean
              @default true
              **/
@@ -2895,7 +2994,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             /**
              Flag to indicate which kind of previews should be used. Possible options are
              
-             @property defaults.viewOptions.previewAsOverlay
+             @property defaults.layerOptions.previewAsOverlay
              @type Boolean
              @default Overlay
              **/
@@ -2903,27 +3002,23 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             /**
              Flag to indicate whether the filter interface should be generated.
              
-             @property defaults.viewOptions.generateFilterOptions
+             @property defaults.layerOptions.generateFilterOptions
              @type Boolean
              @default true
              **/
             generateFilterOptions: true,
+
             /**
-             Default filter to be added to the filter interface.
+             Options for the model holding node results.
              
-             @property defaults.viewOptions.generateSortOptions
+             @property defaults.layerOptions.modelOptions
              @type Object
-             @default [ { value : "*", label : "showAll" } ]
              **/
-            filterBy: [{
-                    value: "*",
-                    label: "showAll"
-                }],
             modelOptions: {
                 /**
                  Batch size of items which can be loaded simultaniosly in the view. Filters only work on single batches. The batchSize should be chosen big enough if Nodefilters are to be used.
                  
-                 @property defaults.viewOptions.batchSize
+                 @property defaults.layerOptions.modelOptions.batchSize
                  @type Integer
                  @default 25
                  **/
@@ -2933,14 +3028,14 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             /**
              Options for remote loading of data.
              
-             @property defaults.viewOptions.remoteOptions
+             @property defaults.layerOptions.remoteOptions
              @type Object
              **/
             remoteOptions: {
                 /**
                  Default remote load query. Used on insertRemoteData() if no query parameter is given.
                  
-                 @property defaults.viewOptions.remoteOptions.defaultRemoteQuery
+                 @property defaults.layerOptions.remoteOptions.defaultRemoteQuery
                  @type String
                  @default "SELECT ?subject ?predicate ?object { BIND( rdfs:label as ?predicate) ?subject ?predicate ?object. ?subject a <http://dbpedia.org/ontology/Place> . ?subject <http://dbpedia.org/property/rulingParty> ?x } LIMIT 500"
                  **/
@@ -2948,7 +3043,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                 /**
                  Backend services to query on remote loading.
                  
-                 @property defaults.viewOptions.remoteOptions.remoteBackend
+                 @property defaults.layerOptions.remoteOptions.remoteBackend
                  @type Array
                  @default ["http://zaire.dimis.fim.uni-passau.de:8080/bigdata/sparql"]
                  **/
@@ -2956,7 +3051,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                 /**
                  Limit for items loaded by a single remote load.
                  
-                 @property defaults.viewOptions.remoteOptions.remoteLimit
+                 @property defaults.layerOptions.remoteOptions.remoteLimit
                  @type Integer
                  @default 100
                  **/
@@ -2964,7 +3059,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                 /**
                  Flag to indicate whether automatic remote load on detail view should be done.
                  
-                 @property defaults.viewOptions.remoteOptions.remoteDynamically
+                 @property defaults.layerOptions.remoteOptions.remoteDynamically
                  @type Boolean
                  @default true
                  **/
@@ -2972,7 +3067,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                 /**
                  Remote backends to query for predicate label information.
                  
-                 @property defaults.viewOptions.remoteOptions.remoteLabelBackend
+                 @property defaults.layerOptions.remoteOptions.remoteLabelBackend
                  @type Array
                  @default ["http://zaire.dimis.fim.uni-passau.de:8080/bigdata/sparql","http://dbpedia.org/sparql"]
                  **/
@@ -2980,7 +3075,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                 /**
                  Flag to indicate whether remote label information should be loaded if needed.
                  
-                 @property defaults.viewOptions.remoteOptions.remoteLabels
+                 @property defaults.layerOptions.remoteOptions.remoteLabels
                  @type Boolean
                  @default true
                  **/
@@ -2996,27 +3091,41 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                 /**
                  Flag to indicate whether the filter should use regular expressions.
                  
-                 @property defaults.viewOptions.supportRegExpFilter
+                 @property defaults.layerOptions.viewOptions.supportRegExpFilter
                  @type Boolean
                  @default true
                  **/
                 supportRegExpFilter: true,
                 
+                batchSize: 10,
+                
+                /**
+                Default filter to be added to the filter interface.
+
+                @property defaults.layerOptions.viewOptions.filterBy
+                @type Object
+                @default [ { value : "*", label : "showAll" } ]
+                **/
+               filterBy: [{
+                       value: "*",
+                       label: "showAll"
+                   }],
+                
                 /**
                  Options for the layoutEngine. Uses isotope http://isotope.metafizzy.co/ options structure.
                  
-                 @property defaults.layoutEngine 
+                 @property defaults.layerOptions.viewOptions.layoutEngine 
                  @type Object
                  **/
                 layoutEngine: {
                     sortBy: 'number',
                     getSortData: {
                         number: function($elem) {
-                            var number = $elem.hasClass('item') ? $elem.find('.number').text() : $elem.attr('data-number');
+                            var number = $elem.hasClass('item') ? $elem.find(cons.CSS_UTIL.toSelector("tileClasses.number")).text() : $elem.attr('data-number');
                             return parseInt(number, 10);
                         },
                         alphabetical: function($elem) {
-                            var labelEn = $elem.find('.labelEn'), itemText = labelEn.length ? labelEn : $elem;
+                            var labelEn = $elem.find(cons.CSS_UTIL.toSelector("tileClasses.labelEN")), itemText = labelEn.length ? labelEn : $elem;
                             return itemText.text();
                         }
                     }
@@ -3041,7 +3150,6 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         };
         // <!--- instance private utility functions ---->
 
-
         this.pluginID = generateId();
 
         this._$parent = $(obj);
@@ -3051,6 +3159,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
         // Give parentobj of the plugin a correspondending plugin class
         this._$parent.addClass(pluginName + "_" + this.pluginID);
+        this._$parent.addClass(pluginName);
 
         // Use $.extend to merge the given plugin options with the defaults
         this.options = $.extend(true, {}, defaults, options);
@@ -3243,11 +3352,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             eventManagers[this.pluginID].addEventHandler('smartresize', function(ev, $invoker) {
 
                 // <---- overlay modification ---->
-                var $overlays = that._$parent.children(cons.CSS_CLASSES.toSelector("overlay"));
+                var $overlays = that._$parent.children(cons.CSS_UTIL.toSelector("overlay"));
                 $overlays.css('clip', getClip(cons.CSS_CLASSES.overlay));
-                var innerScrolls = $overlays.find('.innerScroll');
+                var innerScrolls = $overlays.find(cons.CSS_UTIL.toSelector("innerScroll"));
                 innerScrolls.css("width", ($window.width() - parseInt($overlays.css("padding-left")) - parseInt($overlays.css("padding-right"))) + "px");
-                innerScrolls.css("height", $window.height() - $overlays.find('.innerNoScroll').height() + "px");
+                innerScrolls.css("height", $window.height() - $overlays.find(cons.CSS_UTIL.toSelector("innerNoScroll")).height() + "px");
                 // <!--- overlay modification ---->
 
                 // <---- preview modification ---->

@@ -137,10 +137,10 @@
     // ========================= VisaRDF Constants ===============================
     var cons = {
         // Part of CSS class to indicate a filterable
-        &quot;FA_TAG&quot;: &quot;-filter-_&quot;,
+        FA_TAG: &quot;synopsis_filter_&quot;,
         // Part of CSS class to indicate a token
-        &quot;TOKEN_TAG&quot;: &quot;token_&quot;,
-        &quot;NODE_TYPES&quot;: {
+        TOKEN_TAG: &quot;synopsis_token_&quot;,
+        NODE_TYPES: {
             stdNode: &quot;stdNode&quot;,
             literal: &quot;literal&quot;,
             blankNode: &quot;blankNode&quot;,
@@ -149,11 +149,41 @@
         toFilterable: function(str) {
             return cons.FA_TAG + str;
         },
+        CSS_PREFIX : &quot;synopsis_&quot;,
+        CSS_UTIL : {
+            _getCssString : function(id){
+                var idChain = id.split(&quot;.&quot;), it = cons.CSS_CLASSES;
+                for (var i = 0; i &lt; idChain.length; i++) {
+                    it = it[idChain[i]];
+                }
+                return it;
+            },
+           strToCss : function(str){
+                return cons.CSS_PREFIX + str;
+            },
+            strToToken: function(str) {
+                return cons.TOKEN_TAG + str;
+            },
+            toToken: function(id) {
+                return cons.TOKEN_TAG + cons.CSS_UTIL._getCssString(id);
+            },
+            toFilterable: function(id) {
+                return cons.FA_TAG + cons.CSS_UTIL._getCssString(id);
+            },
+            toSelector: function(id) {
+                return &quot;.&quot; + cons.CSS_UTIL._getCssString(id);
+            }
+        },
+        
         // CSS classes to use
-        &quot;CSS_CLASSES&quot;: {
+        CSS_CLASSES: {
             outerContainer: &quot;outerContainer&quot;,
             viewContainer: &quot;container&quot;,
             options: &quot;options&quot;,
+            optionCombo: &quot;option-combo&quot;,
+            optionSet: &quot;option-set&quot;,
+            groupLabel: &quot;groupLabel&quot;,
+            filter : &quot;filter&quot;,
             clearfix: &quot;clearfix&quot;,
             loader: &quot;loading&quot;,
             preview: &quot;preview&quot;,
@@ -161,6 +191,23 @@
             previewContent: &quot;previewContent&quot;,
             overlay: &quot;overlay&quot;,
             overlayContent: &quot;overlayContent&quot;,
+            innerScroll: &quot;innerScroll&quot;,
+            innerNoScroll: &quot;innerNoScroll&quot;,
+            close: &quot;close&quot;,
+            timelineContainer: &quot;timelineContainer&quot;,
+            timeline: &quot;timeline&quot;,
+            sorter: &quot;sorter&quot;,
+            tileClasses : {
+                tile : &quot;tile&quot;,
+                content : &quot;tileContent&quot;,
+                labelEN : &quot;labelEN&quot;,
+                showURI : &quot;showURI&quot;,
+                descriptionEn : &quot;descriptionEn&quot;,
+                predicate : &quot;predicate&quot;,
+                predicateLabel : &quot;predicateLabel&quot;,
+                typeImage : &quot;typeImage&quot;,
+                number : &quot;number&quot;
+            },
             typeClasses: {
                 incoming: &quot;incoming&quot;,
                 outgoing: &quot;outgoing&quot;
@@ -169,33 +216,12 @@
                 uri: &quot;uri&quot;,
                 literal: &quot;literal&quot;,
                 blanknode: &quot;blank&quot;
-            },
-            toToken: function(id) {
-                var idChain = id.split(&quot;.&quot;), it = this;
-                for (var i = 0; i &lt; idChain.length; i++) {
-                    it = it[idChain[i]];
-                }
-                return cons.TOKEN_TAG + it;
-            },
-            toFilterable: function(id) {
-                var idChain = id.split(&quot;.&quot;), it = this;
-                for (var i = 0; i &lt; idChain.length; i++) {
-                    it = it[idChain[i]];
-                }
-                return cons.FA_TAG + it;
-            },
-            toSelector: function(id) {
-                var idChain = id.split(&quot;.&quot;), it = this;
-                for (var i = 0; i &lt; idChain.length; i++) {
-                    it = it[idChain[i]];
-                }
-                return &quot;.&quot; + it;
             }
         },
         // Placeholder in query strings
-        &quot;DUMMY&quot;: &quot;#replaceMe#&quot;,
+        DUMMY: &quot;#replaceMe#&quot;,
         // Event types for Pub/Sub system
-        &quot;EVENT_TYPES&quot;: {
+        EVENT_TYPES: {
             storeModified: {
                 insert: &quot;dataInsert&quot;
             },
@@ -204,7 +230,7 @@
                 loadingStart: &quot;loadingStarted&quot;
             }
         },
-        &quot;MESSAGES&quot;: {
+        MESSAGES: {
             out: {
                 selectAllFilters: &quot;Select All&quot;
             },
@@ -212,15 +238,30 @@
                 ajax: &quot;Error on loading data.&quot;,
                 remote: &quot;Error on loading remote data.&quot;,
                 template: &quot;Error on loading template data.&quot;,
-                tokenType: &quot;Unkown token type of item.&quot;
+                tokenType: &quot;Unknown token type of item.&quot;
             },
             warn: {
+                cssAppend: &quot;CSS classes already defined&quot;,
                 filterInput: &quot;Filterinput is empty&quot;,
                 filterName: &quot;Filtername duplicate found&quot;
             }
         }
     };
 
+    //Add prefix to given objects strings
+    function objPrefixer(prefix, obj) {
+        $.each(obj, function(i,val) {
+            if (typeof val === &quot;string&quot;) {
+                obj[i] = prefix + val;
+            } else {
+                objPrefixer(prefix, val);
+            }
+        });
+    }
+
+    //Add css_prefix to css_classes
+    objPrefixer(cons.CSS_PREFIX, cons.CSS_CLASSES);
+    
     // ========================= Extend Isotope ===============================
 
     // Extend Isotope - groupRows custom layout mode
@@ -263,11 +304,12 @@
                     }
                 }
 
-                $this.find(&quot;.groupLabel&quot;).remove();
+                $this.find(cons.CSS_UTIL.toSelector(&quot;groupLabel&quot;)).remove();
                 // label for new group
                 if (group !== &#x27;&#x27;) {
+                    console.log(group)
                     var prefix = group.split(&quot;_&quot;)[0] + &quot;_&quot;;
-                    var groups = group.split(prefix), divBox = &quot;&lt;div class=&#x27;groupLabel&#x27;&gt;&quot;;
+                    var groups = group.split(prefix), divBox = &quot;&lt;div class=&#x27;&quot;+ cons.CSS_CLASSES.groupLabel + &quot;&#x27; &gt;&quot;;
                     for (var i = 1; i &lt; groups.length; i++) {
                         divBox += groups[i];
                     }
@@ -355,6 +397,17 @@
     function isUndefinedOrNull(a) {
         return ((typeof a === &quot;undefined&quot;) || (a === null));
     }
+    
+    function appendCssClasses(obj) {
+        if(obj) {
+            if(!obj.CSS_CLASSES) {
+                obj.CSS_CLASSES = cons.CSS_CLASSES;
+            } else {
+                console.log(cons.MESSAGES.warn.cssAppend);
+            }
+        }
+        return obj;
+    }
 
     /**
      * Replace the DUMMY constants of given query with the given replacementstring.
@@ -367,6 +420,19 @@
     function replaceDummy(query, replacement) {
         return query.replace(new RegExp(cons.DUMMY, &quot;g&quot;), replacement);
     }
+    
+    /**
+     * Used to deepCopy a javascript object.
+     *
+     * @private
+     * @method deepCopy
+     * @param {Object} obj Object to clone
+     * @return copy of the object
+     */
+    function deepCopy(obj) {
+        //TODO fn copy?
+        return owl.deepCopy(obj); 
+   }
 
     /**
      * Gets the current window size of the browser.
@@ -943,7 +1009,7 @@
             this.view.addOptionsBox();
             if (plugin.options.generateTimeline) {
                 this.view.addTimelineButton();
-                var item = templates.timelineItem(this);
+                var item = templates.timelineItem(appendCssClasses({layer: this}));
                 plugin._$timeline.append(item);
             }
             if (options.generateSortOptions) {
@@ -1003,6 +1069,7 @@
 
         console.log(nodeFilters);
         console.log(tileFilters);
+         console.log(&quot;after switch&quot;);
         this.view.clearView(function() {
             that.view.paint(that.model.getNodes(), that.plugin, nodeFilters, tileFilters);
         });
@@ -1039,7 +1106,7 @@
             this.filterables.push(cons.toFilterable(data.predicate.type));
             this.predicates.push(data.predicate);
         }
-        console.log(this);
+        //TODO Multiple calls? Check select query
     };
 
     /**
@@ -1080,7 +1147,7 @@
     };
 
     Plugin.Node.prototype.generateTile = function() {
-        var $tile = $(templates[&quot;tileWrapper&quot;](this)).append($(templates[this.useTemplateIdentifier](this)));
+        var $tile = $(templates[&quot;tileWrapper&quot;](appendCssClasses({node: this}))).append($(templates[this.useTemplateIdentifier](appendCssClasses({node: this}))));
         $tile.data(&quot;node&quot;, this);
         //console.log(&quot;Tile generated&quot;);
         return $tile;
@@ -1205,15 +1272,14 @@
     Plugin.NodeFactory = {
         makeNode: function(data, options) {
             var node;
-
             switch (data.subject.token) {
-                case cons.CSS_CLASSES.toToken(&quot;patternClasses.blanknode&quot;):
+                case cons.CSS_UTIL.toToken(&quot;patternClasses.blanknode&quot;):
                     node = new Plugin.BlankNode(data);
                     break;
-                case cons.CSS_CLASSES.toToken(&quot;patternClasses.literal&quot;):
+                case cons.CSS_UTIL.toToken(&quot;patternClasses.literal&quot;):
                     node = new Plugin.LiteralNode(data, options.literalStyle);
                     break;
-                case cons.CSS_CLASSES.toToken(&quot;patternClasses.uri&quot;):
+                case cons.CSS_UTIL.toToken(&quot;patternClasses.uri&quot;):
                     if (data.label &amp;&amp; (data.label.lang === undefined || data.label.lang === &quot;en&quot;)) {
                         node = new Plugin.ResNode(data, options.itemStyle);
                     }
@@ -1275,7 +1341,6 @@
                     }
                 });
             }
-
             return node;
         };
 
@@ -1287,7 +1352,7 @@
      * @return {Object} nodes A copy of the stored nodes
      */
     Plugin.Layer.Model.prototype.getNodes = function() {
-        return owl.deepCopy(this._nodes);
+        return deepCopy(this._nodes);
     };
 
     /**
@@ -1304,7 +1369,7 @@
         var addedNodes = {};
 
         $.each(batch, function(i, val) {
-            val.subject.token = cons.TOKEN_TAG + val.subject.token;
+            val.subject.token = cons.CSS_UTIL.strToToken(cons.CSS_UTIL.strToCss(val.subject.token));
 
             val.index = that.nodesLength + 1;
 
@@ -1348,13 +1413,13 @@
                         }
                         break;
                 }
-                //node = that._fetchPredicateLabel(node);
                 if (node) {
+                    node = that._fetchPredicateLabel(node);
                     addedNodes[node.id] = node;
                 }
             }
         });
-        this.itemsAdded.notify({&quot;addedNodes&quot; : owl.deepCopy(addedNodes), &quot;allNodes&quot; : owl.deepCopy(this._nodes)});
+        this.itemsAdded.notify({&quot;addedNodes&quot; : deepCopy(addedNodes), &quot;allNodes&quot; : this.getNodes()});
         that._checkItemsHelp(resultSet, batchSize);
     };
 
@@ -1451,7 +1516,7 @@
         // on model clearing
         this._model.modelCleared.attach(
             function(sender) {
-                that.layoutEngine.remove($(&quot;.item&quot;), function() {
+                that.layoutEngine.remove($(cons.CSS_UTIL.toSelector(&quot;tileClasses.tile&quot;)), function() {
                     console.log(&quot;view cleared&quot;);
                 });
             });
@@ -1460,6 +1525,7 @@
     Plugin.Layer.View.prototype.paint = function(nodes, plugin, nodeFilters, tileFilters) {
         
         console.log(nodes);
+        
         var filters;
         if (nodeFilters) {
             filters = nodeFilters;
@@ -1497,7 +1563,7 @@
     };
     
     Plugin.Layer.View.prototype.clearView = function(callback) {
-        this.removeTiles(this.$viewContainer.find(&quot;.item&quot;));
+        this.removeTiles(this.$viewContainer.find(cons.CSS_UTIL.toSelector(&quot;tileClasses.tile&quot;)));
 //        this.$viewContainer.find(&quot;.item&quot;).remove();
 //        this.layoutEngine.reLayout();
         if(callback) {
@@ -1535,15 +1601,15 @@
 
         var sortData = $.extend({}, this.options.layoutEngine.getSortData);
         delete sortData[&quot;group&quot;];
-        var sortOptions = templates.sortOptions(sortData);
+        var sortOptions = templates.sortOptions(appendCssClasses({optionSet : sortData}));
         this.$optionsContainer.prepend(sortOptions);
-        var $sorter = this.$optionsContainer.find(&#x27; &gt; .sorter&#x27;);
+        var $sorter = this.$optionsContainer.find(&#x27; &gt; &#x27; + cons.CSS_UTIL.toSelector(&quot;sorter&quot;));
 
         // Set selected on view
         $sorter.find(&#x27;.&#x27; + this.options.layoutEngine.sortBy).addClass(&quot;selected&quot;);
         var $sortLinks = this.$optionsContainer.find(&#x27;a&#x27;);
 
-        $sorter.append(templates.groupDropDown({
+        $sorter.append(templates.groupDropDown(appendCssClasses({
             type: {
                 label: &quot;type&quot;,
                 val: cons.FA_TAG
@@ -1552,7 +1618,7 @@
                 label: &quot;node-type&quot;,
                 val: cons.TOKEN_TAG
             }
-        }));
+        })));
         var $sorterGroup = $sorter.find(&#x27;#GroupDropDown&#x27;);
 
         // Add onChange
@@ -1561,12 +1627,12 @@
             // get href attribute, minus the &#x27;#&#x27;
             var groupBy = $(this).val();
 
-            that.$container.find(&#x27;.sorter &gt; &gt; &gt; .selected&#x27;).removeClass(&#x27;selected&#x27;);
+            that.$container.find(cons.CSS_UTIL.toSelector(&quot;sorter&quot;) + &#x27; &gt; &gt; &gt; .selected&#x27;).removeClass(&#x27;selected&#x27;);
             that.layoutEngine.updateOptions({
                 getSortData: {
                     group: function($elem) {
                         var classes = $elem.attr(&quot;class&quot;);
-                        var pattern = new RegExp(&quot;(\s)*[a-zA-Z0-9]*&quot; + groupBy + &quot;[a-zA-Z0-9]*(\s)*&quot;, &#x27;g&#x27;);
+                        var pattern = new RegExp(&quot;(\s)*[a-zA-Z0-9]*&quot; + groupBy + &quot;[a-zA-Z0-9_]*(\s)*&quot;, &#x27;g&#x27;);
                         var groups = classes.match(pattern), group = &quot;&quot;;
                         if (groups !== null) {
                             for (var i = 0; i &lt; groups.length; i++) {
@@ -1577,8 +1643,8 @@
                     }
                 }
             });
-            that.layoutEngine.updateSortData(that.$viewContainer.find(&quot;.item&quot;));
-            that.$container.find(&quot;&gt; &gt; .groupLabel&quot;).remove();
+            that.layoutEngine.updateSortData(that.$viewContainer.find(cons.CSS_UTIL.toSelector(&quot;tileClasses.tile&quot;)));
+            that.$container.find(&quot;&gt; &gt; &quot; + cons.CSS_UTIL.toSelector(&quot;groupLabel&quot;)).remove();
             that.layoutEngine.updateOptions({
                 layoutMode: &#x27;groupRows&#x27;,
                 sortBy: &quot;group&quot;
@@ -1591,8 +1657,8 @@
             // get href attribute, minus the &#x27;#&#x27;
             var sortName = $(this).attr(&#x27;data-sort-value&#x27;);
             $sorterGroup.val(&quot;Group by...&quot;);
-            that.$optionsContainer.find(&#x27;.sorter &gt; &gt; &gt; .selected&#x27;).removeClass(&quot;selected&quot;);
-            that.$container.find(&quot;&gt; &gt; .groupLabel&quot;).remove();
+            that.$optionsContainer.find(cons.CSS_UTIL.toSelector(&quot;sorter&quot;) + &#x27; &gt; &gt; &gt; .selected&#x27;).removeClass(&quot;selected&quot;);
+            that.$container.find(&quot;&gt; &gt; &quot; + cons.CSS_UTIL.toSelector(&quot;groupLabel&quot;)).remove();
             $(this).addClass(&quot;selected&quot;);
             that.layoutEngine.updateOptions({
                 layoutMode: &#x27;masonry&#x27;,
@@ -1605,10 +1671,10 @@
     Plugin.Layer.View.prototype.addIsotopeFilter = function() {
         // Add options
         var that = this;
-        var filterOptions = templates.filterOptions(that.options.filterBy);
+        var filterOptions = templates.filterOptions(appendCssClasses({filterOptions : that.options.filterBy}));
         this.$optionsContainer.append(filterOptions);
 
-        var $filter = this.$optionsContainer.find(&#x27; &gt; .filter&#x27;);
+        var $filter = this.$optionsContainer.find(&#x27; &gt; &#x27; + cons.CSS_UTIL.toSelector(&quot;filter&quot;));
         var $filterLinks = $filter.find(&#x27;a&#x27;);
 
         // Add onClick
@@ -1618,7 +1684,7 @@
             if (selector !== &#x27;*&#x27;) {
                 selector = &quot;.&quot; + cons.FA_TAG + selector;
             }
-            that.$container.find(&#x27;.filter &gt; &gt; &gt; .selected&#x27;).removeClass(&#x27;selected&#x27;);
+            that.$container.find(cons.CSS_UTIL.toSelector(&quot;filter&quot;) + &#x27; &gt; &gt; &gt; .selected&#x27;).removeClass(&#x27;selected&#x27;);
             $(this).addClass(&#x27;selected&#x27;);
             that.layoutEngine.updateOptions({
                 filter: selector
@@ -1650,7 +1716,7 @@
                 selector = &#x27;*&#x27;;
             }
 
-            that.$container.find(&#x27;.filter &gt; &gt; &gt; .selected&#x27;).removeClass(&#x27;selected&#x27;);
+            that.$container.find(cons.CSS_UTIL.toSelector(&quot;filter&quot;) + &#x27; &gt; &gt; &gt; .selected&#x27;).removeClass(&#x27;selected&#x27;);
             that.layoutEngine.updateOptions({
                 filter: selector
             });
@@ -1671,9 +1737,9 @@
      */
     Plugin.InitLayer = function($container, options, plugin) {
         if (plugin.options.generateTimeline) {
-            plugin._$timelineContainer = $(&#x27;&lt;div class=&quot;timelineContainer&quot;&gt;&#x27;);
+            plugin._$timelineContainer = $(&#x27;&lt;div class=&quot;&#x27;+cons.CSS_CLASSES.timelineContainer +&#x27;&quot;&gt;&#x27;);
             plugin._$parent.prepend(plugin._$timelineContainer);
-            plugin._$timeline = $(&#x27;&lt;ul class=&quot;timeline&quot;&gt;&lt;/ul&gt;&#x27;);
+            plugin._$timeline = $(&#x27;&lt;ul class=&quot;&#x27;+cons.CSS_CLASSES.timeline +&#x27;&quot;&gt;&lt;/ul&gt;&#x27;);
             plugin._$timelineContainer.append(plugin._$timeline);
             //TODO Timeline
         }
@@ -1714,7 +1780,7 @@
         });
 
         // &lt;---- close click Event ----&gt;
-        var $overlayContent = $container.find(&#x27;&gt; &#x27; + cons.CSS_CLASSES.toSelector(&quot;overlayContent&quot;)), $close = $container.find(&#x27;&gt; span.close&#x27;);
+        var $overlayContent = $container.find(&#x27;&gt; &#x27; + cons.CSS_UTIL.toSelector(&quot;overlayContent&quot;)), $close = $container.find(&#x27;&gt; span&#x27; + cons.CSS_UTIL.toSelector(&quot;close&quot;));
         eventManagers[plugin.pluginID].addEventHandler(&#x27;click&#x27;, function() {
             that.close();
         }, $close);
@@ -1723,13 +1789,13 @@
         // Input for the handlebar
         // template
         var input = {};
-        input.label = $item.find(&#x27;.labelEn&#x27;).text();
+        input.label = $item.find(cons.CSS_UTIL.toSelector(&quot;tileClasses.labelEN&quot;)).text();
 
         // write new data
-        $overlayContent.append($(templates.overlayContent(this.node)));
+        $overlayContent.append($(templates.overlayContent(appendCssClasses({node : this.node}))));
 
 
-        Plugin.Layer.call(this, $overlayContent.find(&#x27;.innerScroll&#x27;), options, plugin, queries);
+        Plugin.Layer.call(this, $overlayContent.find(cons.CSS_UTIL.toSelector(&quot;innerScroll&quot;)), options, plugin, queries);
 
         this.$overlay = $container;
         this.$overlayContent = $overlayContent;
@@ -1746,7 +1812,7 @@
             // Set contet color
             var color = new RGBColor(that.$item.css(&quot;background-color&quot;));
             $container.css(&quot;background-color&quot;, color.toRGB());
-            $.each($overlayContent.children(&#x27;div.innerScroll&#x27;), function(i, val) {
+            $.each($overlayContent.children(&#x27;div&#x27;+cons.CSS_UTIL.toSelector(&quot;innerScroll&quot;)), function(i, val) {
                 color.r -= 10;
                 color.b -= 10;
                 color.g -= 10;
@@ -1754,12 +1820,12 @@
             });
 
             // Set content width
-            $overlayContent.find(&#x27;&gt; .overlayColumn&#x27;).css(&quot;width&quot;, 100 + &quot;%&quot;);
+            //$overlayContent.find(&#x27;&gt; .overlayColumn&#x27;).css(&quot;width&quot;, 100 + &quot;%&quot;);
 
             // Set innerScrollBox width and height
-            $overlayContent.find(&#x27;.innerScroll&#x27;).css(&quot;width&quot;,
+            $overlayContent.find(cons.CSS_UTIL.toSelector(&quot;innerScroll&quot;)).css(&quot;width&quot;,
                     ($window.width() - parseInt($container.css(&quot;padding-left&quot;)) - parseInt($container.css(&quot;padding-right&quot;))) + &quot;px&quot;);
-            $overlayContent.find(&#x27;.innerScroll&#x27;).css(&quot;height&quot;, $window.height() - $overlayContent.find(&#x27;.innerNoScroll&#x27;).height() + &quot;px&quot;);
+            $overlayContent.find(cons.CSS_UTIL.toSelector(&quot;innerScroll&quot;)).css(&quot;height&quot;, $window.height() - $overlayContent.find(cons.CSS_UTIL.toSelector(&quot;innerNoScroll&quot;)).height() + &quot;px&quot;);
 
             callback();
         };
@@ -1931,7 +1997,7 @@
     };
 
     Plugin.TemplatesLoader.prototype.getPrecompiledTemplates = function() {
-        templates = window[&quot;visaRDF&quot;][&quot;templates&quot;];
+        templates = window[pluginName][&quot;templates&quot;];
         return this._isLoaded();
     };
 
@@ -2108,11 +2174,9 @@
             multiResNode: {
                 fn: function(plugin, nodes, config) {
                     var tempArray = new Array();
-                    //TODO rework
                     $.each(nodes, function(i, node){
                         if(node.type === &quot;resNode&quot;) {
                             if(node.uri in tempArray) {
-                                console.log(tempArray[node.uri])
                                  tempArray[node.uri].nodeType = &quot;multiResNode&quot;;
                                  tempArray[node.uri].merge(node);
                                  delete nodes[i];
@@ -2121,7 +2185,6 @@
                             }
                         }
                     });
-                    console.log(nodes)
                     return nodes;
                 },
                 lookAtAddedNodes : true
@@ -2197,16 +2260,16 @@
                     };
 
                     this._setLabelScale = function($tile, anchor, height, width, callback) {
-                        var $labelEn = $tile.find(&quot;&gt; .labelEn&quot;);
+                        var $labelEn = $tile.find(&quot;&gt; &quot; + cons.CSS_UTIL.toSelector(&quot;tileClasses.labelEN&quot;));
                         $labelEn.width(width * 0.9);
                         this._addToAnchor($labelEn, anchor, height, callback);
                     };
 
                     this._setPredicateScale = function($tile, anchor, height, width, callback) {
                         var that = this;
-                        var $typeImage = $tile.find(&quot;&gt; .typeImage&quot;);
-                        var $predicate = $tile.find(&quot;&gt; .predicate&quot;);
-                        var $predicateLabel = $tile.find(&quot;&gt; .predicateLabel&quot;);
+                        var $typeImage = $tile.find(&quot;&gt; &quot;+ cons.CSS_UTIL.toSelector(&quot;tileClasses.typeImage&quot;));
+                        var $predicate = $tile.find(&quot;&gt; &quot; +  cons.CSS_UTIL.toSelector(&quot;tileClasses.predicate&quot;));
+                        var $predicateLabel = $tile.find(&quot;&gt; &quot; +  cons.CSS_UTIL.toSelector(&quot;tileClasses.predicateLabel&quot;));
 
                         var imageWidth = width * 0.1;
                         $typeImage.css(&quot;padding-left&quot;, width * 0.025);
@@ -2231,7 +2294,7 @@
                     this._setDescriptionScale = function($tile, anchor, height, width, callback) {
                         var node = $tile.data(&quot;node&quot;);
                         if (node.description) {
-                            var $descriptionEn = $tile.find(&quot;&gt; .descriptionEn&quot;);
+                            var $descriptionEn = $tile.find(&quot;&gt; &quot; +  cons.CSS_UTIL.toSelector(&quot;tileClasses.descriptionEn&quot;));
                             $descriptionEn.width(width * 0.9);
                             that._addToAnchor($descriptionEn, anchor, height, callback);
                         } else if (callback) {
@@ -2482,9 +2545,9 @@
                 fn: function(plugin, $tiles) {
                     $.each($tiles, function(i, tile) {
                         var $tile = $(tile);
-                        var $predicate = $tile.find(&quot;&gt; .predicate&quot;);
-                        var $typeImage = $tile.find(&quot;&gt; .typeImage&quot;);
-                        var $predicateLabel = $tile.find(&quot;&gt; .predicateLabel&quot;);
+                        var $predicate = $tile.find(&quot;&gt; &quot; + cons.CSS_UTIL.toSelector(&quot;tileClasses.predicate&quot;));
+                        var $typeImage = $tile.find(&quot;&gt; &quot; + cons.CSS_UTIL.toSelector(&quot;tileClasses.typeImage&quot;));
+                        var $predicateLabel = $tile.find(&quot;&gt; &quot; + cons.CSS_UTIL.toSelector(&quot;tileClasses.predicateLabel&quot;));
 
                         //Show full URI on mouse enter
                         $predicateLabel.on(&quot;mouseenter&quot;, function() {
@@ -2532,20 +2595,16 @@
                                     } else {
                                         $tile.data(&#x27;isExpanded&#x27;, true);
                                         var idAddition = Math.random().toString(36).substr(2, 9);
-                                        var overlay = templates.overlayWrapper({
+                                        var overlay = templates.overlayWrapper(appendCssClasses({
                                             &quot;id&quot;: node.id + idAddition,
-                                            &quot;cssClass&quot;: {
-                                                &quot;overlay&quot;: cons.CSS_CLASSES.overlay,
-                                                &quot;overlayContent&quot;: cons.CSS_CLASSES.overlayContent
-                                            },
                                             &quot;nodeFilters&quot;: plugin.options.nodeFilters,
-                                            &quot;tileFitlers&quot;: plugin.options.tileFilters
-                                        });
+                                            &quot;tileFilters&quot;: plugin.options.tileFilters
+                                        }));
                                         plugin._$parent.append(overlay);
-                                        var $overlay = plugin._$parent.find(cons.CSS_CLASSES.toSelector(&quot;overlay&quot;)).find(&quot;div:contains(&#x27;&quot; + node.id + idAddition + &quot;&#x27;)&quot;).parent();
+                                        var $overlay = plugin._$parent.find(cons.CSS_UTIL.toSelector(&quot;overlay&quot;)).find(&quot;div:contains(&#x27;&quot; + node.id + idAddition + &quot;&#x27;)&quot;).parent();
                                         var newLayerOptions = $.extend(true, {}, plugin.options.layerOptions, {
                                             layoutEngine: {
-                                                itemSelector: &#x27;.item&#x27;,
+                                                itemSelector: cons.CSS_UTIL.toSelector(&quot;tileClasses.tile&quot;),
                                                 getSortData: {
                                                     type: function($elem) {
                                                         var classes = $elem.attr(&quot;class&quot;);
@@ -2562,16 +2621,18 @@
                                                     }
                                                 }
                                             },
-                                            filterBy: [{
-                                                    value: &quot;*&quot;,
-                                                    label: &quot;showAll&quot;
-                                                }, {
-                                                    value: cons.CSS_CLASSES.typeClasses.incoming,
-                                                    label: &quot;in&quot;
-                                                }, {
-                                                    value: cons.CSS_CLASSES.typeClasses.outgoing,
-                                                    label: &quot;out&quot;
-                                                }]
+                                            viewOptions : {
+                                                filterBy: [{
+                                                        value: &quot;*&quot;,
+                                                        label: &quot;showAll&quot;
+                                                    }, {
+                                                        value: cons.CSS_CLASSES.typeClasses.incoming,
+                                                        label: &quot;in&quot;
+                                                    }, {
+                                                        value: cons.CSS_CLASSES.typeClasses.outgoing,
+                                                        label: &quot;out&quot;
+                                                    }]
+                                            }
                                         });
                                         var newLayer = new Plugin.DetailLayer($overlay, newLayerOptions, plugin, $tile);
                                         plugin.addLayer(newLayer);
@@ -2686,7 +2747,7 @@
             /**
              Flag to indicate whether the sort interface should be generated.
              
-             @property defaults.viewOptions.generateSortOptions
+             @property defaults.layerOptions.generateSortOptions
              @type Boolean
              @default true
              **/
@@ -2694,7 +2755,7 @@
             /**
              Flag to indicate whether previews should be used.
              
-             @property defaults.viewOptions.generateSortOptions
+             @property defaults.layerOptions.generateSortOptions
              @type Boolean
              @default true
              **/
@@ -2702,7 +2763,7 @@
             /**
              Flag to indicate which kind of previews should be used. Possible options are
              
-             @property defaults.viewOptions.previewAsOverlay
+             @property defaults.layerOptions.previewAsOverlay
              @type Boolean
              @default Overlay
              **/
@@ -2710,27 +2771,23 @@
             /**
              Flag to indicate whether the filter interface should be generated.
              
-             @property defaults.viewOptions.generateFilterOptions
+             @property defaults.layerOptions.generateFilterOptions
              @type Boolean
              @default true
              **/
             generateFilterOptions: true,
+
             /**
-             Default filter to be added to the filter interface.
+             Options for the model holding node results.
              
-             @property defaults.viewOptions.generateSortOptions
+             @property defaults.layerOptions.modelOptions
              @type Object
-             @default [ { value : &quot;*&quot;, label : &quot;showAll&quot; } ]
              **/
-            filterBy: [{
-                    value: &quot;*&quot;,
-                    label: &quot;showAll&quot;
-                }],
             modelOptions: {
                 /**
                  Batch size of items which can be loaded simultaniosly in the view. Filters only work on single batches. The batchSize should be chosen big enough if Nodefilters are to be used.
                  
-                 @property defaults.viewOptions.batchSize
+                 @property defaults.layerOptions.modelOptions.batchSize
                  @type Integer
                  @default 25
                  **/
@@ -2740,14 +2797,14 @@
             /**
              Options for remote loading of data.
              
-             @property defaults.viewOptions.remoteOptions
+             @property defaults.layerOptions.remoteOptions
              @type Object
              **/
             remoteOptions: {
                 /**
                  Default remote load query. Used on insertRemoteData() if no query parameter is given.
                  
-                 @property defaults.viewOptions.remoteOptions.defaultRemoteQuery
+                 @property defaults.layerOptions.remoteOptions.defaultRemoteQuery
                  @type String
                  @default &quot;SELECT ?subject ?predicate ?object { BIND( rdfs:label as ?predicate) ?subject ?predicate ?object. ?subject a &lt;http://dbpedia.org/ontology/Place&gt; . ?subject &lt;http://dbpedia.org/property/rulingParty&gt; ?x } LIMIT 500&quot;
                  **/
@@ -2755,7 +2812,7 @@
                 /**
                  Backend services to query on remote loading.
                  
-                 @property defaults.viewOptions.remoteOptions.remoteBackend
+                 @property defaults.layerOptions.remoteOptions.remoteBackend
                  @type Array
                  @default [&quot;http://zaire.dimis.fim.uni-passau.de:8080/bigdata/sparql&quot;]
                  **/
@@ -2763,7 +2820,7 @@
                 /**
                  Limit for items loaded by a single remote load.
                  
-                 @property defaults.viewOptions.remoteOptions.remoteLimit
+                 @property defaults.layerOptions.remoteOptions.remoteLimit
                  @type Integer
                  @default 100
                  **/
@@ -2771,7 +2828,7 @@
                 /**
                  Flag to indicate whether automatic remote load on detail view should be done.
                  
-                 @property defaults.viewOptions.remoteOptions.remoteDynamically
+                 @property defaults.layerOptions.remoteOptions.remoteDynamically
                  @type Boolean
                  @default true
                  **/
@@ -2779,7 +2836,7 @@
                 /**
                  Remote backends to query for predicate label information.
                  
-                 @property defaults.viewOptions.remoteOptions.remoteLabelBackend
+                 @property defaults.layerOptions.remoteOptions.remoteLabelBackend
                  @type Array
                  @default [&quot;http://zaire.dimis.fim.uni-passau.de:8080/bigdata/sparql&quot;,&quot;http://dbpedia.org/sparql&quot;]
                  **/
@@ -2787,7 +2844,7 @@
                 /**
                  Flag to indicate whether remote label information should be loaded if needed.
                  
-                 @property defaults.viewOptions.remoteOptions.remoteLabels
+                 @property defaults.layerOptions.remoteOptions.remoteLabels
                  @type Boolean
                  @default true
                  **/
@@ -2803,27 +2860,41 @@
                 /**
                  Flag to indicate whether the filter should use regular expressions.
                  
-                 @property defaults.viewOptions.supportRegExpFilter
+                 @property defaults.layerOptions.viewOptions.supportRegExpFilter
                  @type Boolean
                  @default true
                  **/
                 supportRegExpFilter: true,
                 
+                batchSize: 10,
+                
+                /**
+                Default filter to be added to the filter interface.
+
+                @property defaults.layerOptions.viewOptions.filterBy
+                @type Object
+                @default [ { value : &quot;*&quot;, label : &quot;showAll&quot; } ]
+                **/
+               filterBy: [{
+                       value: &quot;*&quot;,
+                       label: &quot;showAll&quot;
+                   }],
+                
                 /**
                  Options for the layoutEngine. Uses isotope http://isotope.metafizzy.co/ options structure.
                  
-                 @property defaults.layoutEngine 
+                 @property defaults.layerOptions.viewOptions.layoutEngine 
                  @type Object
                  **/
                 layoutEngine: {
                     sortBy: &#x27;number&#x27;,
                     getSortData: {
                         number: function($elem) {
-                            var number = $elem.hasClass(&#x27;item&#x27;) ? $elem.find(&#x27;.number&#x27;).text() : $elem.attr(&#x27;data-number&#x27;);
+                            var number = $elem.hasClass(&#x27;item&#x27;) ? $elem.find(cons.CSS_UTIL.toSelector(&quot;tileClasses.number&quot;)).text() : $elem.attr(&#x27;data-number&#x27;);
                             return parseInt(number, 10);
                         },
                         alphabetical: function($elem) {
-                            var labelEn = $elem.find(&#x27;.labelEn&#x27;), itemText = labelEn.length ? labelEn : $elem;
+                            var labelEn = $elem.find(cons.CSS_UTIL.toSelector(&quot;tileClasses.labelEN&quot;)), itemText = labelEn.length ? labelEn : $elem;
                             return itemText.text();
                         }
                     }
@@ -2848,7 +2919,6 @@
         };
         // &lt;!--- instance private utility functions ----&gt;
 
-
         this.pluginID = generateId();
 
         this._$parent = $(obj);
@@ -2858,6 +2928,7 @@
 
         // Give parentobj of the plugin a correspondending plugin class
         this._$parent.addClass(pluginName + &quot;_&quot; + this.pluginID);
+        this._$parent.addClass(pluginName);
 
         // Use $.extend to merge the given plugin options with the defaults
         this.options = $.extend(true, {}, defaults, options);
@@ -3050,11 +3121,11 @@
             eventManagers[this.pluginID].addEventHandler(&#x27;smartresize&#x27;, function(ev, $invoker) {
 
                 // &lt;---- overlay modification ----&gt;
-                var $overlays = that._$parent.children(cons.CSS_CLASSES.toSelector(&quot;overlay&quot;));
+                var $overlays = that._$parent.children(cons.CSS_UTIL.toSelector(&quot;overlay&quot;));
                 $overlays.css(&#x27;clip&#x27;, getClip(cons.CSS_CLASSES.overlay));
-                var innerScrolls = $overlays.find(&#x27;.innerScroll&#x27;);
+                var innerScrolls = $overlays.find(cons.CSS_UTIL.toSelector(&quot;innerScroll&quot;));
                 innerScrolls.css(&quot;width&quot;, ($window.width() - parseInt($overlays.css(&quot;padding-left&quot;)) - parseInt($overlays.css(&quot;padding-right&quot;))) + &quot;px&quot;);
-                innerScrolls.css(&quot;height&quot;, $window.height() - $overlays.find(&#x27;.innerNoScroll&#x27;).height() + &quot;px&quot;);
+                innerScrolls.css(&quot;height&quot;, $window.height() - $overlays.find(cons.CSS_UTIL.toSelector(&quot;innerNoScroll&quot;)).height() + &quot;px&quot;);
                 // &lt;!--- overlay modification ----&gt;
 
                 // &lt;---- preview modification ----&gt;
