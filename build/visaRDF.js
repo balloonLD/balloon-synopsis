@@ -478,6 +478,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             },
             warn: {
                 cssAppend: "CSS classes already defined",
+                fileTypeNotKnown: "Couldn't get filetype. Using: ",
                 filterInput: "Filterinput is empty",
                 filterName: "Filtername duplicate found"
             }
@@ -1095,6 +1096,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         if (dataFormat === "text/turtle" || dataFormat === "text/plain" || dataFormat === "text/n3") {
             // get prefix terms and update namespaces
             var prefixTerms = data.match(/.*@prefix.*>(\s)*./g);
+             if(prefixTerms) {
             $.each(prefixTerms, function(i, val) {
                 var prefixTerm = (val.split(/>(\s)*./)[0]).split(/:(\s)*</);
                 var prefix = prefixTerm[0].replace(/@prefix(\s)*/, "");
@@ -1104,14 +1106,19 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
                     that._generateQueryPrefix(prefix, uri);
                 }
             });
+             }
         } else if (dataFormat === "application/ld+json" || dataFormat === "application/json") {
+             console.log(data)
             var prefixes = data["@context"];
-            $.each(prefixes, function(i, val) {
-                if (isUndefinedOrNull(namespaces[prefix])) {
-                    namespaces[i] = val;
-                    that._generateQueryPrefix(i, val);
-                }
-            });
+            console.log(prefixes)
+            if(prefixes) {
+                $.each(prefixes, function(i, val) {
+                    if (isUndefinedOrNull(namespaces[val])) {
+                        namespaces[i] = val;
+                        that._generateQueryPrefix(i, val);
+                    }
+                });
+        }
         }
         this._store.load(dataFormat, data, function(store) {
             callback();
@@ -3538,12 +3545,32 @@ if (plugin.options.generateTimeline) {
          * @param {File} file File to parse
          * @param {String} dataFormat Format of the data
          */
-        insertDataFile: function(file, dataFormat) {
+        insertDataFile: function(file) {
             var that = this, reader = new FileReader();
             reader.onload = function() {
                 var result = this.result;
+                var type ="text/turtle";
+                if (file.type === "") {
+                var extension = file.name.split(".").pop();
+                switch(extension) {
+                    case "ttl": type =  "text/turtle";
+                        break;
+                    case "turtle": type =  "text/turtle";
+                        break;
+                    case "n3": type =  "text/n3";
+                        break;
+                    case "json": type = "application/json";
+                            break;
+                    case "jsld": type = "application/ld+json";
+                            break;
+                    default: 
+                        console.log(cons.MESSAGES.warn.fileTypeNotKnown + type);
+                }
+                } else {
+                    type = file.type;
+                }
                 $.when(globalInitDfd.promise()).done(function() {
-                    that.insertData(result, dataFormat);
+                    that.insertData(result, type);
                 });
             };
             reader.readAsText(file);

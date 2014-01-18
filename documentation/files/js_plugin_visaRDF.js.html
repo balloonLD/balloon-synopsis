@@ -243,6 +243,7 @@
             },
             warn: {
                 cssAppend: &quot;CSS classes already defined&quot;,
+                fileTypeNotKnown: &quot;Couldn&#x27;t get filetype. Using: &quot;,
                 filterInput: &quot;Filterinput is empty&quot;,
                 filterName: &quot;Filtername duplicate found&quot;
             }
@@ -860,6 +861,7 @@
         if (dataFormat === &quot;text/turtle&quot; || dataFormat === &quot;text/plain&quot; || dataFormat === &quot;text/n3&quot;) {
             // get prefix terms and update namespaces
             var prefixTerms = data.match(/.*@prefix.*&gt;(\s)*./g);
+             if(prefixTerms) {
             $.each(prefixTerms, function(i, val) {
                 var prefixTerm = (val.split(/&gt;(\s)*./)[0]).split(/:(\s)*&lt;/);
                 var prefix = prefixTerm[0].replace(/@prefix(\s)*/, &quot;&quot;);
@@ -869,14 +871,19 @@
                     that._generateQueryPrefix(prefix, uri);
                 }
             });
+             }
         } else if (dataFormat === &quot;application/ld+json&quot; || dataFormat === &quot;application/json&quot;) {
+             console.log(data)
             var prefixes = data[&quot;@context&quot;];
-            $.each(prefixes, function(i, val) {
-                if (isUndefinedOrNull(namespaces[prefix])) {
-                    namespaces[i] = val;
-                    that._generateQueryPrefix(i, val);
-                }
-            });
+            console.log(prefixes)
+            if(prefixes) {
+                $.each(prefixes, function(i, val) {
+                    if (isUndefinedOrNull(namespaces[val])) {
+                        namespaces[i] = val;
+                        that._generateQueryPrefix(i, val);
+                    }
+                });
+        }
         }
         this._store.load(dataFormat, data, function(store) {
             callback();
@@ -3303,12 +3310,32 @@ if (plugin.options.generateTimeline) {
          * @param {File} file File to parse
          * @param {String} dataFormat Format of the data
          */
-        insertDataFile: function(file, dataFormat) {
+        insertDataFile: function(file) {
             var that = this, reader = new FileReader();
             reader.onload = function() {
                 var result = this.result;
+                var type =&quot;text/turtle&quot;;
+                if (file.type === &quot;&quot;) {
+                var extension = file.name.split(&quot;.&quot;).pop();
+                switch(extension) {
+                    case &quot;ttl&quot;: type =  &quot;text/turtle&quot;;
+                        break;
+                    case &quot;turtle&quot;: type =  &quot;text/turtle&quot;;
+                        break;
+                    case &quot;n3&quot;: type =  &quot;text/n3&quot;;
+                        break;
+                    case &quot;json&quot;: type = &quot;application/json&quot;;
+                            break;
+                    case &quot;jsld&quot;: type = &quot;application/ld+json&quot;;
+                            break;
+                    default: 
+                        console.log(cons.MESSAGES.warn.fileTypeNotKnown + type);
+                }
+                } else {
+                    type = file.type;
+                }
                 $.when(globalInitDfd.promise()).done(function() {
-                    that.insertData(result, dataFormat);
+                    that.insertData(result, type);
                 });
             };
             reader.readAsText(file);
