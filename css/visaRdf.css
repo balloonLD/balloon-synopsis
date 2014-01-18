@@ -196,7 +196,7 @@ html,body {
 
 .synopsis_timelineContainer {
     padding: 2.0em;
-    position: absolute;
+    position: fixed;
     left: 0;
     top: 0;
     width: 40%;
