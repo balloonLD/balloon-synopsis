@@ -75,9 +75,10 @@
             overlayContent: "overlayContent",
             innerScroll: "innerScroll",
             innerNoScroll: "innerNoScroll",
-            close: "close",
+            buttonClose: "close",
             timelineContainer: "timelineContainer",
             timeline: "timeline",
+            buttonTimeline : "btnTimeline",
             sorter: "sorter",
             tileClasses : {
                 tile : "tile",
@@ -889,11 +890,6 @@
 
         if (options.generateSortOptions || options.generateFilterOptions || plugin.options.generateTimeline) {
             this.view.addOptionsBox();
-            if (plugin.options.generateTimeline) {
-                this.view.addTimelineButton();
-                var item = templates.timelineItem(appendCssClasses({layer: this}));
-                plugin._$timeline.append(item);
-            }
             if (options.generateSortOptions) {
                 this.view.addSorter();
             }
@@ -1471,12 +1467,6 @@
         this.$container.prepend(this.$optionsContainer);
     };
 
-    Plugin.Layer.View.prototype.addTimelineButton = function() {
-        //TODO timelinebutton
-        //Dropit http://dev7studios.com/dropit/
-        
-    };
-
     Plugin.Layer.View.prototype.addSorter = function() {
         // Add sortoptions
         var that = this;
@@ -1618,14 +1608,6 @@
      * @param {Plugin} plugin    The parent plugin of the initialization view
      */
     Plugin.InitLayer = function($container, options, plugin) {
-        if (plugin.options.generateTimeline) {
-            plugin._$timelineContainer = $('<div class="'+cons.CSS_CLASSES.timelineContainer +'">');
-            plugin._$parent.prepend(plugin._$timelineContainer);
-            plugin._$timeline = $('<ul class="'+cons.CSS_CLASSES.timeline +'"></ul>');
-            plugin._$timelineContainer.append(plugin._$timeline);
-            //TODO Timeline
-        }
-
         Plugin.Layer.call(this, $container, options, plugin, plugin.options.initQueries);
     };
 
@@ -1649,20 +1631,74 @@
         var that = this;
         this.$item = $item;
         this.node = $item.data("node");
+        
+        if (plugin.options.generateTimeline) {
+            var $timelineNode = $(templates.timelineItem(that.node));
+            $timelineNode.css({"background-color": that.$item.css("background-color")});
+            plugin._$timeline.prepend($timelineNode);
+            $timelineNode.data("node", that.node);
+            $timelineNode.click(function(){
+                plugin.addLayer(plugin.generateLayer($timelineNode));
+                plugin._$timelineContainer.data("isExpanded", false);
+                plugin._$timelineContainer.css({
+                        opacity: 0,
+                        zIndex: -1
+                    });
+            })
+        }
 
-        var subjectOfQuery = replaceDummy(plugin._queries.selectSubjectOf, this.node.uri), objectOfQuery = replaceDummy(plugin._queries.selectObjectOf, this.node.uri);
         var queries = [];
-        queries.push({
-            query: subjectOfQuery,
-            type: cons.CSS_CLASSES.typeClasses.outgoing
-        });
-        queries.push({
-            query: objectOfQuery,
-            type: cons.CSS_CLASSES.typeClasses.incoming
-        });
+        switch (that.node.getType()) {
+            case cons.NODE_TYPES.resNode:
+                var subjectOfQuery = replaceDummy(plugin._queries.selectSubjectOf, this.node.uri), objectOfQuery = replaceDummy(plugin._queries.selectObjectOf, this.node.uri);
+                queries.push({
+                query: subjectOfQuery,
+                type: cons.CSS_CLASSES.typeClasses.outgoing
+                });
+                queries.push({
+                    query: objectOfQuery,
+                    type: cons.CSS_CLASSES.typeClasses.incoming
+                });
+                break;
+            case cons.NODE_TYPES.literal:
+                var literalIsObjectOf = replaceDummy(plugin._queries.literalIsObjectOf, this.node.value);
+                queries.push({
+                    query: literalIsObjectOf,
+                    type: cons.CSS_CLASSES.typeClasses.incoming
+                });
+                break;
+        }
+        
+        var $overlayContent = $container.find('> ' + cons.CSS_UTIL.toSelector("overlayContent"));
+
+if (plugin.options.generateTimeline) {
+        // <---- open timeline click Event ---->
+        var $btnTimeline = $container.find('> span' + cons.CSS_UTIL.toSelector("buttonTimeline"));
+        eventManagers[plugin.pluginID].addEventHandler('click', function() {
+            if(plugin._$timelineContainer.data("isExpanded")) {
+                plugin._$timelineContainer.data("isExpanded", false);
+                plugin._$timelineContainer.css({
+                        opacity: 0,
+                        zIndex: -1
+                    });
+            } else {
+                plugin._$timelineContainer.data("isExpanded", true);
+                var color = new RGBColor(that.$item.css("background-color"));
+                color.r -= 20;
+                color.b -= 20;
+                color.g -= 20;
+                plugin._$timelineContainer.css({
+                    "background-color": color.toRGB(),
+                    opacity: 1,
+                    zIndex: 9999
+                });
+        }
+        }, $btnTimeline);
+        // <!---open timeline click Event ---->
+            }
 
         // <---- close click Event ---->
-        var $overlayContent = $container.find('> ' + cons.CSS_UTIL.toSelector("overlayContent")), $close = $container.find('> span' + cons.CSS_UTIL.toSelector("close"));
+        var $close = $container.find('> span' + cons.CSS_UTIL.toSelector("buttonClose"));
         eventManagers[plugin.pluginID].addEventHandler('click', function() {
             that.close();
         }, $close);
@@ -1680,6 +1716,12 @@
         Plugin.Layer.call(this, $overlayContent.find(cons.CSS_UTIL.toSelector("innerScroll")), options, plugin, queries);
 
         this.$overlay = $container;
+        
+        //JQuery multiSelect http://www.erichynds.com/blog/jquery-ui-multiselect-widget
+        this.$overlay.find("#filterSelect").multiSelect({'selectAllText': cons.MESSAGES.out.selectAllFilters}, function(select) {
+            that.switchFilterState(select.val());
+         });
+
         this.$overlayContent = $overlayContent;
 
         // Function to init content of given full view overlay.
@@ -1721,7 +1763,7 @@
             $container.css({
                 clip: supportTransitions ? previewClip : overlayClip,
                 opacity: 1,
-                zIndex: 9999,
+                zIndex: 9998,
                 pointerEvents: 'auto'
             });
 
@@ -1765,12 +1807,22 @@
 
         // Get items who are in a relation to
         // current item
-        var remoteSubjectOf = replaceDummy(
-                that.plugin._queries.remoteSubjectOf, that.node.uri), remoteObjectOf = replaceDummy(that.plugin._queries.remoteObjectOf, that.node.uri);
+        switch (that.node.getType()) {
+            case cons.NODE_TYPES.resNode:
+                var remoteSubjectOf = replaceDummy(
+                        that.plugin._queries.remoteSubjectOf, that.node.uri), remoteObjectOf = replaceDummy(that.plugin._queries.remoteObjectOf, that.node.uri);
 
-        //remote needed?
-        that.remoteDataLoader.insertByQuery(remoteSubjectOf + " LIMIT " + that.options.remoteOptions.remoteLimit);
-        that.remoteDataLoader.insertByQuery(remoteObjectOf + " LIMIT " + that.options.remoteOptions.remoteLimit);
+                //remote needed?
+                that.remoteDataLoader.insertByQuery(remoteSubjectOf + " LIMIT " + that.options.remoteOptions.remoteLimit);
+                that.remoteDataLoader.insertByQuery(remoteObjectOf + " LIMIT " + that.options.remoteOptions.remoteLimit);
+            break;
+            case cons.NODE_TYPES.literal:
+                var remoteLiteralIsObjectOf = replaceDummy(that.plugin._queries.remoteLiteralIsObjectOf, that.node.value);
+
+                //remote needed?
+                that.remoteDataLoader.insertByQuery(remoteLiteralIsObjectOf + " LIMIT " + that.options.remoteOptions.remoteLimit);
+            break;
+        }
     };
 
     /**
@@ -2470,59 +2522,13 @@
                         var node = $tile.data("node");
                         switch (node.getType()) {
                             case cons.NODE_TYPES.resNode:
+                            case cons.NODE_TYPES.literal:
                                 $tile.click(function() {
                                     //TODO rework layerOptions
                                     if (plugin.options.layerOptions.usePreviews) {
                                         //TODO open Preview
                                     } else {
-                                        $tile.data('isExpanded', true);
-                                        var idAddition = Math.random().toString(36).substr(2, 9);
-                                        var overlay = templates.overlayWrapper(appendCssClasses({
-                                            "id": node.id + idAddition,
-                                            "nodeFilters": plugin.options.nodeFilters,
-                                            "tileFilters": plugin.options.tileFilters
-                                        }));
-                                        plugin._$parent.append(overlay);
-                                        var $overlay = plugin._$parent.find(cons.CSS_UTIL.toSelector("overlay")).find("div:contains('" + node.id + idAddition + "')").parent();
-                                        var newLayerOptions = $.extend(true, {}, plugin.options.layerOptions, {
-                                            layoutEngine: {
-                                                itemSelector: cons.CSS_UTIL.toSelector("tileClasses.tile"),
-                                                getSortData: {
-                                                    type: function($elem) {
-                                                        var classes = $elem.attr("class");
-                                                        return classes;
-                                                    },
-                                                    group: function($elem) {
-                                                        var classes = $elem.attr("class");
-                                                        var pattern = new RegExp("(\s)*[a-zA-Z0-9]*" + cons.TOKEN_TAG + "[a-zA-Z0-9]*(\s)*", 'g');
-                                                        var groups = classes.match(pattern), group = "";
-                                                        for (var i = 0; i < groups.length; i++) {
-                                                            group += groups[i] + " ";
-                                                        }
-                                                        return group;
-                                                    }
-                                                }
-                                            },
-                                            viewOptions : {
-                                                filterBy: [{
-                                                        value: "*",
-                                                        label: "showAll"
-                                                    }, {
-                                                        value: cons.CSS_CLASSES.typeClasses.incoming,
-                                                        label: "in"
-                                                    }, {
-                                                        value: cons.CSS_CLASSES.typeClasses.outgoing,
-                                                        label: "out"
-                                                    }]
-                                            }
-                                        });
-                                        var newLayer = new Plugin.DetailLayer($overlay, newLayerOptions, plugin, $tile);
-                                        plugin.addLayer(newLayer);
-                                        
-                                        //JQuery multiSelect http://www.erichynds.com/blog/jquery-ui-multiselect-widget
-                                        $overlay.find("#filterSelect").multiSelect({'selectAllText': cons.MESSAGES.out.selectAllFilters}, function(select) {
-                                        newLayer.switchFilterState(select.val());
-                                        });
+                                        plugin.addLayer(plugin.generateLayer($tile));
                                     }
                                 });
                                 break;
@@ -2591,7 +2597,7 @@
          @type Boolean
          @default true
          **/
-        generateTimeline: false,
+        generateTimeline: true,
         /**
          Query/queries to use for the initialization view of the plugin.
          
@@ -2906,22 +2912,24 @@
             that._queries = {
                 initQueries: this.options.initQueries,
                 defaultRemoteQuery: this.options.layerOptions.remoteOptions.defaultRemoteQuery,
-                remoteSubjectOf: " SELECT ?subject ?predicate ?object ?labelObj ?labelPred WHERE { BIND (<" + cons.DUMMY
+                remoteSubjectOf: " SELECT DISTINCT ?subject ?predicate ?object ?labelObj ?labelPred WHERE { BIND (<" + cons.DUMMY
                         + "> as ?subject) ?subject ?predicate ?object. OPTIONAL { ?object rdfs:label ?labelObj }. OPTIONAL { ?predicate rdfs:label ?labelPred }}",
-                remoteObjectOf: " SELECT ?subject ?predicate ?object ?labelSub ?labelPred WHERE {BIND (<" + cons.DUMMY
+                remoteObjectOf: " SELECT DISTINCT ?subject ?predicate ?object ?labelSub ?labelPred WHERE {BIND (<" + cons.DUMMY
                         + "> as ?object) ?subject ?predicate ?object. OPTIONAL { ?subject rdfs:label ?labelSub }. OPTIONAL { ?predicate rdfs:label ?labelPred }}",
-                selectSubjectOf: " SELECT ?subject ?predicate ?label ?description WHERE {<"
+                remoteLiteralIsObjectOf: " SELECT DISTINCT ?subject ?predicate ?object ?labelSub ?labelPred WHERE {BIND ('" + cons.DUMMY
+                        + "' as ?object) ?subject ?predicate ?object. OPTIONAL { ?subject rdfs:label ?labelSub }. OPTIONAL { ?predicate rdfs:label ?labelPred }}",
+                selectSubjectOf: " SELECT DISTINCT ?subject ?predicate ?label ?description WHERE {<"
                         + cons.DUMMY
                         + "> ?predicate ?subject. OPTIONAL { ?subject rdfs:label ?label}. OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }}",
-                selectObjectOf: " SELECT ?subject ?predicate ?type ?label ?description WHERE {?subject ?predicate <"
+                selectObjectOf: " SELECT DISTINCT ?subject ?predicate ?type ?label ?description WHERE {?subject ?predicate <"
                         + cons.DUMMY
                         + ">. OPTIONAL { ?subject rdfs:label ?label}. OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }}",
-                previewQuery: " SELECT ?label ?description ?type WHERE { <" + cons.DUMMY + "> rdfs:label ?label . OPTIONAL { <" + cons.DUMMY
+                literalIsObjectOf: "SELECT DISTINCT ?subject ?predicate ?type ?label ?description WHERE {?subject ?predicate ?oLiteral. FILTER (STR(?oLiteral)='" + cons.DUMMY + "'). OPTIONAL { ?subject rdfs:label ?label}. OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }}",
+                previewQuery: " SELECT DISTINCT ?label ?description ?type WHERE { <" + cons.DUMMY + "> rdfs:label ?label . OPTIONAL { <" + cons.DUMMY
                         + "> rdfs:description ?description } . OPTIONAL { <" + cons.DUMMY + "> rdfs:comment ?description } . OPTIONAL { <" + cons.DUMMY
                         + "> rdfs:type ?type}}",
-                label: "SELECT ?label WHERE { <" + cons.DUMMY + "> rdfs:label ?label . FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), 'en'))}",
-                //TODO blanknodes
-                blankNodeQuery: "SELECT ?object WHERE {<" + cons.DUMMY + "> ?predicate ?object}"
+                label: "SELECT DISTINCT ?label WHERE { <" + cons.DUMMY + "> rdfs:label ?label . FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), 'en'))}",
+                blankNodeQuery: "SELECT DISTINCT ?object WHERE {<" + cons.DUMMY + "> ?predicate ?object}"
             };
         },
         /**
@@ -3014,6 +3022,13 @@
                 //TODO Preview Mod
                 // <!--- preview modification ---->
             }, $window);
+            
+            if (that.options.generateTimeline) {
+                that._$timelineContainer = $('<div class="'+cons.CSS_CLASSES.timelineContainer +'">');
+                that._$parent.prepend(that._$timelineContainer);
+                that._$timeline = $('<ul class="'+cons.CSS_CLASSES.timeline +'"></ul>');
+                that._$timelineContainer.append(that._$timeline);
+            }
 
             // Init templating and RdfStore if needed
             if (globalInitDfd.state() === "pending") {
@@ -3058,10 +3073,66 @@
          * Add given Layer object to the plugin
          *
          * @method addLayer
-         * @param {Plugin.Layer} view Layer object to add to the plugin
+         * @param {Plugin.Layer} layer Layer object to add to the plugin
          */
-        addLayer: function(view) {
-            this._views.push(view);
+        addLayer: function(layer) {
+            this._views.push(layer);
+        },
+        /**
+         * Generates Layer using given tile(with node data).
+         *
+         * @method generateLayer
+         * @param {jQuery} $tile Tile which holds node data
+         */
+        generateLayer: function($tile) {
+            $tile.data('isExpanded', true);
+            var node = $tile.data("node"), that = this, idAddition = Math.random().toString(36).substr(2, 9);
+            var overlay = templates.overlayWrapper(appendCssClasses({
+                "id": node.id + idAddition,
+                "nodeFilters": that.options.nodeFilters,
+                "tileFilters": that.options.tileFilters
+            }));
+            that._$parent.append(overlay);
+            var $overlay = that._$parent.find(cons.CSS_UTIL.toSelector("overlay")).find("div:contains('" + node.id + idAddition + "')").parent();
+            var newLayerOptions = $.extend(true, {}, that.options.layerOptions, {
+                layoutEngine: {
+                    itemSelector: cons.CSS_UTIL.toSelector("tileClasses.tile"),
+                    getSortData: {
+                        type: function($elem) {
+                            var classes = $elem.attr("class");
+                            return classes;
+                        },
+                        group: function($elem) {
+                            var classes = $elem.attr("class");
+                            var pattern = new RegExp("(\s)*[a-zA-Z0-9]*" + cons.TOKEN_TAG + "[a-zA-Z0-9]*(\s)*", 'g');
+                            var groups = classes.match(pattern), group = "";
+                            for (var i = 0; i < groups.length; i++) {
+                                group += groups[i] + " ";
+                            }
+                            return group;
+                        }
+                    }
+                },
+                viewOptions: {
+                    filterBy: [{
+                            value: "*",
+                            label: "showAll"
+                        }, {
+                            value: cons.CSS_CLASSES.typeClasses.incoming,
+                            label: "in"
+                        }, {
+                            value: cons.CSS_CLASSES.typeClasses.outgoing,
+                            label: "out"
+                        }]
+                }
+            });
+            var newLayer;
+            if (node.getType() === cons.NODE_TYPES.resNode) {
+                newLayer = new Plugin.DetailLayer($overlay, newLayerOptions, that, $tile);
+            } else if (node.getType() === cons.NODE_TYPES.literal) {
+                newLayer = new Plugin.DetailLayer($overlay, newLayerOptions, that, $tile);
+            }
+            return newLayer;
         },
         /**
          * Remove given Layer object from the plugin
@@ -3155,6 +3226,21 @@
                 $.each(that._views, function(i, view) {
                     view.removeAllItems();
                 });
+            });
+        },
+        /**
+         * Runs query on local store.
+         *
+         * @method runQuery
+         * @param query Query to run.
+         * @return results of query
+         */
+        runQuery: function(query, callback) {
+            var that = this;
+            rdfStore.executeQuery(query, function(results){
+                if(callback){
+                    callback(results);
+                }
             });
         },
         /**

@@ -121,8 +121,10 @@ function program1(depth0,data) {
   buffer += "\r\n                                                            ";
   stack2 = helpers.each.call(depth0, depth0.tileFilters, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += "\r\n                                                            </select>\r\n			<span class=\""
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.close)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+  buffer += "\r\n                                                            </select>\r\n                                                            <span class=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.buttonTimeline)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">history</span>\r\n			<span class=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.buttonClose)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\">close</span>\r\n			<div class=\""
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.overlayContent)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\">\r\n			</div>\r\n		</div>";
@@ -332,7 +334,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
 
   buffer += "<li>\r\n    "
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.label)),stack1 == null || stack1 === false ? stack1 : stack1.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + escapeExpression(((stack1 = ((stack1 = depth0.label),stack1 == null || stack1 === false ? stack1 : stack1.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\r\n</li>";
   return buffer;
   });
@@ -343,8 +345,10 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
 
 
-  buffer += "<li>\r\n    "
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.label)),stack1 == null || stack1 === false ? stack1 : stack1.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\r\n</li>";
+  buffer += "<div class=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.timelineContainer)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">\r\n    <ul class=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.timeline)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">\r\n    </ul>\r\n</div>";
   return buffer;
   });

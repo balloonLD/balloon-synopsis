@@ -193,9 +193,10 @@
             overlayContent: &quot;overlayContent&quot;,
             innerScroll: &quot;innerScroll&quot;,
             innerNoScroll: &quot;innerNoScroll&quot;,
-            close: &quot;close&quot;,
+            buttonClose: &quot;close&quot;,
             timelineContainer: &quot;timelineContainer&quot;,
             timeline: &quot;timeline&quot;,
+            buttonTimeline : &quot;btnTimeline&quot;,
             sorter: &quot;sorter&quot;,
             tileClasses : {
                 tile : &quot;tile&quot;,
@@ -1007,11 +1008,6 @@
 
         if (options.generateSortOptions || options.generateFilterOptions || plugin.options.generateTimeline) {
             this.view.addOptionsBox();
-            if (plugin.options.generateTimeline) {
-                this.view.addTimelineButton();
-                var item = templates.timelineItem(appendCssClasses({layer: this}));
-                plugin._$timeline.append(item);
-            }
             if (options.generateSortOptions) {
                 this.view.addSorter();
             }
@@ -1589,12 +1585,6 @@
         this.$container.prepend(this.$optionsContainer);
     };
 
-    Plugin.Layer.View.prototype.addTimelineButton = function() {
-        //TODO timelinebutton
-        //Dropit http://dev7studios.com/dropit/
-        
-    };
-
     Plugin.Layer.View.prototype.addSorter = function() {
         // Add sortoptions
         var that = this;
@@ -1736,14 +1726,6 @@
      * @param {Plugin} plugin    The parent plugin of the initialization view
      */
     Plugin.InitLayer = function($container, options, plugin) {
-        if (plugin.options.generateTimeline) {
-            plugin._$timelineContainer = $(&#x27;&lt;div class=&quot;&#x27;+cons.CSS_CLASSES.timelineContainer +&#x27;&quot;&gt;&#x27;);
-            plugin._$parent.prepend(plugin._$timelineContainer);
-            plugin._$timeline = $(&#x27;&lt;ul class=&quot;&#x27;+cons.CSS_CLASSES.timeline +&#x27;&quot;&gt;&lt;/ul&gt;&#x27;);
-            plugin._$timelineContainer.append(plugin._$timeline);
-            //TODO Timeline
-        }
-
         Plugin.Layer.call(this, $container, options, plugin, plugin.options.initQueries);
     };
 
@@ -1767,20 +1749,74 @@
         var that = this;
         this.$item = $item;
         this.node = $item.data(&quot;node&quot;);
+        
+        if (plugin.options.generateTimeline) {
+            var $timelineNode = $(templates.timelineItem(that.node));
+            $timelineNode.css({&quot;background-color&quot;: that.$item.css(&quot;background-color&quot;)});
+            plugin._$timeline.prepend($timelineNode);
+            $timelineNode.data(&quot;node&quot;, that.node);
+            $timelineNode.click(function(){
+                plugin.addLayer(plugin.generateLayer($timelineNode));
+                plugin._$timelineContainer.data(&quot;isExpanded&quot;, false);
+                plugin._$timelineContainer.css({
+                        opacity: 0,
+                        zIndex: -1
+                    });
+            })
+        }
 
-        var subjectOfQuery = replaceDummy(plugin._queries.selectSubjectOf, this.node.uri), objectOfQuery = replaceDummy(plugin._queries.selectObjectOf, this.node.uri);
         var queries = [];
-        queries.push({
-            query: subjectOfQuery,
-            type: cons.CSS_CLASSES.typeClasses.outgoing
-        });
-        queries.push({
-            query: objectOfQuery,
-            type: cons.CSS_CLASSES.typeClasses.incoming
-        });
+        switch (that.node.getType()) {
+            case cons.NODE_TYPES.resNode:
+                var subjectOfQuery = replaceDummy(plugin._queries.selectSubjectOf, this.node.uri), objectOfQuery = replaceDummy(plugin._queries.selectObjectOf, this.node.uri);
+                queries.push({
+                query: subjectOfQuery,
+                type: cons.CSS_CLASSES.typeClasses.outgoing
+                });
+                queries.push({
+                    query: objectOfQuery,
+                    type: cons.CSS_CLASSES.typeClasses.incoming
+                });
+                break;
+            case cons.NODE_TYPES.literal:
+                var literalIsObjectOf = replaceDummy(plugin._queries.literalIsObjectOf, this.node.value);
+                queries.push({
+                    query: literalIsObjectOf,
+                    type: cons.CSS_CLASSES.typeClasses.incoming
+                });
+                break;
+        }
+        
+        var $overlayContent = $container.find(&#x27;&gt; &#x27; + cons.CSS_UTIL.toSelector(&quot;overlayContent&quot;));
+
+if (plugin.options.generateTimeline) {
+        // &lt;---- open timeline click Event ----&gt;
+        var $btnTimeline = $container.find(&#x27;&gt; span&#x27; + cons.CSS_UTIL.toSelector(&quot;buttonTimeline&quot;));
+        eventManagers[plugin.pluginID].addEventHandler(&#x27;click&#x27;, function() {
+            if(plugin._$timelineContainer.data(&quot;isExpanded&quot;)) {
+                plugin._$timelineContainer.data(&quot;isExpanded&quot;, false);
+                plugin._$timelineContainer.css({
+                        opacity: 0,
+                        zIndex: -1
+                    });
+            } else {
+                plugin._$timelineContainer.data(&quot;isExpanded&quot;, true);
+                var color = new RGBColor(that.$item.css(&quot;background-color&quot;));
+                color.r -= 20;
+                color.b -= 20;
+                color.g -= 20;
+                plugin._$timelineContainer.css({
+                    &quot;background-color&quot;: color.toRGB(),
+                    opacity: 1,
+                    zIndex: 9999
+                });
+        }
+        }, $btnTimeline);
+        // &lt;!---open timeline click Event ----&gt;
+            }
 
         // &lt;---- close click Event ----&gt;
-        var $overlayContent = $container.find(&#x27;&gt; &#x27; + cons.CSS_UTIL.toSelector(&quot;overlayContent&quot;)), $close = $container.find(&#x27;&gt; span&#x27; + cons.CSS_UTIL.toSelector(&quot;close&quot;));
+        var $close = $container.find(&#x27;&gt; span&#x27; + cons.CSS_UTIL.toSelector(&quot;buttonClose&quot;));
         eventManagers[plugin.pluginID].addEventHandler(&#x27;click&#x27;, function() {
             that.close();
         }, $close);
@@ -1798,6 +1834,12 @@
         Plugin.Layer.call(this, $overlayContent.find(cons.CSS_UTIL.toSelector(&quot;innerScroll&quot;)), options, plugin, queries);
 
         this.$overlay = $container;
+        
+        //JQuery multiSelect http://www.erichynds.com/blog/jquery-ui-multiselect-widget
+        this.$overlay.find(&quot;#filterSelect&quot;).multiSelect({&#x27;selectAllText&#x27;: cons.MESSAGES.out.selectAllFilters}, function(select) {
+            that.switchFilterState(select.val());
+         });
+
         this.$overlayContent = $overlayContent;
 
         // Function to init content of given full view overlay.
@@ -1839,7 +1881,7 @@
             $container.css({
                 clip: supportTransitions ? previewClip : overlayClip,
                 opacity: 1,
-                zIndex: 9999,
+                zIndex: 9998,
                 pointerEvents: &#x27;auto&#x27;
             });
 
@@ -1883,12 +1925,22 @@
 
         // Get items who are in a relation to
         // current item
-        var remoteSubjectOf = replaceDummy(
-                that.plugin._queries.remoteSubjectOf, that.node.uri), remoteObjectOf = replaceDummy(that.plugin._queries.remoteObjectOf, that.node.uri);
+        switch (that.node.getType()) {
+            case cons.NODE_TYPES.resNode:
+                var remoteSubjectOf = replaceDummy(
+                        that.plugin._queries.remoteSubjectOf, that.node.uri), remoteObjectOf = replaceDummy(that.plugin._queries.remoteObjectOf, that.node.uri);
 
-        //remote needed?
-        that.remoteDataLoader.insertByQuery(remoteSubjectOf + &quot; LIMIT &quot; + that.options.remoteOptions.remoteLimit);
-        that.remoteDataLoader.insertByQuery(remoteObjectOf + &quot; LIMIT &quot; + that.options.remoteOptions.remoteLimit);
+                //remote needed?
+                that.remoteDataLoader.insertByQuery(remoteSubjectOf + &quot; LIMIT &quot; + that.options.remoteOptions.remoteLimit);
+                that.remoteDataLoader.insertByQuery(remoteObjectOf + &quot; LIMIT &quot; + that.options.remoteOptions.remoteLimit);
+            break;
+            case cons.NODE_TYPES.literal:
+                var remoteLiteralIsObjectOf = replaceDummy(that.plugin._queries.remoteLiteralIsObjectOf, that.node.value);
+
+                //remote needed?
+                that.remoteDataLoader.insertByQuery(remoteLiteralIsObjectOf + &quot; LIMIT &quot; + that.options.remoteOptions.remoteLimit);
+            break;
+        }
     };
 
     /**
@@ -2588,59 +2640,13 @@
                         var node = $tile.data(&quot;node&quot;);
                         switch (node.getType()) {
                             case cons.NODE_TYPES.resNode:
+                            case cons.NODE_TYPES.literal:
                                 $tile.click(function() {
                                     //TODO rework layerOptions
                                     if (plugin.options.layerOptions.usePreviews) {
                                         //TODO open Preview
                                     } else {
-                                        $tile.data(&#x27;isExpanded&#x27;, true);
-                                        var idAddition = Math.random().toString(36).substr(2, 9);
-                                        var overlay = templates.overlayWrapper(appendCssClasses({
-                                            &quot;id&quot;: node.id + idAddition,
-                                            &quot;nodeFilters&quot;: plugin.options.nodeFilters,
-                                            &quot;tileFilters&quot;: plugin.options.tileFilters
-                                        }));
-                                        plugin._$parent.append(overlay);
-                                        var $overlay = plugin._$parent.find(cons.CSS_UTIL.toSelector(&quot;overlay&quot;)).find(&quot;div:contains(&#x27;&quot; + node.id + idAddition + &quot;&#x27;)&quot;).parent();
-                                        var newLayerOptions = $.extend(true, {}, plugin.options.layerOptions, {
-                                            layoutEngine: {
-                                                itemSelector: cons.CSS_UTIL.toSelector(&quot;tileClasses.tile&quot;),
-                                                getSortData: {
-                                                    type: function($elem) {
-                                                        var classes = $elem.attr(&quot;class&quot;);
-                                                        return classes;
-                                                    },
-                                                    group: function($elem) {
-                                                        var classes = $elem.attr(&quot;class&quot;);
-                                                        var pattern = new RegExp(&quot;(\s)*[a-zA-Z0-9]*&quot; + cons.TOKEN_TAG + &quot;[a-zA-Z0-9]*(\s)*&quot;, &#x27;g&#x27;);
-                                                        var groups = classes.match(pattern), group = &quot;&quot;;
-                                                        for (var i = 0; i &lt; groups.length; i++) {
-                                                            group += groups[i] + &quot; &quot;;
-                                                        }
-                                                        return group;
-                                                    }
-                                                }
-                                            },
-                                            viewOptions : {
-                                                filterBy: [{
-                                                        value: &quot;*&quot;,
-                                                        label: &quot;showAll&quot;
-                                                    }, {
-                                                        value: cons.CSS_CLASSES.typeClasses.incoming,
-                                                        label: &quot;in&quot;
-                                                    }, {
-                                                        value: cons.CSS_CLASSES.typeClasses.outgoing,
-                                                        label: &quot;out&quot;
-                                                    }]
-                                            }
-                                        });
-                                        var newLayer = new Plugin.DetailLayer($overlay, newLayerOptions, plugin, $tile);
-                                        plugin.addLayer(newLayer);
-                                        
-                                        //JQuery multiSelect http://www.erichynds.com/blog/jquery-ui-multiselect-widget
-                                        $overlay.find(&quot;#filterSelect&quot;).multiSelect({&#x27;selectAllText&#x27;: cons.MESSAGES.out.selectAllFilters}, function(select) {
-                                        newLayer.switchFilterState(select.val());
-                                        });
+                                        plugin.addLayer(plugin.generateLayer($tile));
                                     }
                                 });
                                 break;
@@ -2709,7 +2715,7 @@
          @type Boolean
          @default true
          **/
-        generateTimeline: false,
+        generateTimeline: true,
         /**
          Query/queries to use for the initialization view of the plugin.
          
@@ -3024,22 +3030,24 @@
             that._queries = {
                 initQueries: this.options.initQueries,
                 defaultRemoteQuery: this.options.layerOptions.remoteOptions.defaultRemoteQuery,
-                remoteSubjectOf: &quot; SELECT ?subject ?predicate ?object ?labelObj ?labelPred WHERE { BIND (&lt;&quot; + cons.DUMMY
+                remoteSubjectOf: &quot; SELECT DISTINCT ?subject ?predicate ?object ?labelObj ?labelPred WHERE { BIND (&lt;&quot; + cons.DUMMY
                         + &quot;&gt; as ?subject) ?subject ?predicate ?object. OPTIONAL { ?object rdfs:label ?labelObj }. OPTIONAL { ?predicate rdfs:label ?labelPred }}&quot;,
-                remoteObjectOf: &quot; SELECT ?subject ?predicate ?object ?labelSub ?labelPred WHERE {BIND (&lt;&quot; + cons.DUMMY
+                remoteObjectOf: &quot; SELECT DISTINCT ?subject ?predicate ?object ?labelSub ?labelPred WHERE {BIND (&lt;&quot; + cons.DUMMY
                         + &quot;&gt; as ?object) ?subject ?predicate ?object. OPTIONAL { ?subject rdfs:label ?labelSub }. OPTIONAL { ?predicate rdfs:label ?labelPred }}&quot;,
-                selectSubjectOf: &quot; SELECT ?subject ?predicate ?label ?description WHERE {&lt;&quot;
+                remoteLiteralIsObjectOf: &quot; SELECT DISTINCT ?subject ?predicate ?object ?labelSub ?labelPred WHERE {BIND (&#x27;&quot; + cons.DUMMY
+                        + &quot;&#x27; as ?object) ?subject ?predicate ?object. OPTIONAL { ?subject rdfs:label ?labelSub }. OPTIONAL { ?predicate rdfs:label ?labelPred }}&quot;,
+                selectSubjectOf: &quot; SELECT DISTINCT ?subject ?predicate ?label ?description WHERE {&lt;&quot;
                         + cons.DUMMY
                         + &quot;&gt; ?predicate ?subject. OPTIONAL { ?subject rdfs:label ?label}. OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }}&quot;,
-                selectObjectOf: &quot; SELECT ?subject ?predicate ?type ?label ?description WHERE {?subject ?predicate &lt;&quot;
+                selectObjectOf: &quot; SELECT DISTINCT ?subject ?predicate ?type ?label ?description WHERE {?subject ?predicate &lt;&quot;
                         + cons.DUMMY
                         + &quot;&gt;. OPTIONAL { ?subject rdfs:label ?label}. OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }}&quot;,
-                previewQuery: &quot; SELECT ?label ?description ?type WHERE { &lt;&quot; + cons.DUMMY + &quot;&gt; rdfs:label ?label . OPTIONAL { &lt;&quot; + cons.DUMMY
+                literalIsObjectOf: &quot;SELECT DISTINCT ?subject ?predicate ?type ?label ?description WHERE {?subject ?predicate ?oLiteral. FILTER (STR(?oLiteral)=&#x27;&quot; + cons.DUMMY + &quot;&#x27;). OPTIONAL { ?subject rdfs:label ?label}. OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }}&quot;,
+                previewQuery: &quot; SELECT DISTINCT ?label ?description ?type WHERE { &lt;&quot; + cons.DUMMY + &quot;&gt; rdfs:label ?label . OPTIONAL { &lt;&quot; + cons.DUMMY
                         + &quot;&gt; rdfs:description ?description } . OPTIONAL { &lt;&quot; + cons.DUMMY + &quot;&gt; rdfs:comment ?description } . OPTIONAL { &lt;&quot; + cons.DUMMY
                         + &quot;&gt; rdfs:type ?type}}&quot;,
-                label: &quot;SELECT ?label WHERE { &lt;&quot; + cons.DUMMY + &quot;&gt; rdfs:label ?label . FILTER(LANG(?label) = &#x27;&#x27; || LANGMATCHES(LANG(?label), &#x27;en&#x27;))}&quot;,
-                //TODO blanknodes
-                blankNodeQuery: &quot;SELECT ?object WHERE {&lt;&quot; + cons.DUMMY + &quot;&gt; ?predicate ?object}&quot;
+                label: &quot;SELECT DISTINCT ?label WHERE { &lt;&quot; + cons.DUMMY + &quot;&gt; rdfs:label ?label . FILTER(LANG(?label) = &#x27;&#x27; || LANGMATCHES(LANG(?label), &#x27;en&#x27;))}&quot;,
+                blankNodeQuery: &quot;SELECT DISTINCT ?object WHERE {&lt;&quot; + cons.DUMMY + &quot;&gt; ?predicate ?object}&quot;
             };
         },
         /**
@@ -3132,6 +3140,13 @@
                 //TODO Preview Mod
                 // &lt;!--- preview modification ----&gt;
             }, $window);
+            
+            if (that.options.generateTimeline) {
+                that._$timelineContainer = $(&#x27;&lt;div class=&quot;&#x27;+cons.CSS_CLASSES.timelineContainer +&#x27;&quot;&gt;&#x27;);
+                that._$parent.prepend(that._$timelineContainer);
+                that._$timeline = $(&#x27;&lt;ul class=&quot;&#x27;+cons.CSS_CLASSES.timeline +&#x27;&quot;&gt;&lt;/ul&gt;&#x27;);
+                that._$timelineContainer.append(that._$timeline);
+            }
 
             // Init templating and RdfStore if needed
             if (globalInitDfd.state() === &quot;pending&quot;) {
@@ -3176,10 +3191,66 @@
          * Add given Layer object to the plugin
          *
          * @method addLayer
-         * @param {Plugin.Layer} view Layer object to add to the plugin
+         * @param {Plugin.Layer} layer Layer object to add to the plugin
          */
-        addLayer: function(view) {
-            this._views.push(view);
+        addLayer: function(layer) {
+            this._views.push(layer);
+        },
+        /**
+         * Generates Layer using given tile(with node data).
+         *
+         * @method generateLayer
+         * @param {jQuery} $tile Tile which holds node data
+         */
+        generateLayer: function($tile) {
+            $tile.data(&#x27;isExpanded&#x27;, true);
+            var node = $tile.data(&quot;node&quot;), that = this, idAddition = Math.random().toString(36).substr(2, 9);
+            var overlay = templates.overlayWrapper(appendCssClasses({
+                &quot;id&quot;: node.id + idAddition,
+                &quot;nodeFilters&quot;: that.options.nodeFilters,
+                &quot;tileFilters&quot;: that.options.tileFilters
+            }));
+            that._$parent.append(overlay);
+            var $overlay = that._$parent.find(cons.CSS_UTIL.toSelector(&quot;overlay&quot;)).find(&quot;div:contains(&#x27;&quot; + node.id + idAddition + &quot;&#x27;)&quot;).parent();
+            var newLayerOptions = $.extend(true, {}, that.options.layerOptions, {
+                layoutEngine: {
+                    itemSelector: cons.CSS_UTIL.toSelector(&quot;tileClasses.tile&quot;),
+                    getSortData: {
+                        type: function($elem) {
+                            var classes = $elem.attr(&quot;class&quot;);
+                            return classes;
+                        },
+                        group: function($elem) {
+                            var classes = $elem.attr(&quot;class&quot;);
+                            var pattern = new RegExp(&quot;(\s)*[a-zA-Z0-9]*&quot; + cons.TOKEN_TAG + &quot;[a-zA-Z0-9]*(\s)*&quot;, &#x27;g&#x27;);
+                            var groups = classes.match(pattern), group = &quot;&quot;;
+                            for (var i = 0; i &lt; groups.length; i++) {
+                                group += groups[i] + &quot; &quot;;
+                            }
+                            return group;
+                        }
+                    }
+                },
+                viewOptions: {
+                    filterBy: [{
+                            value: &quot;*&quot;,
+                            label: &quot;showAll&quot;
+                        }, {
+                            value: cons.CSS_CLASSES.typeClasses.incoming,
+                            label: &quot;in&quot;
+                        }, {
+                            value: cons.CSS_CLASSES.typeClasses.outgoing,
+                            label: &quot;out&quot;
+                        }]
+                }
+            });
+            var newLayer;
+            if (node.getType() === cons.NODE_TYPES.resNode) {
+                newLayer = new Plugin.DetailLayer($overlay, newLayerOptions, that, $tile);
+            } else if (node.getType() === cons.NODE_TYPES.literal) {
+                newLayer = new Plugin.DetailLayer($overlay, newLayerOptions, that, $tile);
+            }
+            return newLayer;
         },
         /**
          * Remove given Layer object from the plugin
@@ -3273,6 +3344,21 @@
                 $.each(that._views, function(i, view) {
                     view.removeAllItems();
                 });
+            });
+        },
+        /**
+         * Runs query on local store.
+         *
+         * @method runQuery
+         * @param query Query to run.
+         * @return results of query
+         */
+        runQuery: function(query, callback) {
+            var that = this;
+            rdfStore.executeQuery(query, function(results){
+                if(callback){
+                    callback(results);
+                }
             });
         },
         /**

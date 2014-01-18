@@ -50,6 +50,14 @@
                                 <input type="button" name="clearStore" value="clearStore"
                                        onclick="$('.visaRDF').data('plugin_visaRDF').clearStore();">
                             </form>
+                <form>
+                <label for="queryinputbox">Remote data query:</label>
+                <textarea type="text" name="localQueryinputbox">SELECT ?s ?p ?o WHERE { ?s ?p ?o }
+                            </textarea>
+                            <p>
+                <input type="button" name="runQuery" value="Run query on local store"
+                       onclick="$('.visaRDF').data('plugin_visaRDF').runQuery(this.form.localQueryinputbox.value, console.log);">
+                </form>
 
 
 
