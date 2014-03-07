@@ -17,7 +17,7 @@ Our current prototype offers following features:
 * Configurable Templating (aggregate information for human-friendly view e.g. Google Maps instead of long/lat)
 * Timeline (track history of the browsing behaviour)
 
-![balloon Synopsis Screenshot](http://schlegel.github.io/balloon/images/slider/balloon_synopsis.png)
+![Screenshot](http://schlegel.github.io/balloon/images/slider/balloon_synopsis.png)
 
 
 ## Installation
