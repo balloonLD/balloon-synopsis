@@ -1,6 +1,8 @@
 balloon-synopsis - Visualizing RDF Data
 ================
 
+For more information and demo click [here](http://schlegel.github.io/balloon/balloon-synopsis.html)
+
 **RDF data is online - most RDF visualizer are not**
 
 We see the necessity for an easy-to-use RDF visualizer which everybody can embed in a homepage. Therefore we are developing balloon Synopsis. A node-centric RDF viewer & browser in a modern tile design, available as jQuery-plugin.
