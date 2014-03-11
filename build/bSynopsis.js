@@ -1,360 +1,7 @@
-this["visaRDF"] = this["visaRDF"] || {};
-this["visaRDF"]["templates"] = this["visaRDF"]["templates"] || {};
-
-this["visaRDF"]["templates"]["filterOptions"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression, self=this;
-
-function program1(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\r\n                            <li><a data-filter-value=\"";
-  if (stack1 = helpers.value) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.value; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "\" class=\"";
-  if (stack1 = helpers.value) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.value; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "\">";
-  if (stack1 = helpers.label) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.label; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "</a></li>\r\n                    ";
-  return buffer;
-  }
-
-  buffer += "    <div class=\""
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.optionCombo)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " "
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.filter)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">\r\n            <h2>Filter:</h2>\r\n            <ul class=\""
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.optionSet)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " "
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.clearfix)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\" data-option-key=\"filter\">\r\n                    ";
-  stack2 = helpers.each.call(depth0, depth0.filterOptions, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += "\r\n            </ul>\r\n    </div>";
-  return buffer;
-  });
-
-this["visaRDF"]["templates"]["groupDropDown"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
-
-function program1(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\r\n            <option value=";
-  if (stack1 = helpers.val) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.val; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + ">";
-  if (stack1 = helpers.label) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
-  else { stack1 = depth0.label; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
-  buffer += escapeExpression(stack1)
-    + "</option>\r\n            ";
-  return buffer;
-  }
-
-  buffer += "    <select id=\"GroupDropDown\">\r\n            ";
-  stack1 = helpers.each.call(depth0, depth0, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack1 || stack1 === 0) { buffer += stack1; }
-  buffer += "\r\n    </select>";
-  return buffer;
-  });
-
-this["visaRDF"]["templates"]["overlayContent"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression, self=this;
-
-function program1(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\r\n            <div class=\""
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.innerNoScroll)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">\r\n                <h2>\r\n                    "
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.label)),stack1 == null || stack1 === false ? stack1 : stack1.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\r\n                </h2>\r\n                "
-    + escapeExpression(((stack1 = ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.uri)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\r\n            </div>\r\n            <div class=\""
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.innerScroll)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">\r\n                    <div></div>\r\n            </div>\r\n    ";
-  return buffer;
-  }
-
-  buffer += "    ";
-  stack2 = helpers['if'].call(depth0, ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.label), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  return buffer;
-  });
-
-this["visaRDF"]["templates"]["overlayWrapper"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression, self=this;
-
-function program1(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += " <option value="
-    + escapeExpression(((stack1 = ((stack1 = data),stack1 == null || stack1 === false ? stack1 : stack1.key)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " selected=\"selected\"> "
-    + escapeExpression(((stack1 = ((stack1 = data),stack1 == null || stack1 === false ? stack1 : stack1.key)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " </option> ";
-  return buffer;
-  }
-
-  buffer += "		<div class=\""
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.overlay)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">\r\n                                                            <div style=\"visibility:hidden\">";
-  if (stack2 = helpers.id) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
-  else { stack2 = depth0.id; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
-  buffer += escapeExpression(stack2)
-    + "</div>\r\n                                                            <select multiple=\"multiple\" id=\"filterSelect\">\r\n                                                            ";
-  stack2 = helpers.each.call(depth0, depth0.nodeFilters, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += "\r\n                                                            ";
-  stack2 = helpers.each.call(depth0, depth0.tileFilters, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += "\r\n                                                            </select>\r\n                                                            <span class=\""
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.buttonTimeline)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">history</span>\r\n			<span class=\""
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.buttonClose)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">close</span>\r\n			<div class=\""
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.overlayContent)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">\r\n			</div>\r\n		</div>";
-  return buffer;
-  });
-
-this["visaRDF"]["templates"]["previewItem"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression;
-
-
-  buffer += "<div class=\""
-    + escapeExpression(((stack1 = ((stack1 = depth0.cssClass),stack1 == null || stack1 === false ? stack1 : stack1.preview)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " "
-    + escapeExpression(((stack1 = ((stack1 = depth0.cssClass),stack1 == null || stack1 === false ? stack1 : stack1.preview)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "_";
-  if (stack2 = helpers.index) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
-  else { stack2 = depth0.index; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
-  buffer += escapeExpression(stack2)
-    + "\">\r\n        <div class=\""
-    + escapeExpression(((stack1 = ((stack1 = depth0.cssClass),stack1 == null || stack1 === false ? stack1 : stack1.previewContent)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">\r\n            TODO\r\n        </div>\r\n</div>";
-  return buffer;
-  });
-
-this["visaRDF"]["templates"]["sortOptions"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, stack2, options, functionType="function", escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
-
-function program1(depth0,data) {
-  
-  var buffer = "";
-  buffer += "\r\n				<li><a data-sort-value=\""
-    + escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))
-    + "\" class=\""
-    + escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))
-    + "\">"
-    + escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))
-    + "</a></li>\r\n			";
-  return buffer;
-  }
-
-  buffer += "	<div class=\""
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.optionCombo)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " "
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.sorter)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">\r\n		<h2>Sort:</h2>\r\n		<ul class=\""
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.optionSet)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " "
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.clearfix)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\" data-option-key=\"sortBy\">\r\n			";
-  options = {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data};
-  stack2 = ((stack1 = helpers.keysEach || depth0.keysEach),stack1 ? stack1.call(depth0, depth0.optionSet, options) : helperMissing.call(depth0, "keysEach", depth0.optionSet, options));
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += "\r\n		</ul>\r\n	</div>";
-  return buffer;
-  });
-
-this["visaRDF"]["templates"]["stdNode"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, stack2, options, functionType="function", escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
-
-function program1(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\r\n                    <h3 class=\""
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.content)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " "
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.labelEN)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">"
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.label)),stack1 == null || stack1 === false ? stack1 : stack1.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</h3>\r\n            ";
-  return buffer;
-  }
-
-function program3(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\r\n                    <div class=\""
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.content)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " "
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.descriptionEn)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">"
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.description)),stack1 == null || stack1 === false ? stack1 : stack1.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</div>\r\n            ";
-  return buffer;
-  }
-
-function program5(depth0,data) {
-  
-  var buffer = "", stack1, stack2;
-  buffer += "\r\n            ";
-  stack2 = helpers.each.call(depth0, ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.predicates), {hash:{},inverse:self.noop,fn:self.programWithDepth(6, program6, data, depth0),data:data});
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += "\r\n            ";
-  return buffer;
-  }
-function program6(depth0,data,depth1) {
-  
-  var buffer = "", stack1, stack2, options;
-  buffer += "\r\n                    <img class=\""
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth1.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.typeImage)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\" src=\"img/";
-  if (stack2 = helpers.type) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
-  else { stack2 = depth0.type; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
-  buffer += escapeExpression(stack2)
-    + ".png\">\r\n                    <div class=\""
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth1.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.content)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " "
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth1.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.predicate)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\" style=\"display:none\">";
-  if (stack2 = helpers.value) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
-  else { stack2 = depth0.value; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
-  buffer += escapeExpression(stack2)
-    + "</div>\r\n                    ";
-  options = {hash:{},inverse:self.noop,fn:self.programWithDepth(7, program7, data, depth1),data:data};
-  stack2 = ((stack1 = helpers.predicateLabelRetriver || depth0.predicateLabelRetriver),stack1 ? stack1.call(depth0, depth0, options) : helperMissing.call(depth0, "predicateLabelRetriver", depth0, options));
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += "\r\n            ";
-  return buffer;
-  }
-function program7(depth0,data,depth2) {
-  
-  var buffer = "", stack1, stack2;
-  buffer += "\r\n                        <div class=\""
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth2.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.content)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " "
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth2.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.predicateLabel)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">";
-  if (stack2 = helpers.label) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
-  else { stack2 = depth0.label; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
-  buffer += escapeExpression(stack2)
-    + "</div>\r\n                    ";
-  return buffer;
-  }
-
-  buffer += "            ";
-  stack2 = helpers['if'].call(depth0, ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.label), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += "\r\n            ";
-  options = {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data};
-  stack2 = ((stack1 = helpers.ifLang || depth0.ifLang),stack1 ? stack1.call(depth0, ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.description), options) : helperMissing.call(depth0, "ifLang", ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.description), options));
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += "\r\n            ";
-  stack2 = helpers['if'].call(depth0, ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.predicates), {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  return buffer;
-  });
-
-this["visaRDF"]["templates"]["tileWrapper"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression, self=this;
-
-function program1(depth0,data) {
-  
-  var buffer = "";
-  buffer += escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))
-    + " ";
-  return buffer;
-  }
-
-function program3(depth0,data) {
-  
-  var stack1;
-  return escapeExpression(((stack1 = ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.token)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1));
-  }
-
-function program5(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += "\r\n			<h2 class=\""
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.showURI)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\" style=\"display:none\">"
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.subject)),stack1 == null || stack1 === false ? stack1 : stack1.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</h2>\r\n		";
-  return buffer;
-  }
-
-  buffer += "	<div class=\""
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.tile)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " ";
-  stack2 = helpers.each.call(depth0, ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.filterables), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  stack2 = helpers['if'].call(depth0, ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.token), {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += " "
-    + escapeExpression(((stack1 = ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.index)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">\r\n		";
-  stack2 = helpers['if'].call(depth0, ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.subject), {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += "\r\n		<p class=\""
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.number)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\" style=\"display:none\">"
-    + escapeExpression(((stack1 = ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.index)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "</p>\r\n	</div>";
-  return buffer;
-  });
-
-this["visaRDF"]["templates"]["timelineItem"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
-
-
-  buffer += "<li>\r\n    "
-    + escapeExpression(((stack1 = ((stack1 = depth0.label),stack1 == null || stack1 === false ? stack1 : stack1.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\r\n</li>";
-  return buffer;
-  });
-
-this["visaRDF"]["templates"]["timelineWrapper"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
-
-
-  buffer += "<div class=\""
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.timelineContainer)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">\r\n    <ul class=\""
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.timeline)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">\r\n    </ul>\r\n</div>";
-  return buffer;
-  });;/**
- * VisaRDF is a JQuery Plugin for RDF visualization.
+/**
+ * bSynopsis is a JQuery Plugin for RDF visualization.
  * 
- * @module VisaRDF
+ * @module bSynopsis
  * @main Plugin
  * @param {} $
  * @param {} window
@@ -369,7 +16,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     // get global vars
     var $window = $(window);
 
-    // ========================= VisaRDF Constants ===============================
+    // ========================= bSynopsis Constants ===============================
     var cons = {
         // Part of CSS class to indicate a filterable
         FA_TAG: "synopsis_filter_",
@@ -575,7 +222,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     // ========================= JQuery custom selectors ===============================
     /**
      * class JQuery custom selectors
-     * @class VisaRDF_JQuery_Custom
+     * @class bSynopsis_JQuery_Custom
      **/
 
     /**
@@ -618,10 +265,10 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         return regex.test(jQuery(elem)[attr.method](attr.property));
     };
 
-    // ========================= VisaRDF class private utility functions ===============================
+    // ========================= bSynopsis class private utility functions ===============================
     /**
      * class private utility functions
-     * @class VisaRDF_GLOBAL_UTIL
+     * @class bSynopsis_GLOBAL_UTIL
      **/
 
     /**
@@ -756,7 +403,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         return transEndEventNames[Modernizr.prefixed('transition')];
     }
 
-    // ========================= VisaRDF: RemoteEngine Class ==============================
+    // ========================= bSynopsis: RemoteEngine Class ==============================
     /**
      * Class to provide a function for SPARQL querying of the service located at the given url. YQL is used to fetch the queryresults.
      *
@@ -879,16 +526,16 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         return key in this.values;
     };
 
-    // ========================= Variables for all VisaRDF instances ===============================
+    // ========================= Variables for all bSynopsis instances ===============================
     /**
      * class public functions
-     * @class VisaRDF_GLOBAL
+     * @class bSynopsis_GLOBAL
      **/
 
     // Deferred to inform if the plugin was already initialized once
     var globalInitDfd = $.Deferred(),
             // Name of the plugin
-            pluginName = "visaRDF",
+            pluginName = "bSynopsis",
             // rdf store instance(SPARQL endpoint)
             rdfStore,
             // remoteEngine for remote queries
@@ -931,7 +578,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     }
     ;
 
-    // ========================= VisaRDF: Event Class ==============================
+    // ========================= bSynopsis: Event Class ==============================
     Plugin.Event = function(sender) {
         this._sender = sender;
         this._listeners = [];
@@ -950,7 +597,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         }
     };
 
-    // ========================= VisaRDF: eventManager Class ==============================
+    // ========================= bSynopsis: eventManager Class ==============================
     /**
      * Class to manage eventHandlers
      *
@@ -1051,7 +698,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         });
     };
 
-    // ========================= VisaRDF: rdfStore Class ==============================
+    // ========================= bSynopsis: rdfStore Class ==============================
     /**
      * Class to wrap and create a rdfStore Object. Default: rdfstore-js https://github.com/antoniogarrote/rdfstore-js
      *
@@ -1108,9 +755,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
             });
              }
         } else if (dataFormat === "application/ld+json" || dataFormat === "application/json") {
-             console.log(data)
             var prefixes = data["@context"];
-            console.log(prefixes)
             if(prefixes) {
                 $.each(prefixes, function(i, val) {
                     if (isUndefinedOrNull(namespaces[val])) {
@@ -1144,7 +789,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         });
     };
 
-    // ========================= VisaRDF: LayoutEngine Class ==============================
+    // ========================= bSynopsis: LayoutEngine Class ==============================
     /**
      * Layout engine to add items to. Default: jQuery.isotope http://isotope.metafizzy.co/
      *
@@ -1210,7 +855,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     };
 
 
-    // ========================= VisaRDF: Layer Class ==================================
+    // ========================= bSynopsis: Layer Class ==================================
     /**
      * Layer of the RDF graph
      *
@@ -1323,7 +968,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     };
 
 
-    // ========================= VisaRDF: Node Class ==============================
+    // ========================= bSynopsis: Node Class ==============================
     /**
      * Node to represent an abstract element of the rdf graph.
      *
@@ -1956,7 +1601,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
         });
     };
 
-    // ========================= VisaRDF: InitLayer Class ==============================
+    // ========================= bSynopsis: InitLayer Class ==============================
     /**
      * Initialization view of the plugin
      *
@@ -1975,7 +1620,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     Plugin.InitLayer.prototype = Object.create(Plugin.Layer.prototype);
     Plugin.InitLayer.prototype.constructor = Plugin.InitLayer;
 
-    // ========================= VisaRDF: DetailLayer Class ==============================
+    // ========================= bSynopsis: DetailLayer Class ==============================
     /**
      * Detailed view of an subject / item
      *
@@ -2232,10 +1877,10 @@ if (plugin.options.generateTimeline) {
         // <!--- overlay hide ---->
     };
 
-    // ========================= VisaRDF: Preview Class ==============================
+    // ========================= bSynopsis: Preview Class ==============================
 
 
-    // ========================= VisaRDF: TemplatesLoader Class ==============================
+    // ========================= bSynopsis: TemplatesLoader Class ==============================
     /**
      * Handlebars templates loader to load precompiled or nonprecompiled templates
      *
@@ -2295,7 +1940,7 @@ if (plugin.options.generateTimeline) {
         return this._isLoaded();
     };
 
-    // ========================= VisaRDF: RemoteDataLoader Class ==============================
+    // ========================= bSynopsis: RemoteDataLoader Class ==============================
     /**
      * Loader to load remote data from services at the given urls and add them to the view
      *
@@ -2388,11 +2033,11 @@ if (plugin.options.generateTimeline) {
         });
     };
 
-    // ========================= visaRDF ===============================
+    // ========================= bSynopsis ===============================
 
     // Plugin constructor
     /**
-     * Main plugin class of VisaRDF
+     * Main plugin class of bSynopsis
      *
      * @class Plugin
      * @constructor
@@ -2402,7 +2047,7 @@ if (plugin.options.generateTimeline) {
 
     // Default options
     /**
-     Default options for visaRDF.
+     Default options for bSynopsis.
      
      @property defaults 
      @type Object
@@ -2438,6 +2083,7 @@ if (plugin.options.generateTimeline) {
                 },
                 config: new Array(".*homepage2.*", "somethingelse")
             },
+            
             /**
              * Filters blacklisted resources defined by URIs in config options. RegEx allowed.
              *
@@ -2459,6 +2105,7 @@ if (plugin.options.generateTimeline) {
                 },
                 config: new Array("blackListUrl1", "blackListUrl2")
             },
+            
             /**
              * Merges resNodes talking about the same resource (subject or object).
              *
@@ -2480,19 +2127,19 @@ if (plugin.options.generateTimeline) {
                         }
                     });
                     return nodes;
-                },
-                lookAtAddedNodes : true
+                }
             },
-            /**
-             * Merges nodes representing the same resource over a diffrent predicate
-             *
-             * @property defaults.nodeFilters.predicateConcat
-             * @type Object
-             */
-            predicateConcat: {
-                fn: function(plugin, nodes) {
-                    //TODO predicate concat here
+            
+            blankNode: {
+                fn : function(plugin, nodes, config) {
+                    $.each(nodes, function(i, node){
+                        if(node.nodeType == cons.NODE_TYPES.stdNode) {
+                        }
+                    });
                     return nodes;
+                },
+                config : {
+                    
                 }
             }
 
@@ -2700,6 +2347,7 @@ if (plugin.options.generateTimeline) {
                     }
                 }
             },
+            
             /**
              * Scales text of tiles
              *
@@ -2828,7 +2476,7 @@ if (plugin.options.generateTimeline) {
                     return $tiles;
                 }
             },
-            
+           
             /**
              * Enables mouseover for URIs
              *
@@ -2869,6 +2517,7 @@ if (plugin.options.generateTimeline) {
                     return $tiles;
                 }
             },
+            
             /**
              * Initializes the browsability of tiles
              *
@@ -2986,7 +2635,7 @@ if (plugin.options.generateTimeline) {
             }
         },
         /**
-         Options for the VisaRDF view layer.
+         Options for the bSynopsis view layer.
          
          @property defaults.layerOptions 
          @type Object
@@ -3099,7 +2748,7 @@ if (plugin.options.generateTimeline) {
                 remoteLabels: true
             },
             /**
-             Options for the VisaRDF views.
+             Options for the bSynopsis views.
              
              @property defaults.layerOptions.viewOptions 
              @type Object
@@ -3660,3 +3309,357 @@ if (plugin.options.generateTimeline) {
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+;this["bSynopsis"] = this["bSynopsis"] || {};
+this["bSynopsis"]["templates"] = this["bSynopsis"]["templates"] || {};
+
+this["bSynopsis"]["templates"]["filterOptions"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression, self=this;
+
+function program1(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\r\n                            <li><a data-filter-value=\"";
+  if (stack1 = helpers.value) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.value; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\" class=\"";
+  if (stack1 = helpers.value) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.value; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "\">";
+  if (stack1 = helpers.label) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.label; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</a></li>\r\n                    ";
+  return buffer;
+  }
+
+  buffer += "    <div class=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.optionCombo)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " "
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.filter)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">\r\n            <h2>Filter:</h2>\r\n            <ul class=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.optionSet)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " "
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.clearfix)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\" data-option-key=\"filter\">\r\n                    ";
+  stack2 = helpers.each.call(depth0, depth0.filterOptions, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack2 || stack2 === 0) { buffer += stack2; }
+  buffer += "\r\n            </ul>\r\n    </div>";
+  return buffer;
+  });
+
+this["bSynopsis"]["templates"]["groupDropDown"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
+
+function program1(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\r\n            <option value=";
+  if (stack1 = helpers.val) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.val; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + ">";
+  if (stack1 = helpers.label) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
+  else { stack1 = depth0.label; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
+  buffer += escapeExpression(stack1)
+    + "</option>\r\n            ";
+  return buffer;
+  }
+
+  buffer += "    <select id=\"GroupDropDown\">\r\n            ";
+  stack1 = helpers.each.call(depth0, depth0, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack1 || stack1 === 0) { buffer += stack1; }
+  buffer += "\r\n    </select>";
+  return buffer;
+  });
+
+this["bSynopsis"]["templates"]["overlayContent"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression, self=this;
+
+function program1(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\r\n            <div class=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.innerNoScroll)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">\r\n                <h2>\r\n                    "
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.label)),stack1 == null || stack1 === false ? stack1 : stack1.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\r\n                </h2>\r\n                "
+    + escapeExpression(((stack1 = ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.uri)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\r\n            </div>\r\n            <div class=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.innerScroll)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">\r\n                    <div></div>\r\n            </div>\r\n    ";
+  return buffer;
+  }
+
+  buffer += "    ";
+  stack2 = helpers['if'].call(depth0, ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.label), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack2 || stack2 === 0) { buffer += stack2; }
+  return buffer;
+  });
+
+this["bSynopsis"]["templates"]["overlayWrapper"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression, self=this;
+
+function program1(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += " <option value="
+    + escapeExpression(((stack1 = ((stack1 = data),stack1 == null || stack1 === false ? stack1 : stack1.key)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " selected=\"selected\"> "
+    + escapeExpression(((stack1 = ((stack1 = data),stack1 == null || stack1 === false ? stack1 : stack1.key)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " </option> ";
+  return buffer;
+  }
+
+  buffer += "		<div class=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.overlay)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">\r\n                                                            <div style=\"visibility:hidden\">";
+  if (stack2 = helpers.id) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.id; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
+    + "</div>\r\n                                                            <select multiple=\"multiple\" id=\"filterSelect\">\r\n                                                            ";
+  stack2 = helpers.each.call(depth0, depth0.nodeFilters, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack2 || stack2 === 0) { buffer += stack2; }
+  buffer += "\r\n                                                            ";
+  stack2 = helpers.each.call(depth0, depth0.tileFilters, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack2 || stack2 === 0) { buffer += stack2; }
+  buffer += "\r\n                                                            </select>\r\n                                                            <span class=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.buttonTimeline)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">history</span>\r\n			<span class=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.buttonClose)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">close</span>\r\n			<div class=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.overlayContent)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">\r\n			</div>\r\n		</div>";
+  return buffer;
+  });
+
+this["bSynopsis"]["templates"]["previewItem"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<div class=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.cssClass),stack1 == null || stack1 === false ? stack1 : stack1.preview)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " "
+    + escapeExpression(((stack1 = ((stack1 = depth0.cssClass),stack1 == null || stack1 === false ? stack1 : stack1.preview)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "_";
+  if (stack2 = helpers.index) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.index; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
+    + "\">\r\n        <div class=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.cssClass),stack1 == null || stack1 === false ? stack1 : stack1.previewContent)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">\r\n            TODO\r\n        </div>\r\n</div>";
+  return buffer;
+  });
+
+this["bSynopsis"]["templates"]["sortOptions"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, stack2, options, functionType="function", escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
+
+function program1(depth0,data) {
+  
+  var buffer = "";
+  buffer += "\r\n				<li><a data-sort-value=\""
+    + escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))
+    + "\" class=\""
+    + escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))
+    + "\">"
+    + escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))
+    + "</a></li>\r\n			";
+  return buffer;
+  }
+
+  buffer += "	<div class=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.optionCombo)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " "
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.sorter)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">\r\n		<h2>Sort:</h2>\r\n		<ul class=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.optionSet)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " "
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.clearfix)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\" data-option-key=\"sortBy\">\r\n			";
+  options = {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data};
+  stack2 = ((stack1 = helpers.keysEach || depth0.keysEach),stack1 ? stack1.call(depth0, depth0.optionSet, options) : helperMissing.call(depth0, "keysEach", depth0.optionSet, options));
+  if(stack2 || stack2 === 0) { buffer += stack2; }
+  buffer += "\r\n		</ul>\r\n	</div>";
+  return buffer;
+  });
+
+this["bSynopsis"]["templates"]["stdNode"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, stack2, options, functionType="function", escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
+
+function program1(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\r\n                    <h3 class=\""
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.content)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " "
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.labelEN)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">"
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.label)),stack1 == null || stack1 === false ? stack1 : stack1.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</h3>\r\n            ";
+  return buffer;
+  }
+
+function program3(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\r\n                    <div class=\""
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.content)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " "
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.descriptionEn)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">"
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.description)),stack1 == null || stack1 === false ? stack1 : stack1.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</div>\r\n            ";
+  return buffer;
+  }
+
+function program5(depth0,data) {
+  
+  var buffer = "", stack1, stack2;
+  buffer += "\r\n            ";
+  stack2 = helpers.each.call(depth0, ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.predicates), {hash:{},inverse:self.noop,fn:self.programWithDepth(6, program6, data, depth0),data:data});
+  if(stack2 || stack2 === 0) { buffer += stack2; }
+  buffer += "\r\n            ";
+  return buffer;
+  }
+function program6(depth0,data,depth1) {
+  
+  var buffer = "", stack1, stack2, options;
+  buffer += "\r\n                    <img class=\""
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth1.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.typeImage)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\" src=\"img/";
+  if (stack2 = helpers.type) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.type; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
+    + ".png\">\r\n                    <div class=\""
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth1.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.content)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " "
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth1.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.predicate)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\" style=\"display:none\">";
+  if (stack2 = helpers.value) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.value; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
+    + "</div>\r\n                    ";
+  options = {hash:{},inverse:self.noop,fn:self.programWithDepth(7, program7, data, depth1),data:data};
+  stack2 = ((stack1 = helpers.predicateLabelRetriver || depth0.predicateLabelRetriver),stack1 ? stack1.call(depth0, depth0, options) : helperMissing.call(depth0, "predicateLabelRetriver", depth0, options));
+  if(stack2 || stack2 === 0) { buffer += stack2; }
+  buffer += "\r\n            ";
+  return buffer;
+  }
+function program7(depth0,data,depth2) {
+  
+  var buffer = "", stack1, stack2;
+  buffer += "\r\n                        <div class=\""
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth2.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.content)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " "
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth2.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.predicateLabel)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">";
+  if (stack2 = helpers.label) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
+  else { stack2 = depth0.label; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
+  buffer += escapeExpression(stack2)
+    + "</div>\r\n                    ";
+  return buffer;
+  }
+
+  buffer += "            ";
+  stack2 = helpers['if'].call(depth0, ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.label), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack2 || stack2 === 0) { buffer += stack2; }
+  buffer += "\r\n            ";
+  options = {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data};
+  stack2 = ((stack1 = helpers.ifLang || depth0.ifLang),stack1 ? stack1.call(depth0, ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.description), options) : helperMissing.call(depth0, "ifLang", ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.description), options));
+  if(stack2 || stack2 === 0) { buffer += stack2; }
+  buffer += "\r\n            ";
+  stack2 = helpers['if'].call(depth0, ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.predicates), {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
+  if(stack2 || stack2 === 0) { buffer += stack2; }
+  return buffer;
+  });
+
+this["bSynopsis"]["templates"]["tileWrapper"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression, self=this;
+
+function program1(depth0,data) {
+  
+  var buffer = "";
+  buffer += escapeExpression((typeof depth0 === functionType ? depth0.apply(depth0) : depth0))
+    + " ";
+  return buffer;
+  }
+
+function program3(depth0,data) {
+  
+  var stack1;
+  return escapeExpression(((stack1 = ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.token)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1));
+  }
+
+function program5(depth0,data) {
+  
+  var buffer = "", stack1;
+  buffer += "\r\n			<h2 class=\""
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.showURI)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\" style=\"display:none\">"
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.subject)),stack1 == null || stack1 === false ? stack1 : stack1.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</h2>\r\n		";
+  return buffer;
+  }
+
+  buffer += "	<div class=\""
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.tile)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " ";
+  stack2 = helpers.each.call(depth0, ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.filterables), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  if(stack2 || stack2 === 0) { buffer += stack2; }
+  stack2 = helpers['if'].call(depth0, ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.token), {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
+  if(stack2 || stack2 === 0) { buffer += stack2; }
+  buffer += " "
+    + escapeExpression(((stack1 = ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.index)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">\r\n		";
+  stack2 = helpers['if'].call(depth0, ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.subject), {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
+  if(stack2 || stack2 === 0) { buffer += stack2; }
+  buffer += "\r\n		<p class=\""
+    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.tileClasses)),stack1 == null || stack1 === false ? stack1 : stack1.number)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\" style=\"display:none\">"
+    + escapeExpression(((stack1 = ((stack1 = depth0.node),stack1 == null || stack1 === false ? stack1 : stack1.index)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "</p>\r\n	</div>";
+  return buffer;
+  });
+
+this["bSynopsis"]["templates"]["timelineItem"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<li>\r\n    "
+    + escapeExpression(((stack1 = ((stack1 = depth0.label),stack1 == null || stack1 === false ? stack1 : stack1.value)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\r\n</li>";
+  return buffer;
+  });
+
+this["bSynopsis"]["templates"]["timelineWrapper"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+  this.compilerInfo = [4,'>= 1.0.0'];
+helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
+  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
+
+
+  buffer += "<div class=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.timelineContainer)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">\r\n    <ul class=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.timeline)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">\r\n    </ul>\r\n</div>";
+  return buffer;
+  });

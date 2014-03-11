@@ -1,7 +1,7 @@
 /**
- * VisaRDF is a JQuery Plugin for RDF visualization.
+ * bSynopsis is a JQuery Plugin for RDF visualization.
  * 
- * @module VisaRDF
+ * @module bSynopsis
  * @main Plugin
  * @param {} $
  * @param {} window
@@ -16,7 +16,7 @@
     // get global vars
     var $window = $(window);
 
-    // ========================= VisaRDF Constants ===============================
+    // ========================= bSynopsis Constants ===============================
     var cons = {
         // Part of CSS class to indicate a filterable
         FA_TAG: "synopsis_filter_",
@@ -222,7 +222,7 @@
     // ========================= JQuery custom selectors ===============================
     /**
      * class JQuery custom selectors
-     * @class VisaRDF_JQuery_Custom
+     * @class bSynopsis_JQuery_Custom
      **/
 
     /**
@@ -265,10 +265,10 @@
         return regex.test(jQuery(elem)[attr.method](attr.property));
     };
 
-    // ========================= VisaRDF class private utility functions ===============================
+    // ========================= bSynopsis class private utility functions ===============================
     /**
      * class private utility functions
-     * @class VisaRDF_GLOBAL_UTIL
+     * @class bSynopsis_GLOBAL_UTIL
      **/
 
     /**
@@ -403,7 +403,7 @@
         return transEndEventNames[Modernizr.prefixed('transition')];
     }
 
-    // ========================= VisaRDF: RemoteEngine Class ==============================
+    // ========================= bSynopsis: RemoteEngine Class ==============================
     /**
      * Class to provide a function for SPARQL querying of the service located at the given url. YQL is used to fetch the queryresults.
      *
@@ -526,16 +526,16 @@
         return key in this.values;
     };
 
-    // ========================= Variables for all VisaRDF instances ===============================
+    // ========================= Variables for all bSynopsis instances ===============================
     /**
      * class public functions
-     * @class VisaRDF_GLOBAL
+     * @class bSynopsis_GLOBAL
      **/
 
     // Deferred to inform if the plugin was already initialized once
     var globalInitDfd = $.Deferred(),
             // Name of the plugin
-            pluginName = "visaRDF",
+            pluginName = "bSynopsis",
             // rdf store instance(SPARQL endpoint)
             rdfStore,
             // remoteEngine for remote queries
@@ -578,7 +578,7 @@
     }
     ;
 
-    // ========================= VisaRDF: Event Class ==============================
+    // ========================= bSynopsis: Event Class ==============================
     Plugin.Event = function(sender) {
         this._sender = sender;
         this._listeners = [];
@@ -597,7 +597,7 @@
         }
     };
 
-    // ========================= VisaRDF: eventManager Class ==============================
+    // ========================= bSynopsis: eventManager Class ==============================
     /**
      * Class to manage eventHandlers
      *
@@ -698,7 +698,7 @@
         });
     };
 
-    // ========================= VisaRDF: rdfStore Class ==============================
+    // ========================= bSynopsis: rdfStore Class ==============================
     /**
      * Class to wrap and create a rdfStore Object. Default: rdfstore-js https://github.com/antoniogarrote/rdfstore-js
      *
@@ -789,7 +789,7 @@
         });
     };
 
-    // ========================= VisaRDF: LayoutEngine Class ==============================
+    // ========================= bSynopsis: LayoutEngine Class ==============================
     /**
      * Layout engine to add items to. Default: jQuery.isotope http://isotope.metafizzy.co/
      *
@@ -855,7 +855,7 @@
     };
 
 
-    // ========================= VisaRDF: Layer Class ==================================
+    // ========================= bSynopsis: Layer Class ==================================
     /**
      * Layer of the RDF graph
      *
@@ -968,7 +968,7 @@
     };
 
 
-    // ========================= VisaRDF: Node Class ==============================
+    // ========================= bSynopsis: Node Class ==============================
     /**
      * Node to represent an abstract element of the rdf graph.
      *
@@ -1601,7 +1601,7 @@
         });
     };
 
-    // ========================= VisaRDF: InitLayer Class ==============================
+    // ========================= bSynopsis: InitLayer Class ==============================
     /**
      * Initialization view of the plugin
      *
@@ -1620,7 +1620,7 @@
     Plugin.InitLayer.prototype = Object.create(Plugin.Layer.prototype);
     Plugin.InitLayer.prototype.constructor = Plugin.InitLayer;
 
-    // ========================= VisaRDF: DetailLayer Class ==============================
+    // ========================= bSynopsis: DetailLayer Class ==============================
     /**
      * Detailed view of an subject / item
      *
@@ -1877,10 +1877,10 @@ if (plugin.options.generateTimeline) {
         // <!--- overlay hide ---->
     };
 
-    // ========================= VisaRDF: Preview Class ==============================
+    // ========================= bSynopsis: Preview Class ==============================
 
 
-    // ========================= VisaRDF: TemplatesLoader Class ==============================
+    // ========================= bSynopsis: TemplatesLoader Class ==============================
     /**
      * Handlebars templates loader to load precompiled or nonprecompiled templates
      *
@@ -1940,7 +1940,7 @@ if (plugin.options.generateTimeline) {
         return this._isLoaded();
     };
 
-    // ========================= VisaRDF: RemoteDataLoader Class ==============================
+    // ========================= bSynopsis: RemoteDataLoader Class ==============================
     /**
      * Loader to load remote data from services at the given urls and add them to the view
      *
@@ -2033,11 +2033,11 @@ if (plugin.options.generateTimeline) {
         });
     };
 
-    // ========================= visaRDF ===============================
+    // ========================= bSynopsis ===============================
 
     // Plugin constructor
     /**
-     * Main plugin class of VisaRDF
+     * Main plugin class of bSynopsis
      *
      * @class Plugin
      * @constructor
@@ -2047,7 +2047,7 @@ if (plugin.options.generateTimeline) {
 
     // Default options
     /**
-     Default options for visaRDF.
+     Default options for bSynopsis.
      
      @property defaults 
      @type Object
@@ -2083,6 +2083,7 @@ if (plugin.options.generateTimeline) {
                 },
                 config: new Array(".*homepage2.*", "somethingelse")
             },
+            
             /**
              * Filters blacklisted resources defined by URIs in config options. RegEx allowed.
              *
@@ -2104,6 +2105,7 @@ if (plugin.options.generateTimeline) {
                 },
                 config: new Array("blackListUrl1", "blackListUrl2")
             },
+            
             /**
              * Merges resNodes talking about the same resource (subject or object).
              *
@@ -2125,19 +2127,19 @@ if (plugin.options.generateTimeline) {
                         }
                     });
                     return nodes;
-                },
-                lookAtAddedNodes : true
+                }
             },
-            /**
-             * Merges nodes representing the same resource over a diffrent predicate
-             *
-             * @property defaults.nodeFilters.predicateConcat
-             * @type Object
-             */
-            predicateConcat: {
-                fn: function(plugin, nodes) {
-                    //TODO predicate concat here
+            
+            blankNode: {
+                fn : function(plugin, nodes, config) {
+                    $.each(nodes, function(i, node){
+                        if(node.nodeType == cons.NODE_TYPES.stdNode) {
+                        }
+                    });
                     return nodes;
+                },
+                config : {
+                    
                 }
             }
 
@@ -2345,6 +2347,7 @@ if (plugin.options.generateTimeline) {
                     }
                 }
             },
+            
             /**
              * Scales text of tiles
              *
@@ -2473,7 +2476,7 @@ if (plugin.options.generateTimeline) {
                     return $tiles;
                 }
             },
-            
+           
             /**
              * Enables mouseover for URIs
              *
@@ -2514,6 +2517,7 @@ if (plugin.options.generateTimeline) {
                     return $tiles;
                 }
             },
+            
             /**
              * Initializes the browsability of tiles
              *
@@ -2631,7 +2635,7 @@ if (plugin.options.generateTimeline) {
             }
         },
         /**
-         Options for the VisaRDF view layer.
+         Options for the bSynopsis view layer.
          
          @property defaults.layerOptions 
          @type Object
@@ -2744,7 +2748,7 @@ if (plugin.options.generateTimeline) {
                 remoteLabels: true
             },
             /**
-             Options for the VisaRDF views.
+             Options for the bSynopsis views.
              
              @property defaults.layerOptions.viewOptions 
              @type Object

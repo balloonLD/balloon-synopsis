@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-        <title>visaRDF</title>
+        <title>bSynopsis</title>
         <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
         <script type="text/javascript" src="../../js/libs/jquery-1.8.3.js"></script>
         <script type="text/javascript" src="../../js/libs/handlebars-v1.1.2.js"></script>
@@ -16,23 +16,23 @@
         <script type="text/javascript" src="../../js/libs/modernizr.js"></script>
         <script type="text/javascript" src="../../js/libs/rdf_store.js"></script>
         <script type="text/javascript" src="../../js/libs/rgbcolor.js"></script>
-        <script type="text/javascript" src="../../build/visaRDF.js"></script>
-        <link rel="stylesheet" href="../../css/visaRdf.css" type="text/css" />
+        <script type="text/javascript" src="../../build/bSynopsis.js"></script>
+        <link rel="stylesheet" href="../../css/bSynopsis.css" type="text/css" />
         <link rel="stylesheet" href="demo.css" type="text/css" />
 
     </head>
     <body>
-        <div class="visaRDF"></div>
+        <div class="bSynopsis"></div>
         <form>
             <label for="inputbox">DataURL:</label> <input type="text"
                                                           name="inputbox" value="data/turtle.ttl">
             <p>
                 <input type="button" name="insert" value="Insert data"
-                       onclick="$('.visaRDF').data('plugin_visaRDF').insertDataPath(this.form.inputbox.value, 'text/turtle');">
+                       onclick="$('.bSynopsis').data('plugin_bSynopsis').insertDataPath(this.form.inputbox.value, 'text/turtle');">
         </form>
         <form>
             <label for="inputFile">Local turtle file:</label>
-            <input type="file" id="inputFile"  onchange="$('.visaRDF').data('plugin_visaRDF').insertDataFile(this.files[0]);">
+            <input type="file" id="inputFile"  onchange="$('.bSynopsis').data('plugin_bSynopsis').insertDataFile(this.files[0]);">
         </form>
         <form>
             <label for="serviceinputbox">Remote data service:</label> <input
@@ -40,23 +40,23 @@
                 value="http://zaire.dimis.fim.uni-passau.de:8080/bigdata/sparql">
             <p>
                 <label for="queryinputbox">Remote data query:</label>
-                <textarea type="text" name="queryinputbox">SELECT ?subject ?predicate ?object { BIND( rdfs:label as ?predicate) ?subject ?predicate ?object. ?subject a <http://dbpedia.org/ontology/Place> . ?subject <http://dbpedia.org/property/rulingParty> ?x } LIMIT 500
+                <textarea name="queryinputbox">SELECT ?subject ?predicate ?object { BIND( rdfs:label as ?predicate) ?subject ?predicate ?object. ?subject a <http://dbpedia.org/ontology/Place> . ?subject <http://dbpedia.org/property/rulingParty> ?x } LIMIT 500
                             </textarea>
                             <p>
                                 <input type="button" name="insertRemote" value="Insert remote data"
-                                       onclick="$('.visaRDF').data('plugin_visaRDF').insertRemoteDataQuery(this.form.serviceinputbox.value, this.form.queryinputbox.value);">
+                                       onclick="$('.bSynopsis').data('plugin_bSynopsis').insertRemoteDataQuery(this.form.serviceinputbox.value, this.form.queryinputbox.value);">
                                 </form>
                             <form>
                                 <input type="button" name="clearStore" value="clearStore"
-                                       onclick="$('.visaRDF').data('plugin_visaRDF').clearStore();">
+                                       onclick="$('.bSynopsis').data('plugin_bSynopsis').clearStore();">
                             </form>
                 <form>
                 <label for="queryinputbox">Remote data query:</label>
-                <textarea type="text" name="localQueryinputbox">SELECT ?s ?p ?o WHERE { ?s ?p ?o }
+                <textarea name="localQueryinputbox">SELECT ?s ?p ?o WHERE { ?s ?p ?o }
                             </textarea>
                             <p>
                 <input type="button" name="runQuery" value="Run query on local store"
-                       onclick="$('.visaRDF').data('plugin_visaRDF').runQuery(this.form.localQueryinputbox.value, console.log);">
+                       onclick="$('.bSynopsis').data('plugin_bSynopsis').runQuery(this.form.localQueryinputbox.value, console.log);">
                 </form>
 
 
@@ -64,7 +64,7 @@
                             <script type="text/javascript">
 
                                 $(function() {
-                                    $('.visaRDF').visaRDF({
+                                    $('.bSynopsis').bSynopsis({
                                         nodeFilters: {
                                             blacklistURI: {
                                                 config: new Array(".*someRegExp.*")

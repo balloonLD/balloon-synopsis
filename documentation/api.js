@@ -13,18 +13,18 @@ YUI.add("yuidoc-meta", function(Y) {
         "Plugin.RemoteDataLoader",
         "Plugin.TemplatesLoader",
         "RemoteEngine",
-        "VisaRDF_GLOBAL",
-        "VisaRDF_GLOBAL_UTIL",
-        "VisaRDF_JQuery_Custom"
+        "bSynopsis_GLOBAL",
+        "bSynopsis_GLOBAL_UTIL",
+        "bSynopsis_JQuery_Custom"
     ],
     "modules": [
-        "VisaRDF"
+        "bSynopsis"
     ],
     "allModules": [
         {
-            "displayName": "VisaRDF",
-            "name": "VisaRDF",
-            "description": "VisaRDF is a JQuery Plugin for RDF visualization."
+            "displayName": "bSynopsis",
+            "name": "bSynopsis",
+            "description": "bSynopsis is a JQuery Plugin for RDF visualization."
         }
     ]
 } };
