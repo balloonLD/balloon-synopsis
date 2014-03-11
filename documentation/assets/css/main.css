@@ -281,7 +281,7 @@ th {
 }
 
 #classdocs .item .params p,
-    #classdocs .item .returns p,{
+    #classdocs .item .returns p{
     display: inline;
 }
 
