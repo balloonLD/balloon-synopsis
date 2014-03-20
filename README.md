@@ -21,10 +21,10 @@ Our current prototype offers following features:
 
 
 ## Installation
-The plugin javascript file is located in the build/ folder of the distribution. To use balloon Synopsis just include this file in your page.
+The plugin javascript file is located in the build/ folder of the distribution. To use visaRDF just include this file in your page.
 
 ## Building
-You can use [Grunt](http://gruntjs.com/api/grunt) to generate the template.js from the handlebar files. Grunt concatinates the templates.js and the bSynopsis.js.
+You can use [Grunt](http://gruntjs.com/api/grunt) to generate the template.js from the handlebar files. Grunt concatinates the templates.js and the visaRDF.js.
 Grunt and Grunt plugins are installed and managed via npm, the [Node.js](http://nodejs.org/) package manager.
 You will need to install following Grunt plugins:
 
@@ -33,7 +33,7 @@ You will need to install following Grunt plugins:
 * [grunt-contrib-uglify](https://npmjs.org/package/grunt-contrib-uglify)
 * [grunt-contrib-yuidoc](https://npmjs.org/package/grunt-contrib-yuidoc)
 
-## balloon Synopsis dependencies:
+## visaRDF dependencies:
 
  * [jQuery](http://jquery.com/) 1.8.3
  * [jQuery.isotope](http://isotope.metafizzy.co/)
