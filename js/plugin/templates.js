@@ -1,7 +1,7 @@
-this["bSynopsis"] = this["bSynopsis"] || {};
-this["bSynopsis"]["templates"] = this["bSynopsis"]["templates"] || {};
+this["balloon-synopsis"] = this["balloon-synopsis"] || {};
+this["balloon-synopsis"]["templates"] = this["balloon-synopsis"]["templates"] || {};
 
-this["bSynopsis"]["templates"]["filterOptions"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["balloon-synopsis"]["templates"]["filterOptions"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression, self=this;
@@ -40,7 +40,7 @@ function program1(depth0,data) {
   return buffer;
   });
 
-this["bSynopsis"]["templates"]["groupDropDown"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["balloon-synopsis"]["templates"]["groupDropDown"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression, self=this;
@@ -67,7 +67,7 @@ function program1(depth0,data) {
   return buffer;
   });
 
-this["bSynopsis"]["templates"]["overlayContent"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["balloon-synopsis"]["templates"]["overlayContent"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression, self=this;
@@ -93,35 +93,19 @@ function program1(depth0,data) {
   return buffer;
   });
 
-this["bSynopsis"]["templates"]["overlayWrapper"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["balloon-synopsis"]["templates"]["overlayWrapper"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression, self=this;
+  var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression;
 
-function program1(depth0,data) {
-  
-  var buffer = "", stack1;
-  buffer += " <option value="
-    + escapeExpression(((stack1 = ((stack1 = data),stack1 == null || stack1 === false ? stack1 : stack1.key)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " selected=\"selected\"> "
-    + escapeExpression(((stack1 = ((stack1 = data),stack1 == null || stack1 === false ? stack1 : stack1.key)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " </option> ";
-  return buffer;
-  }
 
-  buffer += "		<div class=\""
+  buffer += "		      \r\n		<div class=\""
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.overlay)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">\r\n                                                            <div style=\"visibility:hidden\">";
+    + "\">\r\n            <div style=\"visibility:hidden\">";
   if (stack2 = helpers.id) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
   else { stack2 = depth0.id; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
   buffer += escapeExpression(stack2)
-    + "</div>\r\n                                                            <select multiple=\"multiple\" id=\"filterSelect\">\r\n                                                            ";
-  stack2 = helpers.each.call(depth0, depth0.nodeFilters, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += "\r\n                                                            ";
-  stack2 = helpers.each.call(depth0, depth0.tileFilters, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += "\r\n                                                            </select>\r\n                                                            <span class=\""
+    + "</div>\r\n            <span class=\""
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.buttonTimeline)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + "\">history</span>\r\n			<span class=\""
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.buttonClose)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
@@ -131,7 +115,7 @@ function program1(depth0,data) {
   return buffer;
   });
 
-this["bSynopsis"]["templates"]["previewItem"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["balloon-synopsis"]["templates"]["previewItem"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression;
@@ -151,7 +135,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-this["bSynopsis"]["templates"]["sortOptions"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["balloon-synopsis"]["templates"]["sortOptions"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, stack2, options, functionType="function", escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
@@ -185,7 +169,7 @@ function program1(depth0,data) {
   return buffer;
   });
 
-this["bSynopsis"]["templates"]["stdNode"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["balloon-synopsis"]["templates"]["stdNode"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, stack2, options, functionType="function", escapeExpression=this.escapeExpression, self=this, helperMissing=helpers.helperMissing;
@@ -277,7 +261,7 @@ function program7(depth0,data,depth2) {
   return buffer;
   });
 
-this["bSynopsis"]["templates"]["tileWrapper"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["balloon-synopsis"]["templates"]["tileWrapper"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression, self=this;
@@ -327,7 +311,7 @@ function program5(depth0,data) {
   return buffer;
   });
 
-this["bSynopsis"]["templates"]["timelineItem"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["balloon-synopsis"]["templates"]["timelineItem"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
@@ -339,7 +323,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-this["bSynopsis"]["templates"]["timelineWrapper"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
+this["balloon-synopsis"]["templates"]["timelineWrapper"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;

@@ -1,6 +1,6 @@
 {
     "project": {
-        "name": "bSynopsis",
+        "name": "balloon-synopsis",
         "description": "",
         "version": "0.1.0",
         "url": ""
@@ -57,7 +57,7 @@
             "namespaces": {},
             "tag": "module",
             "file": "js/plugin/bSynopsis.js",
-            "line": 2039,
+            "line": 2296,
             "description": "bSynopsis is a JQuery Plugin for RDF visualization.",
             "itemtype": "main",
             "params": [
@@ -66,16 +66,16 @@
                     "description": ""
                 },
                 {
-                    "name": "window",
-                    "description": ""
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "window"
                 },
                 {
-                    "name": "document",
-                    "description": ""
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "document"
                 },
                 {
-                    "name": "undefined",
-                    "description": ""
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "undefined"
                 }
             ]
         }
@@ -92,7 +92,7 @@
             "module": "bSynopsis",
             "namespace": "",
             "file": "js/plugin/bSynopsis.js",
-            "line": 223,
+            "line": 248,
             "description": "class JQuery custom selectors"
         },
         "bSynopsis_GLOBAL_UTIL": {
@@ -106,7 +106,7 @@
             "module": "bSynopsis",
             "namespace": "",
             "file": "js/plugin/bSynopsis.js",
-            "line": 269,
+            "line": 305,
             "description": "class private utility functions"
         },
         "RemoteEngine": {
@@ -120,8 +120,8 @@
             "module": "bSynopsis",
             "namespace": "",
             "file": "js/plugin/bSynopsis.js",
-            "line": 407,
-            "description": "Class to provide a function for SPARQL querying of the service located at the given url. YQL is used to fetch the queryresults.",
+            "line": 445,
+            "description": "Class to provide a function for SPARQL querying of the service located at\nthe given url. YQL is used to fetch the queryresults.",
             "is_constructor": 1
         },
         "Cache": {
@@ -135,7 +135,7 @@
             "module": "bSynopsis",
             "namespace": "",
             "file": "js/plugin/bSynopsis.js",
-            "line": 485,
+            "line": 531,
             "description": "This class defines a cache.",
             "is_constructor": 1
         },
@@ -150,7 +150,7 @@
             "module": "bSynopsis",
             "namespace": "",
             "file": "js/plugin/bSynopsis.js",
-            "line": 530,
+            "line": 580,
             "description": "class public functions"
         },
         "Plugin.EventManager": {
@@ -164,13 +164,13 @@
             "module": "bSynopsis",
             "namespace": "",
             "file": "js/plugin/bSynopsis.js",
-            "line": 601,
+            "line": 654,
             "description": "Class to manage eventHandlers",
             "is_constructor": 1,
             "params": [
                 {
-                    "name": "stdObject",
-                    "description": "Default object for adding of eventHandlers",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "stdObject Default object for adding of eventHandlers",
                     "type": "JQuery"
                 }
             ]
@@ -186,18 +186,18 @@
             "module": "bSynopsis",
             "namespace": "",
             "file": "js/plugin/bSynopsis.js",
-            "line": 702,
-            "description": "Class to wrap and create a rdfStore Object. Default: rdfstore-js https://github.com/antoniogarrote/rdfstore-js",
+            "line": 771,
+            "description": "Class to wrap and create a rdfStore Object. Default: rdfstore-js\nhttps://github.com/antoniogarrote/rdfstore-js",
             "is_constructor": 1,
             "params": [
                 {
-                    "name": "options",
-                    "description": "Options object for the rdf store",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "options Options object for the rdf store",
                     "type": "Object"
                 },
                 {
-                    "name": "callback",
-                    "description": "Callback function to execute after class creation",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "callback Callback function to execute after class creation",
                     "type": "Function"
                 }
             ]
@@ -213,18 +213,18 @@
             "module": "bSynopsis",
             "namespace": "",
             "file": "js/plugin/bSynopsis.js",
-            "line": 793,
-            "description": "Layout engine to add items to. Default: jQuery.isotope http://isotope.metafizzy.co/",
+            "line": 880,
+            "description": "Layout engine to add items to. Default: jQuery.isotope\nhttp://isotope.metafizzy.co/",
             "is_constructor": 1,
             "params": [
                 {
-                    "name": "container",
-                    "description": "Container to use the layout engine on",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "container Container to use the layout engine on",
                     "type": "JQuery"
                 },
                 {
-                    "name": "options",
-                    "description": "Options object for the layout engine",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "options Options object for the layout engine",
                     "type": "Object"
                 }
             ]
@@ -240,28 +240,28 @@
             "module": "bSynopsis",
             "namespace": "",
             "file": "js/plugin/bSynopsis.js",
-            "line": 859,
+            "line": 955,
             "description": "Layer of the RDF graph",
             "is_constructor": 1,
             "params": [
                 {
-                    "name": "$container",
-                    "description": "Parent div container",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "$container Parent div container",
                     "type": "JQuery"
                 },
                 {
-                    "name": "options",
-                    "description": "Options object of the view",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "options Options object of the view",
                     "type": "Object"
                 },
                 {
-                    "name": "plugin",
-                    "description": "Parent plugin",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "plugin Parent plugin",
                     "type": "Plugin"
                 },
                 {
-                    "name": "queries",
-                    "description": "Queries to use in the view",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "queries Queries to use in the view",
                     "type": "Object"
                 }
             ]
@@ -277,13 +277,13 @@
             "module": "bSynopsis",
             "namespace": "",
             "file": "js/plugin/bSynopsis.js",
-            "line": 972,
+            "line": 1074,
             "description": "Node to represent an abstract element of the rdf graph.",
             "is_constructor": 1,
             "params": [
                 {
-                    "name": "data",
-                    "description": "Data of a single resource of a select query. Must contain label and index.",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "data Data of a single resource of a select query. Must contain\n           label and index.",
                     "type": "Object"
                 }
             ]
@@ -299,24 +299,24 @@
             "module": "bSynopsis",
             "namespace": "",
             "file": "js/plugin/bSynopsis.js",
-            "line": 1605,
+            "line": 1773,
             "description": "Initialization view of the plugin",
             "extends": "Plugin.Layer",
             "is_constructor": 1,
             "params": [
                 {
-                    "name": "$container",
-                    "description": "Container of the initialization view",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "$container Container of the initialization view",
                     "type": "JQuery"
                 },
                 {
-                    "name": "options",
-                    "description": "Options object",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "options Options object",
                     "type": "Object"
                 },
                 {
-                    "name": "plugin",
-                    "description": "The parent plugin of the initialization view",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "plugin The parent plugin of the initialization view",
                     "type": "Plugin"
                 }
             ]
@@ -332,29 +332,29 @@
             "module": "bSynopsis",
             "namespace": "",
             "file": "js/plugin/bSynopsis.js",
-            "line": 1624,
+            "line": 1797,
             "description": "Detailed view of an subject / item",
             "extends": "Plugin.Layer",
             "is_constructor": 1,
             "params": [
                 {
-                    "name": "$container",
-                    "description": "Container of the detail view",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "$container Container of the detail view",
                     "type": "JQuery"
                 },
                 {
-                    "name": "options",
-                    "description": "Options object",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "options Options object",
                     "type": "Object"
                 },
                 {
-                    "name": "plugin",
-                    "description": "The parent plugin of the detail view",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "plugin The parent plugin of the detail view",
                     "type": "Plugin"
                 },
                 {
-                    "name": "$item",
-                    "description": "Item to get the detail view from",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "$item Item to get the detail view from",
                     "type": "JQuery"
                 }
             ]
@@ -370,14 +370,14 @@
             "module": "bSynopsis",
             "namespace": "",
             "file": "js/plugin/bSynopsis.js",
-            "line": 1884,
-            "description": "Handlebars templates loader to load precompiled or nonprecompiled templates",
+            "line": 2120,
+            "description": "Handlebars templates loader to load precompiled or nonprecompiled\ntemplates",
             "is_constructor": 1,
             "params": [
                 {
                     "name": "dfd",
                     "description": "Deferred Object to resolve when loading is done",
-                    "type": "Deferred Object"
+                    "type": "Deferred!~YUIDOC_LINE~!           Object"
                 }
             ]
         },
@@ -392,18 +392,18 @@
             "module": "bSynopsis",
             "namespace": "",
             "file": "js/plugin/bSynopsis.js",
-            "line": 1944,
-            "description": "Loader to load remote data from services at the given urls and add them to the view",
+            "line": 2188,
+            "description": "Loader to load remote data from services at the given urls and add them\nto the view",
             "is_constructor": 1,
             "params": [
                 {
-                    "name": "sites",
-                    "description": "Array of URLs of SPARQL services to query",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "sites Array of URLs of SPARQL services to query",
                     "type": "Array"
                 },
                 {
-                    "name": "pluginID",
-                    "description": "ID of parten plugin",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "pluginID ID of parten plugin",
                     "type": "Integer"
                 }
             ]
@@ -419,18 +419,18 @@
             "module": "bSynopsis",
             "namespace": "",
             "file": "js/plugin/bSynopsis.js",
-            "line": 2039,
+            "line": 2296,
             "description": "Main plugin class of bSynopsis",
             "is_constructor": 1,
             "params": [
                 {
-                    "name": "obj",
-                    "description": "Parent object of the plugin",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "obj Parent object of the plugin",
                     "type": "JQuery"
                 },
                 {
-                    "name": "options",
-                    "description": "Options for the plugin",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "options Options for the plugin",
                     "type": "Object"
                 }
             ]
@@ -439,22 +439,22 @@
     "classitems": [
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 228,
+            "line": 254,
             "description": "JQuery custom class prefix selector.",
             "itemtype": "method",
             "name": "class-prefix",
             "params": [
                 {
-                    "name": "ele",
-                    "description": ""
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "ele"
                 },
                 {
-                    "name": "index",
-                    "description": ""
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "index"
                 },
                 {
-                    "name": "match",
-                    "description": ""
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "match"
                 }
             ],
             "class": "bSynopsis_JQuery_Custom",
@@ -462,22 +462,22 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 247,
-            "description": "JQuery custom regex selector. (modified the version of James Padolsey - http://james.padolsey.com/javascript/regex-selector-for-jquery/)",
+            "line": 276,
+            "description": "JQuery custom regex selector. (modified the version of James Padolsey -\nhttp://james.padolsey.com/javascript/regex-selector-for-jquery/)",
             "itemtype": "method",
             "name": "regex",
             "params": [
                 {
-                    "name": "elem",
-                    "description": ""
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "elem"
                 },
                 {
-                    "name": "index",
-                    "description": ""
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "index"
                 },
                 {
-                    "name": "match",
-                    "description": ""
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "match"
                 }
             ],
             "class": "bSynopsis_JQuery_Custom",
@@ -485,14 +485,14 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 274,
+            "line": 311,
             "description": "Checks if given variable is undenfined or null.",
             "itemtype": "method",
             "name": "isUndefinedOrNull",
             "params": [
                 {
-                    "name": "a",
-                    "description": "Variable to check",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "a Variable to check",
                     "type": "Object"
                 }
             ],
@@ -505,19 +505,19 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 296,
-            "description": "Replace the DUMMY constants of given query with the given replacementstring.",
+            "line": 334,
+            "description": "Replace the DUMMY constants of given query with the given\nreplacementstring.",
             "itemtype": "method",
             "name": "replaceDummy",
             "params": [
                 {
-                    "name": "query",
-                    "description": "Query to work with",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "query Query to work with",
                     "type": "String"
                 },
                 {
-                    "name": "replacement",
-                    "description": "String to replace the cons.DUMMY of given query",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "replacement String to replace the CONS.DUMMY of given query",
                     "type": "String"
                 }
             ],
@@ -530,40 +530,19 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 308,
-            "description": "Used to deepCopy a javascript object.",
-            "access": "private",
-            "tagname": "",
-            "itemtype": "method",
-            "name": "deepCopy",
-            "params": [
-                {
-                    "name": "obj",
-                    "description": "Object to clone",
-                    "type": "Object"
-                }
-            ],
-            "return": {
-                "description": "copy of the object"
-            },
-            "class": "bSynopsis_GLOBAL_UTIL",
-            "module": "bSynopsis"
-        },
-        {
-            "file": "js/plugin/bSynopsis.js",
-            "line": 321,
+            "line": 349,
             "description": "Gets the current window size of the browser.",
             "itemtype": "method",
             "name": "getWindowSize",
             "params": [
                 {
-                    "name": "withoutScrollbar",
-                    "description": "Flag to assign if the scrollbar should be considered",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "withoutScrollbar Flag to assign if the scrollbar should be\n           considered",
                     "type": "Boolean"
                 }
             ],
             "return": {
-                "description": "Object which contains the width and the height of the window.",
+                "description": "Object which contains the width and the height of the\n        window.",
                 "type": "Object"
             },
             "class": "bSynopsis_GLOBAL_UTIL",
@@ -571,14 +550,14 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 347,
+            "line": 378,
             "description": "Gets the clip data of given type of div box",
             "itemtype": "method",
             "name": "getClip",
             "params": [
                 {
-                    "name": "name",
-                    "description": "CSS name as defined in cons.CSS_CLASSES of given div box",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "name CSS name as defined in CONS.CSS_CLASSES of given div box",
                     "type": "String"
                 }
             ],
@@ -591,14 +570,14 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 371,
+            "line": 406,
             "description": "Gets the layoutprop of given item",
             "itemtype": "method",
             "name": "getItemLayoutProp",
             "params": [
                 {
-                    "name": "$item",
-                    "description": "JQuery item",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "$item JQuery item",
                     "type": "$item"
                 }
             ],
@@ -611,7 +590,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 388,
+            "line": 425,
             "description": "Get browser dependent event names. (Uses Modernizr)",
             "itemtype": "method",
             "name": "getTransEndEventName",
@@ -624,24 +603,24 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 472,
-            "description": "Method for querying the given url with given query. Executes given callback function with results.",
+            "line": 514,
+            "description": "Method for querying the given url with given query. Executes given\ncallback function with results.",
             "itemtype": "method",
             "name": "executeQuery",
             "params": [
                 {
-                    "name": "query",
-                    "description": "Query to execute",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "query Query to execute",
                     "type": "String"
                 },
                 {
-                    "name": "url",
-                    "description": "URL of service to execute the query on",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "url URL of service to execute the query on",
                     "type": "String"
                 },
                 {
-                    "name": "callback",
-                    "description": "Callback function to be executed with query results",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "callback Callback function to be executed with query results",
                     "type": "Function"
                 }
             ],
@@ -650,19 +629,19 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 495,
+            "line": 541,
             "description": "Adds the key and value to the cache.",
             "itemtype": "method",
             "name": "add",
             "params": [
                 {
-                    "name": "key",
-                    "description": "Key to map to the value",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "key Key to map to the value",
                     "type": "String"
                 },
                 {
-                    "name": "val",
-                    "description": "Value to add to the cache",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "val Value to add to the cache",
                     "type": "String"
                 }
             ],
@@ -671,14 +650,14 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 506,
+            "line": 554,
             "description": "Retrives the to the key correspondending value",
             "itemtype": "method",
             "name": "retrieve",
             "params": [
                 {
-                    "name": "key",
-                    "description": "Key to map to the value",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "key Key to map to the value",
                     "type": "String"
                 }
             ],
@@ -691,14 +670,14 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 518,
+            "line": 566,
             "description": "Check if the cache contains a value for the given key",
             "itemtype": "method",
             "name": "contains",
             "params": [
                 {
-                    "name": "key",
-                    "description": "Key to map to the value",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "key Key to map to the value",
                     "type": "String"
                 }
             ],
@@ -711,7 +690,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 570,
+            "line": 621,
             "description": "Generate an ID for the plugin.",
             "itemtype": "method",
             "name": "generateId",
@@ -724,29 +703,29 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 619,
-            "description": "Add an event handler to given object. Save it in the history for cleanup purposes.",
+            "line": 673,
+            "description": "Add an event handler to given object. Save it in the history for cleanup\npurposes.",
             "itemtype": "method",
             "name": "addEventHandler",
             "params": [
                 {
-                    "name": "eventType",
-                    "description": "Type of the event as defined in cons",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "eventType Type of the event as defined in cons",
                     "type": "String"
                 },
                 {
-                    "name": "handler",
-                    "description": "Eventhandler function to trigger on event",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "handler Eventhandler function to trigger on event",
                     "type": "Function"
                 },
                 {
-                    "name": "object",
-                    "description": "Object to add the eventhandler to",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "object Object to add the eventhandler to",
                     "type": "String"
                 },
                 {
-                    "name": "id",
-                    "description": "ID to add to the eventhandler",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "id ID to add to the eventhandler",
                     "type": "String"
                 }
             ],
@@ -755,24 +734,24 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 644,
-            "description": "Remove an event handler from given object and history. Removal by id is possible.",
+            "line": 704,
+            "description": "Remove an event handler from given object and history. Removal by id is\npossible.",
             "itemtype": "method",
             "name": "removeEventHandler",
             "params": [
                 {
-                    "name": "eventType",
-                    "description": "Type of the event as defined in cons",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "eventType Type of the event as defined in CONS",
                     "type": "String"
                 },
                 {
-                    "name": "id",
-                    "description": "ID of the eventHandler to be removed",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "id ID of the eventHandler to be removed",
                     "type": "Function"
                 },
                 {
-                    "name": "object",
-                    "description": "Object to remove the eventhandler from",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "object Object to remove the eventhandler from",
                     "type": "String"
                 }
             ],
@@ -781,24 +760,24 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 672,
+            "line": 737,
             "description": "Trigger the event with given parameters on given object.",
             "itemtype": "method",
             "name": "trigger",
             "params": [
                 {
-                    "name": "eventType",
-                    "description": "Type of the event as defined in cons",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "eventType Type of the event as defined in CONS",
                     "type": "String"
                 },
                 {
-                    "name": "param",
-                    "description": "Array of parameters to give to the triggered function",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "param Array of parameters to give to the triggered function",
                     "type": "Object"
                 },
                 {
-                    "name": "object",
-                    "description": "Object to trigger the event on",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "object Object to trigger the event on",
                     "type": "String"
                 }
             ],
@@ -807,7 +786,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 688,
+            "line": 756,
             "description": "Destroy this event manager and all his event handlers.",
             "itemtype": "method",
             "name": "destroy",
@@ -816,24 +795,24 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 732,
+            "line": 804,
             "description": "Inserts given data in the store",
             "itemtype": "method",
             "name": "insertData",
             "params": [
                 {
-                    "name": "data",
-                    "description": "Data to insert into the store",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "data Data to insert into the store",
                     "type": "String"
                 },
                 {
-                    "name": "dataFormat",
-                    "description": "Format of given data",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "dataFormat Format of given data",
                     "type": "String"
                 },
                 {
-                    "name": "callback",
-                    "description": "Callback function to be called after loading in the store.",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "callback Callback function to be called after loading in the\n           store.",
                     "type": "Function"
                 }
             ],
@@ -842,24 +821,24 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 773,
+            "line": 854,
             "description": "Executes given query on the store",
             "itemtype": "method",
             "name": "executeQuery",
             "params": [
                 {
-                    "name": "query",
-                    "description": "Data to insert into the store",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "query Data to insert into the store",
                     "type": "String"
                 },
                 {
-                    "name": "callback",
-                    "description": "Callback function to be called with the results of the execution.",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "callback Callback function to be called with the results of\n           the execution.",
                     "type": "Function"
                 },
                 {
-                    "name": "fail",
-                    "description": "Callback function to be called if the execution fails.",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "fail Callback function to be called if the execution fails.",
                     "type": "Function"
                 }
             ],
@@ -868,19 +847,19 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 806,
+            "line": 896,
             "description": "Adds items to the layout engine",
             "itemtype": "method",
             "name": "add",
             "params": [
                 {
-                    "name": "items",
-                    "description": "Div boxes which are to be added",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "items Div boxes which are to be added",
                     "type": "JQuery"
                 },
                 {
-                    "name": "callback",
-                    "description": "Callback function",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "callback Callback function",
                     "type": "Function"
                 }
             ],
@@ -889,7 +868,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 817,
+            "line": 909,
             "description": "Repaint the layout of the div boxes",
             "itemtype": "method",
             "name": "reLayout",
@@ -898,19 +877,19 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 826,
+            "line": 918,
             "description": "Remove items from the layout engine",
             "itemtype": "method",
             "name": "remove",
             "params": [
                 {
-                    "name": "items",
-                    "description": "Div boxes which are to be removed",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "items Div boxes which are to be removed",
                     "type": "JQuery"
                 },
                 {
-                    "name": "callback",
-                    "description": "Callback function",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "callback Callback function",
                     "type": "Function"
                 }
             ],
@@ -919,14 +898,14 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 837,
+            "line": 931,
             "description": "Update the sort data of the layout engine on specified items",
             "itemtype": "method",
             "name": "updateSortData",
             "params": [
                 {
-                    "name": "item",
-                    "description": "Items for which sort data should be updated",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "item Items for which sort data should be updated",
                     "type": "Item"
                 }
             ],
@@ -935,14 +914,14 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 847,
+            "line": 942,
             "description": "Update the options of the layout engine",
             "itemtype": "method",
             "name": "updateSortData",
             "params": [
                 {
-                    "name": "options",
-                    "description": "Options object of the layout engine",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "options Options object of the layout engine",
                     "type": "Object"
                 }
             ],
@@ -951,7 +930,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 961,
+            "line": 1063,
             "description": "Clear the view",
             "itemtype": "method",
             "name": "removeAllItems",
@@ -960,7 +939,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 995,
+            "line": 1099,
             "description": "Return type of node",
             "itemtype": "method",
             "name": "getType",
@@ -969,14 +948,14 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 1008,
+            "line": 1112,
             "description": "Set label of predicate with given position number.",
             "itemtype": "method",
             "name": "setPredicateLabel",
             "params": [
                 {
-                    "name": "ind",
-                    "description": "",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "ind",
                     "type": "Integer"
                 },
                 {
@@ -990,14 +969,14 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 1019,
+            "line": 1124,
             "description": "Merges data of given node with own data.",
             "itemtype": "method",
             "name": "setPredicateLabel",
             "params": [
                 {
-                    "name": "otherNode",
-                    "description": "",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "otherNode",
                     "type": "Node"
                 }
             ],
@@ -1009,14 +988,14 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 1065,
+            "line": 1175,
             "description": "Merges data of given node with own data.",
             "itemtype": "method",
             "name": "setPredicateLabel",
             "params": [
                 {
-                    "name": "otherNode",
-                    "description": "",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "otherNode",
                     "type": "Node"
                 }
             ],
@@ -1028,7 +1007,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 1201,
+            "line": 1318,
             "description": "Fetches and updates the labels of the predicates of given node",
             "access": "private",
             "tagname": "",
@@ -1036,8 +1015,8 @@
             "name": "_fetchPredicateLabel",
             "params": [
                 {
-                    "name": "node",
-                    "description": "Node to fetch the predicate labels for",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "node Node to fetch the predicate labels for",
                     "type": "Plugin.Node"
                 }
             ],
@@ -1046,7 +1025,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 1232,
+            "line": 1354,
             "description": "Give back a copy of in model stored nodes",
             "return": {
                 "description": "nodes A copy of the stored nodes",
@@ -1057,14 +1036,14 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 1241,
+            "line": 1363,
             "description": "Look in given resultSet for Items to add to the model.",
             "itemtype": "method",
             "name": "checkItems",
             "params": [
                 {
-                    "name": "resultSet",
-                    "description": "ResultSet of a Select query",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "resultSet ResultSet of a Select query",
                     "type": "Object"
                 }
             ],
@@ -1073,7 +1052,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 1309,
+            "line": 1437,
             "description": "Get data for the model by querying the local store",
             "itemtype": "method",
             "name": "update",
@@ -1082,7 +1061,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 1800,
+            "line": 2023,
             "description": "Load children by remote service",
             "itemtype": "method",
             "name": "loadByRemote",
@@ -1091,7 +1070,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 1833,
+            "line": 2064,
             "description": "Closes the view",
             "itemtype": "method",
             "name": "close",
@@ -1100,7 +1079,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2049,
+            "line": 2308,
             "description": "Default options for bSynopsis.",
             "itemtype": "property",
             "name": "defaults",
@@ -1110,8 +1089,8 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2056,
-            "description": "Filters to be used before node display. Filters only work on single batches. The batchSize should be chosen big enough if Nodefilters are to be used. New filters must have a unique identifier.",
+            "line": 2315,
+            "description": "Filters to be used before node display. Filters only work on single\nbatches. The batchSize should be chosen big enough if Nodefilters are\nto be used. New filters must have a unique identifier.",
             "itemtype": "property",
             "name": "defaults.filters",
             "type": "Object",
@@ -1120,8 +1099,8 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2063,
-            "description": "Filters blacklisted resources defined by predicate URIs in config options. RegEx allowed.",
+            "line": 2324,
+            "description": "Filters blacklisted resources defined by predicate URIs in config\noptions. RegEx allowed.",
             "itemtype": "property",
             "name": "defaults.nodeFilters.blacklistPredURI",
             "type": "Object",
@@ -1130,8 +1109,8 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2087,
-            "description": "Filters blacklisted resources defined by URIs in config options. RegEx allowed.",
+            "line": 2357,
+            "description": "Filters blacklisted resources defined by URIs in config options.\nRegEx allowed.",
             "itemtype": "property",
             "name": "defaults.nodeFilters.blacklistURI",
             "type": "Object",
@@ -1140,8 +1119,8 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2109,
-            "description": "Merges resNodes talking about the same resource (subject or object).",
+            "line": 2380,
+            "description": "Merges resNodes talking about the same resource (subject or\nobject).",
             "itemtype": "property",
             "name": "defaults.nodeFilters.multiResNode",
             "type": "Object",
@@ -1150,7 +1129,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2147,
+            "line": 2419,
             "description": "Filters for tiles",
             "itemtype": "property",
             "name": "defaults.tileFilters",
@@ -1160,7 +1139,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2154,
+            "line": 2426,
             "description": "Scales tiles",
             "itemtype": "property",
             "name": "defaults.tileFilters.scale",
@@ -1170,7 +1149,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2265,
+            "line": 2595,
             "description": "Styles of literal items.",
             "itemtype": "property",
             "name": "defaults.tileFilters.scale.config.literalStyle",
@@ -1180,7 +1159,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2272,
+            "line": 2602,
             "description": "Dimensions of literal items.",
             "itemtype": "property",
             "name": "defaults.tileFilters.scale.config.literalStyle.dimension",
@@ -1190,7 +1169,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2279,
+            "line": 2609,
             "description": "Width of literal items.",
             "itemtype": "property",
             "name": "defaults.tileFilters.scale.config.literalStyle.dimension.width",
@@ -1201,7 +1180,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2287,
+            "line": 2617,
             "description": "Height of literal items.",
             "itemtype": "property",
             "name": "defaults.tileFilters.scale.config.literalStyle.dimension.width",
@@ -1212,7 +1191,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2305,
+            "line": 2635,
             "description": "Styles of items.",
             "itemtype": "property",
             "name": "defaults.tileFilters.scale.config.itemStyle",
@@ -1222,7 +1201,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2312,
+            "line": 2642,
             "description": "Dimensions of items.",
             "itemtype": "property",
             "name": "defaults.tileFilters.scale.config.itemStyle.dimension",
@@ -1232,7 +1211,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2319,
+            "line": 2649,
             "description": "Width of items.",
             "itemtype": "property",
             "name": "defaults.tileFilters.scale.config.itemStyle.dimension.width",
@@ -1243,7 +1222,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2327,
+            "line": 2657,
             "description": "Height of items.",
             "itemtype": "property",
             "name": "defaults.tileFilters.scale.config.itemStyle.dimension.width",
@@ -1254,7 +1233,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2351,
+            "line": 2681,
             "description": "Scales text of tiles",
             "itemtype": "property",
             "name": "defaults.tileFilters.backgroundColor",
@@ -1264,7 +1243,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2365,
+            "line": 2697,
             "description": "Sets backgroundColor for tiles",
             "itemtype": "property",
             "name": "defaults.tileFilters.backgroundColor",
@@ -1274,18 +1253,18 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2396,
+            "line": 2738,
             "description": "Colors of items.",
             "itemtype": "property",
             "name": "defaults.tileFilters.backgroundColor.config.itemStyle.colors",
             "type": "Array",
-            "default": "[ '#e2674a', '#99CC99', '#3399CC', '#33CCCC', '#996699', '#C24747', '#FFCC66', '#669999', '#CC6699', '#339966', '#666699' ]",
+            "default": "[ '#e2674a', '#99CC99', '#3399CC',\n         '#33CCCC', '#996699', '#C24747', '#FFCC66',\n         '#669999', '#CC6699', '#339966', '#666699' ]",
             "class": "Plugin",
             "module": "bSynopsis"
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2406,
+            "line": 2752,
             "description": "Color of literal items.",
             "itemtype": "property",
             "name": "defaults.tileFilters.backgroundColor.config.literalStyle.colors",
@@ -1296,7 +1275,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2418,
+            "line": 2764,
             "description": "Loads background images",
             "itemtype": "property",
             "name": "defaults.tileFilters.backgroundImg",
@@ -1306,7 +1285,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2480,
+            "line": 2850,
             "description": "Enables mouseover for URIs",
             "itemtype": "property",
             "name": "defaults.tileFilters.predicateLabel",
@@ -1316,7 +1295,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2521,
+            "line": 2928,
             "description": "Initializes the browsability of tiles",
             "itemtype": "property",
             "name": "defaults.tileFilters.browsablity",
@@ -1326,8 +1305,8 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2553,
-            "description": "Raw RDF data given on plugin startup. This data will be loaded into the store.",
+            "line": 2962,
+            "description": "Raw RDF data given on plugin startup. This data will be loaded into\nthe store.",
             "itemtype": "property",
             "name": "defaults.data",
             "type": "String",
@@ -1337,8 +1316,8 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2561,
-            "description": "Path to file with Raw RDF data given on plugin startup. This file will be parsed\nand loaded into the store.",
+            "line": 2971,
+            "description": "Path to file with Raw RDF data given on plugin startup. This file\nwill be parsed and loaded into the store.",
             "itemtype": "property",
             "name": "defaults.dataLoc",
             "type": "String",
@@ -1348,7 +1327,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2570,
+            "line": 2980,
             "description": "Format of the RDF data which is given on plugin startup.",
             "itemtype": "property",
             "name": "defaults.dataFormat",
@@ -1359,7 +1338,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2578,
+            "line": 2988,
             "description": "Flag to activate the usage of precompiled handlebars templates.",
             "itemtype": "property",
             "name": "defaults.templatesPrecompiled",
@@ -1370,8 +1349,8 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2586,
-            "description": "Path of the html file which can be used to load handlebars templates dynamically.",
+            "line": 2996,
+            "description": "Path of the html file which can be used to load handlebars templates\ndynamically.",
             "itemtype": "property",
             "name": "defaults.templatesPath",
             "type": "String",
@@ -1381,8 +1360,8 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2594,
-            "description": "SPARQL resultset which can be used to insert data into the store on init.",
+            "line": 3005,
+            "description": "SPARQL resultset which can be used to insert data into the store on\ninit.",
             "itemtype": "property",
             "name": "defaults.sparqlData",
             "type": "Object",
@@ -1392,7 +1371,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2602,
+            "line": 3014,
             "description": "Flag to indicate whether a timeline should be generated and used.",
             "itemtype": "property",
             "name": "defaults.generateTimeline",
@@ -1403,19 +1382,19 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2610,
+            "line": 3022,
             "description": "Query/queries to use for the initialization view of the plugin.",
             "itemtype": "property",
             "name": "defaults.initQueries",
             "type": "Object",
-            "default": "[ { query : \"SELECT ?subject ?label ?description ?type WHERE { ?subject rdfs:label ?label . OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }. OPTIONAL {?subject rdfs:type ?type}}\" } ]",
+            "default": "[ { query : \"SELECT ?subject ?label ?description ?type WHERE {\n         ?subject rdfs:label ?label . OPTIONAL { ?subject\n         rdfs:description ?description } . OPTIONAL { ?subject\n         rdfs:comment ?description }. OPTIONAL {?subject rdfs:type\n         ?type}}\" } ]",
             "class": "Plugin",
             "module": "bSynopsis"
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2620,
-            "description": "Options for the rdf store class. Uses rdfstore-js https://github.com/antoniogarrote/rdfstore-js options structure.",
+            "line": 3036,
+            "description": "Options for the rdf store class. Uses rdfstore-js\nhttps://github.com/antoniogarrote/rdfstore-js options structure.",
             "itemtype": "property",
             "name": "defaults.rdfstoreOptions",
             "type": "Object",
@@ -1424,7 +1403,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2637,
+            "line": 3054,
             "description": "Options for the bSynopsis view layer.",
             "itemtype": "property",
             "name": "defaults.layerOptions",
@@ -1434,7 +1413,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2644,
+            "line": 3061,
             "description": "Flag to indicate whether the sort interface should be generated.",
             "itemtype": "property",
             "name": "defaults.layerOptions.generateSortOptions",
@@ -1445,7 +1424,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2652,
+            "line": 3069,
             "description": "Flag to indicate whether previews should be used.",
             "itemtype": "property",
             "name": "defaults.layerOptions.generateSortOptions",
@@ -1456,8 +1435,8 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2660,
-            "description": "Flag to indicate which kind of previews should be used. Possible options are",
+            "line": 3077,
+            "description": "Flag to indicate which kind of previews should be used. Possible\noptions are",
             "itemtype": "property",
             "name": "defaults.layerOptions.previewAsOverlay",
             "type": "Boolean",
@@ -1467,8 +1446,8 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2668,
-            "description": "Flag to indicate whether the filter interface should be generated.",
+            "line": 3086,
+            "description": "Flag to indicate whether the filter interface should be\ngenerated.",
             "itemtype": "property",
             "name": "defaults.layerOptions.generateFilterOptions",
             "type": "Boolean",
@@ -1478,7 +1457,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2677,
+            "line": 3096,
             "description": "Options for the model holding node results.",
             "itemtype": "property",
             "name": "defaults.layerOptions.modelOptions",
@@ -1488,8 +1467,8 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2684,
-            "description": "Batch size of items which can be loaded simultaniosly in the view. Filters only work on single batches. The batchSize should be chosen big enough if Nodefilters are to be used.",
+            "line": 3103,
+            "description": "Batch size of items which can be loaded simultaniosly in the\nview. Filters only work on single batches. The batchSize\nshould be chosen big enough if Nodefilters are to be used.",
             "itemtype": "property",
             "name": "defaults.layerOptions.modelOptions.batchSize",
             "type": "Integer",
@@ -1499,7 +1478,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2694,
+            "line": 3115,
             "description": "Options for remote loading of data.",
             "itemtype": "property",
             "name": "defaults.layerOptions.remoteOptions",
@@ -1509,18 +1488,18 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2701,
-            "description": "Default remote load query. Used on insertRemoteData() if no query parameter is given.",
+            "line": 3122,
+            "description": "Default remote load query. Used on insertRemoteData() if no\nquery parameter is given.",
             "itemtype": "property",
             "name": "defaults.layerOptions.remoteOptions.defaultRemoteQuery",
             "type": "String",
-            "default": "\"SELECT ?subject ?predicate ?object { BIND( rdfs:label as ?predicate) ?subject ?predicate ?object. ?subject a <http://dbpedia.org/ontology/Place> . ?subject <http://dbpedia.org/property/rulingParty> ?x } LIMIT 500\"",
+            "default": "\"SELECT ?subject ?predicate ?object { BIND(\n         rdfs:label as ?predicate) ?subject ?predicate\n         ?object. ?subject a\n         <http://dbpedia.org/ontology/Place> . ?subject\n         <http://dbpedia.org/property/rulingParty> ?x } LIMIT\n         500\"",
             "class": "Plugin",
             "module": "bSynopsis"
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2709,
+            "line": 3136,
             "description": "Backend services to query on remote loading.",
             "itemtype": "property",
             "name": "defaults.layerOptions.remoteOptions.remoteBackend",
@@ -1531,7 +1510,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2717,
+            "line": 3144,
             "description": "Limit for items loaded by a single remote load.",
             "itemtype": "property",
             "name": "defaults.layerOptions.remoteOptions.remoteLimit",
@@ -1542,8 +1521,8 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2725,
-            "description": "Flag to indicate whether automatic remote load on detail view should be done.",
+            "line": 3152,
+            "description": "Flag to indicate whether automatic remote load on detail view\nshould be done.",
             "itemtype": "property",
             "name": "defaults.layerOptions.remoteOptions.remoteDynamically",
             "type": "Boolean",
@@ -1553,7 +1532,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2733,
+            "line": 3161,
             "description": "Remote backends to query for predicate label information.",
             "itemtype": "property",
             "name": "defaults.layerOptions.remoteOptions.remoteLabelBackend",
@@ -1564,8 +1543,8 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2741,
-            "description": "Flag to indicate whether remote label information should be loaded if needed.",
+            "line": 3171,
+            "description": "Flag to indicate whether remote label information should be\nloaded if needed.",
             "itemtype": "property",
             "name": "defaults.layerOptions.remoteOptions.remoteLabels",
             "type": "Boolean",
@@ -1575,7 +1554,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2750,
+            "line": 3181,
             "description": "Options for the bSynopsis views.",
             "itemtype": "property",
             "name": "defaults.layerOptions.viewOptions",
@@ -1585,8 +1564,8 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2757,
-            "description": "Flag to indicate whether the filter should use regular expressions.",
+            "line": 3188,
+            "description": "Flag to indicate whether the filter should use regular\nexpressions.",
             "itemtype": "property",
             "name": "defaults.layerOptions.viewOptions.supportRegExpFilter",
             "type": "Boolean",
@@ -1596,7 +1575,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2768,
+            "line": 3200,
             "description": "Default filter to be added to the filter interface.",
             "itemtype": "property",
             "name": "defaults.layerOptions.viewOptions.filterBy",
@@ -1607,8 +1586,8 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2780,
-            "description": "Options for the layoutEngine. Uses isotope http://isotope.metafizzy.co/ options structure.",
+            "line": 3212,
+            "description": "Options for the layoutEngine. Uses isotope\nhttp://isotope.metafizzy.co/ options structure.",
             "itemtype": "property",
             "name": "defaults.layerOptions.viewOptions.layoutEngine",
             "type": "Object",
@@ -1617,7 +1596,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2805,
+            "line": 3246,
             "description": "Uses $.proxy() to overwrite the context of a given function with the\nwidget context.",
             "access": "private",
             "tagname": "",
@@ -1625,8 +1604,8 @@
             "name": "_selfProxy",
             "params": [
                 {
-                    "name": "fn",
-                    "description": "Function to modifie",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "fn Function to modifie",
                     "type": "Function"
                 }
             ],
@@ -1638,7 +1617,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2850,
+            "line": 3292,
             "description": "Initializes the rdf store",
             "access": "private",
             "tagname": "",
@@ -1649,7 +1628,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2866,
+            "line": 3309,
             "description": "Initializes the templating",
             "access": "private",
             "tagname": "",
@@ -1660,7 +1639,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2911,
+            "line": 3359,
             "description": "Generate the queries of the Plugin",
             "access": "private",
             "tagname": "",
@@ -1671,7 +1650,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2944,
+            "line": 3405,
             "description": "Check whether the plugin is initialized with insertion options and\ncall insertion methods if needed.",
             "access": "private",
             "tagname": "",
@@ -1686,7 +1665,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2971,
+            "line": 3446,
             "description": "Loads file at dataURL and invokes callback with loaded data",
             "access": "private",
             "tagname": "",
@@ -1694,18 +1673,18 @@
             "name": "_ajaxLoadData",
             "params": [
                 {
-                    "name": "dataURL",
-                    "description": "URL where the data is located",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "dataURL URL where the data is located",
                     "type": "String"
                 },
                 {
-                    "name": "dataFormat",
-                    "description": "Format of the data",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "dataFormat Format of the data",
                     "type": "String"
                 },
                 {
-                    "name": "callback",
-                    "description": "Function to call after loading with results",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "callback Function to call after loading with results",
                     "type": "String"
                 }
             ],
@@ -1717,7 +1696,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 2999,
+            "line": 3480,
             "description": "Init the plugin. Called by the constructor.",
             "itemtype": "method",
             "name": "init",
@@ -1726,14 +1705,14 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 3081,
+            "line": 3601,
             "description": "Add given Layer object to the plugin",
             "itemtype": "method",
             "name": "addLayer",
             "params": [
                 {
-                    "name": "layer",
-                    "description": "Layer object to add to the plugin",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "layer Layer object to add to the plugin",
                     "type": "Plugin.Layer"
                 }
             ],
@@ -1742,14 +1721,14 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 3090,
+            "line": 3611,
             "description": "Generates Layer using given tile(with node data).",
             "itemtype": "method",
             "name": "generateLayer",
             "params": [
                 {
-                    "name": "$tile",
-                    "description": "Tile which holds node data",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "$tile Tile which holds node data",
                     "type": "JQuery"
                 }
             ],
@@ -1758,14 +1737,14 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 3146,
+            "line": 3686,
             "description": "Remove given Layer object from the plugin",
             "itemtype": "method",
             "name": "removeLayer",
             "params": [
                 {
-                    "name": "view",
-                    "description": "Layer object to remove from the plugin",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "view Layer object to remove from the plugin",
                     "type": "Plugin.Layer"
                 }
             ],
@@ -1774,19 +1753,19 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 3162,
+            "line": 3703,
             "description": "Insert given rdf-data in the store.",
             "itemtype": "method",
             "name": "insertData",
             "params": [
                 {
-                    "name": "data",
-                    "description": "Rdf-data to be inserted",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "data Rdf-data to be inserted",
                     "type": "String"
                 },
                 {
-                    "name": "dataFormat",
-                    "description": "Format of the data",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "dataFormat Format of the data",
                     "type": "String"
                 }
             ],
@@ -1795,19 +1774,19 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 3177,
-            "description": "Insert rdf-data of given location in the store. Consider cross domain restrictions when using this method.",
+            "line": 3730,
+            "description": "Insert rdf-data of given location in the store. Consider cross domain\nrestrictions when using this method.",
             "itemtype": "method",
             "name": "insertDataPath",
             "params": [
                 {
-                    "name": "dataURL",
-                    "description": "URL where rdf data is to be found",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "dataURL URL where rdf data is to be found",
                     "type": "String"
                 },
                 {
-                    "name": "dataFormat",
-                    "description": "Format of the data",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "dataFormat Format of the data",
                     "type": "String"
                 }
             ],
@@ -1816,19 +1795,19 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 3190,
+            "line": 3748,
             "description": "Insert rdf-data of given file in the store.",
             "itemtype": "method",
             "name": "insertDataFile",
             "params": [
                 {
-                    "name": "file",
-                    "description": "File to parse",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "file File to parse",
                     "type": "File"
                 },
                 {
-                    "name": "dataFormat",
-                    "description": "Format of the data",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "dataFormat Format of the data",
                     "type": "String"
                 }
             ],
@@ -1837,19 +1816,19 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 3227,
+            "line": 3792,
             "description": "Insert rdf-data of given url SPARQL service in the store. Use the\ngiven query. Is no query given use the default query.",
             "itemtype": "method",
             "name": "insertRemoteDataQuery",
             "params": [
                 {
-                    "name": "url",
-                    "description": "URL of the SPARQL service",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "url URL of the SPARQL service",
                     "type": "String"
                 },
                 {
-                    "name": "query",
-                    "description": "Query to fetch data",
+                    "name": "!~YUIDOC_LINE~!",
+                    "description": "query Query to fetch data",
                     "type": "String"
                 }
             ],
@@ -1858,7 +1837,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 3246,
+            "line": 3815,
             "description": "Clear the store and Layers.",
             "itemtype": "method",
             "name": "clearStore",
@@ -1867,13 +1846,13 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 3260,
+            "line": 3829,
             "description": "Runs query on local store.",
             "itemtype": "method",
             "name": "runQuery",
             "params": [
                 {
-                    "name": "query",
+                    "name": "query!~YUIDOC_LINE~!",
                     "description": "Query to run."
                 }
             ],
@@ -1885,7 +1864,7 @@
         },
         {
             "file": "js/plugin/bSynopsis.js",
-            "line": 3275,
+            "line": 3845,
             "description": "Clean up after plugin (destroy bindings, clear events..)",
             "itemtype": "method",
             "name": "destroy",
@@ -1896,19 +1875,19 @@
     "warnings": [
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " js/plugin/bSynopsis.js:1019"
+            "line": " js/plugin/bSynopsis.js:1124"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " js/plugin/bSynopsis.js:1065"
+            "line": " js/plugin/bSynopsis.js:1175"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " js/plugin/bSynopsis.js:2944"
+            "line": " js/plugin/bSynopsis.js:3405"
         },
         {
             "message": "Missing item type\nGive back a copy of in model stored nodes",
-            "line": " js/plugin/bSynopsis.js:1232"
+            "line": " js/plugin/bSynopsis.js:1354"
         }
     ]
 }

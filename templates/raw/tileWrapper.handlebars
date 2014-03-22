@@ -1,0 +1,6 @@
+	<div class="{{CSS_CLASSES.tileClasses.tile}} {{#each node.filterables}}{{.}} {{/each}}{{#if node.token}}{{node.token}}{{/if}} {{node.index}}">
+		{{#if node.subject}}
+			<h2 class="{{CSS_CLASSES.tileClasses.showURI}}" style="display:none">{{node.subject.value}}</h2>
+		{{/if}}
+		<p class="{{CSS_CLASSES.tileClasses.number}}" style="display:none">{{node.index}}</p>
+	</div>

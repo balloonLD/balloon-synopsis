@@ -1,0 +1,14 @@
+		      
+		<div class="{{CSS_CLASSES.overlay}}">
+            <div style="visibility:hidden">{{id}}</div>
+            <!-- @ifdef F_SELECT -->
+            <select multiple="multiple" id="filterSelect">
+            {{#each nodeFilters}} <option value={{@key}} selected="selected"> {{@key}} </option> {{/each}}
+            {{#each tileFilters}} <option value={{@key}} selected="selected"> {{@key}} </option> {{/each}}
+            </select>
+            <!-- @endif -->
+            <span class="{{CSS_CLASSES.buttonTimeline}}">history</span>
+			<span class="{{CSS_CLASSES.buttonClose}}">close</span>
+			<div class="{{CSS_CLASSES.overlayContent}}">
+			</div>
+		</div>

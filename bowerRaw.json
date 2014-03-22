@@ -1,0 +1,40 @@
+{
+  "name": "bSynopsis",
+  "version": "0.1.0",
+  "homepage": "https://github.com/schlegel/balloon-synopsis",
+  "description": "A node-centric RDF viewer & browser in a modern tile design, available as jQuery-plugin.",
+  "main": "js/plugin/bSynopsis.js",
+  "dependencies": {
+    "jquery": "~2.1.0",
+    "handlebars.js": "http://builds.handlebarsjs.com.s3.amazonaws.com/handlebars-v1.3.0.js",
+    "jquery-textfill-try": "https://raw.githubusercontent.com/jquery-textfill/jquery-textfill/master/jquery.textfill.min.js",
+    "isotope": "https://raw.githubusercontent.com/desandro/isotope/master/jquery.isotope.min.js",
+    "modernizr": "~2.7.2",
+    "rdfstore-js": "https://raw.githubusercontent.com/antoniogarrote/rdfstore-js/master/dist/browser/rdf_store_min.js",
+    "rgbcolor" : "http://www.phpied.com/files/rgbcolor/rgbcolor.js"
+    <!-- @ifdef F_SELECT -->,
+    "multiSelect" : "http://ytjobwebsite.googlecode.com/svn-history/r478/trunk/job/webapp/js/plugin/multiselect/jquery.multiSelect.js",
+    "deepCopy" : "http://oranlooney.com/static/javascript/deepCopy.js"
+    <!-- @endif -->
+  },
+  "keywords": [
+    "rdf",
+    "rdf-viewer",
+    "rdf-browser",
+    "jQuery-plugin",
+    "rdf-jQuery"
+  ],
+  "authors": [
+    "Kai Schlegel",
+    "Thomas Weißgerber"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

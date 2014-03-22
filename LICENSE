@@ -1,6 +1,6 @@
 The MIT License (MIT)
 
-Copyright (c) 2014 Kai Schlegel
+Copyright (c) 2014 Kai Schlegel, Thomas Weißgerber
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,3 +19,35 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+{
+  "name": "bSynopsis",
+  "version": "0.1.0",
+  "homepage": "https://github.com/schlegel/balloon-synopsis",
+  "description": "A node-centric RDF viewer & browser in a modern tile design, available as jQuery-plugin.",
+  "main": "js/plugin/bSynopsis.js",
+   "dependencies": {
+    "jQuery": "1.8.3",
+    "rdfstore-js":"https://github.com/antoniogarrote/rdfstore-js"
+  },
+  "keywords": [
+    "rdf",
+    "rdf-viewer",
+    "rdf-browser",
+    "jQuery-plugin",
+    "rdf-jQuery"
+  ],
+  "authors": [
+    "Kai Schlegel",
+    "Thomas Weißgerber"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

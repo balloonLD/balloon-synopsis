@@ -346,6 +346,21 @@
 		return query.replace(new RegExp(CONS.DUMMY, "g"), replacement);
 	}
 
+	// @ifdef F_SELECT
+	/**
+	 * Used to deepCopy a javascript object.
+	 * 
+	 * @private
+	 * @method deepCopy
+	 * @param {Object}
+	 *            obj Object to clone
+	 * @return copy of the object
+	 */
+	function deepCopy(obj) {
+		return owl.deepCopy(obj);
+	}
+	// @endif
+
 	/**
 	 * Gets the current window size of the browser.
 	 * 
@@ -1357,7 +1372,12 @@
 	 * @return {Object} nodes A copy of the stored nodes
 	 */
 	Plugin.Layer.Model.prototype.getNodes = function() {
+		// @ifdef F_SELECT
+		return deepCopy(this._nodes);
+		// @endif
+		// @ifndef F_SELECT
 		return this.nodes;
+		// @endif
 	};
 
 	/**
@@ -1428,7 +1448,12 @@
 			}
 		});
 		this.itemsAdded.notify({
+			// @ifdef F_SELECT
+			"addedNodes" : deepCopy(addedNodes),
+			// @endif
+			// @ifndef F_SELECT
 			"addedNodes" : addedNodes,
+			// @endif
 			"allNodes" : this.getNodes()
 		});
 		that._checkItemsHelp(resultSet, batchSize);
@@ -1916,6 +1941,16 @@
 				queries);
 
 		this.$overlay = $container;
+
+		// @ifdef F_SELECT
+		// JQuery multiSelect
+		// http://www.erichynds.com/blog/jquery-ui-multiselect-widget
+		this.$overlay.find("#filterSelect").multiSelect({
+			'selectAllText' : CONS.MESSAGES.out.selectAllFilters
+		}, function(select) {
+			that.switchFilterState(select.val());
+		});
+		// @endif
 
 		this.$overlayContent = $overlayContent;
 
