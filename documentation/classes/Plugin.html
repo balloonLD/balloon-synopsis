@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Plugin - balloon-synopsis</title>
+    <title>Plugin - bSynopsis</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -15,7 +15,7 @@
     <div id="hd" class="yui3-g header">
         <div class="yui3-u-3-4">
             
-                <h1><img src="../assets/css/logo.png" title="balloon-synopsis"></h1>
+                <h1><img src="../assets/css/logo.png" title="bSynopsis"></h1>
             
         </div>
         <div class="yui3-u-1-4 version">
@@ -66,6 +66,8 @@
                 <li><a href="../classes/Plugin.RdfStore.html">Plugin.RdfStore</a></li>
             
                 <li><a href="../classes/Plugin.RemoteDataLoader.html">Plugin.RemoteDataLoader</a></li>
+            
+                <li><a href="../classes/Plugin.ResNode.html">Plugin.ResNode</a></li>
             
                 <li><a href="../classes/Plugin.TemplatesLoader.html">Plugin.TemplatesLoader</a></li>
             
@@ -120,7 +122,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/js_plugin_bSynopsis.js.html#l2296"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2296</code></a>
+            Defined in: <a href="../files/js_plugin_bSynopsis.js.html#l2404"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2404</code></a>
         </div>
     
 
@@ -191,7 +193,7 @@
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l2296"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2296</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l2404"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2404</code></a>
         
         </p>
 
@@ -654,14 +656,14 @@
                             </li>
                         
                             <li class="index-item property">
-                                <a href="#property_defaults.tileFilters.backgroundColor.config.itemStyle.colors">defaults.tileFilters.backgroundColor.config.itemStyle.colors</a>
+                                <a href="#property_defaults.tileFilters.backgroundColor.config.defaultStyles.literal.bgColors">defaults.tileFilters.backgroundColor.config.defaultStyles.literal.bgColors</a>
 
                                 
                                 
                             </li>
                         
                             <li class="index-item property">
-                                <a href="#property_defaults.tileFilters.backgroundColor.config.literalStyle.colors">defaults.tileFilters.backgroundColor.config.literalStyle.colors</a>
+                                <a href="#property_defaults.tileFilters.backgroundColor.config.defaultStyles.stdNode.bgColors">defaults.tileFilters.backgroundColor.config.defaultStyles.stdNode.bgColors</a>
 
                                 
                                 
@@ -696,56 +698,42 @@
                             </li>
                         
                             <li class="index-item property">
-                                <a href="#property_defaults.tileFilters.scale.config.itemStyle">defaults.tileFilters.scale.config.itemStyle</a>
+                                <a href="#property_defaults.tileFilters.scale.config.defaultStyles.literal">defaults.tileFilters.scale.config.defaultStyles.literal</a>
 
                                 
                                 
                             </li>
                         
                             <li class="index-item property">
-                                <a href="#property_defaults.tileFilters.scale.config.itemStyle.dimension">defaults.tileFilters.scale.config.itemStyle.dimension</a>
+                                <a href="#property_defaults.tileFilters.scale.config.defaultStyles.literal.height">defaults.tileFilters.scale.config.defaultStyles.literal.height</a>
 
                                 
                                 
                             </li>
                         
                             <li class="index-item property">
-                                <a href="#property_defaults.tileFilters.scale.config.itemStyle.dimension.width">defaults.tileFilters.scale.config.itemStyle.dimension.width</a>
+                                <a href="#property_defaults.tileFilters.scale.config.defaultStyles.literal.width">defaults.tileFilters.scale.config.defaultStyles.literal.width</a>
 
                                 
                                 
                             </li>
                         
                             <li class="index-item property">
-                                <a href="#property_defaults.tileFilters.scale.config.itemStyle.dimension.width">defaults.tileFilters.scale.config.itemStyle.dimension.width</a>
+                                <a href="#property_defaults.tileFilters.scale.config.defaultStyles.stdNode">defaults.tileFilters.scale.config.defaultStyles.stdNode</a>
 
                                 
                                 
                             </li>
                         
                             <li class="index-item property">
-                                <a href="#property_defaults.tileFilters.scale.config.literalStyle">defaults.tileFilters.scale.config.literalStyle</a>
+                                <a href="#property_defaults.tileFilters.scale.config.defaultStyles.stdNode.width">defaults.tileFilters.scale.config.defaultStyles.stdNode.width</a>
 
                                 
                                 
                             </li>
                         
                             <li class="index-item property">
-                                <a href="#property_defaults.tileFilters.scale.config.literalStyle.dimension">defaults.tileFilters.scale.config.literalStyle.dimension</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property">
-                                <a href="#property_defaults.tileFilters.scale.config.literalStyle.dimension.width">defaults.tileFilters.scale.config.literalStyle.dimension.width</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property">
-                                <a href="#property_defaults.tileFilters.scale.config.literalStyle.dimension.width">defaults.tileFilters.scale.config.literalStyle.dimension.width</a>
+                                <a href="#property_defaults.tileFilters.scale.config.defaultStyles.stdNode.width">defaults.tileFilters.scale.config.defaultStyles.stdNode.width</a>
 
                                 
                                 
@@ -825,7 +813,7 @@
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3446"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3446</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3584"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3584</code></a>
         
         </p>
 
@@ -954,7 +942,7 @@
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3405"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3405</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3543"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3543</code></a>
         
         </p>
 
@@ -1026,7 +1014,7 @@ call insertion methods if needed.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3359"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3359</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3497"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3497</code></a>
         
         </p>
 
@@ -1083,7 +1071,7 @@ call insertion methods if needed.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3292"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3292</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3395"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3395</code></a>
         
         </p>
 
@@ -1140,7 +1128,7 @@ call insertion methods if needed.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3309"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3309</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3412"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3412</code></a>
         
         </p>
 
@@ -1211,7 +1199,7 @@ call insertion methods if needed.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3246"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3246</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3352"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3352</code></a>
         
         </p>
 
@@ -1313,7 +1301,7 @@ widget context.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3601"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3601</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3735"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3735</code></a>
         
         </p>
 
@@ -1392,7 +1380,7 @@ widget context.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3815"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3815</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3954"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3954</code></a>
         
         </p>
 
@@ -1447,7 +1435,7 @@ widget context.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3845"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3845</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3993"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3993</code></a>
         
         </p>
 
@@ -1512,7 +1500,7 @@ widget context.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3611"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3611</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3745"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3745</code></a>
         
         </p>
 
@@ -1591,7 +1579,7 @@ widget context.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3480"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3480</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3618"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3618</code></a>
         
         </p>
 
@@ -1662,7 +1650,7 @@ widget context.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3703"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3703</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3842"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3842</code></a>
         
         </p>
 
@@ -1773,7 +1761,7 @@ widget context.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3748"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3748</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3887"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3887</code></a>
         
         </p>
 
@@ -1884,7 +1872,7 @@ widget context.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3730"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3730</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3869"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3869</code></a>
         
         </p>
 
@@ -1996,7 +1984,7 @@ restrictions when using this method.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3792"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3792</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3931"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3931</code></a>
         
         </p>
 
@@ -2102,7 +2090,7 @@ given query. Is no query given use the default query.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3686"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3686</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3825"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3825</code></a>
         
         </p>
 
@@ -2195,7 +2183,7 @@ given query. Is no query given use the default query.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3829"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3829</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3977"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3977</code></a>
         
         </p>
 
@@ -2285,7 +2273,7 @@ given query. Is no query given use the default query.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l2308"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2308</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l2416"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2416</code></a>
         
         </p>
 
@@ -2330,7 +2318,7 @@ given query. Is no query given use the default query.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l2962"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2962</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3070"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3070</code></a>
         
         </p>
 
@@ -2378,7 +2366,7 @@ the store.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l2980"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2980</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3088"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3088</code></a>
         
         </p>
 
@@ -2425,7 +2413,7 @@ the store.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l2971"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2971</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3079"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3079</code></a>
         
         </p>
 
@@ -2473,7 +2461,7 @@ will be parsed and loaded into the store.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l2315"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2315</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l2423"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2423</code></a>
         
         </p>
 
@@ -2520,7 +2508,7 @@ to be used. New filters must have a unique identifier.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3014"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3014</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3122"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3122</code></a>
         
         </p>
 
@@ -2567,7 +2555,7 @@ to be used. New filters must have a unique identifier.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3022"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3022</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3130"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3130</code></a>
         
         </p>
 
@@ -2618,7 +2606,7 @@ to be used. New filters must have a unique identifier.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3054"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3054</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3162"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3162</code></a>
         
         </p>
 
@@ -2663,7 +2651,7 @@ to be used. New filters must have a unique identifier.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3086"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3086</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3194"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3194</code></a>
         
         </p>
 
@@ -2711,7 +2699,7 @@ generated.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3061"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3061</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3177"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3177</code></a>
         
         </p>
 
@@ -2721,7 +2709,7 @@ generated.</p>
     </div>
 
     <div class="description">
-        <p>Flag to indicate whether the sort interface should be generated.</p>
+        <p>Flag to indicate whether previews should be used.</p>
 
     </div>
 
@@ -2758,7 +2746,7 @@ generated.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3069"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3069</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3169"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3169</code></a>
         
         </p>
 
@@ -2768,7 +2756,7 @@ generated.</p>
     </div>
 
     <div class="description">
-        <p>Flag to indicate whether previews should be used.</p>
+        <p>Flag to indicate whether the sort interface should be generated.</p>
 
     </div>
 
@@ -2805,7 +2793,7 @@ generated.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3096"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3096</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3204"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3204</code></a>
         
         </p>
 
@@ -2850,7 +2838,7 @@ generated.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3103"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3103</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3211"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3211</code></a>
         
         </p>
 
@@ -2899,7 +2887,7 @@ should be chosen big enough if Nodefilters are to be used.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3077"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3077</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3185"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3185</code></a>
         
         </p>
 
@@ -2947,7 +2935,7 @@ options are</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3115"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3115</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3223"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3223</code></a>
         
         </p>
 
@@ -2992,7 +2980,7 @@ options are</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3122"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3122</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3230"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3230</code></a>
         
         </p>
 
@@ -3045,7 +3033,7 @@ query parameter is given.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3136"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3136</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3244"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3244</code></a>
         
         </p>
 
@@ -3092,7 +3080,7 @@ query parameter is given.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3152"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3152</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3260"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3260</code></a>
         
         </p>
 
@@ -3140,7 +3128,7 @@ should be done.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3161"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3161</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3269"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3269</code></a>
         
         </p>
 
@@ -3187,7 +3175,7 @@ should be done.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3171"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3171</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3279"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3279</code></a>
         
         </p>
 
@@ -3235,7 +3223,7 @@ loaded if needed.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3144"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3144</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3252"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3252</code></a>
         
         </p>
 
@@ -3282,7 +3270,7 @@ loaded if needed.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3181"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3181</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3289"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3289</code></a>
         
         </p>
 
@@ -3327,7 +3315,7 @@ loaded if needed.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3200"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3200</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3306"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3306</code></a>
         
         </p>
 
@@ -3374,7 +3362,7 @@ loaded if needed.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3212"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3212</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3318"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3318</code></a>
         
         </p>
 
@@ -3420,7 +3408,7 @@ loaded if needed.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3188"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3188</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3296"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3296</code></a>
         
         </p>
 
@@ -3468,7 +3456,7 @@ expressions.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l2324"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2324</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l2432"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2432</code></a>
         
         </p>
 
@@ -3479,7 +3467,7 @@ expressions.</p>
 
     <div class="description">
         <p>Filters blacklisted resources defined by predicate URIs in config
-options. RegEx allowed.</p>
+options. Only RegEx allowed.</p>
 
     </div>
 
@@ -3514,7 +3502,7 @@ options. RegEx allowed.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l2357"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2357</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l2460"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2460</code></a>
         
         </p>
 
@@ -3525,7 +3513,7 @@ options. RegEx allowed.</p>
 
     <div class="description">
         <p>Filters blacklisted resources defined by URIs in config options.
-RegEx allowed.</p>
+Only RegEx allowed.</p>
 
     </div>
 
@@ -3560,7 +3548,7 @@ RegEx allowed.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l2380"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2380</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l2485"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2485</code></a>
         
         </p>
 
@@ -3570,7 +3558,7 @@ RegEx allowed.</p>
     </div>
 
     <div class="description">
-        <p>Merges resNodes talking about the same resource (subject or
+        <p>Merges resNodes describing the same resource (subject or
 object).</p>
 
     </div>
@@ -3606,7 +3594,7 @@ object).</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3036"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3036</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3144"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3144</code></a>
         
         </p>
 
@@ -3652,7 +3640,7 @@ object).</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3005"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3005</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3113"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3113</code></a>
         
         </p>
 
@@ -3700,7 +3688,7 @@ init.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l2996"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2996</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3104"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3104</code></a>
         
         </p>
 
@@ -3748,7 +3736,7 @@ dynamically.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l2988"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2988</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3096"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3096</code></a>
         
         </p>
 
@@ -3795,7 +3783,7 @@ dynamically.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l2419"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2419</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l2526"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2526</code></a>
         
         </p>
 
@@ -3840,7 +3828,7 @@ dynamically.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l2681"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2681</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l2806"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2806</code></a>
         
         </p>
 
@@ -3850,7 +3838,7 @@ dynamically.</p>
     </div>
 
     <div class="description">
-        <p>Scales text of tiles</p>
+        <p>Sets backgroundColor for tiles</p>
 
     </div>
 
@@ -3885,7 +3873,7 @@ dynamically.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l2697"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2697</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l2781"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2781</code></a>
         
         </p>
 
@@ -3895,7 +3883,7 @@ dynamically.</p>
     </div>
 
     <div class="description">
-        <p>Sets backgroundColor for tiles</p>
+        <p>Scales text of tiles</p>
 
     </div>
 
@@ -3907,8 +3895,8 @@ dynamically.</p>
 </div>
 
                 
-                    <div id="property_defaults.tileFilters.backgroundColor.config.itemStyle.colors" class="property item">
-    <h3 class="name"><code>defaults.tileFilters.backgroundColor.config.itemStyle.colors</code></h3>
+                    <div id="property_defaults.tileFilters.backgroundColor.config.defaultStyles.literal.bgColors" class="property item">
+    <h3 class="name"><code>defaults.tileFilters.backgroundColor.config.defaultStyles.literal.bgColors</code></h3>
     <span class="type">Array</span>
 
     
@@ -3930,7 +3918,54 @@ dynamically.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l2738"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2738</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l2841"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2841</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Color of literal items.</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> [ &#x27;#777777&#x27; ]</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_defaults.tileFilters.backgroundColor.config.defaultStyles.stdNode.bgColors" class="property item">
+    <h3 class="name"><code>defaults.tileFilters.backgroundColor.config.defaultStyles.stdNode.bgColors</code></h3>
+    <span class="type">Array</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l2854"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2854</code></a>
         
         </p>
 
@@ -3948,53 +3983,6 @@ dynamically.</p>
         <p><strong>Default:</strong> [ &#x27;#e2674a&#x27;, &#x27;#99CC99&#x27;, &#x27;#3399CC&#x27;,
          &#x27;#33CCCC&#x27;, &#x27;#996699&#x27;, &#x27;#C24747&#x27;, &#x27;#FFCC66&#x27;,
          &#x27;#669999&#x27;, &#x27;#CC6699&#x27;, &#x27;#339966&#x27;, &#x27;#666699&#x27; ]</p>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_defaults.tileFilters.backgroundColor.config.literalStyle.colors" class="property item">
-    <h3 class="name"><code>defaults.tileFilters.backgroundColor.config.literalStyle.colors</code></h3>
-    <span class="type">Array</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_plugin_bSynopsis.js.html#l2752"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2752</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Color of literal items.</p>
-
-    </div>
-
-    
-        <p><strong>Default:</strong> [ &#x27;#777777&#x27; ]</p>
     
 
     
@@ -4026,7 +4014,7 @@ dynamically.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l2764"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2764</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l2871"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2871</code></a>
         
         </p>
 
@@ -4071,7 +4059,7 @@ dynamically.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l2928"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2928</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3024"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3024</code></a>
         
         </p>
 
@@ -4116,7 +4104,7 @@ dynamically.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l2850"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2850</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l2956"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2956</code></a>
         
         </p>
 
@@ -4161,7 +4149,7 @@ dynamically.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l2426"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2426</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l2533"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2533</code></a>
         
         </p>
 
@@ -4183,8 +4171,8 @@ dynamically.</p>
 </div>
 
                 
-                    <div id="property_defaults.tileFilters.scale.config.itemStyle" class="property item">
-    <h3 class="name"><code>defaults.tileFilters.scale.config.itemStyle</code></h3>
+                    <div id="property_defaults.tileFilters.scale.config.defaultStyles.literal" class="property item">
+    <h3 class="name"><code>defaults.tileFilters.scale.config.defaultStyles.literal</code></h3>
     <span class="type">Object</span>
 
     
@@ -4206,191 +4194,7 @@ dynamically.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l2635"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2635</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Styles of items.</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_defaults.tileFilters.scale.config.itemStyle.dimension" class="property item">
-    <h3 class="name"><code>defaults.tileFilters.scale.config.itemStyle.dimension</code></h3>
-    <span class="type">Object</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_plugin_bSynopsis.js.html#l2642"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2642</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Dimensions of items.</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_defaults.tileFilters.scale.config.itemStyle.dimension.width" class="property item">
-    <h3 class="name"><code>defaults.tileFilters.scale.config.itemStyle.dimension.width</code></h3>
-    <span class="type">Integer</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_plugin_bSynopsis.js.html#l2649"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2649</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Width of items.</p>
-
-    </div>
-
-    
-        <p><strong>Default:</strong> 200</p>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_defaults.tileFilters.scale.config.itemStyle.dimension.width" class="property item">
-    <h3 class="name"><code>defaults.tileFilters.scale.config.itemStyle.dimension.width</code></h3>
-    <span class="type">Integer</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_plugin_bSynopsis.js.html#l2657"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2657</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Height of items.</p>
-
-    </div>
-
-    
-        <p><strong>Default:</strong> 200</p>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_defaults.tileFilters.scale.config.literalStyle" class="property item">
-    <h3 class="name"><code>defaults.tileFilters.scale.config.literalStyle</code></h3>
-    <span class="type">Object</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_plugin_bSynopsis.js.html#l2595"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2595</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l2713"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2713</code></a>
         
         </p>
 
@@ -4412,53 +4216,8 @@ dynamically.</p>
 </div>
 
                 
-                    <div id="property_defaults.tileFilters.scale.config.literalStyle.dimension" class="property item">
-    <h3 class="name"><code>defaults.tileFilters.scale.config.literalStyle.dimension</code></h3>
-    <span class="type">Object</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_plugin_bSynopsis.js.html#l2602"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2602</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Dimensions of literal items.</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_defaults.tileFilters.scale.config.literalStyle.dimension.width" class="property item">
-    <h3 class="name"><code>defaults.tileFilters.scale.config.literalStyle.dimension.width</code></h3>
+                    <div id="property_defaults.tileFilters.scale.config.defaultStyles.literal.height" class="property item">
+    <h3 class="name"><code>defaults.tileFilters.scale.config.defaultStyles.literal.height</code></h3>
     <span class="type">Integer</span>
 
     
@@ -4480,7 +4239,54 @@ dynamically.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l2609"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2609</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l2728"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2728</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Height of literal items.</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> 100</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_defaults.tileFilters.scale.config.defaultStyles.literal.width" class="property item">
+    <h3 class="name"><code>defaults.tileFilters.scale.config.defaultStyles.literal.width</code></h3>
+    <span class="type">Integer</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l2720"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2720</code></a>
         
         </p>
 
@@ -4504,8 +4310,100 @@ dynamically.</p>
 </div>
 
                 
-                    <div id="property_defaults.tileFilters.scale.config.literalStyle.dimension.width" class="property item">
-    <h3 class="name"><code>defaults.tileFilters.scale.config.literalStyle.dimension.width</code></h3>
+                    <div id="property_defaults.tileFilters.scale.config.defaultStyles.stdNode" class="property item">
+    <h3 class="name"><code>defaults.tileFilters.scale.config.defaultStyles.stdNode</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l2737"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2737</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Styles of res nodes.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_defaults.tileFilters.scale.config.defaultStyles.stdNode.width" class="property item">
+    <h3 class="name"><code>defaults.tileFilters.scale.config.defaultStyles.stdNode.width</code></h3>
+    <span class="type">Integer or String</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l2752"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2752</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Height of items.</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> 200 / dynamic</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_defaults.tileFilters.scale.config.defaultStyles.stdNode.width" class="property item">
+    <h3 class="name"><code>defaults.tileFilters.scale.config.defaultStyles.stdNode.width</code></h3>
     <span class="type">Integer</span>
 
     
@@ -4527,7 +4425,7 @@ dynamically.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l2617"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2617</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l2744"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2744</code></a>
         
         </p>
 
@@ -4537,12 +4435,12 @@ dynamically.</p>
     </div>
 
     <div class="description">
-        <p>Height of literal items.</p>
+        <p>Width of items.</p>
 
     </div>
 
     
-        <p><strong>Default:</strong> 100</p>
+        <p><strong>Default:</strong> 200</p>
     
 
     

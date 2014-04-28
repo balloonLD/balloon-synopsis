@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Plugin.InitLayer - balloon-synopsis</title>
+    <title>Plugin.InitLayer - bSynopsis</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -15,7 +15,7 @@
     <div id="hd" class="yui3-g header">
         <div class="yui3-u-3-4">
             
-                <h1><img src="../assets/css/logo.png" title="balloon-synopsis"></h1>
+                <h1><img src="../assets/css/logo.png" title="bSynopsis"></h1>
             
         </div>
         <div class="yui3-u-1-4 version">
@@ -66,6 +66,8 @@
                 <li><a href="../classes/Plugin.RdfStore.html">Plugin.RdfStore</a></li>
             
                 <li><a href="../classes/Plugin.RemoteDataLoader.html">Plugin.RemoteDataLoader</a></li>
+            
+                <li><a href="../classes/Plugin.ResNode.html">Plugin.ResNode</a></li>
             
                 <li><a href="../classes/Plugin.TemplatesLoader.html">Plugin.TemplatesLoader</a></li>
             
@@ -124,7 +126,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/js_plugin_bSynopsis.js.html#l1773"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1773</code></a>
+            Defined in: <a href="../files/js_plugin_bSynopsis.js.html#l1882"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1882</code></a>
         </div>
     
 
@@ -201,7 +203,7 @@
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l1773"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1773</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l1882"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1882</code></a>
         
         </p>
 
@@ -303,8 +305,29 @@
 
                     <ul class="index-list methods extends">
                         
+                            <li class="index-item method private inherited">
+                                <a href="#method__fetchPredicateLabel">_fetchPredicateLabel</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method inherited">
+                                <a href="#method_checkItems">checkItems</a>
+
+                                
+                                
+                            </li>
+                        
                             <li class="index-item method inherited">
                                 <a href="#method_removeAllItems">removeAllItems</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method inherited">
+                                <a href="#method_update">update</a>
 
                                 
                                 
@@ -324,6 +347,180 @@
         
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
+
+                
+                    <div id="method__fetchPredicateLabel" class="method item private inherited">
+    <h3 class="name"><code>_fetchPredicateLabel</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>!~YUIDOC_LINE~!</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="../classes/Plugin.Layer.html#method__fetchPredicateLabel">Plugin.Layer</a>:
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l1427"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1427</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Fetches and updates the labels of the predicates of given node</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">!~YUIDOC_LINE~!</code>
+                        <span class="type"><a href="../classes/Plugin.Node.html" class="crosslink">Plugin.Node</a></span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>node Node to fetch the predicate labels for</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_checkItems" class="method item inherited">
+    <h3 class="name"><code>checkItems</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>!~YUIDOC_LINE~!</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="../classes/Plugin.Layer.html#method_checkItems">Plugin.Layer</a>:
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l1473"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1473</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Look in given resultSet for Items to add to the model.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">!~YUIDOC_LINE~!</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>resultSet ResultSet of a Select query</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
 
                 
                     <div id="method_removeAllItems" class="method item inherited">
@@ -355,7 +552,7 @@
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l1063"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1063</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l1395"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1395</code></a>
         
         </p>
 
@@ -367,6 +564,58 @@
 
     <div class="description">
         <p>Clear the view</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_update" class="method item inherited">
+    <h3 class="name"><code>update</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="../classes/Plugin.Layer.html#method_update">Plugin.Layer</a>:
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l1545"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1545</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Get data for the model by querying the local store</p>
 
     </div>
 

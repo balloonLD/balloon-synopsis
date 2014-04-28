@@ -35,6 +35,18 @@
 	transition-property: transform, opacity;
 }
 
+/* /**** disabling Isotope CSS3 transitions ****/ */
+
+/* .isotope.no-transition, */
+/* .isotope.no-transition .isotope-item, */
+/* .isotope .isotope-item.no-transition { */
+/*   -webkit-transition-duration: 0s; */
+/*      -moz-transition-duration: 0s; */
+/*       -ms-transition-duration: 0s; */
+/*        -o-transition-duration: 0s; */
+/*           transition-duration: 0s; */
+/* } */
+
 /**** Isotope filtering ****/
 
 .isotope-item {
@@ -65,7 +77,7 @@ html,body {
 	height: 100%;
 }
 
-.visaRDF {
+.synopsis {
     	padding: 20px;
 	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
 		'Lucida Sans Unicode', Arial, sans-serif;
@@ -236,27 +248,12 @@ html,body {
 .synopsis_tile * {
 	position: absolute;
 	margin: 0;
+    color: #F2F2F2;
 }
 
-.synopsis_descriptionEn {
-	left: 5%;
-	width: 90%;
-	line-height: 100%;
-	font-size: 80%;
-	text-align: center;
-	overflow-y: auto;
-	color: #FFF;
-}
-
-.synopsis_labelEN {
-	left: 5%;
-                    text-align : center;
-                    overflow-x: hidden;
-	overflow-y: auto;
-	top: 5%;
-	width: 90%;
-	font-size: 90%;
-	color: #F2F2F2;
+.synopsis_label {
+   text-align : center;
+    overflow: hidden;
 }
 
 .synopsis_groupLabel {
@@ -270,32 +267,14 @@ html,body {
 }
 
 .synopsis_predicateLabel {
-	left: 5%;
-	overflow: hidden;
-                    position: absolute;
-                    display: inline-block;
-	width: 90%;
-	color: #F2F2F2;
+    position: absolute;
+    display: inline-block;
 }
 .synopsis_predicate {
-	left: 5%;
 	overflow: visible;
-        position: absolute;
-        word-wrap: break-word;
-	width: 90%;
-	color: #F2F2F2;
+    position: absolute;
+    word-wrap: break-word;
 }
-
-/* .item .showUri { */
-/* 	overflow: hidden; */
-/* 	text-overflow: ellipsis; */
-/* 	-o-text-overflow: ellipsis; f�r Opera */
-/* 	white-space: nowrap; */
-/* 	left: 0.5em; */
-/* 	width: 100px; */
-/* 	bottom: 1.0em; */
-/* 	font-size: 0.7em; */
-/* } */
 
 .synopsis_number {
 	font-size: 1.25em;

@@ -11,6 +11,7 @@ YUI.add("yuidoc-meta", function(Y) {
         "Plugin.Node",
         "Plugin.RdfStore",
         "Plugin.RemoteDataLoader",
+        "Plugin.ResNode",
         "Plugin.TemplatesLoader",
         "RemoteEngine",
         "bSynopsis_GLOBAL",

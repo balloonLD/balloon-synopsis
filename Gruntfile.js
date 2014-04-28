@@ -1,7 +1,7 @@
 module.exports = function(grunt) {
 	
-	var debugVal = undefined;
-	var filterSelect = undefined;
+	var DEBUG = true;
+	var F_SELECT = true;
 
 	// Project configuration.
 	grunt
@@ -54,8 +54,8 @@ module.exports = function(grunt) {
 				preprocess : {
 					options : {
 						context : {
-							DEBUG : debugVal,
-							F_SELECT : filterSelect
+							DEBUG : DEBUG,
+							F_SELECT : F_SELECT
 						}
 					},
 					inline : {
@@ -145,6 +145,6 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 
 	// Default task(s).
-	grunt.registerTask('default', ['copy', 'preprocess', 'bower', 'bowerInstall', 'handlebars', 'yuidoc', 'concat'/*,'uglify'*/]);
+	grunt.registerTask('default', ['copy', 'preprocess', 'bower', 'bowerInstall', 'handlebars', 'yuidoc', 'concat', 'uglify']);
 
 };

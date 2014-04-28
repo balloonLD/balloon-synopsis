@@ -1,11 +1,12 @@
-    {{#if node.label}}
+    {{#hasCompType node "label"}}
             <div class="{{CSS_CLASSES.innerNoScroll}}">
                 <h2>
-                    {{node.label.value}}
+                    {{#firstComp node "label"}}{{data.value}}{{/firstComp}}
+                    
                 </h2>
-                {{node.uri}}
+                 {{#firstComp node "uri"}}{{data}}{{/firstComp}}
             </div>
             <div class="{{CSS_CLASSES.innerScroll}}">
                     <div></div>
             </div>
-    {{/if}}
+    {{/hasCompType}}

@@ -12,6 +12,7 @@
     osspatial:within <http://atlantides.org/capgrids/1#E1>;
     pleiades:hasFeatureType <http://pleiades.stoa.org/vocabularies/place-types/unknown>;
     dcterms:coverage "Barrington Atlas grid 1 E1";
+    rdfs:description "An ancient place, cited: BAtlas 1 E1 Germania Superior testestetst etsaaaaaaaas etst es tetest etstet este sts ets et etstes";
     rdfs:comment "An ancient place, cited: BAtlas 1 E1 Germania Superior testestetst etsaaaaaaaas etst es tetest etstet este sts ets et etstes";
     rdfs:seeAlso <http://openlibrary.org/works/OL8327792W>;
     skos:altLabel "Germania Superior";

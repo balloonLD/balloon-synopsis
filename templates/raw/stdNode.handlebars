@@ -1,15 +1,17 @@
-            {{#if node.label}}
-                    <h3 class="{{CSS_CLASSES.tileClasses.content}} {{CSS_CLASSES.tileClasses.labelEN}}">{{node.label.value}}</h3>
-            {{/if}}
-            {{#ifLang node.description}}
-                    <div class="{{CSS_CLASSES.tileClasses.content}} {{CSS_CLASSES.tileClasses.descriptionEn}}">{{node.description.value}}</div>
-            {{/ifLang}}
-            {{#if node.predicates}}
-            {{#each node.predicates}}
-                    <img class="{{../CSS_CLASSES.tileClasses.typeImage}}" src="img/{{type}}.png">
-                    <div class="{{../CSS_CLASSES.tileClasses.content}} {{../CSS_CLASSES.tileClasses.predicate}}" style="display:none">{{value}}</div>
-                    {{#predicateLabelRetriver this}}
-                        <div class="{{../../CSS_CLASSES.tileClasses.content}} {{../../CSS_CLASSES.tileClasses.predicateLabel}}">{{label}}</div>
-                    {{/predicateLabelRetriver}}
-            {{/each}}
-            {{/if}}
+            {{#compsEach node "label"}}
+                    <div class="{{toClass type}} {{toClass id}}">{{tScaleWrap data.value}}</div>
+            {{/compsEach}}
+            {{#compsEach node "description"}}
+                {{#ifLang this}}
+                        <div class="{{toClass type}} {{toClass id}}" style="overflow-y: auto;">{{data.value}}</div>
+                {{/ifLang}}
+            {{/compsEach}}
+            {{#compsEach node "predicate"}}
+                    <div class="{{toClass id}}">
+                        <img class="{{../CSS_CLASSES.tileClasses.typeImage}}" src="img/{{data.type}}.png">
+                        <div class="{{../CSS_CLASSES.tileClasses.predicate}}" style="visibility:hidden">{{tScaleWrap data.value}}</div>
+                        {{#predicateLabelRetriver data}}
+                            <div class="{{../../CSS_CLASSES.tileClasses.predicateLabel}}">{{tScaleWrap data.label}}</div>
+                        {{/predicateLabelRetriver}}
+                    </div>
+            {{/compsEach}}

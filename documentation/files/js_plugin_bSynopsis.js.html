@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>js/plugin/bSynopsis.js - balloon-synopsis</title>
+    <title>js/plugin/bSynopsis.js - bSynopsis</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -15,7 +15,7 @@
     <div id="hd" class="yui3-g header">
         <div class="yui3-u-3-4">
             
-                <h1><img src="../assets/css/logo.png" title="balloon-synopsis"></h1>
+                <h1><img src="../assets/css/logo.png" title="bSynopsis"></h1>
             
         </div>
         <div class="yui3-u-1-4 version">
@@ -66,6 +66,8 @@
                 <li><a href="../classes/Plugin.RdfStore.html">Plugin.RdfStore</a></li>
             
                 <li><a href="../classes/Plugin.RemoteDataLoader.html">Plugin.RemoteDataLoader</a></li>
+            
+                <li><a href="../classes/Plugin.ResNode.html">Plugin.ResNode</a></li>
             
                 <li><a href="../classes/Plugin.TemplatesLoader.html">Plugin.TemplatesLoader</a></li>
             
@@ -175,12 +177,12 @@
 			timeline : &quot;timeline&quot;,
 			buttonTimeline : &quot;btnTimeline&quot;,
 			sorter : &quot;sorter&quot;,
+			textScale : &quot;textScale&quot;,
 			tileClasses : {
 				tile : &quot;tile&quot;,
 				content : &quot;tileContent&quot;,
-				labelEN : &quot;labelEN&quot;,
+				label : &quot;label&quot;,
 				showURI : &quot;showURI&quot;,
-				descriptionEn : &quot;descriptionEn&quot;,
 				predicate : &quot;predicate&quot;,
 				predicateLabel : &quot;predicateLabel&quot;,
 				typeImage : &quot;typeImage&quot;,
@@ -200,12 +202,15 @@
 		DUMMY : &quot;#replaceMe#&quot;,
 		// Event types for Pub/Sub system
 		EVENT_TYPES : {
-			storeModified : {
+			store : {
 				insert : &quot;dataInsert&quot;
 			},
 			loading : {
-				loadingDone : &quot;loadingDone&quot;,
-				loadingStart : &quot;loadingStarted&quot;
+				done : &quot;loadingDone&quot;,
+				start : &quot;loadingStarted&quot;
+			},
+			layout : {
+				done : &quot;layoutingDone&quot;
 			}
 		},
 		MESSAGES : {
@@ -228,11 +233,8 @@
 	};
 
 	var UTIL = {
-		strToCss : function(str) {
+		toClass : function(str) {
 			return CONS.CSS_PREFIX + str;
-		},
-		strToToken : function(str) {
-			return CONS.TOKEN_TAG + str;
 		},
 		toToken : function(str) {
 			return CONS.TOKEN_TAG + str;
@@ -240,20 +242,13 @@
 		toFilterable : function(str) {
 			return CONS.FA_TAG + str;
 		},
+		toClassSelector : function(str) {
+			return &quot;.&quot; + CONS.CSS_PREFIX + str;
+		},
 		toSelector : function(str) {
 			return &quot;.&quot; + str;
 		}
 	};
-
-	// ========================= bSynopsis Events
-	// ===============================
-	Plugin.events = function() {
-		this.dataInserted = new Event(&quot;dataInserted&quot;);
-		this.loadingDone = new Event(&quot;loadingDone&quot;);
-		this.loadingStarted = new Event(&quot;loadingStarted&quot;);
-	};
-
-	var bS_Events = new Plugin.events();
 
 	// Add prefix to given objects strings
 	function objPrefixer(prefix, obj) {
@@ -437,7 +432,9 @@
 	function isUndefinedOrNull(a) {
 		return ((typeof a === &quot;undefined&quot;) || (a === null));
 	}
-
+	
+	// Only print to console, if DEBUG mode is enabled
+	var print = console.log.bind(console);
 	function appendCssClasses(obj) {
 		if (obj) {
 			if (!obj.CSS_CLASSES) {
@@ -464,6 +461,18 @@
 		return query.replace(new RegExp(CONS.DUMMY, &quot;g&quot;), replacement);
 	}
 
+	/**
+	 * Used to deepCopy a javascript object.
+	 * 
+	 * @private
+	 * @method deepCopy
+	 * @param {Object}
+	 *            obj Object to clone
+	 * @return copy of the object
+	 */
+	function deepCopy(obj) {
+		return owl.deepCopy(obj);
+	}
 	/**
 	 * Gets the current window size of the browser.
 	 * 
@@ -693,8 +702,7 @@
 		return key in this.values;
 	};
 
-	// ========================= Variables for all bSynopsis instances
-	// ===============================
+	// ========================= Variables for all bSynopsis instances ===============================
 	/**
 	 * class public functions
 	 * 
@@ -745,7 +753,6 @@
 	function generateId() {
 		return idCounter++;
 	}
-	;
 
 	// ========================= bSynopsis: Event Class
 	// ==============================
@@ -779,7 +786,7 @@
 	 */
 	Plugin.EventManager = function(stdObject) {
 		if (!stdObject) {
-			console.log(&quot;EventManager not created&quot;);
+			print(&quot;EventManager not created&quot;);
 			return false;
 		}
 		this.stdObject = stdObject;
@@ -917,6 +924,18 @@
 			that._store = store;
 			callback();
 		});
+		// TODO store as worker?
+		//		rdfstore.connect(&quot;js/lib/rdfstore-js/index.js&quot;, options, function(success, store) {
+		//		    if(success) {
+		//		        // store is a connection to the worker
+		//		        console.log(store.isWebWorkerConnection === true);
+		//		      } else {
+		//		        // connection was not possible. A store object has been returned instead
+		//		    	  print(&quot;fail on webworker store&quot;);
+		//		      }   
+		//			that._store = store;
+		//			callback();
+		//		});
 	};
 
 	/**
@@ -987,7 +1006,7 @@
 			if (success) {
 				callback(results);
 			} else {
-				console.log(&quot;Error on executing: &quot; + query);
+				print(&quot;Error on executing: &quot; + query);
 				fail();
 			}
 		});
@@ -1008,7 +1027,10 @@
 	 */
 	Plugin.LayoutEngine = function(container, options) {
 		this._container = container;
-		container.isotope(options);
+		// Use isotope on layout callback to trigger event
+		container.isotope($.extend(options, {onLayout : function() {
+						container.trigger(CONS.EVENT_TYPES.layout.done);
+					}}));
 	};
 
 	/**
@@ -1068,151 +1090,101 @@
 		this._container.isotope(options);
 	};
 
-	// ========================= bSynopsis: Layer Class
-	// ==================================
+
+	// ========================= bSynopsis: Node Class ==============================
 	/**
-	 * Layer of the RDF graph
-	 * 
-	 * @class Plugin.Layer
-	 * @constructor
-	 * @param {jQuery}
-	 *            $container Parent div container
-	 * @param {Object}
-	 *            options Options object of the view
-	 * @param {Plugin}
-	 *            plugin Parent plugin
-	 * @param {Object}
-	 *            queries Queries to use in the view
-	 */
-	Plugin.Layer = function($container, options, plugin, queries) {
-
-		var that = this;
-
-		this.plugin = plugin;
-		this.options = options;
-
-		// Use this node filters
-		this.filterNames = [];
-		$.each(plugin.options.nodeFilters, function(i, filter) {
-			that.filterNames.push(i);
-		});
-		$.each(plugin.options.tileFilters, function(i, filter) {
-			if (that.filterNames[i]) {
-				console.log(CONS.MESSAGES.warn.filterName);
-			} else {
-				that.filterNames.push(i);
-			}
-		});
-
-		this.model = new Plugin.Layer.Model(queries, options.modelOptions,
-				plugin._queries.label);
-		this.view = new Plugin.Layer.View(this.model, $container,
-				options.viewOptions);
-
-		this.model.itemsAdded.attach(function(sender, args) {
-			that.view.paint(args.addedNodes, that.plugin);
-		});
-
-		if (options.generateSortOptions || options.generateFilterOptions
-				|| plugin.options.generateTimeline) {
-			this.view.addOptionsBox();
-			if (options.generateSortOptions) {
-				this.view.addSorter();
-			}
-			if (options.generateFilterOptions) {
-				this.view.addIsotopeFilter();
-			}
-		}
-	};
-
-	Plugin.Layer.prototype.openPreview = function($item) {
-		var that = this;
-		var node = $item.data(&quot;node&quot;);
-
-		// TODO Previews
-	};
-
-	Plugin.Layer.prototype.update = function() {
-		this.model.update();
-	};
-
-	Plugin.Layer.prototype.switchFilterState = function(filterName) {
-		var that = this;
-
-		if (filterName === &quot;on&quot;) {
-			that.filterNames = [];
-			$.each(that.plugin.options.nodeFilters, function(i, filter) {
-				that.filterNames.push(i);
-			});
-			$.each(that.plugin.options.tileFilters, function(i, filter) {
-				if (that.filterNames[i]) {
-					console.log(CONS.MESSAGES.warn.filterName);
-				} else {
-					that.filterNames.push(i);
-				}
-			});
-		} else {
-
-			if (this.filterNames.indexOf(filterName) !== -1) {
-				this.filterNames
-						.splice(this.filterNames.indexOf(filterName), 1);
-			} else {
-				this.filterNames.push(filterName);
-			}
-		}
-
-		var nodeFilters = {};
-		var tileFilters = {};
-		$.each(this.filterNames, function(i, val) {
-			if (that.plugin.options.nodeFilters[val]) {
-				nodeFilters[val] = that.plugin.options.nodeFilters[val];
-			}
-			if (that.plugin.options.tileFilters[val]) {
-				tileFilters[val] = that.plugin.options.tileFilters[val];
-			}
-		});
-
-		this.view.clearView(function() {
-			that.view.paint(that.model.getNodes(), that.plugin, nodeFilters,
-					tileFilters);
-		});
-	};
-
-	/**
-	 * Clear the view
-	 * 
-	 * @method removeAllItems
-	 */
-	Plugin.Layer.prototype.removeAllItems = function() {
-		this.model.clearModel();
-	};
-
-	// ========================= bSynopsis: Node Class
-	// ==============================
-	/**
-	 * Node to represent an abstract element of the rdf graph.
+	 * Base node to represent an abstract element of the rdf graph.
 	 * 
 	 * @class Plugin.Node
 	 * @constructor
 	 * @param {Object}
-	 *            data Data of a single resource of a select query. Must contain
-	 *            label and index.
+	 *            data Data of a single resource of a select query. Must contain index.
 	 */
-	Plugin.Node = function(data) {
-		this.index = data.index;
-		this.label = data.label;
-		this.token = data.subject.token;
-		this.nodeType = CONS.NODE_TYPES.stdNode;
-		this.useTemplateIdentifier = this.nodeType;
-		this.description = data.description;
-		this.filterables = [];
-		if (data.predicate) {
-			this.predicates = [];
+	Plugin.Node = function(data, style) {
+		//this.label = data.label;
+		//this.description = data.description;
+		this.id = data.index; // ID for this node
+		this.type = CONS.NODE_TYPES.stdNode; // Node Type
+		this.useTemplateID = this.type; // Use Templated stored under this name
+		this.filterables = []; // Classes used for filtering
+		this.componentTypes = {};
+		this.components = {}; // Components of the node
+		this.style = style;
+		if (data.predicate) { // Empty predicates are possible on init view
 			this.filterables.push(UTIL.toFilterable(data.predicate.type));
-			this.predicates.push(data.predicate);
+			this.addComponent(&quot;predicate&quot;, data.predicate);
 		}
-		// TODO Multiple calls? Check select query
+		if(data.description) {
+			this.addComponent(&quot;description&quot;, data.description);
+		}
 	};
+
+	/**
+	 * Add a new component to this node
+	 * 
+	 * @method addNewComponent
+	 */
+	Plugin.Node.prototype.addComponent = function(type, data, style) {
+		if(this.componentTypes[type]) {		// Increase counter
+			this.componentTypes[type]++;
+		} else {
+			this.componentTypes[type] = 1;
+		}
+		var id = type + this.componentTypes[type];
+		var predComp;
+		if (style) {
+			predComp = new Plugin.Node.Component(id, type, data, style);
+		} else {
+			predComp = new Plugin.Node.Component(id, type, data);
+		}
+		this.components[id] = predComp;
+	}
+	
+	/**
+	 * Check if node has this component. You can search for type or id
+	 * 
+	 * @method hasComponent
+	 * @param {String}
+	 *            id ID to look for.
+	 * @returns {Boolean}
+	 */
+	Plugin.Node.prototype.hasComponent = function(id) { // Increment counter and return
+		return this.components.hasOwnProperty(id)
+	}
+	
+	/**
+	 * Check if node has this component type and get the first component of this type. Returns false if no object is found.
+	 * 
+	 * @method getFComponentOT
+	 * @param {String}
+	 *            type Type to look for.
+	 * @returns {Object}
+	 */
+	Plugin.Node.prototype.getFComponentOT = function(type) { // Increment counter and return
+		if(this.componentTypes[type]) {
+			return this.components[type+&quot;1&quot;];
+		} else {
+			return false;
+		}
+	}
+	
+	/**
+	 * Check if node has a component of this type. Returns false or true.
+	 * 
+	 * @method hasComponentType
+	 * @param {String}
+	 *            type Type to look for.
+	 * @returns {Boolean}
+	 */
+	Plugin.Node.prototype.hasComponentType = function(type) { // Increment counter and return
+		return this.componentTypes.hasOwnProperty(type);
+	}
+	
+	Plugin.Node.prototype.forEachComponentType = function(type, fn) { // Increment counter and return
+		for (var i = 1; i &lt;= this.componentTypes[type]; i++) {
+			fn(this.components[type+i]);
+		}
+	}
 
 	/**
 	 * Return type of node
@@ -1223,8 +1195,13 @@
 		return this.type;
 	};
 
+	/**
+	 * Return template name to use for this node
+	 * 
+	 * @method getTemplateIdentifier
+	 */
 	Plugin.Node.prototype.getTemplateIdentifier = function() {
-		return this.useTemplateIdentifier;
+		return this.useTemplateID;
 	};
 
 	/**
@@ -1235,56 +1212,73 @@
 	 *            ind
 	 * @param{String} label
 	 */
-	Plugin.Node.prototype.setPredicateLabel = function(ind, label) {
-		this.predicates[ind].label = label;
-	};
-
-	/**
-	 * Merges data of given node with own data.
-	 * 
-	 * @method setPredicateLabel
-	 * @param {Node}
-	 *            otherNode
-	 * @returns {}
-	 */
-	Plugin.Node.prototype.merge = function(otherNode) {
-		var that = this, update = false;
-		// TODO
-		return update;
+	Plugin.Node.prototype.setPredicateLabel = function(i, label) {
+		this.components[&quot;predicate&quot; + i].label = label;
 	};
 
 	Plugin.Node.prototype.generateTile = function() {
 		var $tile = $(templates[&quot;tileWrapper&quot;](appendCssClasses({
 			node : this
-		}))).append($(templates[this.useTemplateIdentifier](appendCssClasses({
+		}))).append($(templates[this.useTemplateID](appendCssClasses({
 			node : this
 		}))));
 		$tile.data(&quot;node&quot;, this);
-		// console.log(&quot;Tile generated&quot;);
+		print(&quot;Tile generated&quot;);
+		print($tile);
 		return $tile;
 	};
 
-	Plugin.ResNode = function(data, itemStyle) {
-		Plugin.Node.call(this, data);
-		this.itemStyle = itemStyle;
-		this.type = CONS.NODE_TYPES.resNode;
-		this.uri = data.subject.value;
-		if (isUndefinedOrNull(this.label)) {
-			this.label = {
-				value : this.uri
-			};
-		} else {
-			this.label.value = unescape(this.label.value);
-		}
+	/**
+	 * Node component to be shown on a tile
+	 * 
+	 * @class Plugin.Node
+	 * @constructor
+	 * @param {Object}
+	 *            data Data of a single resource of a select query. Must contain
+	 *            label and index.
+	 */
+	Plugin.Node.Component = function(id, type, data, style) {
+		this.id = id;
+		this.type = type;
+		this.data = data;
+		this.style = style;
+	};
 
-		this._generateID = function() {
-			var id = this.uri;
-			if (this.predicates) {
-				id += this.predicates[0].value;
-			}
+	/**
+	 * Extension of base node to represent an std element of the rdf graph.
+	 * 
+	 * @class Plugin.ResNode
+	 * @constructor
+	 * @param {Object}
+	 *            data Data of a single resource of a select query. Must contain
+	 *            label and index.
+	 * @param {Object}
+	 *            itemStyle Node style object.   
+	 */
+	Plugin.ResNode = function(data) {
+		// Call node constructor
+		Plugin.Node.call(this, data);
+		var that = this;
+		// Function for ID generation
+		var generateID = function() {		
+			var id = that.components.uri1.data;
+			that.forEachComponentType(&quot;predicate&quot;, function(predicate){
+				id += predicate.value;
+			});
 			return id;
 		};
-		this.id = this._generateID();
+		this.type = CONS.NODE_TYPES.resNode;		// Overwrite std node type
+		this.addComponent(&quot;uri&quot;, data.subject.value, {display : &quot;none&quot;});
+		if (isUndefinedOrNull(data.label)) {
+			this.addComponent(&quot;label&quot;,{
+				value : this.uri
+			}); 
+		} else {
+			data.label.value = unescape(data.label.value);
+			this.addComponent(&quot;label&quot;, data.label); 
+		}
+		this.id = generateID();				// Overwrite id
+		print(this);
 	};
 
 	Plugin.ResNode.prototype = Object.create(Plugin.Node.prototype);
@@ -1333,26 +1327,27 @@
 
 	Plugin.ResNode.prototype.generateTile = function() {
 		var $tile = Plugin.Node.prototype.generateTile.call(this);
-		// console.log(&quot;ResNode Tile generated&quot;);
+		print(&quot;ResNode Tile generated&quot;);
 		return $tile;
 	}
 
-	Plugin.LiteralNode = function(data, literalStyle) {
+	Plugin.LiteralNode = function(data) {
+		var that = this;
+		// Call node constructor
 		Plugin.Node.call(this, data);
-		this.label = data.subject;
-		this.label.value = unescape(this.label.value);
-		this.literalStyle = literalStyle;
-		this.type = CONS.NODE_TYPES.literal;
-		this.value = data.subject.value;
-
-		this._generateID = function() {
-			if (this.predicates) {
-				return this.predicates[0].value + this.value;
-				return &#x27;_&#x27; + Math.random().toString(36).substr(2, 9); // TODO
-				// literalID
-			}
+		// Function for ID generation
+		var generateID = function() {			
+			var id = that.getFComponentOT(&quot;label&quot;).data.value;
+			that.forEachComponentType(&quot;predicate&quot;, function(predicate){
+				id += predicate.value;
+			});
+			return id;
 		};
-		this.id = this._generateID();
+		this.type = CONS.NODE_TYPES.literal;
+		print(data.subject.value)
+		this.addComponent(&quot;label&quot;, data.subject);
+		this.id = generateID();
+		print(this);
 	};
 
 	Plugin.LiteralNode.prototype = Object.create(Plugin.Node.prototype);
@@ -1360,22 +1355,23 @@
 
 	Plugin.LiteralNode.prototype.generateTile = function() {
 		var $tile = Plugin.Node.prototype.generateTile.call(this);
-		// console.log(&quot;LiteralNode Tile generated&quot;);
+		print(&quot;LiteralNode Tile generated&quot;);
 		return $tile;
 	}
 
 	Plugin.BlankNode = function(data) {
+		// Call node constructor
 		Plugin.Node.call(this, data);
-		this.type = CONS.NODE_TYPES.blankNode;
-		this.label = {
-			value : &quot;BlankNode - TODO&quot;
-		};
-
-		this._generateID = function() {
+		var that = this;
+		// Function for ID generation
+		var generateID = function() {			
 			return &#x27;_&#x27; + Math.random().toString(36).substr(2, 9); // TODO
-			// BlankNodeID
 		};
-		this.id = this._generateID();
+		this.type = CONS.NODE_TYPES.blankNode;
+		this.addComponent(&quot;label&quot;, {
+			value : &quot;BlankNode - TODO&quot;
+		});
+		this.id = generateID();
 	};
 
 	Plugin.BlankNode.prototype = Object.create(Plugin.Node.prototype);
@@ -1383,7 +1379,7 @@
 
 	Plugin.BlankNode.prototype.generateTile = function() {
 		var $tile = Plugin.Node.prototype.generateTile.call(this);
-		// console.log(&quot;BlankNode Tile generated&quot;);
+		print(&quot;BlankNode Tile generated&quot;);
 		return $tile;
 	};
 
@@ -1410,6 +1406,121 @@
 		}
 	};
 
+
+	// ========================= bSynopsis: Layer Class
+	// ==================================
+	/**
+	 * Layer to be shown
+	 * 
+	 * @class Plugin.Layer
+	 * @constructor
+	 * @param {jQuery}
+	 *            $container Parent div container
+	 * @param {Object}
+	 *            options Options object of the view
+	 * @param {Plugin}
+	 *            plugin Parent plugin
+	 * @param {Object}
+	 *            queries Queries to use in the view
+	 */
+	Plugin.Layer = function($container, options, plugin, queries) {
+
+		var that = this;
+
+		this.plugin = plugin;
+		this.options = options;
+
+		// Use this node filters
+		this.filterNames = [];
+		$.each(plugin.options.nodeFilters, function(i, filter) {
+			print(&quot;Filters found:&quot;);
+			print(filter);
+			that.filterNames.push(i);
+		});
+		$.each(plugin.options.tileFilters, function(i, filter) {
+			print(filter);
+			if (that.filterNames[i]) {
+				console.log(CONS.MESSAGES.warn.filterName);
+			} else {
+				that.filterNames.push(i);
+			}
+		});
+
+		this.model = new Plugin.Layer.Model(queries, options.modelOptions,
+				plugin._queries.label);
+		this.view = new Plugin.Layer.View(this.model, $container,
+				options.viewOptions);
+
+		this.model.itemsAdded.attach(function(sender, args) {
+			that.view.paint(args.addedNodes, that.plugin);
+		});
+
+		if (options.generateSortOptions || options.generateFilterOptions
+				|| plugin.options.generateTimeline) {
+			this.view.addOptionsBox();
+			if (options.generateSortOptions) {
+				this.view.addSorter();
+			}
+			if (options.generateFilterOptions) {
+				this.view.addIsotopeFilter();
+			}
+		}
+	};
+
+	Plugin.Layer.prototype.update = function() {
+		this.model.update();
+	};
+
+	Plugin.Layer.prototype.switchFilterState = function(filterName) {
+		var that = this;
+
+		if (filterName === &quot;on&quot;) {
+			that.filterNames = [];
+			$.each(that.plugin.options.nodeFilters, function(i, filter) {
+				that.filterNames.push(i);
+			});
+			$.each(that.plugin.options.tileFilters, function(i, filter) {
+				if (that.filterNames[i]) {
+					console.log(CONS.MESSAGES.warn.filterName);
+				} else {
+					that.filterNames.push(i);
+				}
+			});
+		} else {
+
+			if (this.filterNames.indexOf(filterName) !== -1) {
+				this.filterNames
+						.splice(this.filterNames.indexOf(filterName), 1);
+			} else {
+				this.filterNames.push(filterName);
+			}
+		}
+
+		var nodeFilters = {};
+		var tileFilters = {};
+		$.each(this.filterNames, function(i, val) {
+			if (that.plugin.options.nodeFilters[val]) {
+				nodeFilters[val] = that.plugin.options.nodeFilters[val];
+			}
+			if (that.plugin.options.tileFilters[val]) {
+				tileFilters[val] = that.plugin.options.tileFilters[val];
+			}
+		});
+
+		this.view.clearView(function() {
+			that.view.paint(that.model.getNodes(), that.plugin, nodeFilters,
+					tileFilters);
+		});
+	};
+	/**
+	 * Clear the view
+	 * 
+	 * @method removeAllItems
+	 */
+	Plugin.Layer.prototype.removeAllItems = function() {
+		this.model.clearModel();
+	};
+	
 	Plugin.Layer.Model = function(viewQueries, options, labelQuery) {
 
 		var that = this;
@@ -1443,10 +1554,11 @@
 		 */
 		this._fetchPredicateLabel = function(node) {
 
-			if (node.predicates) {
-				$.each(node.predicates, function(i, predicate) {
+			if (node.hasComponentType(&quot;predicate&quot;)) {
+				for(var i = 1; i &lt; node.componentTypes[&quot;predicate&quot;]; i++) {
+					var predicate = node.components[&quot;predicate&quot;+i];
 					if (!labelCache.contains(predicate.value)) {
-						var labelQuery = replaceDummy(that.labelQuery,
+						var labelQuery = replaceDummy(that.labelQuery, 
 								predicate.value);
 						rdfStore.executeQuery(labelQuery, function(results) {
 							if (results &amp;&amp; results[0]) {
@@ -1462,7 +1574,7 @@
 						node.setPredicateLabel(i, labelCache
 								.retrieve(predicate.value));
 					}
-				});
+				}
 			}
 			return node;
 		};
@@ -1475,7 +1587,7 @@
 	 * @return {Object} nodes A copy of the stored nodes
 	 */
 	Plugin.Layer.Model.prototype.getNodes = function() {
-		return this.nodes;
+		return deepCopy(this._nodes);
 	};
 
 	/**
@@ -1494,11 +1606,9 @@
 		var addedNodes = {};
 
 		$.each(batch, function(i, val) {
-			val.subject.token = UTIL.strToToken(UTIL
-					.strToCss(val.subject.token));
-
+			val.subject.token = UTIL.toToken(UTIL
+					.toClass(val.subject.token));
 			val.index = that.nodesLength + 1;
-
 			var node = Plugin.NodeFactory.makeNode(val, that.options);
 
 			if (node) {
@@ -1524,7 +1634,7 @@
 					} else {
 						// TODO check literal UPDATE
 						node = undefined;
-						console.log(&quot;literalupdate&quot;);
+						print(&quot;literalupdate&quot;);
 					}
 					break;
 				case CONS.NODE_TYPES.blankNode:
@@ -1533,8 +1643,8 @@
 						that.nodesLength++;
 					} else {
 						// TODO check blankNode UPDATE ?
-						// console.log(node);
-						console.log(&quot;blankNodeupdate&quot;);
+						print(node);
+						print(&quot;blankNodeupdate&quot;);
 						node = undefined;
 					}
 					break;
@@ -1546,7 +1656,7 @@
 			}
 		});
 		this.itemsAdded.notify({
-			&quot;addedNodes&quot; : addedNodes,
+			&quot;addedNodes&quot; : deepCopy(addedNodes),
 			&quot;allNodes&quot; : this.getNodes()
 		});
 		that._checkItemsHelp(resultSet, batchSize);
@@ -1560,7 +1670,6 @@
 	Plugin.Layer.Model.prototype.update = function() {
 		var that = this;
 		this.allResults = [];
-
 		// Concat all results for filtering before adding
 		for (var i = 0; i &lt; this.viewQueries.length; i++) {
 			rdfStore
@@ -1582,7 +1691,7 @@
 		if (this.allResults.length &gt; 0) {
 			that.checkItems(this.allResults);
 		} else {
-			console.log(&quot;Nothing to add to View&quot;);
+			print(&quot;Nothing to add to View&quot;);
 		}
 	};
 
@@ -1609,7 +1718,9 @@
 				viewOptions.layoutEngine);
 
 		this._getCorrespondingTile = function(node) {
-			var $tile = this.$viewContainer.find(&quot;.&quot; + node.index);
+			var $tile = this.$viewContainer.find(UTIL.toClassSelector(node.id));
+			print(&quot;CorrespondingTile&quot;);
+			print($tile);
 			return $tile;
 		};
 
@@ -1653,30 +1764,29 @@
 			that.layoutEngine.remove($(UTIL
 					.toSelector(CONS.CSS_CLASSES.tileClasses.tile)),
 					function() {
-						console.log(&quot;view cleared&quot;);
+						print(&quot;view cleared&quot;);
 					});
 		});
 	};
 
 	Plugin.Layer.View.prototype.paint = function(nodes, plugin, nodeFilters,
 			tileFilters) {
-
-		// console.log(nodes);
-
-		var filters;
+		var that = this;
 		if (nodeFilters) {
 			filters = nodeFilters;
 		} else {
-			filters = plugin.nodeFilters;
+			filters = plugin.options.nodeFilters;
 		}
+		var startTime = new Date().getTime();
 
 		// Run nodeFilters on nodes
 		$.each(filters, function(i, filter) {
 			if (!$.isEmptyObject(nodes)) {
-				nodes = filter.fn(plugin, nodes, filter.config);
+				nodes = filter.fn(plugin, nodes, filter.config, that);
 			} else {
 				console.log(CONS.MESSAGES.warn.filterInput);
 			}
+			print(&quot;Filter &quot; + i + &quot; done at: &quot; + (new Date().getTime() - startTime) + &quot; milisec&quot;);
 		});
 
 		// Generate all tiles
@@ -1688,13 +1798,14 @@
 		if (tileFilters) {
 			filters = tileFilters;
 		} else {
-			filters = plugin.tileFilters;
+			filters = plugin.options.tileFilters;
 		}
 
 		// Run tileFilters on tiles
 		$tiles = $tiles.children();
 		$.each(filters, function(i, filter) {
-			$tiles = filter.fn(plugin, $tiles, filter.config);
+			$tiles = filter.fn(plugin, $tiles, filter.config, that);
+			print(&quot;Filter &quot; + i + &quot; done at: &quot; + (new Date().getTime() - startTime) + &quot; milisec&quot;);
 		});
 		this.addTiles($tiles);
 	};
@@ -1951,10 +2062,20 @@
 
 		var queries = [];
 		switch (that.node.getType()) {
+		case CONS.NODE_TYPES.literal:
+			var literalIsObjectOf = replaceDummy(
+					plugin._queries.literalIsObjectOf, this.node.getFComponentOT(&quot;value&quot;).data);
+			queries.push({
+				query : literalIsObjectOf,
+				type : CONS.CSS_CLASSES.typeClasses.incoming
+			});
+			break;
 		case CONS.NODE_TYPES.resNode:
+		default:
 			var subjectOfQuery = replaceDummy(plugin._queries.selectSubjectOf,
-					this.node.uri), objectOfQuery = replaceDummy(
-					plugin._queries.selectObjectOf, this.node.uri);
+					this.node.getFComponentOT(&quot;uri&quot;).data);
+			var objectOfQuery = replaceDummy(
+					plugin._queries.selectObjectOf, this.node.getFComponentOT(&quot;uri&quot;).data);
 			queries.push({
 				query : subjectOfQuery,
 				type : CONS.CSS_CLASSES.typeClasses.outgoing
@@ -1963,15 +2084,6 @@
 				query : objectOfQuery,
 				type : CONS.CSS_CLASSES.typeClasses.incoming
 			});
-			break;
-		case CONS.NODE_TYPES.literal:
-			var literalIsObjectOf = replaceDummy(
-					plugin._queries.literalIsObjectOf, this.node.value);
-			queries.push({
-				query : literalIsObjectOf,
-				type : CONS.CSS_CLASSES.typeClasses.incoming
-			});
-			break;
 		}
 
 		var $overlayContent = $container.find(&#x27;&gt; &#x27;
@@ -2022,7 +2134,7 @@
 		// template
 		var input = {};
 		input.label = $item.find(
-				UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.labelEN)).text();
+				UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.label)).text();
 
 		// write new data
 		$overlayContent.append($(templates.overlayContent(appendCssClasses({
@@ -2035,6 +2147,13 @@
 
 		this.$overlay = $container;
 
+		// JQuery multiSelect
+		// http://www.erichynds.com/blog/jquery-ui-multiselect-widget
+		this.$overlay.find(&quot;#filterSelect&quot;).multiSelect({
+			&#x27;selectAllText&#x27; : CONS.MESSAGES.out.selectAllFilters
+		}, function(select) {
+			that.switchFilterState(select.val());
+		});
 		this.$overlayContent = $overlayContent;
 
 		// Function to init content of given full view overlay.
@@ -2046,7 +2165,7 @@
 				that.loadByRemote();
 			}
 
-			// Set contet color
+			// Set background color
 			var color = new RGBColor(that.$item.css(&quot;background-color&quot;));
 			$container.css(&quot;background-color&quot;, color.toRGB());
 			$.each($overlayContent.children(&#x27;div&#x27;
@@ -2133,8 +2252,7 @@
 						});
 	};
 
-	// pseudo class inheritance of Preview
-	// pseudo class inheritance of Preview
+	// pseudo class inheritance of Layer
 	Plugin.DetailLayer.prototype = Object.create(Plugin.Layer.prototype);
 	Plugin.DetailLayer.prototype.constructor = Plugin.DetailLayer;
 
@@ -2158,8 +2276,8 @@
 		switch (that.node.getType()) {
 		case CONS.NODE_TYPES.resNode:
 			var remoteSubjectOf = replaceDummy(
-					that.plugin._queries.remoteSubjectOf, that.node.uri), remoteObjectOf = replaceDummy(
-					that.plugin._queries.remoteObjectOf, that.node.uri);
+					that.plugin._queries.remoteSubjectOf, that.node.getFComponentOT(&quot;uri&quot;).data), remoteObjectOf = replaceDummy(
+					that.plugin._queries.remoteObjectOf, that.node.getFComponentOT(&quot;uri&quot;).data);
 
 			// remote needed?
 			that.remoteDataLoader.insertByQuery(remoteSubjectOf + &quot; LIMIT &quot;
@@ -2170,7 +2288,7 @@
 		case CONS.NODE_TYPES.literal:
 			var remoteLiteralIsObjectOf = replaceDummy(
 					that.plugin._queries.remoteLiteralIsObjectOf,
-					that.node.value);
+					that.node.getFComponentOT(&quot;value&quot;));
 
 			// remote needed?
 			that.remoteDataLoader.insertByQuery(remoteLiteralIsObjectOf
@@ -2332,7 +2450,7 @@
 					var insertionQuery = &quot;INSERT DATA {&quot;;
 					$.each(data, function(i, val) {
 						if (val.subject === undefined) {
-							console.log(&quot;Resultset disfigured.&quot;);
+							print(&quot;Resultset disfigured.&quot;);
 						} else if (val.subject.type === &quot;uri&quot;) {
 							insertionQuery += &quot;&lt;&quot; + val.subject.value + &quot;&gt; &quot;;
 						} else {
@@ -2350,21 +2468,13 @@
 							insertionQuery += &#x27;&lt;&#x27; + val.subject.value
 									+ &#x27;&gt; rdfs:label &quot;&#x27; + val.labelSub.value
 									+ &#x27;&quot;. &#x27;;
-							// console.log(&#x27;&lt;&#x27; + val.subject.value + &#x27;&gt;
-							// rdfs:label &quot;&#x27; + val.labelSub.value + &#x27;&quot;.
-							// &#x27;);
 						}
 						if (val.labelObj) {
 							insertionQuery += &#x27;&lt;&#x27; + val.object.value
 									+ &#x27;&gt; rdfs:label &quot;&#x27; + val.labelObj.value
 									+ &#x27;&quot;. &#x27;;
-							// console.log(&#x27;&lt;&#x27; + val.object.value + &#x27;&gt;
-							// rdfs:label &quot;&#x27; + val.labelObj.value + &#x27;&quot;.
-							// &#x27;);
 						}
 						if (val.labelPred) {
-							// console.log(val.predicate.value + &quot; added &quot; +
-							// val.labelPred.value);
 							labelCache.add(val.predicate.value,
 									val.labelPred.value);
 						}
@@ -2392,17 +2502,17 @@
 
 		// Inform the plugin something is loading
 		eventManagers[that.pluginID].trigger(
-				CONS.EVENT_TYPES.loading.loadingStart, that);
+				CONS.EVENT_TYPES.loading.start, that);
 
 		$.each(that.sites, function(i, val) {
 			that._insertDataByQuery(query, val, function(success) {
 				// Inform the plugin loading is done
 				eventManagers[that.pluginID].trigger(
-						CONS.EVENT_TYPES.loading.loadingDone, that);
+						CONS.EVENT_TYPES.loading.done, that);
 				if (success) {
 					// Inform the plugin that the store has been modified
 					eventManagers[that.pluginID].trigger(
-							CONS.EVENT_TYPES.storeModified.insert, that);
+							CONS.EVENT_TYPES.store.insert, that);
 				}
 			});
 		});
@@ -2441,40 +2551,35 @@
 		nodeFilters : {
 			/**
 			 * Filters blacklisted resources defined by predicate URIs in config
-			 * options. RegEx allowed.
+			 * options. Only RegEx allowed.
 			 * 
 			 * @property defaults.nodeFilters.blacklistPredURI
 			 * @type Object
 			 */
 			blacklistPredURI : {
 				fn : function(plugin, nodes, config) {
-					$
-							.each(
-									nodes,
-									function(i, node) {
-										if (node.predicates) {
-											$
-													.each(
-															config,
-															function(j, exp) {
-																var regExp = new RegExp(
-																		exp);
-																var res = regExp
-																		.exec(node.predicates[0].value);
-																if (res !== null) {
-																	delete nodes[i];
-																}
-															});
-										}
-									});
+					$.each(nodes, function(i, node) {
+						if (node.hasComponentType(&quot;predicate&quot;) &amp;&amp; config) {
+							$.each(config, function(j, exp) {
+								for(var i = 0; i &lt;= node.componentTypes.predicate; i++) {
+									var res = new RegExp(exp)
+									.exec(node.components[&quot;predicate&quot;+i].value);
+									if (res !== null) {
+										delete nodes[i];
+									}
+								}
+							});
+						}
+					});
 					return nodes;
 				},
-				config : new Array(&quot;.*homepage2.*&quot;, &quot;somethingelse&quot;)
+				config : new Array()
+			//Regex to be filtered
 			},
 
 			/**
 			 * Filters blacklisted resources defined by URIs in config options.
-			 * RegEx allowed.
+			 * Only RegEx allowed.
 			 * 
 			 * @property defaults.nodeFilters.blacklistURI
 			 * @type Object
@@ -2482,21 +2587,23 @@
 			blacklistURI : {
 				fn : function(plugin, nodes, config) {
 					$.each(nodes, function(i, node) {
-						$.each(config, function(j, exp) {
-							var regExp = new RegExp(exp);
-							var res = regExp.exec(node.uri);
-							if (res !== null) {
-								delete nodes[i];
-							}
-						});
+						if (node.hasComponentType(&quot;uri&quot;) &amp;&amp; config) {
+							$.each(config, function(j, exp) {
+								var res = new RegExp(exp).exec(node.components.uri1);
+								if (res !== null) {
+									delete nodes[i];
+								}
+							});
+						}
 					});
 					return nodes;
 				},
-				config : new Array(&quot;blackListUrl1&quot;, &quot;blackListUrl2&quot;)
+				config : new Array()
+			//Regex to be filtered
 			},
 
 			/**
-			 * Merges resNodes talking about the same resource (subject or
+			 * Merges resNodes describing the same resource (subject or
 			 * object).
 			 * 
 			 * @property defaults.nodeFilters.multiResNode
@@ -2507,12 +2614,12 @@
 					var tempArray = new Array();
 					$.each(nodes, function(i, node) {
 						if (node.type === &quot;resNode&quot;) {
-							if (node.uri in tempArray) {
-								tempArray[node.uri].nodeType = &quot;multiResNode&quot;;
-								tempArray[node.uri].merge(node);
-								delete nodes[i];
+							if (node.components.uri1 in tempArray) {
+								tempArray[node.components.uri1].type = &quot;multiResNode&quot;;
+								//tempArray[node.components.uri1].merge(node); //TODO merge
+								//delete nodes[i];
 							} else {
-								tempArray[node.uri] = node;
+								tempArray[node.components.uri1] = node;
 							}
 						}
 					});
@@ -2523,7 +2630,9 @@
 			blankNode : {
 				fn : function(plugin, nodes, config) {
 					$.each(nodes, function(i, node) {
-						if (node.nodeType == CONS.NODE_TYPES.stdNode) {
+						if (node.getType() == CONS.NODE_TYPES.stdNode) {
+							//TODO Blanknode
+							print(&quot;TODO Blanknode&quot;);
 						}
 					});
 					return nodes;
@@ -2549,225 +2658,213 @@
 			 */
 			scale : {
 				fn : function(plugin, $tiles, config) {
-					this._addToAnchor = function($element, anchor, step,
-							callback) {
-						$element.height(step);
-						$element.css(&quot;top&quot;, anchor);
-						anchor += step + 5;
-						if (callback) {
-							callback(anchor);
-						}
-					};
-
-					this._setLiteralScale = function($tile, callback) {
-						var that = this;
-						var anchor = $tile.height()
-								+ config.literalStyle.topPadding;
-						var width = config.literalStyle.dimension.width;
-						$tile.width(width);
-						that
-								._setLabelScale(
-										$tile,
-										anchor,
-										config.literalStyle.value.height,
-										width,
-										function(anchor) {
-											that
-													._setPredicateScale(
-															$tile,
-															anchor,
-															config.literalStyle.predicate.height,
-															width,
-															function(anchor) {
-																$tile
-																		.height(anchor
-																				+ config.literalStyle.bottomPadding);
-																if (callback) {
-																	callback();
-																}
-															});
-										});
-					};
-
-					this._setResNodeScale = function($tile, callback) {
-						var that = this;
-						var anchor = $tile.height()
-								+ config.itemStyle.topPadding;
-						var width = config.itemStyle.dimension.width;
-						$tile.width(width);
-						that
-								._setLabelScale(
-										$tile,
-										anchor,
-										config.itemStyle.label.height,
-										width,
-										function(anchor) {
-											that
-													._setDescriptionScale(
-															$tile,
-															anchor,
-															config.itemStyle.description.height,
-															width,
-															function(anchor) {
-																that
-																		._setPredicateScale(
-																				$tile,
-																				anchor,
-																				config.itemStyle.predicate.height,
-																				width,
-																				function(
-																						anchor) {
-																					$tile
-																							.height(anchor
-																									+ config.itemStyle.bottomPadding);
-																					if (callback) {
-																						callback();
-																					}
-																				});
-															});
-										});
-					};
-
-					this._setLabelScale = function($tile, anchor, height,
-							width, callback) {
-						var $labelEn = $tile
-								.find(&quot;&gt; &quot;
-										+ UTIL
-												.toSelector(CONS.CSS_CLASSES.tileClasses.labelEN));
-						$labelEn.width(width * 0.9);
-						this._addToAnchor($labelEn, anchor, height, callback);
-					};
-
-					this._setPredicateScale = function($tile, anchor, height,
-							width, callback) {
-						var that = this;
-						var $typeImage = $tile
-								.find(&quot;&gt; &quot;
-										+ UTIL
-												.toSelector(CONS.CSS_CLASSES.tileClasses.typeImage));
-						var $predicate = $tile
-								.find(&quot;&gt; &quot;
-										+ UTIL
-												.toSelector(CONS.CSS_CLASSES.tileClasses.predicate));
-						var $predicateLabel = $tile
-								.find(&quot;&gt; &quot;
-										+ UTIL
-												.toSelector(CONS.CSS_CLASSES.tileClasses.predicateLabel));
-
-						var imageWidth = width * 0.1;
-						$typeImage.css(&quot;padding-left&quot;, width * 0.025);
-						$typeImage.width(imageWidth);
-						$predicateLabel.css(&quot;padding-left&quot;, imageWidth);
-						$predicateLabel.width((width * 0.9) - imageWidth);
-						$predicate.width(width * 0.9);
-
-						$.each($predicate, function(i, val) {
-							$($typeImage[i]).height(height);
-							$($typeImage[i]).css(&quot;top&quot;, anchor);
-							that._addToAnchor($(val), anchor, height);
-							that._addToAnchor($($predicateLabel[i]), anchor,
-									height, function(reAnchor) {
-										anchor = reAnchor;
-									});
-						});
-						if (callback) {
-							callback(anchor);
-						}
-					};
-
-					this._setDescriptionScale = function($tile, anchor, height,
-							width, callback) {
-						var node = $tile.data(&quot;node&quot;);
-						if (node.description) {
-							var $descriptionEn = $tile
-									.find(&quot;&gt; &quot;
-											+ UTIL
-													.toSelector(CONS.CSS_CLASSES.tileClasses.descriptionEn));
-							$descriptionEn.width(width * 0.9);
-							that._addToAnchor($descriptionEn, anchor, height,
-									callback);
-						} else if (callback) {
-							callback(anchor);
-						}
-					};
-
-					var that = this;
+					
 					$.each($tiles, function(i, tile) {
 						var $tile = $(tile);
 						var node = $tile.data(&quot;node&quot;);
-						switch (node.getType()) {
-						case CONS.NODE_TYPES.resNode:
-							that._setResNodeScale($tile);
-							break;
-						case CONS.NODE_TYPES.literal:
-							that._setLiteralScale($tile);
-							break;
-						case CONS.NODE_TYPES.blankNode:
-							that._setResNodeScale($tile);
-							break;
+						var nStyle;
+						if(node.style) { // Style passed via node
+							nStyle = node.style;
+						} else if (config.defaultStyles[node.getType()]) { // Style chosen via node type
+							nStyle = config.defaultStyles[node.getType()];
+						} else { // Default style
+							nStyle = config.defaultStyles[&quot;stdNode&quot;];
+						}
+						if (typeof nStyle.height != &quot;number&quot;) { // If height of tiles should be dynamic (depending on components)
+							if(node.dynLayoutFn) {	// Function passed via node
+								node.dynLayoutFn($tile, node, nStyle, config);
+							} else if (config.defaultDynLayoutFns[node.getType()]) { // Function chosen via node type
+								config.defaultDynLayoutFns[node.getType()]($tile, node, nStyle, config);
+							} else { // Default function
+								config.defaultDynLayoutFns[&quot;stdNode&quot;]($tile, node, nStyle, config);
+							}
+						} else {	// If height should be static
+							if(node.layoutFn) { // Function passed via node
+								node.layoutFn($tile, node, nStyle, config);
+							} else if (config.defaultLayoutFns[node.getType()]) { // Function chosen via node type
+								config.defaultLayoutFns[node.getType()]($tile, node, nStyle, config);
+							} else { // Default function
+								config.defaultLayoutFns[&quot;stdNode&quot;]($tile, node, nStyle, config);
+							}
 						}
 					});
 					return $tiles;
 				},
 				config : {
-					/**
-					 * Styles of literal items.
-					 * 
-					 * @property defaults.tileFilters.scale.config.literalStyle
-					 * @type Object
-					 */
-					literalStyle : {
+					multiplicator : 1,
+					defaultLayoutFns : {
+						stdNode : function($tile, node, nStyle, config) {
+							var anchorY = $tile.height() + nStyle.topPadding;
+							var mult = config.multiplicator;
+							$tile.width(nStyle.width * mult);
+							var height = nStyle.height * mult;
+							$tile.height(height);
+							var contentHeight = height - (nStyle.topPadding + nStyle.bottomPadding * mult);
+							var temp = 0;
+							var cStyles = [];
+							$.each(node.components, function(i, component) {
+								if(component.style) {
+									cStyles[i] = component.style;
+								} else if (config.defaultContentStyles[component.type]) {
+									cStyles[i] = config.defaultContentStyles[component.type];
+								} else {
+									cStyles[i] = config.defaultContentStyles[&quot;stdComponent&quot;];
+								}
+								if (cStyles[i] &amp;&amp; (!cStyles[i].display || cStyles[i].display != &quot;none&quot;)) {
+									temp += cStyles[i].height;
+								}
+							});
+							$.each(node.components, function(i, component) {
+								if (cStyles[i] &amp;&amp; (!cStyles[i].display || cStyles[i].display != &quot;none&quot;)) {
+									var cStyle = cStyles[i];
+									if(component.layoutFn) {
+										anchorY = component.layoutFn($tile, node, nStyle, component, cStyle, config, anchorY, contentHeight, temp);
+									} else if (config.defaultContentLayoutFns[component.type]) {
+										anchorY = config.defaultContentLayoutFns[component.type]($tile, node, nStyle, component, cStyle, config, anchorY, contentHeight, temp);
+									} else {
+										anchorY = config.defaultContentLayoutFns[&quot;stdComponent&quot;]($tile, node, nStyle, component, cStyle, config, anchorY, contentHeight, temp);
+									}
+								}
+							});
+						}
+					},
+					defaultDynLayoutFns : {
+						stdNode : function($tile, node, nStyle, config) {
+							var startY = $tile.height();
+							var mult = config.multiplicator;
+							var anchorY = startY + (nStyle.topPadding  * mult);
+							$tile.width(nStyle.width * mult);
+							$.each(node.components, function(i, component) {
+								var cStyle;
+								if(component.style) {
+									cStyle = component.style;
+								} else if (config.defaultContentStyles[component.type]) {
+									cStyle = config.defaultContentStyles[component.type];
+								} else {
+									cStyle = config.defaultContentStyles[&quot;stdComponent&quot;];
+								}
+									if (cStyle &amp;&amp; (!cStyle.display || cStyle.display != &quot;none&quot;)) {
+										if(component.dynLayoutFn) {
+											anchorY = component.dynLayoutFn($tile, node, nStyle, component, cStyle, config, anchorY);
+										} else if (config.defaultContentDynLayoutFns[component.type]) {
+											anchorY = config.defaultContentDynLayoutFns[component.type]($tile, node, nStyle, component, cStyle, config, anchorY);
+										} else {
+											anchorY = config.defaultContentDynLayoutFns[&quot;stdComponent&quot;]($tile, node, nStyle, component, cStyle, config, anchorY);
+										}
+									}
+							});
+							$tile.height(anchorY + (nStyle.bottomPadding * mult) - startY);
+						}
+					},
+					defaultContentLayoutFns : {
+						predicate : function($tile, node, nStyle, component,
+								cStyle, config, anchorY, contentHeight, divisor) {
+							var $component = $tile.find(UTIL.toClassSelector(component.id));
+							print(UTIL.toClassSelector(component.id));
+							console.log($component)
+							var mult = config.multiplicator;
+							var cHeight = contentHeight * (cStyle.height / divisor) - nStyle.spacing * mult;
+							var cWidth = ((nStyle.width - nStyle.leftPadding - nStyle.rightPadding) * mult);
+							$component.height(cHeight);
+							$component.width(cWidth);
+							$component.css(&quot;top&quot;, anchorY);
+							$component.css(&quot;left&quot;, nStyle.leftPadding);
+							anchorY += (cHeight + nStyle.spacing * mult);
+							$component.children().height(cHeight);
+							var $typeImage = $tile.find(UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.typeImage));
+							var $predicate = $tile.find(UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.predicate));
+							var $predicateLabel = $tile.find(UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.predicateLabel));
+							var imageWidth = cWidth * 0.2;
+							$typeImage.height(&quot;auto&quot;);
+							$typeImage.width(imageWidth);
+							$predicateLabel.css(&quot;left&quot;, imageWidth);
+							$predicateLabel.width(cWidth - imageWidth);
+							$predicate.width(cWidth);
+							return anchorY;
+						},
+						stdComponent : function($tile, node, nStyle, component, cStyle, config, anchorY, contentHeight, divisor) {
+							var $component = $tile.find(UTIL.toClassSelector(component.id));
+							var mult = config.multiplicator;
+							var cHeight = contentHeight * (cStyle.height / divisor) - nStyle.spacing * mult;
+							$component.width((nStyle.width - nStyle.leftPadding - nStyle.rightPadding) * mult);
+							$component.height(cHeight);
+							$component.css(&quot;top&quot;, anchorY);
+							$component.css(&quot;left&quot;, nStyle.leftPadding);
+							anchorY += (cHeight + nStyle.spacing * mult);
+							return anchorY;
+						}
+					},
+					defaultContentDynLayoutFns : {
+						predicate : function($tile, node, nStyle, component,
+								cStyle, config, anchorY) {
+							var $component = $tile.find(UTIL.toClassSelector(component.id));
+							var mult = config.multiplicator;
+							var cHeight = cStyle.height * mult;
+							var cWidth = (nStyle.width - nStyle.leftPadding - nStyle.rightPadding) * mult;
+							$component.height(cHeight);
+							$component.width(cWidth);
+							$component.css(&quot;top&quot;, anchorY);
+							$component.css(&quot;left&quot;, nStyle.leftPadding);
+							anchorY += (cHeight + nStyle.spacing * mult);
+							$component.children().height(cHeight);
+							var $typeImage = $tile.find(UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.typeImage));
+							var $predicate = $tile.find(UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.predicate));
+							var $predicateLabel = $tile.find(UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.predicateLabel));
+							var imageWidth = cWidth * 0.2;
+							$typeImage.height(&quot;auto&quot;);
+							$typeImage.width(imageWidth);
+							$predicateLabel.css(&quot;left&quot;, imageWidth);
+							$predicateLabel.width(cWidth - imageWidth);
+							$predicate.width(cWidth);
+							return anchorY;
+						},
+						stdComponent : function($tile, node, nStyle, component, cStyle, config, anchorY) {
+							var $component = $tile.find(UTIL.toClassSelector(component.id));
+							var mult = config.multiplicator;
+							$component.width((nStyle.width - nStyle.leftPadding - nStyle.rightPadding) * mult);
+							$component.height(cStyle.height * mult);
+							$component.css(&quot;top&quot;, anchorY);
+							$component.css(&quot;left&quot;, nStyle.leftPadding);
+							anchorY += ((cStyle.height + nStyle.spacing) * mult);
+							return anchorY;
+						}
+					},
+					defaultStyles : {
 						/**
-						 * Dimensions of literal items.
+						 * Styles of literal items.
 						 * 
-						 * @property defaults.tileFilters.scale.config.literalStyle.dimension
+						 * @property defaults.tileFilters.scale.config.defaultStyles.literal
 						 * @type Object
 						 */
-						dimension : {
+						//literal : {
 							/**
 							 * Width of literal items.
 							 * 
-							 * @property defaults.tileFilters.scale.config.literalStyle.dimension.width
+							 * @property defaults.tileFilters.scale.config.defaultStyles.literal.width
 							 * @type Integer
 							 * @default 200
 							 */
-							width : 200,
+							//width : 200,
 							/**
 							 * Height of literal items.
 							 * 
-							 * @property defaults.tileFilters.scale.config.literalStyle.dimension.width
+							 * @property defaults.tileFilters.scale.config.defaultStyles.literal.height
 							 * @type Integer
 							 * @default 100
 							 */
-							height : 0
-						},
-						topPadding : 10,
-						bottomPadding : 10,
-						value : {
-							height : 30
-						},
-						predicate : {
-							height : 15
-						}
-					},
-					/**
-					 * Styles of items.
-					 * 
-					 * @property defaults.tileFilters.scale.config.itemStyle
-					 * @type Object
-					 */
-					itemStyle : {
+							//height : 100
+						//},
 						/**
-						 * Dimensions of items.
+						 * Styles of res nodes.
 						 * 
-						 * @property defaults.tileFilters.scale.config.itemStyle.dimension
+						 * @property defaults.tileFilters.scale.config.defaultStyles.stdNode
 						 * @type Object
 						 */
-						dimension : {
+						stdNode : {
 							/**
 							 * Width of items.
 							 * 
-							 * @property defaults.tileFilters.scale.config.itemStyle.dimension.width
+							 * @property defaults.tileFilters.scale.config.defaultStyles.stdNode.width
 							 * @type Integer
 							 * @default 200
 							 */
@@ -2775,22 +2872,27 @@
 							/**
 							 * Height of items.
 							 * 
-							 * @property defaults.tileFilters.scale.config.itemStyle.dimension.width
-							 * @type Integer
-							 * @default 200
+							 * @property defaults.tileFilters.scale.config.defaultStyles.stdNode.width
+							 * @type Integer or String
+							 * @default 200 / dynamic
 							 */
-							height : 0
+							height : &quot;dynamic&quot;,
+							topPadding : 10,
+							leftPadding : 10,
+							rightPadding : 10,
+							bottomPadding : 10,
+							spacing : 5
+						}
+					},
+					defaultContentStyles : {
+						predicate : {
+							height : 20
 						},
-						topPadding : 10,
-						bottomPadding : 10,
 						label : {
 							height : 40
 						},
-						description : {
-							height : 80
-						},
-						predicate : {
-							height : 15
+						stdComponent : {
+							height : 40
 						}
 					}
 				}
@@ -2803,12 +2905,21 @@
 			 * @type Object
 			 */
 			textScale : {
-				fn : function(plugin, $tiles) {
-					$tiles.css({
-						&quot;line-height&quot; : 1
+				webWorker : true,
+				fn : function(plugin, $tiles, config, view) {
+					// On layout done event
+					view.$viewContainer.on(CONS.EVENT_TYPES.layout.done, function() {
+						var $fitHere = $tiles.find(UTIL.toSelector(CONS.CSS_CLASSES.textScale));
+						//$fitHere.css({&quot;word-wrap&quot;:&quot;break-word&quot;});
+						$fitHere.parent().textfill({
+							maxFontPixels : 80,
+							minFontPixels : 8
+						});
 					});
-					$tiles.children().textfill({ maxFontPixels: 36 });
 					return $tiles;
+				},
+				config : {
+					
 				}
 			},
 
@@ -2820,28 +2931,21 @@
 			 */
 			backgroundColor : {
 				fn : function(plugin, $tiles, config) {
-					$
-							.each(
-									$tiles,
+					var counter = 0;
+					$.each($tiles,
 									function(i, tile) {
+										counter++;
 										var $tile = $(tile);
-										var color, node = $tile.data(&quot;node&quot;);
-										switch (node.getType()) {
-										case CONS.NODE_TYPES.resNode:
-											color = new RGBColor(
-													config.itemStyle.colors[node.index
-															% config.itemStyle.colors.length]);
-											break; // TODO style in Nodeobject
-										case CONS.NODE_TYPES.literal:
-											color = new RGBColor(
-													config.literalStyle.colors[0]);
-											break;
-										case CONS.NODE_TYPES.blankNode:
-											// TODO Blanknode
-											color = new RGBColor(
-													config.literalStyle.colors[0]);
-											break;
+										var colorArray;
+										var node = $tile.data(&quot;node&quot;);
+										if(node.style &amp;&amp; node.style.bgColors) {
+											colorArray = node.style.bgColors;
+										} else if (config.defaultStyles[node.getType()]) {
+											colorArray = config.defaultStyles[node.getType()].bgColors;
+										} else {
+											colorArray = config.defaultStyles[&quot;stdNode&quot;].bgColors;
 										}
+										var color = new RGBColor(colorArray[counter % colorArray.length]);
 										if (color) {
 											$tile.css(&quot;background-color&quot;,
 													&quot;rgba(&quot; + color.r + &quot;, &quot;
@@ -2852,29 +2956,34 @@
 					return $tiles;
 				},
 				config : {
-					itemStyle : {
-						/**
-						 * Colors of items.
-						 * 
-						 * @property defaults.tileFilters.backgroundColor.config.itemStyle.colors
-						 * @type Array
-						 * @default [ &#x27;#e2674a&#x27;, &#x27;#99CC99&#x27;, &#x27;#3399CC&#x27;,
-						 *          &#x27;#33CCCC&#x27;, &#x27;#996699&#x27;, &#x27;#C24747&#x27;, &#x27;#FFCC66&#x27;,
-						 *          &#x27;#669999&#x27;, &#x27;#CC6699&#x27;, &#x27;#339966&#x27;, &#x27;#666699&#x27; ]
-						 */
-						colors : [ &#x27;#e2674a&#x27;, &#x27;#99CC99&#x27;, &#x27;#3399CC&#x27;, &#x27;#33CCCC&#x27;,
-								&#x27;#996699&#x27;, &#x27;#C24747&#x27;, &#x27;#FFCC66&#x27;, &#x27;#669999&#x27;,
-								&#x27;#CC6699&#x27;, &#x27;#339966&#x27;, &#x27;#666699&#x27; ]
-					},
-					literalStyle : {
-						/**
-						 * Color of literal items.
-						 * 
-						 * @property defaults.tileFilters.backgroundColor.config.literalStyle.colors
-						 * @type Array
-						 * @default [ &#x27;#777777&#x27; ]
-						 */
-						colors : [ &#x27;#777777&#x27; ]
+					defaultStyles : {
+						literal : {
+							/**
+							 * Color of literal items.
+							 * 
+							 * @property defaults.tileFilters.backgroundColor.config.defaultStyles.literal.bgColors
+							 * @type Array
+							 * @default [ &#x27;#777777&#x27; ]
+							 */
+							bgColors : [ &#x27;#777777&#x27; ]
+						},
+						blankNode : {
+							bgColors : [ &#x27;#777777&#x27; ]
+						},
+						stdNode : {
+							/**
+							 * Colors of items.
+							 * 
+							 * @property defaults.tileFilters.backgroundColor.config.defaultStyles.stdNode.bgColors
+							 * @type Array
+							 * @default [ &#x27;#e2674a&#x27;, &#x27;#99CC99&#x27;, &#x27;#3399CC&#x27;,
+							 *          &#x27;#33CCCC&#x27;, &#x27;#996699&#x27;, &#x27;#C24747&#x27;, &#x27;#FFCC66&#x27;,
+							 *          &#x27;#669999&#x27;, &#x27;#CC6699&#x27;, &#x27;#339966&#x27;, &#x27;#666699&#x27; ]
+							 */
+							bgColors : [ &#x27;#e2674a&#x27;, &#x27;#99CC99&#x27;, &#x27;#3399CC&#x27;, &#x27;#33CCCC&#x27;,
+										&#x27;#996699&#x27;, &#x27;#C24747&#x27;, &#x27;#FFCC66&#x27;, &#x27;#669999&#x27;,
+										&#x27;#CC6699&#x27;, &#x27;#339966&#x27;, &#x27;#666699&#x27; ]
+						}
 					}
 				}
 			},
@@ -2893,14 +3002,13 @@
 									function(i, tile) {
 										var $tile = $(tile);
 										var node = $tile.data(&quot;node&quot;), image_url = &quot;&quot;;
-
 										switch (node.getType()) {
 										case CONS.NODE_TYPES.resNode:
-											image_url = node.uri;
+											image_url = node.getFComponentOT(&quot;uri&quot;).data;
 											break;
 
 										case CONS.NODE_TYPES.literal:
-											image_url = node.value;
+											image_url = node.getFComponentOT(&quot;label&quot;).data.value;
 											break;
 										}
 										var tmpArray = image_url.replace(&quot;&gt;&quot;,
@@ -2912,7 +3020,6 @@
 										case &quot;svg&quot;:
 										case &quot;jpg&quot;:
 
-											var image;
 											if (image_url) {
 												var $img = $(&#x27;&lt;img src=&quot;&#x27;
 														+ image_url + &#x27;&quot;&gt;&#x27;);
@@ -2953,7 +3060,8 @@
 															$img
 																	.css({
 																		&quot;left&quot; : (tile_width - actual_width) / 2,
-																		&quot;opacity&quot; : 0.5
+																		&quot;opacity&quot; : 0.5,
+																		&quot;position&quot; : &quot;absolute&quot;
 																	});
 														});
 												$tile.prepend($img);
@@ -2979,37 +3087,27 @@
 									function(i, tile) {
 										var $tile = $(tile);
 										var $predicate = $tile
-												.find(&quot;&gt; &quot;
-														+ UTIL
+												.find(UTIL
 																.toSelector(CONS.CSS_CLASSES.tileClasses.predicate));
 										var $typeImage = $tile
-												.find(&quot;&gt; &quot;
-														+ UTIL
+												.find(UTIL
 																.toSelector(CONS.CSS_CLASSES.tileClasses.typeImage));
 										var $predicateLabel = $tile
-												.find(&quot;&gt; &quot;
-														+ UTIL
+												.find(UTIL
 																.toSelector(CONS.CSS_CLASSES.tileClasses.predicateLabel));
 
 										// Show full URI on mouse enter
-										$predicateLabel.on(&quot;mouseenter&quot;,
+										$tile.on(&quot;mouseenter&quot;,
 												function() {
-													$predicate.css(&quot;display&quot;,
-															&quot;inline-block&quot;);
-													$typeImage.css(&quot;display&quot;,
-															&quot;none&quot;);
+													$predicate.css(&quot;visibility&quot;,
+															&quot;visible&quot;);
+													$typeImage.css(&quot;visibility&quot;,
+															&quot;hidden&quot;);
 													$predicateLabel.css(
-															&quot;display&quot;, &quot;none&quot;);
+															&quot;visibility&quot;, &quot;hidden&quot;);
 												});
 
-										// Prevents hanging of shown full URI
-										// (mouseleave triggered before
-										// mouseenter is done)
-										$predicate.on(&quot;mouseleave&quot;, function() {
-											$predicateLabel.stop(true, true);
-										});
-
-										$predicateLabel
+										$tile
 												.on(
 														&quot;mouseleave&quot;,
 														function() {
@@ -3025,16 +3123,16 @@
 																			function() {
 																				$predicate
 																						.css(
-																								&quot;display&quot;,
-																								&quot;none&quot;);
+																								&quot;visibility&quot;,
+																								&quot;hidden&quot;);
 																				$typeImage
 																						.css(
-																								&quot;display&quot;,
-																								&quot;inline-block&quot;);
+																								&quot;visibility&quot;,
+																								&quot;visible&quot;);
 																				$predicateLabel
 																						.css(
-																								&quot;display&quot;,
-																								&quot;inline-block&quot;);
+																								&quot;visibility&quot;,
+																								&quot;visible&quot;);
 																			},
 																			100);
 														});
@@ -3050,30 +3148,42 @@
 			 * @type Object
 			 */
 			browsablity : {
-				fn : function(plugin, $tiles) {
+				fn : function(plugin, $tiles, config) {
 					$.each($tiles, function(i, tile) {
 						var $tile = $(tile);
 						var node = $tile.data(&quot;node&quot;);
-						switch (node.getType()) {
-						case CONS.NODE_TYPES.resNode:
-						case CONS.NODE_TYPES.literal:
-							$tile.click(function() {
-								// TODO rework layerOptions
-								if (plugin.options.layerOptions.usePreviews) {
-									// TODO open Preview
-								} else {
-									plugin
-											.addLayer(plugin
-													.generateLayer($tile));
-								}
+						var nodeType = node.getType();
+						if (nodeType in config.types) {
+							$.each(config.types[nodeType].browsingFns, function(fnLabel, fn) {
+								fn(plugin, node, $tile);
 							});
-							break;
-						case CONS.NODE_TYPES.blankNode:
-							// TODO blanknode
-							break;
+						} else {
+							$.each(config.defaultFns, function(fnLabel, fn) {
+								fn(plugin, node, $tile);
+							});
 						}
 					});
 					return $tiles;
+				},
+				config : {
+					types : {
+						blankNode : {
+									browsingFns : {
+										fn : function(plugin, node, $tile) {
+											$tile.click(function() {
+												//TODO
+											});
+										}
+									}
+						}
+					},
+					defaultFns : {
+						fn : function(plugin, node, $tile) {
+							$tile.click(function() {
+								plugin.addLayer(plugin.generateLayer($tile));
+							});
+						}
+					}
 				}
 			}
 		},
@@ -3313,8 +3423,6 @@
 				 */
 				supportRegExpFilter : true,
 
-				batchSize : 10,
-
 				/**
 				 * Default filter to be added to the filter interface.
 				 * 
@@ -3347,9 +3455,9 @@
 							return parseInt(number, 10);
 						},
 						alphabetical : function($elem) {
-							var labelEn = $elem
+							var label = $elem
 									.find(UTIL
-											.toSelector(CONS.CSS_CLASSES.tileClasses.labelEN)), itemText = labelEn.length ? labelEn
+											.toSelector(CONS.CSS_CLASSES.tileClasses.label)), itemText = label.length ? label
 									: $elem;
 							return itemText.text();
 						}
@@ -3391,9 +3499,6 @@
 		this.options = $.extend(true, {}, defaults, options);
 		this._defaults = defaults;
 
-		this.nodeFilters = this.options.nodeFilters;
-		this.tileFilters = this.options.tileFilters;
-
 		this._name = pluginName;
 
 		this._expandedOverlaysCount = 0;
@@ -3415,7 +3520,7 @@
 		 */
 		_initRdfStore : function() {
 			var that = this, rdfStoreInitDfd = $.Deferred();
-			// console.log(&quot;Init RDFSTORE&quot;);
+			print(&quot;Init RDFSTORE&quot;);
 			if (isUndefinedOrNull(rdfStore)) {
 				rdfStore = new Plugin.RdfStore(that.options.rdfstoreOptions,
 						function(store) {
@@ -3432,6 +3537,42 @@
 		 */
 		_initTemplating : function() {
 			var that = this, templateInitDfd = $.Deferred();
+			
+			// Helper to get first component of given type
+			Handlebars.registerHelper(&#x27;toClass&#x27;, function(str) {
+				return UTIL.toClass(str);
+			});
+			
+			// Helper to get first component of given type
+			Handlebars.registerHelper(&#x27;tScaleWrap&#x27;, function(str) {
+				str = Handlebars.Utils.escapeExpression(str);//escape
+				return new Handlebars.SafeString(&quot;&lt;span class=&#x27;&quot; + CONS.CSS_CLASSES.textScale + &quot;&#x27; style=&#x27;position:static&#x27;&gt;&quot; + str + &quot;&lt;/span&gt;&quot;);//mark as encoded
+			});
+			
+			// Helper to get first component of given type
+			Handlebars.registerHelper(&#x27;firstComp&#x27;, function(context, type, options) {
+				var out = &#x27;&#x27;;
+				if (context.hasComponentType(type)) {
+					out += options.fn(context.components[type+&quot;1&quot;]);
+				}
+				return out;
+			});
+			
+			// Helper to get first component of given type
+			Handlebars.registerHelper(&#x27;hasCompType&#x27;, function(context, type, options) {
+				if (context.hasComponentType(type)) {
+					return options.fn(this);
+				}
+			});
+			
+			// Helper to get each component of given type
+			Handlebars.registerHelper(&#x27;compsEach&#x27;, function(context, type, options) {
+				var out = &#x27;&#x27;;
+				context.forEachComponentType(type, function(component){
+					out += options.fn(component);
+				});
+				return out;
+			});
 
 			// Helper to iterate over keys of given context
 			Handlebars.registerHelper(&#x27;keysEach&#x27;, function(context, options) {
@@ -3455,7 +3596,6 @@
 
 			Handlebars.registerHelper(&#x27;predicateLabelRetriver&#x27;, function(ctx,
 					options) {
-
 				if (ctx &amp;&amp; !ctx.label) {
 					var uriArray = ctx.value.split(&quot;#&quot;);
 					if (uriArray.length === 1) {
@@ -3545,7 +3685,7 @@
 														function() {
 															eventManagers[that.pluginID]
 																	.trigger(
-																			CONS.EVENT_TYPES.storeModified.insert,
+																			CONS.EVENT_TYPES.store.insert,
 																			that);
 														});
 									});
@@ -3554,7 +3694,7 @@
 					rdfStore.insertData(that.options.data,
 							that.options.dataFormat, function() {
 								eventManagers[that.pluginID].trigger(
-										CONS.EVENT_TYPES.storeModified.insert,
+										CONS.EVENT_TYPES.store.insert,
 										that);
 							});
 				}
@@ -3577,9 +3717,9 @@
 		_ajaxLoadData : function(dataURL, dataFormat, callback) {
 			var that = this;
 			eventManagers[that.pluginID].trigger(
-					CONS.EVENT_TYPES.loading.loadingStart, that);
+					CONS.EVENT_TYPES.loading.start, that);
 
-			// console.log(&quot;_ajaxLoadData&quot;);
+			// print(&quot;_ajaxLoadData&quot;);
 			$.ajax({
 				url : dataURL,
 				dataType : &quot;text&quot;,
@@ -3589,7 +3729,7 @@
 			}).fail(
 					function() {
 						eventManagers[that.pluginID].trigger(
-								CONS.EVENT_TYPES.loading.loadingDone, that);
+								CONS.EVENT_TYPES.loading.done, that);
 						alert(CONS.MESSAGES.error.ajax);
 					});
 		},
@@ -3608,10 +3748,10 @@
 
 			// Add insertion listener
 			eventManagers[this.pluginID].addEventHandler(
-					CONS.EVENT_TYPES.storeModified.insert, function(ev) {
+					CONS.EVENT_TYPES.store.insert, function(ev) {
 						$.each(that._views, function(key, view) {
 							view.update();
-							console.log(&quot;view &quot; + key + &quot; is updating&quot;);
+							print(&quot;view &quot; + key + &quot; is updating&quot;);
 						});
 					});
 
@@ -3649,10 +3789,6 @@
 																.height()
 														+ &quot;px&quot;);
 								// &lt;!--- overlay modification ----&gt;
-
-								// &lt;---- preview modification ----&gt;
-								// TODO Preview Mod
-								// &lt;!--- preview modification ----&gt;
 							}, $window);
 
 			if (that.options.generateTimeline) {
@@ -3738,7 +3874,8 @@
 			var node = $tile.data(&quot;node&quot;), that = this, idAddition = Math
 					.random().toString(36).substr(2, 9);
 			var overlay = templates.overlayWrapper(appendCssClasses({
-				&quot;id&quot; : node.id + idAddition,
+				&quot;id&quot; : node.id + idAddition
+				,
 				&quot;nodeFilters&quot; : that.options.nodeFilters,
 				&quot;tileFilters&quot; : that.options.tileFilters
 			}));
@@ -3798,9 +3935,13 @@
 			} else if (node.getType() === CONS.NODE_TYPES.literal) {
 				newLayer = new Plugin.DetailLayer($overlay, newLayerOptions,
 						that, $tile);
+			} else {
+				newLayer = new Plugin.DetailLayer($overlay, newLayerOptions,
+						that, $tile);
 			}
 			return newLayer;
 		},
+
 		/**
 		 * Remove given Layer object from the plugin
 		 * 
@@ -3840,7 +3981,7 @@
 												function() {
 													eventManagers[that.pluginID]
 															.trigger(
-																	CONS.EVENT_TYPES.storeModified.insert,
+																	CONS.EVENT_TYPES.store.insert,
 																	that);
 												});
 							});
@@ -3938,11 +4079,20 @@
 		clearStore : function() {
 			var that = this;
 			rdfStore.executeQuery(&quot;CLEAR ALL&quot;, function() {
-				console.log(&quot;store cleared&quot;);
+				print(&quot;store cleared&quot;);
 				$.each(that._views, function(i, view) {
 					view.removeAllItems();
 				});
 			});
+		},
+		/**
+		 * 
+		 */
+		addTileFilter : function() {
+			// TODO
+		},
+		addNodeFilter : function() {
+			// TODO
 		},
 		/**
 		 * Runs query on local store.
