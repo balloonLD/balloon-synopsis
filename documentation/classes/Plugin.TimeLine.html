@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Plugin.RemoteDataLoader - bSynopsis</title>
+    <title>Plugin.TimeLine - bSynopsis</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -130,7 +130,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>Plugin.RemoteDataLoader Class</h1>
+                        <h1>Plugin.TimeLine Class</h1>
 <div class="box meta">
     
 
@@ -138,7 +138,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/js_plugin_bSynopsis.js.html#l2535"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2535</code></a>
+            Defined in: <a href="../files/js_plugin_bSynopsis.js.html#l1459"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1459</code></a>
         </div>
     
 
@@ -154,26 +154,141 @@
 
 
 <div class="box intro">
-    <p>Loader to load remote data from services at the given urls and add them to
-the view</p>
+    <p>Timeline</p>
 
 </div>
 
 
     <div class="constructor">
         <h2>Constructor</h2>
-        <div id="method_Plugin.RemoteDataLoader" class="method item">
-    <h3 class="name"><code>Plugin.RemoteDataLoader</code></h3>
+        <div id="method_Plugin.TimeLine" class="method item">
+    <h3 class="name"><code>Plugin.TimeLine</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l1459"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1459</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+    </div>
+
+
+<div id="classdocs" class="tabview">
+    <ul class="api-class-tabs">
+        <li class="api-class-tab index"><a href="#index">Index</a></li>
+
+        
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+        
+        
+        
+        
+    </ul>
+
+    <div>
+        <div id="index" class="api-class-tabpanel index">
+            <h2 class="off-left">Item Index</h2>
+
+            
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods">
+                        
+                            <li class="index-item method">
+                                <a href="#method_addLayer">addLayer</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_addNode">addNode</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_close">close</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_open#">open#</a>
+
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
+
+            
+
+            
+
+            
+        </div>
+
+        
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+                
+                    <div id="method_addLayer" class="method item">
+    <h3 class="name"><code>addLayer</code></h3>
 
     
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>!~YUIDOC_LINE~!</code>
-                    
-                </li>
             
                 <li class="arg">
                     
@@ -210,7 +325,7 @@ the view</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l2535"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2535</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l1508"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1508</code></a>
         
         </p>
 
@@ -221,7 +336,8 @@ the view</p>
     </div>
 
     <div class="description">
-        
+        <p>Add layer to timeline via timeLineNode generation.</p>
+
     </div>
 
     
@@ -233,29 +349,13 @@ the view</p>
                 <li class="param">
                     
                         <code class="param-name">!~YUIDOC_LINE~!</code>
-                        <span class="type">Array</span>
+                        <span class="type"><a href="../classes/Plugin.Layer.html" class="crosslink">Plugin.Layer</a></span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>remoteBackends Array of URLs of SPARQL services to query</p>
-
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">!~YUIDOC_LINE~!</code>
-                        <span class="type">Integer</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>pluginID ID of parten plugin</p>
+                        <p>layer Layer object to be added to timeline.</p>
 
                     </div>
 
@@ -271,32 +371,207 @@ the view</p>
     
 </div>
 
+                
+                    <div id="method_addNode" class="method item">
+    <h3 class="name"><code>addNode</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>!~YUIDOC_LINE~!</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l1519"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1519</code></a>
+        
+        </p>
+
+
+        
+
+        
     </div>
 
+    <div class="description">
+        <p>Add TimeLineNode to timeline.</p>
 
-<div id="classdocs" class="tabview">
-    <ul class="api-class-tabs">
-        <li class="api-class-tab index"><a href="#index">Index</a></li>
+    </div>
 
-        
-        
-        
-        
-    </ul>
+    
+        <div class="params">
+            <h4>Parameters:</h4>
 
-    <div>
-        <div id="index" class="api-class-tabpanel index">
-            <h2 class="off-left">Item Index</h2>
-
+            <ul class="params-list">
             
+                <li class="param">
+                    
+                        <code class="param-name">!~YUIDOC_LINE~!</code>
+                        <span class="type"><a href="../classes/Plugin.TimeLine.Node.html" class="crosslink">Plugin.TimeLine.Node</a></span>
+                    
 
-            
+                    
 
-            
+                    <div class="param-description">
+                        <p>timeLineNode TimeLineNode added to timeline.</p>
 
+                    </div>
+
+                    
+                </li>
             
+            </ul>
         </div>
+    
 
+    
+
+    
+</div>
+
+                
+                    <div id="method_close" class="method item">
+    <h3 class="name"><code>close</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l1495"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1495</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Close timeline overlay.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_open#" class="method item">
+    <h3 class="name"><code>open#</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l1473"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1473</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Open timeline overlay.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+            </div>
         
 
         

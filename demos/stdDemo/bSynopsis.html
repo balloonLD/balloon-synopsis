@@ -3,6 +3,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
         <title>bSynopsis</title>
+        <script src="vkthread.js"></script>
         <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
         <!-- bower:js -->
         <script src="../../bower_components/modernizr/modernizr.js"></script>
@@ -12,8 +13,6 @@
         <script src="../../bower_components/isotope/index.js"></script>
         <script src="../../bower_components/rdfstore-js/index.js"></script>
         <script src="../../bower_components/rgbcolor/index.js"></script>
-        <script src="../../bower_components/multiSelect/index.js"></script>
-        <script src="../../bower_components/deepCopy/index.js"></script>
         <!-- endbower -->
         <script type="text/javascript" src="../../build/bSynopsis.js"></script>
         <!-- bower:css -->
@@ -24,6 +23,7 @@
     </head>
     <body>
         <div class="bSynopsis"></div>
+        <br>
         <form>
             <label for="inputbox">DataURL:</label> <input type="text"
                                                           name="inputbox" value="data/turtle.ttl">
@@ -38,10 +38,10 @@
         <form>
             <label for="serviceinputbox">Remote data service:</label> <input
                 type="text" name="serviceinputbox"
-                value="http://zaire.dimis.fim.uni-passau.de:8080/bigdata/sparql">
+                value="http://dbpedia.org/sparql">
             <p>
                 <label for="queryinputbox">Remote data query:</label>
-                <textarea name="queryinputbox">SELECT ?subject ?predicate ?object { BIND( rdfs:label as ?predicate) ?subject ?predicate ?object. ?subject a <http://dbpedia.org/ontology/Place> . ?subject <http://dbpedia.org/property/rulingParty> ?x } LIMIT 500
+                <textarea name="queryinputbox">SELECT ?subject ?predicate ?object { VALUES ?subject { <http://dbpedia.org/resource/Berlin> <http://dbpedia.org/resource/Passau> <http://dbpedia.org/resource/Munich> <http://dbpedia.org/resource/Frankfurt> } VALUES ?predicate { rdfs:label } ?subject ?predicate ?object. FILTER (lang(?object) = 'en') } LIMIT 150
                             </textarea>
                             <p>
                                 <input type="button" name="insertRemote" value="Insert remote data"
@@ -66,23 +66,23 @@
 
                                 $(function() {
                                     $('.bSynopsis').bSynopsis({
-                                        nodeFilters: {
-                                            blacklistURI: {
-                                                config: new Array("/passau/i")
-                                            },
-                                            actor: {
-                                                fn: function(plugin, nodes, config) {
-                                                    $.each(nodes, function(i, node) {
-                                                        if (node.hasComponentType("label") && node.components["label0"] == "TestPerson") {
-                                                            node.useTemplateIdentifier = "actor";
-                                                        }
-                                                    });
-                                                    return nodes;
-                                                },
-                                                template: "<div>I'm an actor!</div>"
-                                            }
-                                        },
                                         layerOptions : {
+                                            nodeFilters: {
+                                                blacklistURI: {
+                                                    config: new Array("/passau/i")
+                                                },
+                                                actor: {
+                                                    fn: function(nodes, config) {
+                                                        $.each(nodes, function(i, node) {
+                                                            if (node.hasComponentType("label") && node.components["label0"] == "TestPerson") {
+                                                                node.useTemplateIdentifier = "actor";
+                                                            }
+                                                        });
+                                                        return nodes;
+                                                    },
+                                                    template: "<div>I'm an actor!</div>"
+                                                }
+                                            },
                                             remoteOptions : {
                                                 remoteLimit: 1000
                                             }

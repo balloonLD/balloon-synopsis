@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Plugin.RemoteDataLoader - bSynopsis</title>
+    <title>Plugin.LiteralNode - bSynopsis</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -130,7 +130,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>Plugin.RemoteDataLoader Class</h1>
+                        <h1>Plugin.LiteralNode Class</h1>
 <div class="box meta">
     
 
@@ -138,7 +138,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/js_plugin_bSynopsis.js.html#l2535"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2535</code></a>
+            Defined in: <a href="../files/js_plugin_bSynopsis.js.html#l1348"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1348</code></a>
         </div>
     
 
@@ -154,26 +154,19 @@
 
 
 <div class="box intro">
-    <p>Loader to load remote data from services at the given urls and add them to
-the view</p>
+    <p>Extension of base node to represent an literal element of the rdf graph.</p>
 
 </div>
 
 
     <div class="constructor">
         <h2>Constructor</h2>
-        <div id="method_Plugin.RemoteDataLoader" class="method item">
-    <h3 class="name"><code>Plugin.RemoteDataLoader</code></h3>
+        <div id="method_Plugin.LiteralNode" class="method item">
+    <h3 class="name"><code>Plugin.LiteralNode</code></h3>
 
     
         <div class="args">
             <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>!~YUIDOC_LINE~!</code>
-                    
-                </li>
             
                 <li class="arg">
                     
@@ -210,7 +203,7 @@ the view</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l2535"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2535</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l1348"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1348</code></a>
         
         </p>
 
@@ -233,29 +226,13 @@ the view</p>
                 <li class="param">
                     
                         <code class="param-name">!~YUIDOC_LINE~!</code>
-                        <span class="type">Array</span>
+                        <span class="type">Object</span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>remoteBackends Array of URLs of SPARQL services to query</p>
-
-                    </div>
-
-                    
-                </li>
-            
-                <li class="param">
-                    
-                        <code class="param-name">!~YUIDOC_LINE~!</code>
-                        <span class="type">Integer</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>pluginID ID of parten plugin</p>
+                        <p>data Data of a single resource of a select query.</p>
 
                     </div>
 
@@ -279,6 +256,8 @@ the view</p>
         <li class="api-class-tab index"><a href="#index">Index</a></li>
 
         
+            <li class="api-class-tab methods"><a href="#methods">Methods</a></li>
+        
         
         
         
@@ -289,6 +268,21 @@ the view</p>
             <h2 class="off-left">Item Index</h2>
 
             
+                <div class="index-section methods">
+                    <h3>Methods</h3>
+
+                    <ul class="index-list methods">
+                        
+                            <li class="index-item method">
+                                <a href="#method_generateTile">generateTile</a>
+
+                                
+                                
+                            </li>
+                        
+                    </ul>
+                </div>
+            
 
             
 
@@ -297,6 +291,83 @@ the view</p>
             
         </div>
 
+        
+            <div id="methods" class="api-class-tabpanel">
+                <h2 class="off-left">Methods</h2>
+
+                
+                    <div id="method_generateTile" class="method item">
+    <h3 class="name"><code>generateTile</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+        <span class="returns-inline">
+            <span class="type">JQuery</span>
+        </span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l1378"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1378</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Generate tile out of node and return it.</p>
+
+    </div>
+
+    
+
+    
+        <div class="returns">
+            <h4>Returns:</h4>
+
+            <div class="returns-description">
+                
+                    
+                        <span class="type">JQuery</span>:
+                    
+                
+            </div>
+        </div>
+    
+
+    
+</div>
+
+                
+            </div>
         
 
         

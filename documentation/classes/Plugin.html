@@ -51,17 +51,29 @@
             
                 <li><a href="../classes/Plugin.html">Plugin</a></li>
             
-                <li><a href="../classes/Plugin.DetailLayer.html">Plugin.DetailLayer</a></li>
+                <li><a href="../classes/Plugin.BlankNode.html">Plugin.BlankNode</a></li>
+            
+                <li><a href="../classes/Plugin.ComponentFactory.html">Plugin.ComponentFactory</a></li>
             
                 <li><a href="../classes/Plugin.EventManager.html">Plugin.EventManager</a></li>
             
-                <li><a href="../classes/Plugin.InitLayer.html">Plugin.InitLayer</a></li>
-            
                 <li><a href="../classes/Plugin.Layer.html">Plugin.Layer</a></li>
+            
+                <li><a href="../classes/Plugin.Layers.Blank.html">Plugin.Layers.Blank</a></li>
+            
+                <li><a href="../classes/Plugin.Layers.Inlay.html">Plugin.Layers.Inlay</a></li>
+            
+                <li><a href="../classes/Plugin.Layers.Literal.html">Plugin.Layers.Literal</a></li>
+            
+                <li><a href="../classes/Plugin.Layers.Res.html">Plugin.Layers.Res</a></li>
             
                 <li><a href="../classes/Plugin.LayoutEngine.html">Plugin.LayoutEngine</a></li>
             
+                <li><a href="../classes/Plugin.LiteralNode.html">Plugin.LiteralNode</a></li>
+            
                 <li><a href="../classes/Plugin.Node.html">Plugin.Node</a></li>
+            
+                <li><a href="../classes/Plugin.NodeFactory.html">Plugin.NodeFactory</a></li>
             
                 <li><a href="../classes/Plugin.RdfStore.html">Plugin.RdfStore</a></li>
             
@@ -70,6 +82,10 @@
                 <li><a href="../classes/Plugin.ResNode.html">Plugin.ResNode</a></li>
             
                 <li><a href="../classes/Plugin.TemplatesLoader.html">Plugin.TemplatesLoader</a></li>
+            
+                <li><a href="../classes/Plugin.TimeLine.html">Plugin.TimeLine</a></li>
+            
+                <li><a href="../classes/Plugin.TimeLine.Node.html">Plugin.TimeLine.Node</a></li>
             
                 <li><a href="../classes/RemoteEngine.html">RemoteEngine</a></li>
             
@@ -122,7 +138,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/js_plugin_bSynopsis.js.html#l2404"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2404</code></a>
+            Defined in: <a href="../files/js_plugin_bSynopsis.js.html#l2646"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2646</code></a>
         </div>
     
 
@@ -193,7 +209,7 @@
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l2404"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2404</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l2646"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2646</code></a>
         
         </p>
 
@@ -282,6 +298,13 @@
                     <ul class="index-list methods">
                         
                             <li class="index-item method private">
+                                <a href="#method_;">;</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method private">
                                 <a href="#method__ajaxLoadData">_ajaxLoadData</a>
 
                                 
@@ -345,13 +368,6 @@
                             </li>
                         
                             <li class="index-item method">
-                                <a href="#method_generateLayer">generateLayer</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method">
                                 <a href="#method_init">init</a>
 
                                 
@@ -395,6 +411,13 @@
                         
                             <li class="index-item method">
                                 <a href="#method_runQuery">runQuery</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method">
+                                <a href="#method_updateLayers">updateLayers</a>
 
                                 
                                 
@@ -502,6 +525,27 @@
                             </li>
                         
                             <li class="index-item property">
+                                <a href="#property_defaults.layerOptions.nodeFilters.blacklistPredURI">defaults.layerOptions.nodeFilters.blacklistPredURI</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_defaults.layerOptions.nodeFilters.blacklistURI">defaults.layerOptions.nodeFilters.blacklistURI</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_defaults.layerOptions.nodeFilters.multiResNode">defaults.layerOptions.nodeFilters.multiResNode</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
                                 <a href="#property_defaults.layerOptions.previewAsOverlay">defaults.layerOptions.previewAsOverlay</a>
 
                                 
@@ -516,14 +560,14 @@
                             </li>
                         
                             <li class="index-item property">
-                                <a href="#property_defaults.layerOptions.remoteOptions.defaultRemoteQuery">defaults.layerOptions.remoteOptions.defaultRemoteQuery</a>
+                                <a href="#property_defaults.layerOptions.remoteOptions.defaultInitRemoteQuery">defaults.layerOptions.remoteOptions.defaultInitRemoteQuery</a>
 
                                 
                                 
                             </li>
                         
                             <li class="index-item property">
-                                <a href="#property_defaults.layerOptions.remoteOptions.remoteBackend">defaults.layerOptions.remoteOptions.remoteBackend</a>
+                                <a href="#property_defaults.layerOptions.remoteOptions.remoteBackends">defaults.layerOptions.remoteOptions.remoteBackends</a>
 
                                 
                                 
@@ -558,6 +602,111 @@
                             </li>
                         
                             <li class="index-item property">
+                                <a href="#property_defaults.layerOptions.tileFilters">defaults.layerOptions.tileFilters</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_defaults.layerOptions.tileFilters.backgroundColor">defaults.layerOptions.tileFilters.backgroundColor</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_defaults.layerOptions.tileFilters.backgroundColor">defaults.layerOptions.tileFilters.backgroundColor</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_defaults.layerOptions.tileFilters.backgroundColor.config.defaultStyles.literal.bgColors">defaults.layerOptions.tileFilters.backgroundColor.config.defaultStyles.literal.bgColors</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_defaults.layerOptions.tileFilters.backgroundColor.config.defaultStyles.stdNode.bgColors">defaults.layerOptions.tileFilters.backgroundColor.config.defaultStyles.stdNode.bgColors</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_defaults.layerOptions.tileFilters.backgroundImg">defaults.layerOptions.tileFilters.backgroundImg</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_defaults.layerOptions.tileFilters.browsablity">defaults.layerOptions.tileFilters.browsablity</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_defaults.layerOptions.tileFilters.predicateLabel">defaults.layerOptions.tileFilters.predicateLabel</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_defaults.layerOptions.tileFilters.scale">defaults.layerOptions.tileFilters.scale</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_defaults.layerOptions.tileFilters.scale.config.defaultStyles.literal">defaults.layerOptions.tileFilters.scale.config.defaultStyles.literal</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_defaults.layerOptions.tileFilters.scale.config.defaultStyles.literal.height">defaults.layerOptions.tileFilters.scale.config.defaultStyles.literal.height</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_defaults.layerOptions.tileFilters.scale.config.defaultStyles.literal.width">defaults.layerOptions.tileFilters.scale.config.defaultStyles.literal.width</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_defaults.layerOptions.tileFilters.scale.config.defaultStyles.stdNode">defaults.layerOptions.tileFilters.scale.config.defaultStyles.stdNode</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_defaults.layerOptions.tileFilters.scale.config.defaultStyles.stdNode.width">defaults.layerOptions.tileFilters.scale.config.defaultStyles.stdNode.width</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
+                                <a href="#property_defaults.layerOptions.tileFilters.scale.config.defaultStyles.stdNode.width">defaults.layerOptions.tileFilters.scale.config.defaultStyles.stdNode.width</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item property">
                                 <a href="#property_defaults.layerOptions.viewOptions">defaults.layerOptions.viewOptions</a>
 
                                 
@@ -580,27 +729,6 @@
                         
                             <li class="index-item property">
                                 <a href="#property_defaults.layerOptions.viewOptions.supportRegExpFilter">defaults.layerOptions.viewOptions.supportRegExpFilter</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property">
-                                <a href="#property_defaults.nodeFilters.blacklistPredURI">defaults.nodeFilters.blacklistPredURI</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property">
-                                <a href="#property_defaults.nodeFilters.blacklistURI">defaults.nodeFilters.blacklistURI</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property">
-                                <a href="#property_defaults.nodeFilters.multiResNode">defaults.nodeFilters.multiResNode</a>
 
                                 
                                 
@@ -634,111 +762,6 @@
                                 
                             </li>
                         
-                            <li class="index-item property">
-                                <a href="#property_defaults.tileFilters">defaults.tileFilters</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property">
-                                <a href="#property_defaults.tileFilters.backgroundColor">defaults.tileFilters.backgroundColor</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property">
-                                <a href="#property_defaults.tileFilters.backgroundColor">defaults.tileFilters.backgroundColor</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property">
-                                <a href="#property_defaults.tileFilters.backgroundColor.config.defaultStyles.literal.bgColors">defaults.tileFilters.backgroundColor.config.defaultStyles.literal.bgColors</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property">
-                                <a href="#property_defaults.tileFilters.backgroundColor.config.defaultStyles.stdNode.bgColors">defaults.tileFilters.backgroundColor.config.defaultStyles.stdNode.bgColors</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property">
-                                <a href="#property_defaults.tileFilters.backgroundImg">defaults.tileFilters.backgroundImg</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property">
-                                <a href="#property_defaults.tileFilters.browsablity">defaults.tileFilters.browsablity</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property">
-                                <a href="#property_defaults.tileFilters.predicateLabel">defaults.tileFilters.predicateLabel</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property">
-                                <a href="#property_defaults.tileFilters.scale">defaults.tileFilters.scale</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property">
-                                <a href="#property_defaults.tileFilters.scale.config.defaultStyles.literal">defaults.tileFilters.scale.config.defaultStyles.literal</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property">
-                                <a href="#property_defaults.tileFilters.scale.config.defaultStyles.literal.height">defaults.tileFilters.scale.config.defaultStyles.literal.height</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property">
-                                <a href="#property_defaults.tileFilters.scale.config.defaultStyles.literal.width">defaults.tileFilters.scale.config.defaultStyles.literal.width</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property">
-                                <a href="#property_defaults.tileFilters.scale.config.defaultStyles.stdNode">defaults.tileFilters.scale.config.defaultStyles.stdNode</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property">
-                                <a href="#property_defaults.tileFilters.scale.config.defaultStyles.stdNode.width">defaults.tileFilters.scale.config.defaultStyles.stdNode.width</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item property">
-                                <a href="#property_defaults.tileFilters.scale.config.defaultStyles.stdNode.width">defaults.tileFilters.scale.config.defaultStyles.stdNode.width</a>
-
-                                
-                                
-                            </li>
-                        
                     </ul>
                 </div>
             
@@ -751,6 +774,63 @@
         
             <div id="methods" class="api-class-tabpanel">
                 <h2 class="off-left">Methods</h2>
+
+                
+                    <div id="method_;" class="method item private">
+    <h3 class="name"><code>;</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+        <span class="flag private">private</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l3717"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3717</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Initializes the remote data loader</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
 
                 
                     <div id="method__ajaxLoadData" class="method item private">
@@ -813,7 +893,7 @@
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3584"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3584</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3888"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3888</code></a>
         
         </p>
 
@@ -942,7 +1022,7 @@
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3543"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3543</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3860"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3860</code></a>
         
         </p>
 
@@ -953,8 +1033,8 @@
     </div>
 
     <div class="description">
-        <p>Check whether the plugin is initialized with insertion options and
-call insertion methods if needed.</p>
+        <p>Check whether the plugin is initialized with insertion options and call
+insertion methods if needed.</p>
 
     </div>
 
@@ -1014,7 +1094,7 @@ call insertion methods if needed.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3497"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3497</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3820"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3820</code></a>
         
         </p>
 
@@ -1071,7 +1151,7 @@ call insertion methods if needed.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3395"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3395</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3701"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3701</code></a>
         
         </p>
 
@@ -1128,7 +1208,7 @@ call insertion methods if needed.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3412"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3412</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3737"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3737</code></a>
         
         </p>
 
@@ -1199,7 +1279,7 @@ call insertion methods if needed.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3352"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3352</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3661"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3661</code></a>
         
         </p>
 
@@ -1301,7 +1381,7 @@ widget context.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3735"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3735</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l4006"><code>js&#x2F;plugin&#x2F;bSynopsis.js:4006</code></a>
         
         </p>
 
@@ -1380,7 +1460,7 @@ widget context.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3954"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3954</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l4161"><code>js&#x2F;plugin&#x2F;bSynopsis.js:4161</code></a>
         
         </p>
 
@@ -1435,7 +1515,7 @@ widget context.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3993"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3993</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l4190"><code>js&#x2F;plugin&#x2F;bSynopsis.js:4190</code></a>
         
         </p>
 
@@ -1450,95 +1530,6 @@ widget context.</p>
 
     </div>
 
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="method_generateLayer" class="method item">
-    <h3 class="name"><code>generateLayer</code></h3>
-
-    
-        <div class="args">
-            <span class="paren">(</span><ul class="args-list inline commas">
-            
-                <li class="arg">
-                    
-                        <code>!~YUIDOC_LINE~!</code>
-                    
-                </li>
-            
-            </ul><span class="paren">)</span>
-        </div>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_plugin_bSynopsis.js.html#l3745"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3745</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Generates Layer using given tile(with node data).</p>
-
-    </div>
-
-    
-        <div class="params">
-            <h4>Parameters:</h4>
-
-            <ul class="params-list">
-            
-                <li class="param">
-                    
-                        <code class="param-name">!~YUIDOC_LINE~!</code>
-                        <span class="type">JQuery</span>
-                    
-
-                    
-
-                    <div class="param-description">
-                        <p>$tile Tile which holds node data</p>
-
-                    </div>
-
-                    
-                </li>
-            
-            </ul>
-        </div>
     
 
     
@@ -1579,7 +1570,7 @@ widget context.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3618"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3618</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3919"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3919</code></a>
         
         </p>
 
@@ -1650,7 +1641,7 @@ widget context.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3842"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3842</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l4064"><code>js&#x2F;plugin&#x2F;bSynopsis.js:4064</code></a>
         
         </p>
 
@@ -1761,7 +1752,7 @@ widget context.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3887"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3887</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l4097"><code>js&#x2F;plugin&#x2F;bSynopsis.js:4097</code></a>
         
         </p>
 
@@ -1872,7 +1863,7 @@ widget context.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3869"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3869</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l4081"><code>js&#x2F;plugin&#x2F;bSynopsis.js:4081</code></a>
         
         </p>
 
@@ -1984,7 +1975,7 @@ restrictions when using this method.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3931"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3931</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l4141"><code>js&#x2F;plugin&#x2F;bSynopsis.js:4141</code></a>
         
         </p>
 
@@ -1995,8 +1986,8 @@ restrictions when using this method.</p>
     </div>
 
     <div class="description">
-        <p>Insert rdf-data of given url SPARQL service in the store. Use the
-given query. Is no query given use the default query.</p>
+        <p>Insert rdf-data of given url SPARQL service in the store. Use the given
+query. Is no query given use the default query.</p>
 
     </div>
 
@@ -2090,7 +2081,7 @@ given query. Is no query given use the default query.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3825"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3825</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l4043"><code>js&#x2F;plugin&#x2F;bSynopsis.js:4043</code></a>
         
         </p>
 
@@ -2183,7 +2174,7 @@ given query. Is no query given use the default query.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3977"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3977</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l4175"><code>js&#x2F;plugin&#x2F;bSynopsis.js:4175</code></a>
         
         </p>
 
@@ -2242,6 +2233,61 @@ given query. Is no query given use the default query.</p>
 </div>
 
                 
+                    <div id="method_updateLayers" class="method item">
+    <h3 class="name"><code>updateLayers</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l4054"><code>js&#x2F;plugin&#x2F;bSynopsis.js:4054</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Update all layers of the plugin</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
             </div>
         
 
@@ -2273,7 +2319,7 @@ given query. Is no query given use the default query.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l2416"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2416</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l2658"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2658</code></a>
         
         </p>
 
@@ -2318,7 +2364,7 @@ given query. Is no query given use the default query.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3070"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3070</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l2665"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2665</code></a>
         
         </p>
 
@@ -2328,8 +2374,8 @@ given query. Is no query given use the default query.</p>
     </div>
 
     <div class="description">
-        <p>Raw RDF data given on plugin startup. This data will be loaded into
-the store.</p>
+        <p>Raw RDF data given on plugin startup. This data will be loaded into the
+store.</p>
 
     </div>
 
@@ -2366,7 +2412,7 @@ the store.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3088"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3088</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l2683"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2683</code></a>
         
         </p>
 
@@ -2413,7 +2459,7 @@ the store.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3079"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3079</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l2674"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2674</code></a>
         
         </p>
 
@@ -2423,8 +2469,8 @@ the store.</p>
     </div>
 
     <div class="description">
-        <p>Path to file with Raw RDF data given on plugin startup. This file
-will be parsed and loaded into the store.</p>
+        <p>Path to file with Raw RDF data given on plugin startup. This file will be
+parsed and loaded into the store.</p>
 
     </div>
 
@@ -2461,7 +2507,7 @@ will be parsed and loaded into the store.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l2423"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2423</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l2763"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2763</code></a>
         
         </p>
 
@@ -2508,7 +2554,7 @@ to be used. New filters must have a unique identifier.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3122"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3122</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l2716"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2716</code></a>
         
         </p>
 
@@ -2555,7 +2601,7 @@ to be used. New filters must have a unique identifier.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3130"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3130</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l2724"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2724</code></a>
         
         </p>
 
@@ -2606,7 +2652,7 @@ to be used. New filters must have a unique identifier.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3162"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3162</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l2756"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2756</code></a>
         
         </p>
 
@@ -2651,7 +2697,7 @@ to be used. New filters must have a unique identifier.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3194"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3194</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3509"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3509</code></a>
         
         </p>
 
@@ -2661,8 +2707,7 @@ to be used. New filters must have a unique identifier.</p>
     </div>
 
     <div class="description">
-        <p>Flag to indicate whether the filter interface should be
-generated.</p>
+        <p>Flag to indicate whether the filter interface should be generated.</p>
 
     </div>
 
@@ -2699,7 +2744,7 @@ generated.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3177"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3177</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3492"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3492</code></a>
         
         </p>
 
@@ -2746,7 +2791,7 @@ generated.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3169"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3169</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3484"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3484</code></a>
         
         </p>
 
@@ -2793,7 +2838,7 @@ generated.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3204"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3204</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3518"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3518</code></a>
         
         </p>
 
@@ -2838,7 +2883,7 @@ generated.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3211"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3211</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3525"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3525</code></a>
         
         </p>
 
@@ -2848,14 +2893,151 @@ generated.</p>
     </div>
 
     <div class="description">
-        <p>Batch size of items which can be loaded simultaniosly in the
-view. Filters only work on single batches. The batchSize
-should be chosen big enough if Nodefilters are to be used.</p>
+        <p>Batch size of items which can be loaded simultaniosly in the view.
+Filters only work on single batches. The batchSize should be chosen
+big enough if Nodefilters are to be used.</p>
 
     </div>
 
     
-        <p><strong>Default:</strong> 25</p>
+        <p><strong>Default:</strong> 500</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_defaults.layerOptions.nodeFilters.blacklistPredURI" class="property item">
+    <h3 class="name"><code>defaults.layerOptions.nodeFilters.blacklistPredURI</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l2772"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2772</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Filters blacklisted resources defined by predicate URIs in config
+options. Only RegEx allowed.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_defaults.layerOptions.nodeFilters.blacklistURI" class="property item">
+    <h3 class="name"><code>defaults.layerOptions.nodeFilters.blacklistURI</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l2799"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2799</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Filters blacklisted resources defined by URIs in config options. Only
+RegEx allowed.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_defaults.layerOptions.nodeFilters.multiResNode" class="property item">
+    <h3 class="name"><code>defaults.layerOptions.nodeFilters.multiResNode</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l2824"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2824</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Merges resNodes describing the same resource (subject or object).</p>
+
+    </div>
+
     
 
     
@@ -2887,7 +3069,7 @@ should be chosen big enough if Nodefilters are to be used.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3185"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3185</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3500"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3500</code></a>
         
         </p>
 
@@ -2935,7 +3117,7 @@ options are</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3223"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3223</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3537"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3537</code></a>
         
         </p>
 
@@ -2957,8 +3139,8 @@ options are</p>
 </div>
 
                 
-                    <div id="property_defaults.layerOptions.remoteOptions.defaultRemoteQuery" class="property item">
-    <h3 class="name"><code>defaults.layerOptions.remoteOptions.defaultRemoteQuery</code></h3>
+                    <div id="property_defaults.layerOptions.remoteOptions.defaultInitRemoteQuery" class="property item">
+    <h3 class="name"><code>defaults.layerOptions.remoteOptions.defaultInitRemoteQuery</code></h3>
     <span class="type">String</span>
 
     
@@ -2980,7 +3162,7 @@ options are</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3230"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3230</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3544"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3544</code></a>
         
         </p>
 
@@ -2990,18 +3172,19 @@ options are</p>
     </div>
 
     <div class="description">
-        <p>Default remote load query. Used on insertRemoteData() if no
-query parameter is given.</p>
+        <p>Default remote load query. Used on insertRemoteData() if no query
+parameter is given.</p>
 
     </div>
 
     
-        <p><strong>Default:</strong> &quot;SELECT ?subject ?predicate ?object { BIND(
-         rdfs:label as ?predicate) ?subject ?predicate
-         ?object. ?subject a
-         &lt;http://dbpedia.org/ontology/Place&gt; . ?subject
-         &lt;http://dbpedia.org/property/rulingParty&gt; ?x } LIMIT
-         500&quot;</p>
+        <p><strong>Default:</strong> &quot;SELECT ?subject ?predicate ?object { VALUES ?subject {
+         &lt;http://dbpedia.org/resource/Berlin&gt;
+         &lt;http://dbpedia.org/resource/Passau&gt;
+         &lt;http://dbpedia.org/resource/Munich&gt;
+         &lt;http://dbpedia.org/resource/Frankfurt&gt; } VALUES ?predicate {
+         rdfs:label } ?subject ?predicate ?object. FILTER
+         (lang(?object) = &#x27;en&#x27;) } LIMIT 150&quot;</p>
     
 
     
@@ -3010,8 +3193,8 @@ query parameter is given.</p>
 </div>
 
                 
-                    <div id="property_defaults.layerOptions.remoteOptions.remoteBackend" class="property item">
-    <h3 class="name"><code>defaults.layerOptions.remoteOptions.remoteBackend</code></h3>
+                    <div id="property_defaults.layerOptions.remoteOptions.remoteBackends" class="property item">
+    <h3 class="name"><code>defaults.layerOptions.remoteOptions.remoteBackends</code></h3>
     <span class="type">Array</span>
 
     
@@ -3033,7 +3216,7 @@ query parameter is given.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3244"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3244</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3559"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3559</code></a>
         
         </p>
 
@@ -3080,7 +3263,7 @@ query parameter is given.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3260"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3260</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3576"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3576</code></a>
         
         </p>
 
@@ -3090,8 +3273,8 @@ query parameter is given.</p>
     </div>
 
     <div class="description">
-        <p>Flag to indicate whether automatic remote load on detail view
-should be done.</p>
+        <p>Flag to indicate whether automatic remote load on detail view should
+be done.</p>
 
     </div>
 
@@ -3128,7 +3311,7 @@ should be done.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3269"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3269</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3585"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3585</code></a>
         
         </p>
 
@@ -3175,7 +3358,7 @@ should be done.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3279"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3279</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3594"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3594</code></a>
         
         </p>
 
@@ -3185,8 +3368,8 @@ should be done.</p>
     </div>
 
     <div class="description">
-        <p>Flag to indicate whether remote label information should be
-loaded if needed.</p>
+        <p>Flag to indicate whether remote label information should be loaded if
+needed.</p>
 
     </div>
 
@@ -3202,6 +3385,509 @@ loaded if needed.</p>
                 
                     <div id="property_defaults.layerOptions.remoteOptions.remoteLimit" class="property item">
     <h3 class="name"><code>defaults.layerOptions.remoteOptions.remoteLimit</code></h3>
+    <span class="type">Integer  </span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l3568"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3568</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Limit for items loaded by a single remote load.</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> 100</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_defaults.layerOptions.tileFilters" class="property item">
+    <h3 class="name"><code>defaults.layerOptions.tileFilters</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l2864"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2864</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Filters for tiles</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_defaults.layerOptions.tileFilters.backgroundColor" class="property item">
+    <h3 class="name"><code>defaults.layerOptions.tileFilters.backgroundColor</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l3151"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3151</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Scales text of tiles</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_defaults.layerOptions.tileFilters.backgroundColor" class="property item">
+    <h3 class="name"><code>defaults.layerOptions.tileFilters.backgroundColor</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l3185"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3185</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Sets backgroundColor for tiles</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_defaults.layerOptions.tileFilters.backgroundColor.config.defaultStyles.literal.bgColors" class="property item">
+    <h3 class="name"><code>defaults.layerOptions.tileFilters.backgroundColor.config.defaultStyles.literal.bgColors</code></h3>
+    <span class="type">Array</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l3217"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3217</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Color of literal items.</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> [ &#x27;#777777&#x27; ]</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_defaults.layerOptions.tileFilters.backgroundColor.config.defaultStyles.stdNode.bgColors" class="property item">
+    <h3 class="name"><code>defaults.layerOptions.tileFilters.backgroundColor.config.defaultStyles.stdNode.bgColors</code></h3>
+    <span class="type">Array</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l3230"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3230</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Colors of items.</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> [ &#x27;#e2674a&#x27;, &#x27;#99CC99&#x27;, &#x27;#3399CC&#x27;, &#x27;#33CCCC&#x27;,
+         &#x27;#996699&#x27;, &#x27;#C24747&#x27;, &#x27;#FFCC66&#x27;, &#x27;#669999&#x27;,
+         &#x27;#CC6699&#x27;, &#x27;#339966&#x27;, &#x27;#666699&#x27; ]</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_defaults.layerOptions.tileFilters.backgroundImg" class="property item">
+    <h3 class="name"><code>defaults.layerOptions.tileFilters.backgroundImg</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l3246"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3246</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Loads background images</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_defaults.layerOptions.tileFilters.browsablity" class="property item">
+    <h3 class="name"><code>defaults.layerOptions.tileFilters.browsablity</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l3348"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3348</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Initializes the browsability of tiles</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_defaults.layerOptions.tileFilters.predicateLabel" class="property item">
+    <h3 class="name"><code>defaults.layerOptions.tileFilters.predicateLabel</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l3311"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3311</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Enables mouseover for URIs</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_defaults.layerOptions.tileFilters.scale" class="property item">
+    <h3 class="name"><code>defaults.layerOptions.tileFilters.scale</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l2871"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2871</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Scales tiles</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_defaults.layerOptions.tileFilters.scale.config.defaultStyles.literal" class="property item">
+    <h3 class="name"><code>defaults.layerOptions.tileFilters.scale.config.defaultStyles.literal</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l3083"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3083</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Styles of literal items.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_defaults.layerOptions.tileFilters.scale.config.defaultStyles.literal.height" class="property item">
+    <h3 class="name"><code>defaults.layerOptions.tileFilters.scale.config.defaultStyles.literal.height</code></h3>
     <span class="type">Integer</span>
 
     
@@ -3223,7 +3909,7 @@ loaded if needed.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3252"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3252</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3098"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3098</code></a>
         
         </p>
 
@@ -3233,12 +3919,198 @@ loaded if needed.</p>
     </div>
 
     <div class="description">
-        <p>Limit for items loaded by a single remote load.</p>
+        <p>Height of literal items.</p>
 
     </div>
 
     
         <p><strong>Default:</strong> 100</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_defaults.layerOptions.tileFilters.scale.config.defaultStyles.literal.width" class="property item">
+    <h3 class="name"><code>defaults.layerOptions.tileFilters.scale.config.defaultStyles.literal.width</code></h3>
+    <span class="type">Integer</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l3090"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3090</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Width of literal items.</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> 200</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_defaults.layerOptions.tileFilters.scale.config.defaultStyles.stdNode" class="property item">
+    <h3 class="name"><code>defaults.layerOptions.tileFilters.scale.config.defaultStyles.stdNode</code></h3>
+    <span class="type">Object</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l3107"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3107</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Styles of res nodes.</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_defaults.layerOptions.tileFilters.scale.config.defaultStyles.stdNode.width" class="property item">
+    <h3 class="name"><code>defaults.layerOptions.tileFilters.scale.config.defaultStyles.stdNode.width</code></h3>
+    <span class="type">Integer</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l3114"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3114</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Width of items.</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> 200</p>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="property_defaults.layerOptions.tileFilters.scale.config.defaultStyles.stdNode.width" class="property item">
+    <h3 class="name"><code>defaults.layerOptions.tileFilters.scale.config.defaultStyles.stdNode.width</code></h3>
+    <span class="type">Integer or String</span>
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                
+                <p>
+                
+                Defined in
+                
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l3122"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3122</code></a>
+        
+        </p>
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Height of items.</p>
+
+    </div>
+
+    
+        <p><strong>Default:</strong> 200 / dynamic</p>
     
 
     
@@ -3270,7 +4142,7 @@ loaded if needed.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3289"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3289</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3604"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3604</code></a>
         
         </p>
 
@@ -3315,7 +4187,7 @@ loaded if needed.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3306"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3306</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3620"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3620</code></a>
         
         </p>
 
@@ -3362,7 +4234,7 @@ loaded if needed.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3318"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3318</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3632"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3632</code></a>
         
         </p>
 
@@ -3408,7 +4280,7 @@ loaded if needed.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3296"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3296</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l3611"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3611</code></a>
         
         </p>
 
@@ -3418,151 +4290,12 @@ loaded if needed.</p>
     </div>
 
     <div class="description">
-        <p>Flag to indicate whether the filter should use regular
-expressions.</p>
+        <p>Flag to indicate whether the filter should use regular expressions.</p>
 
     </div>
 
     
         <p><strong>Default:</strong> true</p>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_defaults.nodeFilters.blacklistPredURI" class="property item">
-    <h3 class="name"><code>defaults.nodeFilters.blacklistPredURI</code></h3>
-    <span class="type">Object</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_plugin_bSynopsis.js.html#l2432"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2432</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Filters blacklisted resources defined by predicate URIs in config
-options. Only RegEx allowed.</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_defaults.nodeFilters.blacklistURI" class="property item">
-    <h3 class="name"><code>defaults.nodeFilters.blacklistURI</code></h3>
-    <span class="type">Object</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_plugin_bSynopsis.js.html#l2460"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2460</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Filters blacklisted resources defined by URIs in config options.
-Only RegEx allowed.</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_defaults.nodeFilters.multiResNode" class="property item">
-    <h3 class="name"><code>defaults.nodeFilters.multiResNode</code></h3>
-    <span class="type">Object</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_plugin_bSynopsis.js.html#l2485"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2485</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Merges resNodes describing the same resource (subject or
-object).</p>
-
-    </div>
-
     
 
     
@@ -3594,7 +4327,7 @@ object).</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3144"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3144</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l2738"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2738</code></a>
         
         </p>
 
@@ -3640,7 +4373,7 @@ object).</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3113"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3113</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l2708"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2708</code></a>
         
         </p>
 
@@ -3650,8 +4383,7 @@ object).</p>
     </div>
 
     <div class="description">
-        <p>SPARQL resultset which can be used to insert data into the store on
-init.</p>
+        <p>SPARQL resultset which can be used to insert data into the store on init.</p>
 
     </div>
 
@@ -3688,7 +4420,7 @@ init.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3104"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3104</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l2699"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2699</code></a>
         
         </p>
 
@@ -3736,7 +4468,7 @@ dynamically.</p>
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l3096"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3096</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l2691"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2691</code></a>
         
         </p>
 
@@ -3752,695 +4484,6 @@ dynamically.</p>
 
     
         <p><strong>Default:</strong> true</p>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_defaults.tileFilters" class="property item">
-    <h3 class="name"><code>defaults.tileFilters</code></h3>
-    <span class="type">Object</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_plugin_bSynopsis.js.html#l2526"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2526</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Filters for tiles</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_defaults.tileFilters.backgroundColor" class="property item">
-    <h3 class="name"><code>defaults.tileFilters.backgroundColor</code></h3>
-    <span class="type">Object</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_plugin_bSynopsis.js.html#l2806"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2806</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Sets backgroundColor for tiles</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_defaults.tileFilters.backgroundColor" class="property item">
-    <h3 class="name"><code>defaults.tileFilters.backgroundColor</code></h3>
-    <span class="type">Object</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_plugin_bSynopsis.js.html#l2781"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2781</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Scales text of tiles</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_defaults.tileFilters.backgroundColor.config.defaultStyles.literal.bgColors" class="property item">
-    <h3 class="name"><code>defaults.tileFilters.backgroundColor.config.defaultStyles.literal.bgColors</code></h3>
-    <span class="type">Array</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_plugin_bSynopsis.js.html#l2841"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2841</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Color of literal items.</p>
-
-    </div>
-
-    
-        <p><strong>Default:</strong> [ &#x27;#777777&#x27; ]</p>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_defaults.tileFilters.backgroundColor.config.defaultStyles.stdNode.bgColors" class="property item">
-    <h3 class="name"><code>defaults.tileFilters.backgroundColor.config.defaultStyles.stdNode.bgColors</code></h3>
-    <span class="type">Array</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_plugin_bSynopsis.js.html#l2854"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2854</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Colors of items.</p>
-
-    </div>
-
-    
-        <p><strong>Default:</strong> [ &#x27;#e2674a&#x27;, &#x27;#99CC99&#x27;, &#x27;#3399CC&#x27;,
-         &#x27;#33CCCC&#x27;, &#x27;#996699&#x27;, &#x27;#C24747&#x27;, &#x27;#FFCC66&#x27;,
-         &#x27;#669999&#x27;, &#x27;#CC6699&#x27;, &#x27;#339966&#x27;, &#x27;#666699&#x27; ]</p>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_defaults.tileFilters.backgroundImg" class="property item">
-    <h3 class="name"><code>defaults.tileFilters.backgroundImg</code></h3>
-    <span class="type">Object</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_plugin_bSynopsis.js.html#l2871"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2871</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Loads background images</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_defaults.tileFilters.browsablity" class="property item">
-    <h3 class="name"><code>defaults.tileFilters.browsablity</code></h3>
-    <span class="type">Object</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_plugin_bSynopsis.js.html#l3024"><code>js&#x2F;plugin&#x2F;bSynopsis.js:3024</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Initializes the browsability of tiles</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_defaults.tileFilters.predicateLabel" class="property item">
-    <h3 class="name"><code>defaults.tileFilters.predicateLabel</code></h3>
-    <span class="type">Object</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_plugin_bSynopsis.js.html#l2956"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2956</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Enables mouseover for URIs</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_defaults.tileFilters.scale" class="property item">
-    <h3 class="name"><code>defaults.tileFilters.scale</code></h3>
-    <span class="type">Object</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_plugin_bSynopsis.js.html#l2533"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2533</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Scales tiles</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_defaults.tileFilters.scale.config.defaultStyles.literal" class="property item">
-    <h3 class="name"><code>defaults.tileFilters.scale.config.defaultStyles.literal</code></h3>
-    <span class="type">Object</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_plugin_bSynopsis.js.html#l2713"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2713</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Styles of literal items.</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_defaults.tileFilters.scale.config.defaultStyles.literal.height" class="property item">
-    <h3 class="name"><code>defaults.tileFilters.scale.config.defaultStyles.literal.height</code></h3>
-    <span class="type">Integer</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_plugin_bSynopsis.js.html#l2728"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2728</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Height of literal items.</p>
-
-    </div>
-
-    
-        <p><strong>Default:</strong> 100</p>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_defaults.tileFilters.scale.config.defaultStyles.literal.width" class="property item">
-    <h3 class="name"><code>defaults.tileFilters.scale.config.defaultStyles.literal.width</code></h3>
-    <span class="type">Integer</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_plugin_bSynopsis.js.html#l2720"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2720</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Width of literal items.</p>
-
-    </div>
-
-    
-        <p><strong>Default:</strong> 200</p>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_defaults.tileFilters.scale.config.defaultStyles.stdNode" class="property item">
-    <h3 class="name"><code>defaults.tileFilters.scale.config.defaultStyles.stdNode</code></h3>
-    <span class="type">Object</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_plugin_bSynopsis.js.html#l2737"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2737</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Styles of res nodes.</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_defaults.tileFilters.scale.config.defaultStyles.stdNode.width" class="property item">
-    <h3 class="name"><code>defaults.tileFilters.scale.config.defaultStyles.stdNode.width</code></h3>
-    <span class="type">Integer or String</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_plugin_bSynopsis.js.html#l2752"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2752</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Height of items.</p>
-
-    </div>
-
-    
-        <p><strong>Default:</strong> 200 / dynamic</p>
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="property_defaults.tileFilters.scale.config.defaultStyles.stdNode.width" class="property item">
-    <h3 class="name"><code>defaults.tileFilters.scale.config.defaultStyles.stdNode.width</code></h3>
-    <span class="type">Integer</span>
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_plugin_bSynopsis.js.html#l2744"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2744</code></a>
-        
-        </p>
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Width of items.</p>
-
-    </div>
-
-    
-        <p><strong>Default:</strong> 200</p>
     
 
     

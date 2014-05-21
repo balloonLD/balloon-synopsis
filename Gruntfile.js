@@ -1,7 +1,7 @@
 module.exports = function(grunt) {
 	
 	var DEBUG = true;
-	var F_SELECT = true;
+	var F_SELECT = undefined;
 
 	// Project configuration.
 	grunt

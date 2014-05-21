@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Plugin.Layer - bSynopsis</title>
+    <title>Plugin.Layers.Res - bSynopsis</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -130,15 +130,19 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>Plugin.Layer Class</h1>
+                        <h1>Plugin.Layers.Res Class</h1>
 <div class="box meta">
     
 
     
+        <div class="extends">
+            Extends <a href="../classes/Plugin.Layer.html" class="crosslink">Plugin.Layer</a>
+        </div>
+    
 
     
         <div class="foundat">
-            Defined in: <a href="../files/js_plugin_bSynopsis.js.html#l1572"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1572</code></a>
+            Defined in: <a href="../files/js_plugin_bSynopsis.js.html#l2180"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2180</code></a>
         </div>
     
 
@@ -154,15 +158,15 @@
 
 
 <div class="box intro">
-    <p>Layer to be shown</p>
+    <p>Initialization view of the plugin</p>
 
 </div>
 
 
     <div class="constructor">
         <h2>Constructor</h2>
-        <div id="method_Plugin.Layer" class="method item">
-    <h3 class="name"><code>Plugin.Layer</code></h3>
+        <div id="method_Plugin.Layers.Res" class="method item">
+    <h3 class="name"><code>Plugin.Layers.Res</code></h3>
 
     
         <div class="args">
@@ -215,7 +219,7 @@
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l1572"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1572</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l2180"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2180</code></a>
         
         </p>
 
@@ -244,7 +248,7 @@
                     
 
                     <div class="param-description">
-                        <p>$parent Parent div container</p>
+                        <p>$container Container of the initialization view</p>
 
                     </div>
 
@@ -260,7 +264,7 @@
                     
 
                     <div class="param-description">
-                        <p>options Options object of the view</p>
+                        <p>options Options object</p>
 
                     </div>
 
@@ -270,13 +274,13 @@
                 <li class="param">
                     
                         <code class="param-name">!~YUIDOC_LINE~!</code>
-                        <span class="type">Object</span>
+                        <span class="type"><a href="../classes/Plugin.html" class="crosslink">Plugin</a></span>
                     
 
                     
 
                     <div class="param-description">
-                        <p>queries Queries to use in the view</p>
+                        <p>plugin The parent plugin of the initialization view</p>
 
                     </div>
 
@@ -315,30 +319,30 @@
                 <div class="index-section methods">
                     <h3>Methods</h3>
 
-                    <ul class="index-list methods">
+                    <ul class="index-list methods extends">
                         
-                            <li class="index-item method private">
+                            <li class="index-item method private inherited">
                                 <a href="#method__fetchPredicateLabel">_fetchPredicateLabel</a>
 
                                 
                                 
                             </li>
                         
-                            <li class="index-item method">
+                            <li class="index-item method inherited">
                                 <a href="#method__initLayerData">_initLayerData</a>
 
                                 
                                 
                             </li>
                         
-                            <li class="index-item method">
+                            <li class="index-item method inherited">
                                 <a href="#method_checkItems">checkItems</a>
 
                                 
                                 
                             </li>
                         
-                            <li class="index-item method">
+                            <li class="index-item method inherited">
                                 <a href="#method_getJQueryObj">getJQueryObj</a>
 
                                 
@@ -346,34 +350,34 @@
                             </li>
                         
                             <li class="index-item method">
+                                <a href="#method_loadByRemote">loadByRemote</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method inherited">
                                 <a href="#method_open">open</a>
 
                                 
                                 
                             </li>
                         
-                            <li class="index-item method">
+                            <li class="index-item method inherited">
                                 <a href="#method_removeAllItems">removeAllItems</a>
 
                                 
                                 
                             </li>
                         
-                            <li class="index-item method">
+                            <li class="index-item method inherited">
                                 <a href="#method_removeHtml">removeHtml</a>
 
                                 
                                 
                             </li>
                         
-                            <li class="index-item method">
-                                <a href="#method_update">update</a>
-
-                                
-                                
-                            </li>
-                        
-                            <li class="index-item method">
+                            <li class="index-item method inherited inherited">
                                 <a href="#method_update">update</a>
 
                                 
@@ -396,7 +400,7 @@
                 <h2 class="off-left">Methods</h2>
 
                 
-                    <div id="method__fetchPredicateLabel" class="method item private">
+                    <div id="method__fetchPredicateLabel" class="method item private inherited">
     <h3 class="name"><code>_fetchPredicateLabel</code></h3>
 
     
@@ -432,11 +436,8 @@
     <div class="meta">
         
             
-                
-                <p>
-                
-                Defined in
-                
+                <p>Inherited from
+                <a href="../classes/Plugin.Layer.html#method__fetchPredicateLabel">Plugin.Layer</a>:
             
         
         
@@ -487,7 +488,7 @@
 </div>
 
                 
-                    <div id="method__initLayerData" class="method item">
+                    <div id="method__initLayerData" class="method item inherited">
     <h3 class="name"><code>_initLayerData</code></h3>
 
     
@@ -521,11 +522,8 @@
     <div class="meta">
         
             
-                
-                <p>
-                
-                Defined in
-                
+                <p>Inherited from
+                <a href="../classes/Plugin.Layer.html#method__initLayerData">Plugin.Layer</a>:
             
         
         
@@ -576,7 +574,7 @@
 </div>
 
                 
-                    <div id="method_checkItems" class="method item">
+                    <div id="method_checkItems" class="method item inherited">
     <h3 class="name"><code>checkItems</code></h3>
 
     
@@ -610,11 +608,8 @@
     <div class="meta">
         
             
-                
-                <p>
-                
-                Defined in
-                
+                <p>Inherited from
+                <a href="../classes/Plugin.Layer.html#method_checkItems">Plugin.Layer</a>:
             
         
         
@@ -665,7 +660,7 @@
 </div>
 
                 
-                    <div id="method_getJQueryObj" class="method item">
+                    <div id="method_getJQueryObj" class="method item inherited">
     <h3 class="name"><code>getJQueryObj</code></h3>
 
     
@@ -689,11 +684,8 @@
     <div class="meta">
         
             
-                
-                <p>
-                
-                Defined in
-                
+                <p>Inherited from
+                <a href="../classes/Plugin.Layer.html#method_getJQueryObj">Plugin.Layer</a>:
             
         
         
@@ -720,8 +712,8 @@
 </div>
 
                 
-                    <div id="method_open" class="method item">
-    <h3 class="name"><code>open</code></h3>
+                    <div id="method_loadByRemote" class="method item">
+    <h3 class="name"><code>loadByRemote</code></h3>
 
     
         <span class="paren">()</span>
@@ -749,6 +741,58 @@
                 
                 Defined in
                 
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l2245"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2245</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Load children by remote service</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_open" class="method item inherited">
+    <h3 class="name"><code>open</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="../classes/Plugin.Layer.html#method_open">Plugin.Layer</a>:
             
         
         
@@ -775,7 +819,7 @@
 </div>
 
                 
-                    <div id="method_removeAllItems" class="method item">
+                    <div id="method_removeAllItems" class="method item inherited">
     <h3 class="name"><code>removeAllItems</code></h3>
 
     
@@ -799,11 +843,8 @@
     <div class="meta">
         
             
-                
-                <p>
-                
-                Defined in
-                
+                <p>Inherited from
+                <a href="../classes/Plugin.Layer.html#method_removeAllItems">Plugin.Layer</a>:
             
         
         
@@ -830,7 +871,7 @@
 </div>
 
                 
-                    <div id="method_removeHtml" class="method item">
+                    <div id="method_removeHtml" class="method item inherited">
     <h3 class="name"><code>removeHtml</code></h3>
 
     
@@ -854,11 +895,8 @@
     <div class="meta">
         
             
-                
-                <p>
-                
-                Defined in
-                
+                <p>Inherited from
+                <a href="../classes/Plugin.Layer.html#method_removeHtml">Plugin.Layer</a>:
             
         
         
@@ -885,7 +923,7 @@
 </div>
 
                 
-                    <div id="method_update" class="method item">
+                    <div id="method_update" class="method item inherited">
     <h3 class="name"><code>update</code></h3>
 
     
@@ -908,12 +946,12 @@
 
     <div class="meta">
         
+            <p>Inherited from
+            <a href="../classes/Plugin.Layer.html#method_update">
+                Plugin.Layer
+            </a>
             
-                
-                <p>
-                
-                Defined in
-                
+            but overwritten in
             
         
         
@@ -929,61 +967,6 @@
 
     <div class="description">
         <p>Call the model update function to start selfupdating of the model</p>
-
-    </div>
-
-    
-
-    
-
-    
-</div>
-
-                
-                    <div id="method_update" class="method item">
-    <h3 class="name"><code>update</code></h3>
-
-    
-        <span class="paren">()</span>
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    <div class="meta">
-        
-            
-                
-                <p>
-                
-                Defined in
-                
-            
-        
-        
-        <a href="../files/js_plugin_bSynopsis.js.html#l1960"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1960</code></a>
-        
-        </p>
-
-
-        
-
-        
-    </div>
-
-    <div class="description">
-        <p>Get data for the model by querying the local store</p>
 
     </div>
 

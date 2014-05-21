@@ -51,17 +51,29 @@
             
                 <li><a href="../classes/Plugin.html">Plugin</a></li>
             
-                <li><a href="../classes/Plugin.DetailLayer.html">Plugin.DetailLayer</a></li>
+                <li><a href="../classes/Plugin.BlankNode.html">Plugin.BlankNode</a></li>
+            
+                <li><a href="../classes/Plugin.ComponentFactory.html">Plugin.ComponentFactory</a></li>
             
                 <li><a href="../classes/Plugin.EventManager.html">Plugin.EventManager</a></li>
             
-                <li><a href="../classes/Plugin.InitLayer.html">Plugin.InitLayer</a></li>
-            
                 <li><a href="../classes/Plugin.Layer.html">Plugin.Layer</a></li>
+            
+                <li><a href="../classes/Plugin.Layers.Blank.html">Plugin.Layers.Blank</a></li>
+            
+                <li><a href="../classes/Plugin.Layers.Inlay.html">Plugin.Layers.Inlay</a></li>
+            
+                <li><a href="../classes/Plugin.Layers.Literal.html">Plugin.Layers.Literal</a></li>
+            
+                <li><a href="../classes/Plugin.Layers.Res.html">Plugin.Layers.Res</a></li>
             
                 <li><a href="../classes/Plugin.LayoutEngine.html">Plugin.LayoutEngine</a></li>
             
+                <li><a href="../classes/Plugin.LiteralNode.html">Plugin.LiteralNode</a></li>
+            
                 <li><a href="../classes/Plugin.Node.html">Plugin.Node</a></li>
+            
+                <li><a href="../classes/Plugin.NodeFactory.html">Plugin.NodeFactory</a></li>
             
                 <li><a href="../classes/Plugin.RdfStore.html">Plugin.RdfStore</a></li>
             
@@ -70,6 +82,10 @@
                 <li><a href="../classes/Plugin.ResNode.html">Plugin.ResNode</a></li>
             
                 <li><a href="../classes/Plugin.TemplatesLoader.html">Plugin.TemplatesLoader</a></li>
+            
+                <li><a href="../classes/Plugin.TimeLine.html">Plugin.TimeLine</a></li>
+            
+                <li><a href="../classes/Plugin.TimeLine.Node.html">Plugin.TimeLine.Node</a></li>
             
                 <li><a href="../classes/RemoteEngine.html">RemoteEngine</a></li>
             
@@ -125,11 +141,11 @@
  * @main Plugin
  * @param {} $
  * @param {}
- *            window
+ *          window
  * @param {}
- *            document
+ *          document
  * @param {}
- *            undefined
+ *          undefined
  */
 
 // safety net for unclosed plugins and/or chained functions
@@ -151,6 +167,11 @@
 			literal : &quot;literal&quot;,
 			blankNode : &quot;blankNode&quot;,
 			resNode : &quot;resNode&quot;
+		},
+		COMP_TYPES : {
+			predicate : &quot;predicate&quot;,
+			label : &quot;label&quot;,
+			uri : &quot;uri&quot;
 		},
 		CSS_PREFIX : &quot;synopsis_&quot;,
 
@@ -221,7 +242,8 @@
 				ajax : &quot;Error on loading data.&quot;,
 				remote : &quot;Error on loading remote data.&quot;,
 				template : &quot;Error on loading template data.&quot;,
-				tokenType : &quot;Unknown token type of item.&quot;
+				tokenType : &quot;Unknown token type of item.&quot;,
+				compType : &quot;Unknown component type of item.&quot;
 			},
 			warn : {
 				cssAppend : &quot;CSS classes already defined&quot;,
@@ -263,9 +285,62 @@
 
 	// Add css_prefix to css_classes
 	objPrefixer(CONS.CSS_PREFIX, CONS.CSS_CLASSES);
+	
+	// ========================= Generic Webworkers ===============================
+	  $.Hive.create({
+
+		    worker: &#x27;worker.js&#x27;,
+		    receive: function (data) {
+
+		      console.group(&#x27;RECEIVED MESSAGE - WORKER: #&#x27; + data._from_);
+		        console.log( data );  
+		      console.groupEnd();   
+
+		      /*
+		      ------------------------------------------------------
+		        Possible uses:
+
+		        Populate a massive data table...
+
+		        Update a browser based IM client
+
+		        Update a feed reader app ( 1-to-1 worker to feed?)
+
+		        Handle audio data from typed array
+
+		        Handle pixel array
+		      ------------------------------------------------------        
+		      */
+
+		    },
+		    created: function (hive) {
+
+		      /*
+		      ------------------------------------------------------
+		        Possible uses:
+
+		        Impress the hell out of your friends by 
+		        executing code after all the workers are created
+		      ------------------------------------------------------  
+		      */        
+		    }
+		  });
+	  
+	  $.Hive.get(1).send({ 
+
+		    &quot;message&quot; : { 
+		      &quot;a&quot; : &quot;a-value&quot;,
+		      &quot;b&quot; : &quot;b-value&quot;,
+		      &quot;c&quot; : &quot;c-value&quot;
+		    }      
+
+		  }, function (data) {
+
+		    console.log(&#x27;This is from a task specific message receipt callback&#x27;);
+
+		  });  
 
 	// ========================= Extend Isotope ===============================
-
 	// Extend Isotope - groupRows custom layout mode
 	// Modified Version of
 	// http://isotope.metafizzy.co/custom-layout-modes/category-rows.html
@@ -283,21 +358,17 @@
 							};
 						},
 						_groupRowsLayout : function($elems) {
-							var instance = this, containerWidth = this.element
-									.width(), sortBy = this.options.sortBy, props = this.groupRows;
+							var instance = this, containerWidth = this.element.width(), sortBy = this.options.sortBy, props = this.groupRows;
 
 							$elems
 									.each(function() {
-										var $this = $(this), atomW = $this
-												.outerWidth(true), atomH = $this
-												.outerHeight(true), group = $
-												.data(this, &#x27;isotope-sort-data&#x27;)[sortBy];
+										var $this = $(this), atomW = $this.outerWidth(true), atomH = $this
+												.outerHeight(true), group = $.data(this, &#x27;isotope-sort-data&#x27;)[sortBy];
 
 										if (group !== props.currentGroup) {
 											// new group, new row
 											props.x = 0;
-											props.height += props.currentGroup ? instance.groupRows.gutter
-													: 0;
+											props.height += props.currentGroup ? instance.groupRows.gutter : 0;
 											props.y = props.height;
 											props.currentGroup = group;
 
@@ -307,8 +378,7 @@
 
 										} else {
 
-											if (props.x !== 0
-													&amp;&amp; atomW + props.x &gt; containerWidth) {
+											if (props.x !== 0 &amp;&amp; atomW + props.x &gt; containerWidth) {
 
 												// if this item cannot fit in
 												// the current row
@@ -317,18 +387,12 @@
 											}
 										}
 
-										$this
-												.find(
-														UTIL
-																.toSelector(CONS.CSS_CLASSES.groupLabel))
-												.remove();
+										$this.find(UTIL.toSelector(CONS.CSS_CLASSES.groupLabel)).remove();
 										// label for new group
 										if (group !== &#x27;&#x27;) {
-											var prefix = group.split(&quot;_&quot;)[0]
-													+ &quot;_&quot;;
+											var prefix = group.split(&quot;_&quot;)[0] + &quot;_&quot;;
 											var groups = group.split(prefix), divBox = &quot;&lt;div class=&#x27;&quot;
-													+ CONS.CSS_CLASSES.groupLabel
-													+ &quot;&#x27; &gt;&quot;;
+													+ CONS.CSS_CLASSES.groupLabel + &quot;&#x27; &gt;&quot;;
 											for (var i = 1; i &lt; groups.length; i++) {
 												divBox += groups[i];
 											}
@@ -337,11 +401,9 @@
 										}
 
 										// position the atom
-										instance._pushPosition($this, props.x,
-												props.y);
+										instance._pushPosition($this, props.x, props.y);
 
-										props.height = Math.max(
-												props.y + atomH, props.height);
+										props.height = Math.max(props.y + atomH, props.height);
 										props.x += atomW;
 									});
 						},
@@ -369,11 +431,11 @@
 	 * 
 	 * @method class-prefix
 	 * @param {}
-	 *            ele
+	 *          ele
 	 * @param {}
-	 *            index
+	 *          index
 	 * @param {}
-	 *            match
+	 *          match
 	 */
 	$.expr[&#x27;:&#x27;][&#x27;class-prefix&#x27;] = function(ele, index, match) {
 		var prefix = match[3];
@@ -392,21 +454,19 @@
 	 * 
 	 * @method regex
 	 * @param {}
-	 *            elem
+	 *          elem
 	 * @param {}
-	 *            index
+	 *          index
 	 * @param {}
-	 *            match
+	 *          match
 	 */
 	$.expr[&#x27;:&#x27;].regex = function(elem, index, match) {
 		var matchParams = match[3].split(&#x27;,&#x27;), validLabels = /^(data|css):/, attr = {
-			method : matchParams[0].match(validLabels) ? matchParams[0]
-					.split(&#x27;:&#x27;)[0] : &#x27;attr&#x27;,
+			method : matchParams[0].match(validLabels) ? matchParams[0].split(&#x27;:&#x27;)[0] : &#x27;attr&#x27;,
 			property : matchParams.shift().replace(validLabels, &#x27;&#x27;)
 		}, regexFlags = &#x27;ig&#x27;, regex;
 		try {
-			regex = new RegExp(matchParams.join(&#x27;&#x27;).replace(/^\s+|\s+$/g, &#x27;&#x27;),
-					regexFlags);
+			regex = new RegExp(matchParams.join(&#x27;&#x27;).replace(/^\s+|\s+$/g, &#x27;&#x27;), regexFlags);
 		} catch (e) {
 			return false;
 		}
@@ -426,13 +486,13 @@
 	 * 
 	 * @method isUndefinedOrNull
 	 * @param {Object}
-	 *            a Variable to check
+	 *          a Variable to check
 	 * @return {Boolean} Returns true on success
 	 */
 	function isUndefinedOrNull(a) {
 		return ((typeof a === &quot;undefined&quot;) || (a === null));
 	}
-	
+
 	// Only print to console, if DEBUG mode is enabled
 	var print = console.log.bind(console);
 	function appendCssClasses(obj) {
@@ -452,9 +512,9 @@
 	 * 
 	 * @method replaceDummy
 	 * @param {String}
-	 *            query Query to work with
+	 *          query Query to work with
 	 * @param {String}
-	 *            replacement String to replace the CONS.DUMMY of given query
+	 *          replacement String to replace the CONS.DUMMY of given query
 	 * @return {String} Returns the query with replaced DUMMY constants
 	 */
 	function replaceDummy(query, replacement) {
@@ -462,24 +522,12 @@
 	}
 
 	/**
-	 * Used to deepCopy a javascript object.
-	 * 
-	 * @private
-	 * @method deepCopy
-	 * @param {Object}
-	 *            obj Object to clone
-	 * @return copy of the object
-	 */
-	function deepCopy(obj) {
-		return owl.deepCopy(obj);
-	}
-	/**
 	 * Gets the current window size of the browser.
 	 * 
 	 * @method getWindowSize
 	 * @param {Boolean}
-	 *            withoutScrollbar Flag to assign if the scrollbar should be
-	 *            considered
+	 *          withoutScrollbar Flag to assign if the scrollbar should be
+	 *          considered
 	 * @return {Object} Object which contains the width and the height of the
 	 *         window.
 	 */
@@ -507,7 +555,7 @@
 	 * 
 	 * @method getClip
 	 * @param {String}
-	 *            name CSS name as defined in CONS.CSS_CLASSES of given div box
+	 *          name CSS name as defined in CONS.CSS_CLASSES of given div box
 	 * @return {Object} Rectangle Object / Clip data
 	 */
 	function getClip(name) {
@@ -515,14 +563,12 @@
 		switch (name) {
 		case CONS.CSS_CLASSES.overlay:
 			winsize = getWindowSize(true);
-			return &#x27;rect(0px &#x27; + winsize.width + &#x27;px &#x27; + winsize.height
-					+ &#x27;px 0px)&#x27;;
+			return &#x27;rect(0px &#x27; + winsize.width + &#x27;px &#x27; + winsize.height + &#x27;px 0px)&#x27;;
 			break;
 		case CONS.CSS_CLASSES.preview:
 			winsize = getWindowSize(false);
-			return &#x27;rect(&#x27; + winsize.height * 0.25 + &#x27;px &#x27; + winsize.width
-					* 0.75 + &#x27;px &#x27; + winsize.height * 0.75 + &#x27;px &#x27;
-					+ winsize.width * 0.25 + &#x27;px)&#x27;;
+			return &#x27;rect(&#x27; + winsize.height * 0.25 + &#x27;px &#x27; + winsize.width * 0.75 + &#x27;px &#x27; + winsize.height
+					* 0.75 + &#x27;px &#x27; + winsize.width * 0.25 + &#x27;px)&#x27;;
 			break;
 		default:
 			console.log(&quot;No clip data found.&quot;);
@@ -535,12 +581,11 @@
 	 * 
 	 * @method getItemLayoutProp
 	 * @param {$item}
-	 *            $item JQuery item
+	 *          $item JQuery item
 	 * @return {Object} Object which contains the layoutprops
 	 */
 	function getItemLayoutProp($item) {
-		var scrollT = $window.scrollTop(), scrollL = $window.scrollLeft(), itemOffset = $item
-				.offset();
+		var scrollT = $window.scrollTop(), scrollL = $window.scrollLeft(), itemOffset = $item.offset();
 		return {
 			left : itemOffset.left - scrollL,
 			top : itemOffset.top - scrollT,
@@ -568,7 +613,6 @@
 	}
 
 	// ========================= bSynopsis: RemoteEngine Class
-	// ==============================
 	/**
 	 * Class to provide a function for SPARQL querying of the service located at
 	 * the given url. YQL is used to fetch the queryresults.
@@ -615,8 +659,7 @@
 			// encode it!
 			var yql = &#x27;http://query.yahooapis.com/v1/public/yql?q=&#x27;
 					+ encodeURIComponent(&#x27;use &quot;http://triplr.org/sparyql/sparql.xml&quot; as sparql; select * from sparql where query=&quot;&#x27;
-							+ query + &#x27;&quot; and service=&quot;&#x27; + url)
-					+ &#x27;&quot;&amp;format=json&amp;callback=cbFunc&#x27; + cnt;
+							+ query + &#x27;&quot; and service=&quot;&#x27; + url) + &#x27;&quot;&amp;format=json&amp;callback=cbFunc&#x27; + cnt;
 
 			// Request that YSQL string, and run a callback function.
 			// Pass a defined function to prevent cache-busting.
@@ -639,16 +682,16 @@
 	};
 
 	/**
-	 * Method for querying the given url with given query. Executes given
-	 * callback function with results.
+	 * Method for querying the given url with given query. Executes given callback
+	 * function with results.
 	 * 
 	 * @method executeQuery
 	 * @param {String}
-	 *            query Query to execute
+	 *          query Query to execute
 	 * @param {String}
-	 *            url URL of service to execute the query on
+	 *          url URL of service to execute the query on
 	 * @param {Function}
-	 *            callback Callback function to be executed with query results
+	 *          callback Callback function to be executed with query results
 	 */
 	RemoteEngine.prototype.executeQuery = function(query, url, callback) {
 		this._requestSPARQLCrossDomain(query, url, callback);
@@ -670,9 +713,9 @@
 	 * 
 	 * @method add
 	 * @param {String}
-	 *            key Key to map to the value
+	 *          key Key to map to the value
 	 * @param {String}
-	 *            val Value to add to the cache
+	 *          val Value to add to the cache
 	 */
 	Cache.prototype.add = function(key, val) {
 		this.values[key] = val;
@@ -683,7 +726,7 @@
 	 * 
 	 * @method retrieve
 	 * @param {String}
-	 *            key Key to map to the value
+	 *          key Key to map to the value
 	 * @return {String} Value to which the key maps
 	 */
 	Cache.prototype.retrieve = function(key) {
@@ -695,14 +738,14 @@
 	 * 
 	 * @method contains
 	 * @param {String}
-	 *            key Key to map to the value
+	 *          key Key to map to the value
 	 * @return {Boolean} true if cache contains a value for the given key
 	 */
 	Cache.prototype.contains = function(key) {
 		return key in this.values;
 	};
 
-	// ========================= Variables for all bSynopsis instances ===============================
+	// ========================= Variables for all bSynopsis instances
 	/**
 	 * class public functions
 	 * 
@@ -716,7 +759,7 @@
 	// rdf store instance(SPARQL endpoint)
 	rdfStore,
 	// remoteEngine for remote queries
-	remoteEngine = new RemoteEngine(),
+	remoteDataLoader, queryStore,
 	// rdf store instance(SPARQL endpoint)
 	eventManagers = [],
 	// cache for predicate labels
@@ -741,8 +784,15 @@
 	// handlebars templates for the plugin
 	templates = {},
 	// Counter for plugin ids
-	idCounter = 0;
-
+	idCounter = 0,
+	// Counter for layer ids
+	layerIdCounter = 0,
+	// Counter for view ids
+	viewIdCounter = 0,
+	// zIndex counter to show overlays
+	zIndex = 2,
+	// Counter for listener ids
+	listenerId = 0;
 	// Returns a unique PluginID
 	/**
 	 * Generate an ID for the plugin.
@@ -755,34 +805,63 @@
 	}
 
 	// ========================= bSynopsis: Event Class
-	// ==============================
 	Plugin.Event = function(sender) {
 		this._sender = sender;
-		this._listeners = [];
+		this._listeners = {};
 	};
 
 	Plugin.Event.prototype = {
 		attach : function(listener) {
-			this._listeners.push(listener);
+			this._listeners[listener.id] = listener;
+		},
+		dettach : function(listener) {
+			delete this._listeners[listener.id];
 		},
 		notify : function(args) {
-			var index;
-
-			for (index = 0; index &lt; this._listeners.length; index += 1) {
-				this._listeners[index](this._sender, args);
-			}
+			$.each(this._listeners, function(i, val) {
+				val.fn(this.sender, args);
+			});
 		}
 	};
 
+	// ========================= bSynopsis: Switch Class
+	Plugin.Switch = function(sender) {
+		this._sender = sender;
+		this._listeners = {};
+		this._triggered = false;
+	};
+
+	Plugin.Switch.prototype = {
+		attach : function(listener) {
+			if (this._triggered) {
+				listener.fn(this._sender, this._args);
+			} else {
+				this._listeners[listener.id] = listener;
+			}
+		},
+		trigger : function(args) {
+			this._triggered = true;
+			this._args = args;
+			$.each(this._listeners, function(i, val) {
+				val.fn(this._sender, args);
+				delete this._listeners[i];
+			});
+		}
+	};
+
+	// ========================= bSynopsis: Listener Class
+	Plugin.Listener = function(fn) {
+		this.id = &quot;listener&quot; + listenerId++;
+		this.fn = fn;
+	};
 	// ========================= bSynopsis: eventManager Class
-	// ==============================
 	/**
 	 * Class to manage eventHandlers
 	 * 
 	 * @class Plugin.EventManager
 	 * @constructor
 	 * @param {jQuery}
-	 *            stdObject Default object for adding of eventHandlers
+	 *          stdObject Default object for adding of eventHandlers
 	 */
 	Plugin.EventManager = function(stdObject) {
 		if (!stdObject) {
@@ -801,16 +880,15 @@
 	 * 
 	 * @method addEventHandler
 	 * @param {String}
-	 *            eventType Type of the event as defined in cons
+	 *          eventType Type of the event as defined in cons
 	 * @param {Function}
-	 *            handler Eventhandler function to trigger on event
+	 *          handler Eventhandler function to trigger on event
 	 * @param {String}
-	 *            object Object to add the eventhandler to
+	 *          object Object to add the eventhandler to
 	 * @param {String}
-	 *            id ID to add to the eventhandler
+	 *          id ID to add to the eventhandler
 	 */
-	Plugin.EventManager.prototype.addEventHandler = function(eventType,
-			handler, object, id) {
+	Plugin.EventManager.prototype.addEventHandler = function(eventType, handler, object, id) {
 		var that = this;
 		if (object === undefined) {
 			object = that.stdObject;
@@ -832,14 +910,13 @@
 	 * 
 	 * @method removeEventHandler
 	 * @param {String}
-	 *            eventType Type of the event as defined in CONS
+	 *          eventType Type of the event as defined in CONS
 	 * @param {Function}
-	 *            id ID of the eventHandler to be removed
+	 *          id ID of the eventHandler to be removed
 	 * @param {String}
-	 *            object Object to remove the eventhandler from
+	 *          object Object to remove the eventhandler from
 	 */
-	Plugin.EventManager.prototype.removeEventHandler = function(eventType, id,
-			object) {
+	Plugin.EventManager.prototype.removeEventHandler = function(eventType, id, object) {
 		var that = this;
 		$.each(that._evHandlerHistory[eventType], function(i, val) {
 			if (id === val.id) {
@@ -864,11 +941,11 @@
 	 * 
 	 * @method trigger
 	 * @param {String}
-	 *            eventType Type of the event as defined in CONS
+	 *          eventType Type of the event as defined in CONS
 	 * @param {Object}
-	 *            param Array of parameters to give to the triggered function
+	 *          param Array of parameters to give to the triggered function
 	 * @param {String}
-	 *            object Object to trigger the event on
+	 *          object Object to trigger the event on
 	 */
 	Plugin.EventManager.prototype.trigger = function(eventType, param, object) {
 		if (object) {
@@ -892,7 +969,6 @@
 	};
 
 	// ========================= bSynopsis: rdfStore Class
-	// ==============================
 	/**
 	 * Class to wrap and create a rdfStore Object. Default: rdfstore-js
 	 * https://github.com/antoniogarrote/rdfstore-js
@@ -900,9 +976,9 @@
 	 * @class Plugin.RdfStore
 	 * @constructor
 	 * @param {Object}
-	 *            options Options object for the rdf store
+	 *          options Options object for the rdf store
 	 * @param {Function}
-	 *            callback Callback function to execute after class creation
+	 *          callback Callback function to execute after class creation
 	 */
 	Plugin.RdfStore = function(options, callback) {
 		var that = this;
@@ -925,17 +1001,19 @@
 			callback();
 		});
 		// TODO store as worker?
-		//		rdfstore.connect(&quot;js/lib/rdfstore-js/index.js&quot;, options, function(success, store) {
-		//		    if(success) {
-		//		        // store is a connection to the worker
-		//		        console.log(store.isWebWorkerConnection === true);
-		//		      } else {
-		//		        // connection was not possible. A store object has been returned instead
-		//		    	  print(&quot;fail on webworker store&quot;);
-		//		      }   
-		//			that._store = store;
-		//			callback();
-		//		});
+		// rdfstore.connect(&quot;js/lib/rdfstore-js/index.js&quot;, options,
+		// function(success, store) {
+		// if(success) {
+		// // store is a connection to the worker
+		// console.log(store.isWebWorkerConnection === true);
+		// } else {
+		// // connection was not possible. A store object has been returned
+		// instead
+		// print(&quot;fail on webworker store&quot;);
+		// }
+		// that._store = store;
+		// callback();
+		// });
 	};
 
 	/**
@@ -943,36 +1021,31 @@
 	 * 
 	 * @method insertData
 	 * @param {String}
-	 *            data Data to insert into the store
+	 *          data Data to insert into the store
 	 * @param {String}
-	 *            dataFormat Format of given data
+	 *          dataFormat Format of given data
 	 * @param {Function}
-	 *            callback Callback function to be called after loading in the
-	 *            store.
+	 *          callback Callback function to be called after loading in the
+	 *          store.
 	 */
 	Plugin.RdfStore.prototype.insertData = function(data, dataFormat, callback) {
 		var that = this;
 
-		if (dataFormat === &quot;text/turtle&quot; || dataFormat === &quot;text/plain&quot;
-				|| dataFormat === &quot;text/n3&quot;) {
+		if (dataFormat === &quot;text/turtle&quot; || dataFormat === &quot;text/plain&quot; || dataFormat === &quot;text/n3&quot;) {
 			// get prefix terms and update namespaces
 			var prefixTerms = data.match(/.*@prefix.*&gt;(\s)*./g);
 			if (prefixTerms) {
-				$.each(prefixTerms,
-						function(i, val) {
-							var prefixTerm = (val.split(/&gt;(\s)*./)[0])
-									.split(/:(\s)*&lt;/);
-							var prefix = prefixTerm[0].replace(/@prefix(\s)*/,
-									&quot;&quot;);
-							var uri = prefixTerm[2];
-							if (isUndefinedOrNull(namespaces[prefix])) {
-								namespaces[prefix] = uri;
-								that._generateQueryPrefix(prefix, uri);
-							}
-						});
+				$.each(prefixTerms, function(i, val) {
+					var prefixTerm = (val.split(/&gt;(\s)*./)[0]).split(/:(\s)*&lt;/);
+					var prefix = prefixTerm[0].replace(/@prefix(\s)*/, &quot;&quot;);
+					var uri = prefixTerm[2];
+					if (isUndefinedOrNull(namespaces[prefix])) {
+						namespaces[prefix] = uri;
+						that._generateQueryPrefix(prefix, uri);
+					}
+				});
 			}
-		} else if (dataFormat === &quot;application/ld+json&quot;
-				|| dataFormat === &quot;application/json&quot;) {
+		} else if (dataFormat === &quot;application/ld+json&quot; || dataFormat === &quot;application/json&quot;) {
 			var prefixes = data[&quot;@context&quot;];
 			if (prefixes) {
 				$.each(prefixes, function(i, val) {
@@ -993,16 +1066,15 @@
 	 * 
 	 * @method executeQuery
 	 * @param {String}
-	 *            query Data to insert into the store
+	 *          query Data to insert into the store
 	 * @param {Function}
-	 *            callback Callback function to be called with the results of
-	 *            the execution.
+	 *          callback Callback function to be called with the results of the
+	 *          execution.
 	 * @param {Function}
-	 *            fail Callback function to be called if the execution fails.
+	 *          fail Callback function to be called if the execution fails.
 	 */
 	Plugin.RdfStore.prototype.executeQuery = function(query, callback, fail) {
-		this._store.execute(this._queryPrefixes + query, function(success,
-				results) {
+		this._store.execute(this._queryPrefixes + query, function(success, results) {
 			if (success) {
 				callback(results);
 			} else {
@@ -1013,7 +1085,6 @@
 	};
 
 	// ========================= bSynopsis: LayoutEngine Class
-	// ==============================
 	/**
 	 * Layout engine to add items to. Default: jQuery.isotope
 	 * http://isotope.metafizzy.co/
@@ -1021,33 +1092,69 @@
 	 * @class Plugin.LayoutEngine
 	 * @constructor
 	 * @param {jQuery}
-	 *            container Container to use the layout engine on
+	 *          container Container to use the layout engine on
 	 * @param {Object}
-	 *            options Options object for the layout engine
+	 *          options Options object for the layout engine
 	 */
 	Plugin.LayoutEngine = function(container, options) {
+		var engine = this;
 		this._container = container;
+		this._funcQueue = [];
+		this._occupied = false;
+		this._internDoneEvent = new Plugin.Event(this);
+		this._internDoneEvent.attach(new Plugin.Listener(function(sender) {
+			engine._addNext();
+		}));
 		// Use isotope on layout callback to trigger event
-		container.isotope($.extend(options, {onLayout : function() {
-						container.trigger(CONS.EVENT_TYPES.layout.done);
-					}}));
+		container.isotope($.extend(options, {
+			onLayout : function() {
+				container.trigger(CONS.EVENT_TYPES.layout.done);
+			}
+		}));
 	};
+
+	Plugin.LayoutEngine.prototype._addNext = function(items) {
+		if (this._funcQueue.length &gt; 0) {
+			setTimeout(this._funcQueue.shift(), 100);
+		} else {
+			this._occupied = false;
+			print(&quot;unoccupy&quot;);
+		}
+	}
 
 	/**
 	 * Adds items to the layout engine
 	 * 
 	 * @method add
 	 * @param {jQuery}
-	 *            items Div boxes which are to be added
+	 *          items Div boxes which are to be added
 	 * @param {Function}
-	 *            callback Callback function
+	 *          callback Callback function
 	 */
-	Plugin.LayoutEngine.prototype.add = function(items, callback) {
-		this._container.isotope(&quot;insert&quot;, items, callback);
+	Plugin.LayoutEngine.prototype.add = function(items) {
+		var fn = function(input) {
+			return function() {
+				var i = input;
+				engine._container.isotope(&quot;insert&quot;, i, function() {
+					engine._internDoneEvent.notify();
+				});
+			};
+		};
+		var engine = this;
+		if (items) {
+			if (!this._occupied) {
+				this._occupied = true;
+				this._container.isotope(&quot;insert&quot;, items, function() {
+					engine._internDoneEvent.notify();
+				});
+			} else {
+				this._funcQueue.push(fn(items));
+			}
+		}
 	};
 
 	/**
-	 * Repaint the layout of the div boxes
+	 * Redo the layout of the div boxes
 	 * 
 	 * @method reLayout
 	 */
@@ -1060,12 +1167,16 @@
 	 * 
 	 * @method remove
 	 * @param {jQuery}
-	 *            items Div boxes which are to be removed
+	 *          items Div boxes which are to be removed
 	 * @param {Function}
-	 *            callback Callback function
+	 *          callback Callback function
 	 */
 	Plugin.LayoutEngine.prototype.remove = function(items, callback) {
 		this._container.isotope(&quot;remove&quot;, items, callback);
+	};
+
+	Plugin.LayoutEngine.prototype.removeAll = function(callback) {
+		this._container.html(&#x27;&#x27;);
 	};
 
 	/**
@@ -1073,7 +1184,7 @@
 	 * 
 	 * @method updateSortData
 	 * @param {item}
-	 *            item Items for which sort data should be updated
+	 *          item Items for which sort data should be updated
 	 */
 	Plugin.LayoutEngine.prototype.updateSortData = function(item) {
 		this._container.isotope(&quot;updateSortData&quot;, item);
@@ -1084,37 +1195,36 @@
 	 * 
 	 * @method updateSortData
 	 * @param {Object}
-	 *            options Options object of the layout engine
+	 *          options Options object of the layout engine
 	 */
 	Plugin.LayoutEngine.prototype.updateOptions = function(options) {
 		this._container.isotope(options);
 	};
 
-
-	// ========================= bSynopsis: Node Class ==============================
+	// ========================= bSynopsis: Node Class
 	/**
 	 * Base node to represent an abstract element of the rdf graph.
 	 * 
 	 * @class Plugin.Node
 	 * @constructor
 	 * @param {Object}
-	 *            data Data of a single resource of a select query. Must contain index.
+	 *          data Data of a single resource of a select query. Must contain
+	 *          index.
 	 */
 	Plugin.Node = function(data, style) {
-		//this.label = data.label;
-		//this.description = data.description;
 		this.id = data.index; // ID for this node
 		this.type = CONS.NODE_TYPES.stdNode; // Node Type
 		this.useTemplateID = this.type; // Use Templated stored under this name
 		this.filterables = []; // Classes used for filtering
-		this.componentTypes = {};
 		this.components = {}; // Components of the node
 		this.style = style;
 		if (data.predicate) { // Empty predicates are possible on init view
 			this.filterables.push(UTIL.toFilterable(data.predicate.type));
+			data.predicate.value = unescape(data.predicate.value);
 			this.addComponent(&quot;predicate&quot;, data.predicate);
 		}
-		if(data.description) {
+		if (data.description) {
+			data.description.value = unescape(data.description.value);
 			this.addComponent(&quot;description&quot;, data.description);
 		}
 	};
@@ -1125,64 +1235,61 @@
 	 * @method addNewComponent
 	 */
 	Plugin.Node.prototype.addComponent = function(type, data, style) {
-		if(this.componentTypes[type]) {		// Increase counter
-			this.componentTypes[type]++;
-		} else {
-			this.componentTypes[type] = 1;
+		if (!this.components[type]) { // Increase counter
+			this.components[type] = [];
 		}
-		var id = type + this.componentTypes[type];
-		var predComp;
-		if (style) {
-			predComp = new Plugin.Node.Component(id, type, data, style);
-		} else {
-			predComp = new Plugin.Node.Component(id, type, data);
-		}
-		this.components[id] = predComp;
+		var id = type + this.components[type].length;
+		this.components[type].push(Plugin.ComponentFactory.makeComp(id, type, data, style));
 	}
-	
+
 	/**
-	 * Check if node has this component. You can search for type or id
-	 * 
-	 * @method hasComponent
-	 * @param {String}
-	 *            id ID to look for.
-	 * @returns {Boolean}
-	 */
-	Plugin.Node.prototype.hasComponent = function(id) { // Increment counter and return
-		return this.components.hasOwnProperty(id)
-	}
-	
-	/**
-	 * Check if node has this component type and get the first component of this type. Returns false if no object is found.
+	 * Check if node has this component type and get the first component of this
+	 * type. Returns false if no object is found.
 	 * 
 	 * @method getFComponentOT
 	 * @param {String}
-	 *            type Type to look for.
+	 *          type Type to look for.
 	 * @returns {Object}
 	 */
-	Plugin.Node.prototype.getFComponentOT = function(type) { // Increment counter and return
-		if(this.componentTypes[type]) {
-			return this.components[type+&quot;1&quot;];
+	Plugin.Node.prototype.getFComponentOT = function(type) { // Increment
+		// counter and
+		// return
+		if (this.components[type]) {
+			return this.components[type][0];
 		} else {
 			return false;
 		}
 	}
-	
+
 	/**
-	 * Check if node has a component of this type. Returns false or true.
+	 * Check if node has a component of this type. Returns Boolean.
 	 * 
 	 * @method hasComponentType
 	 * @param {String}
-	 *            type Type to look for.
+	 *          type Type to look for.
 	 * @returns {Boolean}
 	 */
-	Plugin.Node.prototype.hasComponentType = function(type) { // Increment counter and return
-		return this.componentTypes.hasOwnProperty(type);
+	Plugin.Node.prototype.hasComponentType = function(type) { // Increment
+		// counter and
+		// return
+		return this.components.hasOwnProperty(type);
 	}
-	
-	Plugin.Node.prototype.forEachComponentType = function(type, fn) { // Increment counter and return
-		for (var i = 1; i &lt;= this.componentTypes[type]; i++) {
-			fn(this.components[type+i]);
+
+	/**
+	 * Execute function for each component of given type.
+	 * 
+	 * @method forEachComponentType
+	 * @param {string}
+	 *          type Type to look for.
+	 * @param {function}
+	 *          fn Function to execute.
+	 * @returns {Object}
+	 */
+	Plugin.Node.prototype.forEachComponentType = function(type, fn) {
+		if(this.components[type]) {
+			for (var i = 0; i &lt; this.components[type].length; i++) {
+				fn(this.components[type][i]);
+			}
 		}
 	}
 
@@ -1199,6 +1306,7 @@
 	 * Return template name to use for this node
 	 * 
 	 * @method getTemplateIdentifier
+	 * @returns {String}
 	 */
 	Plugin.Node.prototype.getTemplateIdentifier = function() {
 		return this.useTemplateID;
@@ -1209,13 +1317,19 @@
 	 * 
 	 * @method setPredicateLabel
 	 * @param {Integer}
-	 *            ind
+	 *          ind
 	 * @param{String} label
 	 */
 	Plugin.Node.prototype.setPredicateLabel = function(i, label) {
-		this.components[&quot;predicate&quot; + i].label = label;
+		this.components.predicate[i].label = label;
 	};
 
+	/**
+	 * Generate tile out of the node and return it.
+	 * 
+	 * @method generateTile
+	 * @returns {jQuery}
+	 */
 	Plugin.Node.prototype.generateTile = function() {
 		var $tile = $(templates[&quot;tileWrapper&quot;](appendCssClasses({
 			node : this
@@ -1223,9 +1337,80 @@
 			node : this
 		}))));
 		$tile.data(&quot;node&quot;, this);
-		print(&quot;Tile generated&quot;);
-		print($tile);
 		return $tile;
+	};
+	
+	/**
+	 * Merges data of given node with own data.
+	 * 
+	 * @method setPredicateLabel
+	 * @param {Node}
+	 *          otherNode
+	 * @returns {Boolean}
+	 */
+	Plugin.Node.prototype.merge = function(otherNode) {
+		var that = this, update = false;
+		$.each(otherNode.components, function(typeID, comps) {
+			$.each(comps, function(i, comp) {
+				var insert = true;
+				if(that.components[typeID]) {
+					for(var j = 0; j &lt; that.components[typeID].length; j++) {
+						if(comp.equals(that.components[typeID][j])) {
+							insert = false;
+							break;
+						}
+					}
+				}
+				if(insert) {
+					that.addComponent(typeID, comp.data);
+					update = true;
+				}
+			});
+		});
+		return update;
+	};
+	
+	/**
+	 * Class to construct nodes out of sparql result sets.
+	 * 
+	 * @class Plugin.ComponentFactory
+	 * @constructor
+	 * @param {Object}
+	 *          data Data of a single resource of a select query.
+	 */
+	Plugin.ComponentFactory = {
+			//TODO equality etc
+		makeComp : function(id, type, data, style) {
+			var comp;
+			if (style) {
+				comp = new Plugin.Node.Component(id, type, data, style);
+			} else {
+				comp = new Plugin.Node.Component(id, type, data);
+			}
+			switch (type) {
+			case CONS.COMP_TYPES.predicate:
+				comp.equals = function(other) {
+					return (this.type === other.type) &amp;&amp; (this.data.value === other.data.value);
+				}
+				break;
+			case CONS.COMP_TYPES.label:
+				comp.equals = function(other) {
+					return (this.type === other.type) &amp;&amp; (this.data.value === other.data.value);
+				}
+				break;
+			case CONS.COMP_TYPES.uri:
+				comp.equals = function(other) {
+					return (this.type === other.type) &amp;&amp; (this.data === other.data);
+				}
+				break;
+			default:
+				comp.equals = function(other) {
+				return (this.type === other.type) &amp;&amp; (this.data.value === other.data.value);
+				}
+				console.log(CONS.MESSAGES.error.compType + type);
+			}
+			return comp;
+		}
 	};
 
 	/**
@@ -1234,8 +1419,8 @@
 	 * @class Plugin.Node
 	 * @constructor
 	 * @param {Object}
-	 *            data Data of a single resource of a select query. Must contain
-	 *            label and index.
+	 *          data Data of a single resource of a select query. Must contain
+	 *          label and index.
 	 */
 	Plugin.Node.Component = function(id, type, data, style) {
 		this.id = id;
@@ -1248,123 +1433,110 @@
 	 * Extension of base node to represent an std element of the rdf graph.
 	 * 
 	 * @class Plugin.ResNode
+	 * @extendes Plugin.Node
 	 * @constructor
 	 * @param {Object}
-	 *            data Data of a single resource of a select query. Must contain
-	 *            label and index.
-	 * @param {Object}
-	 *            itemStyle Node style object.   
+	 *          data Data of a single resource of a select query. Must contain
+	 *          label and index.
 	 */
 	Plugin.ResNode = function(data) {
 		// Call node constructor
 		Plugin.Node.call(this, data);
 		var that = this;
 		// Function for ID generation
-		var generateID = function() {		
-			var id = that.components.uri1.data;
-			that.forEachComponentType(&quot;predicate&quot;, function(predicate){
+		var generateID = function() {
+			var id = that.components.uri[0].data;
+			that.forEachComponentType(&quot;predicate&quot;, function(predicate) {
 				id += predicate.value;
 			});
 			return id;
 		};
-		this.type = CONS.NODE_TYPES.resNode;		// Overwrite std node type
-		this.addComponent(&quot;uri&quot;, data.subject.value, {display : &quot;none&quot;});
+		this.type = CONS.NODE_TYPES.resNode; // Overwrite std node type
+		this.addComponent(&quot;uri&quot;, data.subject.value, {
+			display : &quot;none&quot;
+		});
 		if (isUndefinedOrNull(data.label)) {
-			this.addComponent(&quot;label&quot;,{
-				value : this.uri
-			}); 
+			this.addComponent(&quot;label&quot;, {
+				value : unescape(this.uri)
+			});
 		} else {
 			data.label.value = unescape(data.label.value);
-			this.addComponent(&quot;label&quot;, data.label); 
+			this.addComponent(&quot;label&quot;, data.label);
 		}
-		this.id = generateID();				// Overwrite id
-		print(this);
+		this.id = generateID(); // Overwrite id
 	};
 
 	Plugin.ResNode.prototype = Object.create(Plugin.Node.prototype);
 	Plugin.ResNode.prototype.constructor = Plugin.ResNode;
 
 	/**
-	 * Merges data of given node with own data.
+	 * Generate tile out of node and return it.
 	 * 
-	 * @method setPredicateLabel
-	 * @param {Node}
-	 *            otherNode
-	 * @returns {}
+	 * @overwrites Plugin.Node.prototype.generateTile
+	 * @method generateTile
+	 * @returns {jQuery}
 	 */
-	Plugin.ResNode.prototype.merge = function(otherNode) {
-		var that = this, update = false;
-		$.each(otherNode, function(prop, propVal) {
-			switch (prop) {
-			case &quot;label&quot;:
-				if ((propVal.lang &amp;&amp; propVal.lang === &quot;en&quot;)
-						&amp;&amp; !(propVal.lang || propVal.lang === &quot;en&quot;)) {
-					update = true;
-					this.label = propVal;
-				}
-				break;
-
-			case &quot;predicates&quot;:
-				var updatePred = true;
-				$.each(that.predicates, function(i, predicate) {
-					if (predicate.value === propVal[0].value
-							&amp;&amp; predicate.type === propVal[0].type) {
-						updatePred = false;
-					} else if (that.filterables.indexOf(UTIL
-							.toFilterable(propVal[0].type)) === -1) {
-						that.filterables.push(UTIL
-								.toFilterable(propVal[0].type));
-					}
-				});
-				if (updatePred) {
-					update = true;
-					that.predicates.push(propVal[0]);
-				}
-			}
-		});
-		return update;
-	};
-
 	Plugin.ResNode.prototype.generateTile = function() {
 		var $tile = Plugin.Node.prototype.generateTile.call(this);
-		print(&quot;ResNode Tile generated&quot;);
 		return $tile;
 	}
 
+	/**
+	 * Extension of base node to represent an literal element of the rdf graph.
+	 * 
+	 * @class Plugin.LiteralNode
+	 * @extendes Plugin.Node
+	 * @constructor
+	 * @param {Object}
+	 *          data Data of a single resource of a select query.
+	 */
 	Plugin.LiteralNode = function(data) {
 		var that = this;
 		// Call node constructor
 		Plugin.Node.call(this, data);
 		// Function for ID generation
-		var generateID = function() {			
+		var generateID = function() {
 			var id = that.getFComponentOT(&quot;label&quot;).data.value;
-			that.forEachComponentType(&quot;predicate&quot;, function(predicate){
+			that.forEachComponentType(&quot;predicate&quot;, function(predicate) {
 				id += predicate.value;
 			});
 			return id;
 		};
 		this.type = CONS.NODE_TYPES.literal;
-		print(data.subject.value)
+		data.subject.value = unescape(data.subject.value);
 		this.addComponent(&quot;label&quot;, data.subject);
 		this.id = generateID();
-		print(this);
 	};
 
 	Plugin.LiteralNode.prototype = Object.create(Plugin.Node.prototype);
 	Plugin.LiteralNode.prototype.constructor = Plugin.LiteralNode;
 
+	/**
+	 * Generate tile out of node and return it.
+	 * 
+	 * @overwrites Plugin.Node.prototype.generateTile
+	 * @method generateTile
+	 * @returns {jQuery}
+	 */
 	Plugin.LiteralNode.prototype.generateTile = function() {
 		var $tile = Plugin.Node.prototype.generateTile.call(this);
-		print(&quot;LiteralNode Tile generated&quot;);
 		return $tile;
-	}
+	};
 
+	/**
+	 * Extension of base node to represent an literal element of the rdf graph.
+	 * 
+	 * @class Plugin.BlankNode
+	 * @extendes Plugin.Node
+	 * @constructor
+	 * @param {Object}
+	 *          data Data of a single resource of a select query.
+	 */
 	Plugin.BlankNode = function(data) {
 		// Call node constructor
 		Plugin.Node.call(this, data);
-		var that = this;
 		// Function for ID generation
-		var generateID = function() {			
+		var generateID = function() {
 			return &#x27;_&#x27; + Math.random().toString(36).substr(2, 9); // TODO
 		};
 		this.type = CONS.NODE_TYPES.blankNode;
@@ -1377,12 +1549,26 @@
 	Plugin.BlankNode.prototype = Object.create(Plugin.Node.prototype);
 	Plugin.BlankNode.prototype.constructor = Plugin.BlankNode;
 
+	/**
+	 * Generate tile out of node and return it.
+	 * 
+	 * @overwrites Plugin.Node.prototype.generateTile
+	 * @method generateTile
+	 * @returns {jQuery}
+	 */
 	Plugin.BlankNode.prototype.generateTile = function() {
 		var $tile = Plugin.Node.prototype.generateTile.call(this);
-		print(&quot;BlankNode Tile generated&quot;);
 		return $tile;
 	};
 
+	/**
+	 * Class to construct nodes out of sparql result sets.
+	 * 
+	 * @class Plugin.NodeFactory
+	 * @constructor
+	 * @param {Object}
+	 *          data Data of a single resource of a select query.
+	 */
 	Plugin.NodeFactory = {
 		makeNode : function(data, options) {
 			var node;
@@ -1394,8 +1580,7 @@
 				node = new Plugin.LiteralNode(data, options.literalStyle);
 				break;
 			case UTIL.toToken(CONS.CSS_CLASSES.patternClasses.uri):
-				if (data.label
-						&amp;&amp; (data.label.lang === undefined || data.label.lang === &quot;en&quot;)) {
+				if (data.label &amp;&amp; (data.label.lang === undefined || data.label.lang === &quot;en&quot;)) {
 					node = new Plugin.ResNode(data, options.itemStyle);
 				}
 				break;
@@ -1406,112 +1591,303 @@
 		}
 	};
 
+	// ========================= bSynopsis: Timeline Class
+	/**
+	 * Timeline
+	 * 
+	 * @class Plugin.TimeLine
+	 * @constructor
+	 */
+	Plugin.TimeLine = function($parent) {
+		this._$timelineContainer = $(&#x27;&lt;div class=&quot;&#x27; + CONS.CSS_CLASSES.timelineContainer + &#x27;&quot;&gt;&#x27;);
+		$parent.prepend(this._$timelineContainer);
+		this._$timeline = $(&#x27;&lt;ul class=&quot;&#x27; + CONS.CSS_CLASSES.timeline + &#x27;&quot;&gt;&lt;/ul&gt;&#x27;);
+		this._$timelineContainer.append(this._$timeline);
+		this.timeLineNodes = [];
+	};
+
+	/**
+	 * Open timeline overlay.
+	 * 
+	 * @method open#
+	 */
+	Plugin.TimeLine.prototype.open = function() {
+		if (this._$timelineContainer.data(&quot;isExpanded&quot;)) {
+			this._$timelineContainer.data(&quot;isExpanded&quot;, false);
+			this._$timelineContainer.css({
+				opacity : 0,
+				zIndex : -1
+			});
+		} else {
+			this._$timelineContainer.data(&quot;isExpanded&quot;, true);
+			this._$timelineContainer.css({
+				&quot;background-color&quot; : &quot;grey&quot;,
+				opacity : 1,
+				zIndex : zIndex++
+			});
+		}
+	};
+
+	/**
+	 * Close timeline overlay.
+	 * 
+	 * @method close
+	 */
+	Plugin.TimeLine.prototype.close = function() {
+		this._$timelineContainer.data(&quot;isExpanded&quot;, false);
+		this._$timelineContainer.css({
+			opacity : 0,
+			zIndex : -1
+		});
+	};
+
+	/**
+	 * Add layer to timeline via timeLineNode generation.
+	 * 
+	 * @method addLayer
+	 * @param {Plugin.Layer}
+	 *          layer Layer object to be added to timeline.
+	 */
+	Plugin.TimeLine.prototype.addLayer = function(layer) {
+		this.addNode(new Plugin.TimeLine.Node(layer));
+	};
+
+	/**
+	 * Add TimeLineNode to timeline.
+	 * 
+	 * @method addNode
+	 * @param {Plugin.TimeLine.Node}
+	 *          timeLineNode TimeLineNode added to timeline.
+	 */
+	Plugin.TimeLine.prototype.addNode = function(timeLineNode) {
+		var that = this;
+		this.timeLineNodes.push(timeLineNode);
+		this._$timeline.prepend(timeLineNode.getJQueryObj());
+		timeLineNode.clickEvent.attach(new Plugin.Listener(function() {
+			that.close();
+		}));
+	};
+
+	// ========================= bSynopsis: Timeline.Node Class
+	/**
+	 * Timeline node object to be used in timelines.
+	 * 
+	 * @class Plugin.TimeLine.Node
+	 * @constructor
+	 */
+	Plugin.TimeLine.Node = function(layer) {
+		var that = this;
+		this.clickEvent = new Plugin.Event(this);
+		this.layer = layer;
+		this.$timelineNode = $(templates.timelineItem({
+			label : (layer.node &amp;&amp; layer.node.hasComponentType(&quot;label&quot;)) ? layer.node.getFComponentOT(&quot;label&quot;).data.value : layer.id
+		}));
+		if (layer.$tile) {
+			this.$timelineNode.css({
+				&quot;background-color&quot; : layer.$tile.css(&quot;background-color&quot;)
+			});
+		}
+		this.$timelineNode.click(function() {
+			that.clickEvent.notify();
+			that.layer.open();
+			that.layer.update();
+		});
+	};
+
+	/**
+	 * Return jQuery object of timeline node
+	 * 
+	 * @method getJQueryObj
+	 * @returns {JQuery}
+	 */
+	Plugin.TimeLine.Node.prototype.getJQueryObj = function() {
+		return this.$timelineNode;
+	};
 
 	// ========================= bSynopsis: Layer Class
-	// ==================================
 	/**
 	 * Layer to be shown
 	 * 
 	 * @class Plugin.Layer
 	 * @constructor
 	 * @param {jQuery}
-	 *            $container Parent div container
+	 *          $parent Parent div container
 	 * @param {Object}
-	 *            options Options object of the view
-	 * @param {Plugin}
-	 *            plugin Parent plugin
+	 *          options Options object of the view
 	 * @param {Object}
-	 *            queries Queries to use in the view
+	 *          queries Queries to use in the view
 	 */
-	Plugin.Layer = function($container, options, plugin, queries) {
-
+	Plugin.Layer = function($parent, options, queries) {
 		var that = this;
 
-		this.plugin = plugin;
+		this.initSwitch = new Plugin.Switch(this);
+		this.openEvent = new Plugin.Event(this);
+		this.closeEvent = new Plugin.Event(this);
+		this.filterEvent = new Plugin.Event(this);
+
+		this.id = &quot;layer&quot; + layerIdCounter++;
+		this.initDfd = $.Deferred();
+		this.$parent = $parent;
 		this.options = options;
-
-		// Use this node filters
-		this.filterNames = [];
-		$.each(plugin.options.nodeFilters, function(i, filter) {
-			print(&quot;Filters found:&quot;);
-			print(filter);
-			that.filterNames.push(i);
+		$.when(that._addOverlay()).done(function() {
+			$.when(that._addOverlayContent()).done(function() {
+				that._initLayerData(queries);
+			});
 		});
-		$.each(plugin.options.tileFilters, function(i, filter) {
-			print(filter);
-			if (that.filterNames[i]) {
-				console.log(CONS.MESSAGES.warn.filterName);
-			} else {
-				that.filterNames.push(i);
-			}
-		});
+	};
 
-		this.model = new Plugin.Layer.Model(queries, options.modelOptions,
-				plugin._queries.label);
-		this.view = new Plugin.Layer.View(this.model, $container,
-				options.viewOptions);
+	/**
+	 * Private method to init Layer object.
+	 * 
+	 * @method _initLayerData
+	 * @param {Object}
+	 *          queries Queries to use for layer init
+	 */
+	Plugin.Layer.prototype._initLayerData = function(queries) {
+		var that = this;
 
-		this.model.itemsAdded.attach(function(sender, args) {
-			that.view.paint(args.addedNodes, that.plugin);
-		});
+		this.model = new Plugin.Layer.Model(queries, this.options.modelOptions, queryStore.label);
+		this.view = new Plugin.Layer.View(this.model, this.$content, this.options.viewOptions);
+		// Repaint on added items
+		this.model.itemsAdded.attach(new Plugin.Listener(function(sender, args) {
+			that.view.addTiles(that.getTilesToPaint(args.addedNodes, that.options.nodeFilters,
+					that.options.tileFilters));
+		}));
 
-		if (options.generateSortOptions || options.generateFilterOptions
-				|| plugin.options.generateTimeline) {
+		// Clear view on model clearing
+		this.model.modelCleared.attach(new Plugin.Listener(function(sender) {
+			print(&quot;Clearing view.&quot;);
+			that.view.layoutEngine.remove($(UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.tile)));
+		}));
+
+		if (this.options.generateSortOptions || this.options.generateFilterOptions) {
 			this.view.addOptionsBox();
-			if (options.generateSortOptions) {
+			if (this.options.generateSortOptions) {
 				this.view.addSorter();
 			}
-			if (options.generateFilterOptions) {
+			if (this.options.generateFilterOptions) {
 				this.view.addIsotopeFilter();
 			}
 		}
+		this._addCloseOnClick();
+		this._addBackgroundColor();
+		this._initContent();
+		this.initSwitch.trigger();
 	};
 
+	Plugin.Layer.prototype._addBackgroundColor = function() {
+		this.$overlay.css(&quot;background-color&quot;, &quot;grey&quot;);
+	};
+
+	Plugin.Layer.prototype._addFilterSelection = function() {
+		var that = this;
+		this.$overlay.find(&quot;#filterSelect&quot;).multiSelect({
+			&#x27;selectAllText&#x27; : CONS.MESSAGES.out.selectAllFilters
+		}, function(select) {
+			that.switchFilterState(select.val());
+		});
+	};
+
+	Plugin.Layer.prototype._addCloseOnClick = function() {
+		var that = this;
+		var $close = this.$overlay.find(&#x27;&gt; span&#x27; + UTIL.toSelector(CONS.CSS_CLASSES.buttonClose));
+		$close.on(&quot;click&quot;, function() {
+			that.close();
+		});
+	};
+
+	Plugin.Layer.prototype.getTimeLineButton = function() {
+		print(this.$overlay.find(UTIL.toSelector(CONS.CSS_CLASSES.buttonTimeline)));
+		return this.$overlay.find(UTIL.toSelector(CONS.CSS_CLASSES.buttonTimeline));
+	};
+
+	Plugin.Layer.prototype._addOverlay = function() {
+		var overlayAddedDfd = $.Deferred();
+		this.$overlay = $(templates.overlayWrapper(appendCssClasses({
+			&quot;id&quot; : this.id,
+		})));
+		this.$parent.append(this.$overlay);
+		overlayAddedDfd.resolve();
+		return overlayAddedDfd.promise();
+	};
+
+	Plugin.Layer.prototype._addOverlayContent = function() {
+		var overlayContentAddedDfd = $.Deferred();
+		// Dummy content (overwrite it)
+		this.$content = $(&quot;&lt;div&gt;&lt;/div&gt;&quot;);
+		this.$overlay.append(this.$content);
+		overlayContentAddedDfd.resolve();
+		return overlayContentAddedDfd.promise();
+	};
+
+	Plugin.Layer.prototype._initContent = function() {
+		this.update();
+		if (this.options.remoteOptions.remoteDynamically &amp;&amp; this.loadByRemote) {
+			this.loadByRemote();
+		}
+	};
+
+	/**
+	 * Get the div box of the overlay
+	 * 
+	 * @method getJQueryObj
+	 */
+	Plugin.Layer.prototype.getJQueryObj = function() {
+		return this.$overlay;
+	};
+
+	/**
+	 * Remove the div box of the overlay
+	 * 
+	 * @method removeHtml
+	 */
+	Plugin.Layer.prototype.removeHtml = function() {
+		return this.$overlay.remove();
+	};
+
+	/**
+	 * Call the model update function to start selfupdating of the model
+	 * 
+	 * @method update
+	 */
 	Plugin.Layer.prototype.update = function() {
+		print(&quot;Layer &quot; + this.id + &quot; is updating.&quot;);
 		this.model.update();
 	};
 
-	Plugin.Layer.prototype.switchFilterState = function(filterName) {
-		var that = this;
+	/**
+	 * Method to show the layer
+	 * 
+	 * @method open
+	 */
+	Plugin.Layer.prototype.open = function() {
+		this.$overlay.data(&quot;isExpanded&quot;, true);
+		this.show();
+	};
 
-		if (filterName === &quot;on&quot;) {
-			that.filterNames = [];
-			$.each(that.plugin.options.nodeFilters, function(i, filter) {
-				that.filterNames.push(i);
-			});
-			$.each(that.plugin.options.tileFilters, function(i, filter) {
-				if (that.filterNames[i]) {
-					console.log(CONS.MESSAGES.warn.filterName);
-				} else {
-					that.filterNames.push(i);
-				}
-			});
-		} else {
-
-			if (this.filterNames.indexOf(filterName) !== -1) {
-				this.filterNames
-						.splice(this.filterNames.indexOf(filterName), 1);
-			} else {
-				this.filterNames.push(filterName);
-			}
-		}
-
-		var nodeFilters = {};
-		var tileFilters = {};
-		$.each(this.filterNames, function(i, val) {
-			if (that.plugin.options.nodeFilters[val]) {
-				nodeFilters[val] = that.plugin.options.nodeFilters[val];
-			}
-			if (that.plugin.options.tileFilters[val]) {
-				tileFilters[val] = that.plugin.options.tileFilters[val];
-			}
-		});
-
-		this.view.clearView(function() {
-			that.view.paint(that.model.getNodes(), that.plugin, nodeFilters,
-					tileFilters);
+	Plugin.Layer.prototype.show = function() {
+		// Make overlay visible
+		this.$overlay.css({
+			clip : getClip(CONS.CSS_CLASSES.overlay),
+			opacity : 1,
+			zIndex : zIndex++,
+			pointerEvents : &#x27;auto&#x27;
 		});
 	};
+
+	Plugin.Layer.prototype.close = function() {
+		this.$overlay.data(&quot;isExpanded&quot;, false);
+		this.closeEvent.notify();
+		this.hide();
+	};
+
+	Plugin.Layer.prototype.hide = function() {
+		this.$overlay.css({
+			opacity : 0,
+			zIndex : -1
+		});
+	};
+
 	/**
 	 * Clear the view
 	 * 
@@ -1520,7 +1896,62 @@
 	Plugin.Layer.prototype.removeAllItems = function() {
 		this.model.clearModel();
 	};
-	
+
+	Plugin.Layer.prototype.getTilesToPaint = function(nodes, nodeFilters, tileFilters) {
+		return this.runTileFilters(this.generateTiles(this.runNodeFilters(nodes, nodeFilters)), tileFilters)
+	};
+
+	Plugin.Layer.prototype.runNodeFilters = function(nodes, nodeFilters) {
+		var that = this;
+		if (nodeFilters) {
+			filters = nodeFilters;
+		} else {
+			filters = this.options.nodeFilters;
+		}
+		var startTime = new Date().getTime();
+
+		// Run nodeFilters on nodes
+		$.each(filters, function(i, filter) {
+			if (!$.isEmptyObject(nodes)) {
+				nodes = filter.fn(nodes, filter.config, that);
+			} else {
+				console.log(CONS.MESSAGES.warn.filterInput);
+			}
+			print(&quot;Filter &quot; + i + &quot; done at: &quot; + (new Date().getTime() - startTime) + &quot; milisec&quot;);
+		});
+		return nodes;
+	};
+
+	Plugin.Layer.prototype.generateTiles = function(nodes, nodeFilters) {
+		// Generate all tiles
+		var $tiles = $(&quot;&lt;div&gt;&quot;);
+		$.each(nodes, function(i, node) {
+			$tiles.append($(node.generateTile()));
+		});
+		return $tiles;
+	};
+
+	Plugin.Layer.prototype.runTileFilters = function($tiles, tileFilters) {
+		var that = this;
+		var startTime = new Date().getTime();
+
+		// Generate all tiles
+		if (tileFilters) {
+			filters = tileFilters;
+		} else {
+			filters = this.options.tileFilters;
+		}
+
+		// Run tileFilters on tiles
+		$tiles = $tiles.children();
+		print(&quot;Start tile filters at: &quot; + (new Date().getTime() - startTime) + &quot; milisec&quot;);
+		$.each(filters, function(i, filter) {
+			$tiles = filter.fn($tiles, filter.config, that);
+			print(&quot;Filter &quot; + i + &quot; done at: &quot; + (new Date().getTime() - startTime) + &quot; milisec&quot;);
+		});
+		return $tiles;
+	};
+
 	Plugin.Layer.Model = function(viewQueries, options, labelQuery) {
 
 		var that = this;
@@ -1550,29 +1981,25 @@
 		 * @private
 		 * @method _fetchPredicateLabel
 		 * @param {Plugin.Node}
-		 *            node Node to fetch the predicate labels for
+		 *          node Node to fetch the predicate labels for
 		 */
 		this._fetchPredicateLabel = function(node) {
 
 			if (node.hasComponentType(&quot;predicate&quot;)) {
-				for(var i = 1; i &lt; node.componentTypes[&quot;predicate&quot;]; i++) {
-					var predicate = node.components[&quot;predicate&quot;+i];
+				for (var i = 0; i &lt; node.components.predicate.length; i++) {
+					var predicate = node.components.predicate[i];
 					if (!labelCache.contains(predicate.value)) {
-						var labelQuery = replaceDummy(that.labelQuery, 
-								predicate.value);
+						var labelQuery = replaceDummy(that.labelQuery, predicate.value);
 						rdfStore.executeQuery(labelQuery, function(results) {
 							if (results &amp;&amp; results[0]) {
 								$.each(results, function(i, result) {
-									node.setPredicateLabel(i,
-											result.label.value);
-									labelCache.add(predicate.value,
-											result.label.value);
+									node.setPredicateLabel(i, result.label.value);
+									labelCache.add(predicate.value, result.label.value);
 								});
 							}
 						});
 					} else {
-						node.setPredicateLabel(i, labelCache
-								.retrieve(predicate.value));
+						node.setPredicateLabel(i, labelCache.retrieve(predicate.value));
 					}
 				}
 			}
@@ -1587,7 +2014,7 @@
 	 * @return {Object} nodes A copy of the stored nodes
 	 */
 	Plugin.Layer.Model.prototype.getNodes = function() {
-		return deepCopy(this._nodes);
+		return this.nodes;
 	};
 
 	/**
@@ -1595,7 +2022,7 @@
 	 * 
 	 * @method checkItems
 	 * @param {Object}
-	 *            resultSet ResultSet of a Select query
+	 *          resultSet ResultSet of a Select query
 	 */
 	Plugin.Layer.Model.prototype.checkItems = function(resultSet) {
 		var length = resultSet.length, that = this, batchSize = ((length &lt; that.options.batchSize) ? length
@@ -1606,8 +2033,7 @@
 		var addedNodes = {};
 
 		$.each(batch, function(i, val) {
-			val.subject.token = UTIL.toToken(UTIL
-					.toClass(val.subject.token));
+			val.subject.token = UTIL.toToken(UTIL.toClass(val.subject.token));
 			val.index = that.nodesLength + 1;
 			var node = Plugin.NodeFactory.makeNode(val, that.options);
 
@@ -1619,6 +2045,7 @@
 						that._nodes[node.id] = node;
 						that.nodesLength++;
 					} else {
+						print(&quot;resNodeUpdate, fix me&quot;);
 						if (that._nodes[node.id].merge(node)) {
 							node = that._nodes[node.id];
 							that.itemUpdated.notify(node);
@@ -1632,9 +2059,13 @@
 						that._nodes[node.id] = node;
 						that.nodesLength++;
 					} else {
-						// TODO check literal UPDATE
-						node = undefined;
 						print(&quot;literalupdate&quot;);
+						if (that._nodes[node.id].merge(node)) {
+							node = that._nodes[node.id];
+							that.itemUpdated.notify(node);
+						} else {
+							node = undefined;
+						}
 					}
 					break;
 				case CONS.NODE_TYPES.blankNode:
@@ -1656,7 +2087,7 @@
 			}
 		});
 		this.itemsAdded.notify({
-			&quot;addedNodes&quot; : deepCopy(addedNodes),
+			&quot;addedNodes&quot; : addedNodes,
 			&quot;allNodes&quot; : this.getNodes()
 		});
 		that._checkItemsHelp(resultSet, batchSize);
@@ -1668,24 +2099,22 @@
 	 * @method update
 	 */
 	Plugin.Layer.Model.prototype.update = function() {
+		print(&quot;START&quot;);
 		var that = this;
 		this.allResults = [];
 		// Concat all results for filtering before adding
 		for (var i = 0; i &lt; this.viewQueries.length; i++) {
-			rdfStore
-					.executeQuery(
-							this.viewQueries[i].query,
-							function(results) {
-								if (results &amp;&amp; results.length !== 0) {
-									for (var j = 0; j &lt; results.length; j++) {
-										// Add types for filtering
-										if (that.viewQueries[i].type) {
-											results[j].predicate.type = that.viewQueries[i].type;
-										}
-										that.allResults.push(results[j]);
-									}
-								}
-							});
+			rdfStore.executeQuery(this.viewQueries[i].query, function(results) {
+				if (results &amp;&amp; results.length !== 0) {
+					for (var j = 0; j &lt; results.length; j++) {
+						// Add types for filtering
+						if (that.viewQueries[i].type) {
+							results[j].predicate.type = that.viewQueries[i].type;
+						}
+						that.allResults.push(results[j]);
+					}
+				}
+			});
 		}
 
 		if (this.allResults.length &gt; 0) {
@@ -1701,21 +2130,15 @@
 	};
 
 	Plugin.Layer.View = function(model, $container, viewOptions) {
-
-		var that = this;
+		this.id = &quot;view&quot; + viewIdCounter++;
 		this.options = viewOptions;
-
 		this._model = model;
-
-		this.$container = $container;
-		this.$outerContainer = $(&#x27;&lt;div class=&quot;&#x27;
-				+ CONS.CSS_CLASSES.outerContainer + &#x27;&quot;&gt;&lt;/div&gt;&#x27;);
-		this.$viewContainer = $(&#x27;&lt;div class=&quot;&#x27; + CONS.CSS_CLASSES.viewContainer
-				+ &#x27;&quot;&gt;&lt;/div&gt;&#x27;);
-		this.$container.append(this.$outerContainer);
+		this.$outerContainer = $(&#x27;&lt;div class=&quot;&#x27; + CONS.CSS_CLASSES.outerContainer + &#x27;&quot;&gt;&lt;/div&gt;&#x27;);
+		this.$viewContainer = $(&#x27;&lt;div class=&quot;&#x27; + CONS.CSS_CLASSES.viewContainer + &#x27;&quot;&gt;&lt;/div&gt;&#x27;);
+		$container.append(this.$outerContainer);
 		this.$outerContainer.append(this.$viewContainer);
-		this.layoutEngine = new Plugin.LayoutEngine(this.$viewContainer,
-				viewOptions.layoutEngine);
+		this.$viewContainer.css(&quot;width&quot;, &quot;100%&quot;);
+		this.layoutEngine = new Plugin.LayoutEngine(this.$viewContainer, viewOptions.layoutEngine);
 
 		this._getCorrespondingTile = function(node) {
 			var $tile = this.$viewContainer.find(UTIL.toClassSelector(node.id));
@@ -1723,101 +2146,10 @@
 			print($tile);
 			return $tile;
 		};
-
-		// attach model listeners
-		// on items added
-		// this._model.itemsAdded.attach(
-		// function(sender, nodes) {
-
-		// //Generate tiles for nodes
-		// var $literalTiles = $(&quot;&lt;div&gt;&quot;);
-		// var $resTiles = $(&quot;&lt;div&gt;&quot;);
-		// var $blankNodeTiles = $(&quot;&lt;div&gt;&quot;);
-		//
-		// $.each(nodes, function(i, node) {
-		// that._generateTile(node, $resTiles, $literalTiles, $blankNodeTiles);
-		// });
-		//                
-		// $literalTiles = $literalTiles.children();
-		// $resTiles = $resTiles.children();
-		// $blankNodeTiles = $blankNodeTiles.children();
-		// var $allTiles =
-		// $().add($resTiles).add($blankNodeTiles).add($literalTiles);
-		// var $browsableTiles = $().add($resTiles).add($blankNodeTiles);
-		//
-		// //Add all tiles
-		// that.layoutEngine.add($allTiles, function(){
-		// that._initBrowsability($browsableTiles);
-		// });
-
-		// });
-
-		// on items update
-		// this._model.itemUpdated.attach(
-		// function(sender, node) {
-		// var $tile = that._getCorrespondingTile(node);
-		// that.layoutEngine.remove($tile);
-		// });
-
-		// on model clearing
-		this._model.modelCleared.attach(function(sender) {
-			that.layoutEngine.remove($(UTIL
-					.toSelector(CONS.CSS_CLASSES.tileClasses.tile)),
-					function() {
-						print(&quot;view cleared&quot;);
-					});
-		});
-	};
-
-	Plugin.Layer.View.prototype.paint = function(nodes, plugin, nodeFilters,
-			tileFilters) {
-		var that = this;
-		if (nodeFilters) {
-			filters = nodeFilters;
-		} else {
-			filters = plugin.options.nodeFilters;
-		}
-		var startTime = new Date().getTime();
-
-		// Run nodeFilters on nodes
-		$.each(filters, function(i, filter) {
-			if (!$.isEmptyObject(nodes)) {
-				nodes = filter.fn(plugin, nodes, filter.config, that);
-			} else {
-				console.log(CONS.MESSAGES.warn.filterInput);
-			}
-			print(&quot;Filter &quot; + i + &quot; done at: &quot; + (new Date().getTime() - startTime) + &quot; milisec&quot;);
-		});
-
-		// Generate all tiles
-		var $tiles = $(&quot;&lt;div&gt;&quot;);
-		$.each(nodes, function(i, node) {
-			$tiles.append($(node.generateTile()));
-		});
-
-		if (tileFilters) {
-			filters = tileFilters;
-		} else {
-			filters = plugin.options.tileFilters;
-		}
-
-		// Run tileFilters on tiles
-		$tiles = $tiles.children();
-		$.each(filters, function(i, filter) {
-			$tiles = filter.fn(plugin, $tiles, filter.config, that);
-			print(&quot;Filter &quot; + i + &quot; done at: &quot; + (new Date().getTime() - startTime) + &quot; milisec&quot;);
-		});
-		this.addTiles($tiles);
 	};
 
 	Plugin.Layer.View.prototype.clearView = function(callback) {
-		this.removeTiles(this.$viewContainer.find(UTIL
-				.toSelector(CONS.CSS_CLASSES.tileClasses.tile)));
-		// this.$viewContainer.find(&quot;.item&quot;).remove();
-		// this.layoutEngine.reLayout();
-		if (callback) {
-			callback();
-		}
+		this.layoutEngine.removeAll(callback);
 	};
 
 	Plugin.Layer.View.prototype.removeTiles = function($tiles, callback) {
@@ -1834,10 +2166,9 @@
 	};
 
 	Plugin.Layer.View.prototype.addOptionsBox = function() {
-		this.$optionsContainer = $(&#x27;&lt;section class=&quot;&#x27;
-				+ CONS.CSS_CLASSES.options + &#x27;&quot; class=&quot;&#x27;
+		this.$optionsContainer = $(&#x27;&lt;section class=&quot;&#x27; + CONS.CSS_CLASSES.options + &#x27;&quot; class=&quot;&#x27;
 				+ CONS.CSS_CLASSES.clearfix + &#x27;&quot;&gt;&lt;/section&gt;&#x27;);
-		this.$container.prepend(this.$optionsContainer);
+		this.$outerContainer.prepend(this.$optionsContainer);
 	};
 
 	Plugin.Layer.View.prototype.addSorter = function() {
@@ -1850,12 +2181,10 @@
 			optionSet : sortData
 		}));
 		this.$optionsContainer.prepend(sortOptions);
-		var $sorter = this.$optionsContainer.find(&#x27; &gt; &#x27;
-				+ UTIL.toSelector(CONS.CSS_CLASSES.sorter));
+		var $sorter = this.$optionsContainer.find(&#x27; &gt; &#x27; + UTIL.toSelector(CONS.CSS_CLASSES.sorter));
 
 		// Set selected on view
-		$sorter.find(&#x27;.&#x27; + this.options.layoutEngine.sortBy).addClass(
-				&quot;selected&quot;);
+		$sorter.find(&#x27;.&#x27; + this.options.layoutEngine.sortBy).addClass(&quot;selected&quot;);
 		var $sortLinks = this.$optionsContainer.find(&#x27;a&#x27;);
 
 		$sorter.append(templates.groupDropDown(appendCssClasses({
@@ -1876,15 +2205,13 @@
 			// get href attribute, minus the &#x27;#&#x27;
 			var groupBy = $(this).val();
 
-			that.$container.find(
-					UTIL.toSelector(CONS.CSS_CLASSES.sorter)
-							+ &#x27; &gt; &gt; &gt; .selected&#x27;).removeClass(&#x27;selected&#x27;);
+			that.$outerContainer.find(UTIL.toSelector(CONS.CSS_CLASSES.sorter) + &#x27; &gt; &gt; &gt; .selected&#x27;)
+					.removeClass(&#x27;selected&#x27;);
 			that.layoutEngine.updateOptions({
 				getSortData : {
 					group : function($elem) {
 						var classes = $elem.attr(&quot;class&quot;);
-						var pattern = new RegExp(&quot;(\s)*[a-zA-Z0-9]*&quot; + groupBy
-								+ &quot;[a-zA-Z0-9_]*(\s)*&quot;, &#x27;g&#x27;);
+						var pattern = new RegExp(&quot;(\s)*[a-zA-Z0-9]*&quot; + groupBy + &quot;[a-zA-Z0-9_]*(\s)*&quot;, &#x27;g&#x27;);
 						var groups = classes.match(pattern), group = &quot;&quot;;
 						if (groups !== null) {
 							for (var i = 0; i &lt; groups.length; i++) {
@@ -1897,9 +2224,7 @@
 			});
 			that.layoutEngine.updateSortData(that.$viewContainer.find(UTIL
 					.toSelector(CONS.CSS_CLASSES.tileClasses.tile)));
-			that.$container.find(
-					&quot;&gt; &gt; &quot; + UTIL.toSelector(CONS.CSS_CLASSES.groupLabel))
-					.remove();
+			that.$outerContainer.find(&quot;&gt; &gt; &quot; + UTIL.toSelector(CONS.CSS_CLASSES.groupLabel)).remove();
 			that.layoutEngine.updateOptions({
 				layoutMode : &#x27;groupRows&#x27;,
 				sortBy : &quot;group&quot;
@@ -1912,12 +2237,9 @@
 			// get href attribute, minus the &#x27;#&#x27;
 			var sortName = $(this).attr(&#x27;data-sort-value&#x27;);
 			$sorterGroup.val(&quot;Group by...&quot;);
-			that.$optionsContainer.find(
-					UTIL.toSelector(CONS.CSS_CLASSES.sorter)
-							+ &#x27; &gt; &gt; &gt; .selected&#x27;).removeClass(&quot;selected&quot;);
-			that.$container.find(
-					&quot;&gt; &gt; &quot; + UTIL.toSelector(CONS.CSS_CLASSES.groupLabel))
-					.remove();
+			that.$optionsContainer.find(UTIL.toSelector(CONS.CSS_CLASSES.sorter) + &#x27; &gt; &gt; &gt; .selected&#x27;)
+					.removeClass(&quot;selected&quot;);
+			that.$outerContainer.find(&quot;&gt; &gt; &quot; + UTIL.toSelector(CONS.CSS_CLASSES.groupLabel)).remove();
 			$(this).addClass(&quot;selected&quot;);
 			that.layoutEngine.updateOptions({
 				layoutMode : &#x27;masonry&#x27;,
@@ -1935,8 +2257,7 @@
 		}));
 		this.$optionsContainer.append(filterOptions);
 
-		var $filter = this.$optionsContainer.find(&#x27; &gt; &#x27;
-				+ UTIL.toSelector(CONS.CSS_CLASSES.filter));
+		var $filter = this.$optionsContainer.find(&#x27; &gt; &#x27; + UTIL.toSelector(CONS.CSS_CLASSES.filter));
 		var $filterLinks = $filter.find(&#x27;a&#x27;);
 
 		// Add onClick
@@ -1946,9 +2267,8 @@
 			if (selector !== &#x27;*&#x27;) {
 				selector = &quot;.&quot; + CONS.FA_TAG + selector;
 			}
-			that.$container.find(
-					UTIL.toSelector(CONS.CSS_CLASSES.filter)
-							+ &#x27; &gt; &gt; &gt; .selected&#x27;).removeClass(&#x27;selected&#x27;);
+			that.$outerContainer.find(UTIL.toSelector(CONS.CSS_CLASSES.filter) + &#x27; &gt; &gt; &gt; .selected&#x27;)
+					.removeClass(&#x27;selected&#x27;);
 			$(this).addClass(&#x27;selected&#x27;);
 			that.layoutEngine.updateOptions({
 				filter : selector
@@ -1956,421 +2276,349 @@
 			return false;
 		});
 
-		$filter
-				.append(&#x27;&lt;input id=&quot;filterField&quot; type=&quot;text&quot; size=&quot;25&quot; value=&quot;Enter search here.&quot;&gt;&#x27;);
+		$filter.append(&#x27;&lt;input id=&quot;filterField&quot; type=&quot;text&quot; size=&quot;25&quot; value=&quot;Enter search here.&quot;&gt;&#x27;);
 		var $filterBox = $filter.find(&#x27;#filterField&#x27;);
 
 		// Add onKey
-		$filterBox
-				.keyup(function(e) {
+		$filterBox.keyup(function(e) {
 
-					// get href attribute, minus the &#x27;#&#x27;
-					var selector = $(this).val();
-					if (selector !== &#x27;&#x27;) {
-						if (selector !== &#x27;*&#x27;) {
-							if (that.options.supportRegExpFilter) {
-								try {
-									selector = &quot;div:regex(class, &quot; + selector
-											+ &quot;), div &gt; div:contains(&quot;
-											+ selector + &quot;)&quot;;
-								} catch (e) {
-									selector = &quot;div &gt; div:contains(&quot; + selector
-											+ &quot;)&quot;;
-								}
-							} else {
-								selector = &quot;div &gt; div:contains(&quot; + selector
-										+ &quot;)&quot;;
-							}
+			// get href attribute, minus the &#x27;#&#x27;
+			var selector = $(this).val();
+			if (selector !== &#x27;&#x27;) {
+				if (selector !== &#x27;*&#x27;) {
+					if (that.options.supportRegExpFilter) {
+						try {
+							selector = &quot;div:regex(class, &quot; + selector + &quot;), div &gt; div:contains(&quot; + selector + &quot;)&quot;;
+						} catch (e) {
+							selector = &quot;div &gt; div:contains(&quot; + selector + &quot;)&quot;;
 						}
 					} else {
-						selector = &#x27;*&#x27;;
+						selector = &quot;div &gt; div:contains(&quot; + selector + &quot;)&quot;;
 					}
+				}
+			} else {
+				selector = &#x27;*&#x27;;
+			}
 
-					that.$container.find(
-							UTIL.toSelector(CONS.CSS_CLASSES.filter)
-									+ &#x27; &gt; &gt; &gt; .selected&#x27;).removeClass(
-							&#x27;selected&#x27;);
-					that.layoutEngine.updateOptions({
-						filter : selector
-					});
-					return false;
-				});
+			that.$outerContainer.find(UTIL.toSelector(CONS.CSS_CLASSES.filter) + &#x27; &gt; &gt; &gt; .selected&#x27;)
+					.removeClass(&#x27;selected&#x27;);
+			that.layoutEngine.updateOptions({
+				filter : selector
+			});
+			return false;
+		});
 	};
 
-	// ========================= bSynopsis: InitLayer Class
-	// ==============================
+	// Object for all layer types
+	Plugin.Layers = {};
+
+	// ========================= bSynopsis: ResNodeLayer Class
 	/**
 	 * Initialization view of the plugin
 	 * 
-	 * @class Plugin.InitLayer
+	 * @class Plugin.Layers.Res
 	 * @extends Plugin.Layer
 	 * @constructor
 	 * @param {jQuery}
-	 *            $container Container of the initialization view
+	 *          $container Container of the initialization view
 	 * @param {Object}
-	 *            options Options object
+	 *          options Options object
 	 * @param {Plugin}
-	 *            plugin The parent plugin of the initialization view
+	 *          plugin The parent plugin of the initialization view
 	 */
-	Plugin.InitLayer = function($container, options, plugin) {
-		Plugin.Layer.call(this, $container, options, plugin,
-				plugin.options.initQueries);
+	Plugin.Layers.Res = function($container, options, $tile) {
+		this.$tile = $tile;
+		this.node = $tile.data(&quot;node&quot;);
+
+		// Get queries
+		var queries = []
+		var subjectOfQuery = replaceDummy(queryStore.selectSubjectOf, this.node.getFComponentOT(&quot;uri&quot;).data);
+		var objectOfQuery = replaceDummy(queryStore.selectObjectOf, this.node.getFComponentOT(&quot;uri&quot;).data);
+		queries.push({
+			query : subjectOfQuery,
+			type : CONS.CSS_CLASSES.typeClasses.outgoing
+		});
+		queries.push({
+			query : objectOfQuery,
+			type : CONS.CSS_CLASSES.typeClasses.incoming
+		});
+		Plugin.Layer.call(this, $container, options, queries);
 	};
 
 	// pseudo class inheritance
-	Plugin.InitLayer.prototype = Object.create(Plugin.Layer.prototype);
-	Plugin.InitLayer.prototype.constructor = Plugin.InitLayer;
+	Plugin.Layers.Res.prototype = Object.create(Plugin.Layer.prototype);
+	Plugin.Layers.Res.prototype.constructor = Plugin.Layers.Res;
 
-	// ========================= bSynopsis: DetailLayer Class
-	// ==============================
-	/**
-	 * Detailed view of an subject / item
-	 * 
-	 * @class Plugin.DetailLayer
-	 * @extends Plugin.Layer
-	 * @constructor
-	 * @param {jQuery}
-	 *            $container Container of the detail view
-	 * @param {Object}
-	 *            options Options object
-	 * @param {Plugin}
-	 *            plugin The parent plugin of the detail view
-	 * @param {jQuery}
-	 *            $item Item to get the detail view from
-	 */
-	Plugin.DetailLayer = function($container, options, plugin, $item) {
-		var that = this;
-		this.$item = $item;
-		this.node = $item.data(&quot;node&quot;);
-
-		if (plugin.options.generateTimeline) {
-			var $timelineNode = $(templates.timelineItem(that.node));
-			$timelineNode.css({
-				&quot;background-color&quot; : that.$item.css(&quot;background-color&quot;)
-			});
-			plugin._$timeline.prepend($timelineNode);
-			$timelineNode.data(&quot;node&quot;, that.node);
-			$timelineNode.click(function() {
-				plugin.addLayer(plugin.generateLayer($timelineNode));
-				plugin._$timelineContainer.data(&quot;isExpanded&quot;, false);
-				plugin._$timelineContainer.css({
-					opacity : 0,
-					zIndex : -1
-				});
-			})
-		}
-
-		var queries = [];
-		switch (that.node.getType()) {
-		case CONS.NODE_TYPES.literal:
-			var literalIsObjectOf = replaceDummy(
-					plugin._queries.literalIsObjectOf, this.node.getFComponentOT(&quot;value&quot;).data);
-			queries.push({
-				query : literalIsObjectOf,
-				type : CONS.CSS_CLASSES.typeClasses.incoming
-			});
-			break;
-		case CONS.NODE_TYPES.resNode:
-		default:
-			var subjectOfQuery = replaceDummy(plugin._queries.selectSubjectOf,
-					this.node.getFComponentOT(&quot;uri&quot;).data);
-			var objectOfQuery = replaceDummy(
-					plugin._queries.selectObjectOf, this.node.getFComponentOT(&quot;uri&quot;).data);
-			queries.push({
-				query : subjectOfQuery,
-				type : CONS.CSS_CLASSES.typeClasses.outgoing
-			});
-			queries.push({
-				query : objectOfQuery,
-				type : CONS.CSS_CLASSES.typeClasses.incoming
-			});
-		}
-
-		var $overlayContent = $container.find(&#x27;&gt; &#x27;
-				+ UTIL.toSelector(CONS.CSS_CLASSES.overlayContent));
-
-		if (plugin.options.generateTimeline) {
-			// &lt;---- open timeline click Event ----&gt;
-			var $btnTimeline = $container.find(&#x27;&gt; span&#x27;
-					+ UTIL.toSelector(CONS.CSS_CLASSES.buttonTimeline));
-			eventManagers[plugin.pluginID]
-					.addEventHandler(&#x27;click&#x27;,
-							function() {
-								if (plugin._$timelineContainer
-										.data(&quot;isExpanded&quot;)) {
-									plugin._$timelineContainer.data(
-											&quot;isExpanded&quot;, false);
-									plugin._$timelineContainer.css({
-										opacity : 0,
-										zIndex : -1
-									});
-								} else {
-									plugin._$timelineContainer.data(
-											&quot;isExpanded&quot;, true);
-									var color = new RGBColor(that.$item
-											.css(&quot;background-color&quot;));
-									color.r -= 20;
-									color.b -= 20;
-									color.g -= 20;
-									plugin._$timelineContainer.css({
-										&quot;background-color&quot; : color.toRGB(),
-										opacity : 1,
-										zIndex : 9999
-									});
-								}
-							}, $btnTimeline);
-			// &lt;!---open timeline click Event ----&gt;
-		}
-
-		// &lt;---- close click Event ----&gt;
-		var $close = $container.find(&#x27;&gt; span&#x27;
-				+ UTIL.toSelector(CONS.CSS_CLASSES.buttonClose));
-		eventManagers[plugin.pluginID].addEventHandler(&#x27;click&#x27;, function() {
-			that.close();
-		}, $close);
-		// &lt;!--- close click Event ----&gt;
-
-		// Input for the handlebar
-		// template
-		var input = {};
-		input.label = $item.find(
-				UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.label)).text();
-
-		// write new data
-		$overlayContent.append($(templates.overlayContent(appendCssClasses({
+	Plugin.Layers.Res.prototype._addOverlayContent = function() {
+		var overlayContentAddedDfd = $.Deferred();
+		var $content = this.$overlay.find(UTIL.toSelector(CONS.CSS_CLASSES.overlayContent));
+		$content.append($(templates.overlayContent(appendCssClasses({
 			node : this.node
 		}))));
-
-		Plugin.Layer.call(this, $overlayContent.find(UTIL
-				.toSelector(CONS.CSS_CLASSES.innerScroll)), options, plugin,
-				queries);
-
-		this.$overlay = $container;
-
-		// JQuery multiSelect
-		// http://www.erichynds.com/blog/jquery-ui-multiselect-widget
-		this.$overlay.find(&quot;#filterSelect&quot;).multiSelect({
-			&#x27;selectAllText&#x27; : CONS.MESSAGES.out.selectAllFilters
-		}, function(select) {
-			that.switchFilterState(select.val());
-		});
-		this.$overlayContent = $overlayContent;
-
-		// Function to init content of given full view overlay.
-		this._initOverlayContent = function($container, callback) {
-
-			that.update();
-
-			if (that.options.remoteOptions.remoteDynamically) {
-				that.loadByRemote();
-			}
-
-			// Set background color
-			var color = new RGBColor(that.$item.css(&quot;background-color&quot;));
-			$container.css(&quot;background-color&quot;, color.toRGB());
-			$.each($overlayContent.children(&#x27;div&#x27;
-					+ UTIL.toSelector(&quot;innerScroll&quot;)), function(i, val) {
-				color.r -= 10;
-				color.b -= 10;
-				color.g -= 10;
-				$(val).css(&quot;background&quot;, color.toRGB());
-			});
-
-			// Set content width
-			// $overlayContent.find(&#x27;&gt; .overlayColumn&#x27;).css(&quot;width&quot;, 100 + &quot;%&quot;);
-
-			// Set innerScrollBox width and height
-			$overlayContent
-					.find(UTIL.toSelector(CONS.CSS_CLASSES.innerScroll))
-					.css(
-							&quot;width&quot;,
-							($window.width()
-									- parseInt($container.css(&quot;padding-left&quot;)) - parseInt($container
-									.css(&quot;padding-right&quot;)))
-									+ &quot;px&quot;);
-			$overlayContent
-					.find(UTIL.toSelector(CONS.CSS_CLASSES.innerScroll))
-					.css(
-							&quot;height&quot;,
-							$window.height()
-									- $overlayContent
-											.find(
-													UTIL
-															.toSelector(CONS.CSS_CLASSES.innerNoScroll))
-											.height() + &quot;px&quot;);
-
-			callback();
-		};
-
-		// Fill overlay with content
-		that
-				._initOverlayContent(
-						$container,
-						function() {
-							// &lt;---- overlay show function ----&gt;
-							var previewClip = getClip(CONS.CSS_CLASSES.preview), overlayClip = getClip(CONS.CSS_CLASSES.overlay);
-
-							// Make overlay visible
-							$container.css({
-								clip : supportTransitions ? previewClip
-										: overlayClip,
-								opacity : 1,
-								zIndex : 9998,
-								pointerEvents : &#x27;auto&#x27;
-							});
-
-							if (supportTransitions) {
-								$container
-										.on(
-												transEndEventName,
-												function() {
-
-													$container
-															.off(transEndEventName);
-
-													setTimeout(
-															function() {
-																$container
-																		.css(
-																				&#x27;clip&#x27;,
-																				overlayClip)
-																		.on(
-																				transEndEventName,
-																				function() {
-																					$container
-																							.off(transEndEventName);
-																					plugin.$body
-																							.addClass(&#x27;noscroll&#x27;);
-																				});
-															}, 25);
-
-												});
-							} else {
-								plugin.$body.addClass(&#x27;noscroll&#x27;);
-							}
-							// &lt;!--- overlay show function ----&gt;
-						});
+		this.$content = $content.find(UTIL.toSelector(CONS.CSS_CLASSES.innerScroll));
+		// Set innerScrollBox width and height
+		this.$content.css(&quot;width&quot;,
+				($window.width() - parseInt(this.$overlay.css(&quot;padding-left&quot;)) - parseInt(this.$overlay
+						.css(&quot;padding-right&quot;)))
+						+ &quot;px&quot;);
+		this.$content.css(&quot;height&quot;, $window.height()
+				- this.$overlay.find(UTIL.toSelector(CONS.CSS_CLASSES.innerNoScroll)).height() + &quot;px&quot;);
+		overlayContentAddedDfd.resolve();
+		return overlayContentAddedDfd.promise();
 	};
 
-	// pseudo class inheritance of Layer
-	Plugin.DetailLayer.prototype = Object.create(Plugin.Layer.prototype);
-	Plugin.DetailLayer.prototype.constructor = Plugin.DetailLayer;
+	Plugin.Layers.Res.prototype._addBackgroundColor = function() {
+		var color = new RGBColor(this.$tile.css(&quot;background-color&quot;));
+		this.$overlay.css(&quot;background-color&quot;, color.toRGB());
+		$.each(this.$content.children(&#x27;div&#x27; + UTIL.toSelector(&quot;innerScroll&quot;)), function(i, val) {
+			color.r -= 10;
+			color.b -= 10;
+			color.g -= 10;
+			$(val).css(&quot;background&quot;, color.toRGB());
+		});
+	};
 
 	/**
 	 * Load children by remote service
 	 * 
 	 * @method loadByRemote
 	 */
-	Plugin.DetailLayer.prototype.loadByRemote = function() {
+	Plugin.Layers.Res.prototype.loadByRemote = function() {
 
 		var that = this;
-
-		if (!that.remoteDataLoader) {
-			that.remoteDataLoader = new Plugin.RemoteDataLoader(
-					that.options.remoteOptions.remoteBackend,
-					that.plugin.pluginID);
-		}
-
 		// Get items who are in a relation to
 		// current item
-		switch (that.node.getType()) {
-		case CONS.NODE_TYPES.resNode:
-			var remoteSubjectOf = replaceDummy(
-					that.plugin._queries.remoteSubjectOf, that.node.getFComponentOT(&quot;uri&quot;).data), remoteObjectOf = replaceDummy(
-					that.plugin._queries.remoteObjectOf, that.node.getFComponentOT(&quot;uri&quot;).data);
+		var remoteSubjectOf = replaceDummy(queryStore.remoteSubjectOf, that.node.getFComponentOT(&quot;uri&quot;).data);
+		var remoteObjectOf = replaceDummy(queryStore.remoteObjectOf, that.node.getFComponentOT(&quot;uri&quot;).data);
 
-			// remote needed?
-			that.remoteDataLoader.insertByQuery(remoteSubjectOf + &quot; LIMIT &quot;
-					+ that.options.remoteOptions.remoteLimit);
-			that.remoteDataLoader.insertByQuery(remoteObjectOf + &quot; LIMIT &quot;
-					+ that.options.remoteOptions.remoteLimit);
-			break;
-		case CONS.NODE_TYPES.literal:
-			var remoteLiteralIsObjectOf = replaceDummy(
-					that.plugin._queries.remoteLiteralIsObjectOf,
-					that.node.getFComponentOT(&quot;value&quot;));
-
-			// remote needed?
-			that.remoteDataLoader.insertByQuery(remoteLiteralIsObjectOf
-					+ &quot; LIMIT &quot; + that.options.remoteOptions.remoteLimit);
-			break;
-		}
+		// remote needed?
+		remoteDataLoader.insertByQuery(remoteSubjectOf + &quot; LIMIT &quot; + that.options.remoteOptions.remoteLimit);
+		remoteDataLoader.insertByQuery(remoteObjectOf + &quot; LIMIT &quot; + that.options.remoteOptions.remoteLimit);
 	};
 
-	/**
-	 * Closes the view
-	 * 
-	 * @method close
-	 */
-	Plugin.DetailLayer.prototype.close = function() {
+	Plugin.Layers.Res.prototype.show = function() {
+		// &lt;---- overlay show function ----&gt;
 		var that = this;
+		var previewClip = getClip(CONS.CSS_CLASSES.preview), overlayClip = getClip(CONS.CSS_CLASSES.overlay);
 
-		// clear old data
-		that.plugin.removeLayer(that);
+		// Make overlay visible
+		this.$overlay.css({
+			clip : supportTransitions ? previewClip : overlayClip,
+			opacity : 1,
+			zIndex : zIndex++,
+			pointerEvents : &#x27;auto&#x27;
+		});
 
-		var layoutProp = getItemLayoutProp(that.$item), itemClip = &#x27;rect(&#x27;
-				+ layoutProp.top + &#x27;px &#x27; + (layoutProp.left + layoutProp.width)
-				+ &#x27;px &#x27; + (layoutProp.top + layoutProp.height) + &#x27;px &#x27;
+		if (supportTransitions) {
+			that.$overlay.on(transEndEventName, function() {
+				that.$overlay.off(transEndEventName);
+				setTimeout(function() {
+					that.$overlay.css(&#x27;clip&#x27;, overlayClip).on(transEndEventName, function() {
+						that.$overlay.off(transEndEventName);
+						that.openEvent.notify();
+					});
+				}, 25);
+
+			});
+		} else {
+			that.openEvent.notify();
+		}
+		// &lt;!--- overlay show function ----&gt;
+	};
+
+	Plugin.Layers.Res.prototype.hide = function() {
+		var that = this;
+		var layoutProp = getItemLayoutProp(this.$tile), itemClip = &#x27;rect(&#x27; + layoutProp.top + &#x27;px &#x27;
+				+ (layoutProp.left + layoutProp.width) + &#x27;px &#x27; + (layoutProp.top + layoutProp.height) + &#x27;px &#x27;
 				+ layoutProp.left + &#x27;px)&#x27;;
-		that.$overlay.children().remove(&#x27;&#x27;);
-		that.$overlay.css({
+		// this.$overlay.children().remove(&#x27;&#x27;);
+		this.$overlay.css({
 			clip : itemClip,
 			opacity : 1,
 			pointerEvents : &#x27;none&#x27;
 		});
 
 		// &lt;---- overlay hide ----&gt;
-
 		if (supportTransitions) {
 			that.$overlay.on(transEndEventName, function() {
 				that.$overlay.off(transEndEventName);
 				setTimeout(function() {
-					that.$overlay.css(&#x27;opacity&#x27;, 0).on(transEndEventName,
-							function() {
-								that.$overlay.off(transEndEventName).css({
-									clip : &#x27;auto&#x27;,
-									zIndex : -1
-								});
-								that.$overlay.remove();
-								that.$item.data(&#x27;isExpanded&#x27;, false);
-							});
+					that.$overlay.css(&#x27;opacity&#x27;, 0).on(transEndEventName, function() {
+						that.$overlay.off(transEndEventName).css({
+							clip : &#x27;auto&#x27;,
+							zIndex : -1
+						});
+						// that.$overlay.remove();
+						that.$tile.data(&#x27;isExpanded&#x27;, false);
+					});
 				}, 25);
-
 			});
 		} else {
 			that.$overlay.css({
 				opacity : 0,
 				zIndex : -1
 			});
-			that.$overlay.remove();
+			// that.$overlay.remove();
+			that.$tile.data(&#x27;isExpanded&#x27;, false);
 		}
 		// &lt;!--- overlay hide ----&gt;
 	};
 
+	// ========================= bSynopsis: LiteralNodeLayer Class
+	/**
+	 * Initialization view of the plugin
+	 * 
+	 * @class Plugin.Layers.Literal
+	 * @extends Plugin.Layer
+	 * @constructor
+	 * @param {jQuery}
+	 *          $container Container of the initialization view
+	 * @param {Object}
+	 *          options Options object
+	 * @param {Plugin}
+	 *          plugin The parent plugin of the initialization view
+	 */
+	Plugin.Layers.Literal = function($container, options, $tile) {
+		this.$tile = $tile;
+		this.node = $tile.data(&quot;node&quot;);
+
+		// Get queries
+		var queries = []
+		var literalIsObjectOf = replaceDummy(queryStore.literalIsObjectOf,
+				this.node.getFComponentOT(&quot;value&quot;).data);
+		queries.push({
+			query : literalIsObjectOf,
+			type : CONS.CSS_CLASSES.typeClasses.incoming
+		});
+		Plugin.Layer.call(this, $container, options, queries);
+	};
+
+	// pseudo class inheritance
+	Plugin.Layers.Literal.prototype = Object.create(Plugin.Layer.prototype);
+	Plugin.Layers.Literal.prototype.constructor = Plugin.Layers.Literal;
+
+	Plugin.Layers.Literal.prototype._addOverlayContent = function() {
+		return Plugin.Layers.Res.prototype._addOverlayContent.call(this);
+	};
+
+	Plugin.Layers.Literal.prototype._addBackgroundColor = function() {
+		Plugin.Layers.Res.prototype._addBackgroundColor.call(this);
+	};
+
+	/**
+	 * Load children by remote service
+	 * 
+	 * @method loadByRemote
+	 */
+	Plugin.Layers.Literal.prototype.loadByRemote = function() {
+
+		var that = this;
+		// Get items who are in a relation to
+		// current item
+		var remoteLiteralIsObjectOf = replaceDummy(queryStore.remoteLiteralIsObjectOf, that.node
+				.getFComponentOT(&quot;value&quot;));
+
+		// remote needed?
+		remoteDataLoader.insertByQuery(remoteLiteralIsObjectOf + &quot; LIMIT &quot;
+				+ that.options.remoteOptions.remoteLimit);
+	};
+
+	// ========================= bSynopsis: BlankNodeLayer Class
+	/**
+	 * Initialization view of the plugin
+	 * 
+	 * @class Plugin.Layers.Blank
+	 * @extends Plugin.Layer
+	 * @constructor
+	 * @param {jQuery}
+	 *          $container Container of the initialization view
+	 * @param {Object}
+	 *          options Options object
+	 * @param {Plugin}
+	 *          plugin The parent plugin of the initialization view
+	 */
+	Plugin.Layers.Blank = function($container, options) {
+		// TODO
+	};
+
+	// pseudo class inheritance
+	Plugin.Layers.Blank.prototype = Object.create(Plugin.Layer.prototype);
+	Plugin.Layers.Blank.prototype.constructor = Plugin.Layers.Blank;
+
+	// ========================= bSynopsis: BlankNodeLayer Class
+	/**
+	 * Initialization view of the plugin
+	 * 
+	 * @class Plugin.Layers.Inlay
+	 * @extends Plugin.Layer
+	 * @constructor
+	 * @param {jQuery}
+	 *          $container Container of the initialization view
+	 * @param {Object}
+	 *          options Options object
+	 * @param {Plugin}
+	 *          plugin The parent plugin of the initialization view
+	 */
+	Plugin.Layers.Inlay = function($container, options, queries) {
+		Plugin.Layer.call(this, $container, options, queries);
+	};
+
+	// pseudo class inheritance
+	Plugin.Layers.Inlay.prototype = Object.create(Plugin.Layer.prototype);
+	Plugin.Layers.Inlay.prototype.constructor = Plugin.Layers.Blank;
+
+	Plugin.Layers.Inlay.prototype._addOverlay = function() {
+		var overlayContentAddedDfd = $.Deferred();
+		this.$overlay = this.$parent;
+		overlayContentAddedDfd.resolve();
+		return overlayContentAddedDfd.promise();
+	};
+
+	Plugin.Layers.Inlay.prototype._addBackgroundColor = function() {
+
+	};
+
+	Plugin.Layers.Inlay.prototype._addOverlayContent = function() {
+		var overlayContentAddedDfd = $.Deferred();
+		this.$content = this.$overlay;
+		overlayContentAddedDfd.resolve();
+		return overlayContentAddedDfd.promise();
+	};
+
+	Plugin.Layers.Inlay.prototype.show = function() {
+		this.$overlay.css({
+			position : &quot;static&quot;,
+			opacity : 1,
+			pointerEvents : &#x27;auto&#x27;
+		});
+	};
+
+	Plugin.Layers.Inlay.prototype.hide = function() {
+		this.$overlay.css({
+			opacity : 0
+		});
+	};
+
 	// ========================= bSynopsis: Preview Class
-	// ==============================
 	// TODO preview
 
 	// ========================= bSynopsis: TemplatesLoader Class
-	// ==============================
 	/**
-	 * Handlebars templates loader to load precompiled or nonprecompiled
-	 * templates
+	 * Handlebars templates loader to load precompiled or nonprecompiled templates
 	 * 
 	 * @class Plugin.TemplatesLoader
 	 * @constructor
 	 * @param {Deferred
-	 *            Object} dfd Deferred Object to resolve when loading is done
+	 *          Object} dfd Deferred Object to resolve when loading is done
 	 */
 	Plugin.TemplatesLoader = function(dfd) {
 		this._templateInitDfd = dfd;
-		this._neededTemps = [ &quot;filterOptions&quot;, &quot;sortOptions&quot;, &quot;tileWrapper&quot;,
-				&quot;stdNode&quot;, &quot;groupDropDown&quot;, &quot;overlayContent&quot;, &quot;overlayWrapper&quot;,
-				&quot;previewItem&quot;, &quot;timelineWrapper&quot;, &quot;timelineItem&quot; ];
+		this._neededTemps = [ &quot;filterOptions&quot;, &quot;sortOptions&quot;, &quot;tileWrapper&quot;, &quot;stdNode&quot;, &quot;groupDropDown&quot;,
+				&quot;overlayContent&quot;, &quot;overlayWrapper&quot;, &quot;previewItem&quot;, &quot;timelineWrapper&quot;, &quot;timelineItem&quot; ];
 
 		this._methodsAreLoaded = function(/*
-		 * array of templatenames which must
-		 * be loaded
+		 * array of templatenames which must be
+		 * loaded
 		 */) {
 			var i = 0, methodName;
 			while (arguments[0[i++]] !== undefined) {
@@ -2420,99 +2668,109 @@
 	};
 
 	// ========================= bSynopsis: RemoteDataLoader Class
-	// ==============================
 	/**
-	 * Loader to load remote data from services at the given urls and add them
-	 * to the view
+	 * Loader to load remote data from services at the given urls and add them to
+	 * the view
 	 * 
 	 * @class Plugin.RemoteDataLoader
 	 * @constructor
 	 * @param {Array}
-	 *            sites Array of URLs of SPARQL services to query
+	 *          remoteBackends Array of URLs of SPARQL services to query
 	 * @param {Integer}
-	 *            pluginID ID of parten plugin
+	 *          pluginID ID of parten plugin
 	 */
-	Plugin.RemoteDataLoader = function(sites, pluginID) {
-		this.sites = sites;
-		this.pluginID = pluginID;
+	Plugin.RemoteDataLoader = function(remoteBackends) {
+		this.backends = remoteBackends;
+		this.remoteEngine = new RemoteEngine();
+		this.loadingStarted = new Plugin.Event(this);
+		this.loadingDone = new Plugin.Event(this);
+		this.dataInserted = new Plugin.Event(this);
+	};
 
-		// Inserts Data by querying given service
-		this._insertDataByQuery = function(query, site, callback) {
+	Plugin.RemoteDataLoader.prototype.addBackend = function(backend) {
+		if (!this.backends.find(backend)) {
+			this.backends.push(backend);
+		}
+	};
 
-			// Execute selection query
-			remoteEngine.executeQuery(query, site, function(data) {
+	Plugin.RemoteDataLoader.prototype.removeBackend = function(backend) {
+		var index = this.backends.indexOf(backend);
+		if (index &gt; -1) {
+			this.backends.splice(index, 1);
+		}
+	};
 
-				// Generate insertionQuery out of the resultset.
-				if (data) {
-					if (data.subject !== undefined) {
-						data = [ data ];
-					}
-					var insertionQuery = &quot;INSERT DATA {&quot;;
-					$.each(data, function(i, val) {
-						if (val.subject === undefined) {
-							print(&quot;Resultset disfigured.&quot;);
-						} else if (val.subject.type === &quot;uri&quot;) {
-							insertionQuery += &quot;&lt;&quot; + val.subject.value + &quot;&gt; &quot;;
-						} else {
-							// TODO BlankNodes
-							insertionQuery += &quot;&lt;&quot; + val.subject.value + &quot;&gt; &quot;;
-						}
-						insertionQuery += &quot;&lt;&quot; + val.predicate.value + &quot;&gt; &quot;;
-						if (val.object.type === &quot;uri&quot;) {
-							insertionQuery += &quot;&lt;&quot; + val.object.value + &quot;&gt;. &quot;;
-						} else if (val.object.type === &quot;literal&quot;) {
-							insertionQuery += &#x27;&quot;&#x27; + escape(val.object.value)
-									+ &#x27;&quot;. &#x27;;
-						}
-						if (val.labelSub) {
-							insertionQuery += &#x27;&lt;&#x27; + val.subject.value
-									+ &#x27;&gt; rdfs:label &quot;&#x27; + val.labelSub.value
-									+ &#x27;&quot;. &#x27;;
-						}
-						if (val.labelObj) {
-							insertionQuery += &#x27;&lt;&#x27; + val.object.value
-									+ &#x27;&gt; rdfs:label &quot;&#x27; + val.labelObj.value
-									+ &#x27;&quot;. &#x27;;
-						}
-						if (val.labelPred) {
-							labelCache.add(val.predicate.value,
-									val.labelPred.value);
-						}
-					});
-					insertionQuery += &quot;}&quot;;
+	Plugin.RemoteDataLoader.prototype._insertDataByQuery = function(query, service, callback) {
+		var that = this;
+		// Execute selection query
+		this.remoteEngine.executeQuery(query, service, function(data) {
 
-					// Execute insertion
-					rdfStore.executeQuery(insertionQuery, function() {
-						if (callback) {
-							callback(true);
-						}
-					});
-				} else {
-					if (callback) {
-						callback(false);
-					}
+			// Generate insertionQuery out of the resultset.
+			if (data) {
+				if (data.subject !== undefined) {
+					data = [ data ];
 				}
-			});
-		};
+				// Execute insertion
+				rdfStore.executeQuery(that.generateInsertionQuery(data), function() {
+					if (callback) {
+						callback(true);
+					}
+				});
+			} else {
+				if (callback) {
+					callback(false);
+				}
+			}
+		});
+	};
+
+	Plugin.RemoteDataLoader.prototype.generateInsertionQuery = function(data) {
+		var insertionQuery = &quot;INSERT DATA {&quot;;
+		$.each(data, function(i, val) {
+			if (val.subject === undefined) {
+				print(&quot;Resultset disfigured.&quot;);
+			} else if (val.subject.type === &quot;uri&quot;) {
+				insertionQuery += &quot;&lt;&quot; + val.subject.value + &quot;&gt; &quot;;
+			} else {
+				// TODO BlankNodes
+				insertionQuery += &quot;&lt;&quot; + val.subject.value + &quot;&gt; &quot;;
+			}
+			insertionQuery += &quot;&lt;&quot; + val.predicate.value + &quot;&gt; &quot;;
+			if (val.object.type === &quot;uri&quot;) {
+				insertionQuery += &quot;&lt;&quot; + val.object.value + &quot;&gt;. &quot;;
+			} else if (val.object.type === &quot;literal&quot;) {
+				insertionQuery += &#x27;&quot;&#x27; + escape(val.object.value) + &#x27;&quot;. &#x27;;
+			}
+			if (val.labelSub) {
+				insertionQuery += &#x27;&lt;&#x27; + val.subject.value + &#x27;&gt; rdfs:label &quot;&#x27; + val.labelSub.value + &#x27;&quot;. &#x27;;
+			}
+			if (val.labelObj) {
+				insertionQuery += &#x27;&lt;&#x27; + val.object.value + &#x27;&gt; rdfs:label &quot;&#x27; + val.labelObj.value + &#x27;&quot;. &#x27;;
+			}
+			if (val.labelPred) {
+				labelCache.add(val.predicate.value, val.labelPred.value);
+			}
+		});
+		insertionQuery += &quot;}&quot;;
+		return insertionQuery;
 	};
 
 	// Inserts Data by querying all services
-	Plugin.RemoteDataLoader.prototype.insertByQuery = function(query) {
+	Plugin.RemoteDataLoader.prototype.insertByQuery = function(query, backends) {
 		var that = this;
+		var backendsToUse = this.backends;
+		if (backends) {
+			backendsToUse = backends;
+		}
 
 		// Inform the plugin something is loading
-		eventManagers[that.pluginID].trigger(
-				CONS.EVENT_TYPES.loading.start, that);
-
-		$.each(that.sites, function(i, val) {
+		this.loadingStarted.notify();
+		$.each(backendsToUse, function(i, val) {
 			that._insertDataByQuery(query, val, function(success) {
 				// Inform the plugin loading is done
-				eventManagers[that.pluginID].trigger(
-						CONS.EVENT_TYPES.loading.done, that);
+				that.loadingDone.notify();
 				if (success) {
-					// Inform the plugin that the store has been modified
-					eventManagers[that.pluginID].trigger(
-							CONS.EVENT_TYPES.store.insert, that);
+					that.dataInserted.notify();
 				}
 			});
 		});
@@ -2527,9 +2785,9 @@
 	 * @class Plugin
 	 * @constructor
 	 * @param {jQuery}
-	 *            obj Parent object of the plugin
+	 *          obj Parent object of the plugin
 	 * @param {Object}
-	 *            options Options for the plugin
+	 *          options Options for the plugin
 	 */
 
 	// Default options
@@ -2541,655 +2799,8 @@
 	 */
 	var defaults = {
 		/**
-		 * Filters to be used before node display. Filters only work on single
-		 * batches. The batchSize should be chosen big enough if Nodefilters are
-		 * to be used. New filters must have a unique identifier.
-		 * 
-		 * @property defaults.filters
-		 * @type Object
-		 */
-		nodeFilters : {
-			/**
-			 * Filters blacklisted resources defined by predicate URIs in config
-			 * options. Only RegEx allowed.
-			 * 
-			 * @property defaults.nodeFilters.blacklistPredURI
-			 * @type Object
-			 */
-			blacklistPredURI : {
-				fn : function(plugin, nodes, config) {
-					$.each(nodes, function(i, node) {
-						if (node.hasComponentType(&quot;predicate&quot;) &amp;&amp; config) {
-							$.each(config, function(j, exp) {
-								for(var i = 0; i &lt;= node.componentTypes.predicate; i++) {
-									var res = new RegExp(exp)
-									.exec(node.components[&quot;predicate&quot;+i].value);
-									if (res !== null) {
-										delete nodes[i];
-									}
-								}
-							});
-						}
-					});
-					return nodes;
-				},
-				config : new Array()
-			//Regex to be filtered
-			},
-
-			/**
-			 * Filters blacklisted resources defined by URIs in config options.
-			 * Only RegEx allowed.
-			 * 
-			 * @property defaults.nodeFilters.blacklistURI
-			 * @type Object
-			 */
-			blacklistURI : {
-				fn : function(plugin, nodes, config) {
-					$.each(nodes, function(i, node) {
-						if (node.hasComponentType(&quot;uri&quot;) &amp;&amp; config) {
-							$.each(config, function(j, exp) {
-								var res = new RegExp(exp).exec(node.components.uri1);
-								if (res !== null) {
-									delete nodes[i];
-								}
-							});
-						}
-					});
-					return nodes;
-				},
-				config : new Array()
-			//Regex to be filtered
-			},
-
-			/**
-			 * Merges resNodes describing the same resource (subject or
-			 * object).
-			 * 
-			 * @property defaults.nodeFilters.multiResNode
-			 * @type Object
-			 */
-			multiResNode : {
-				fn : function(plugin, nodes, config) {
-					var tempArray = new Array();
-					$.each(nodes, function(i, node) {
-						if (node.type === &quot;resNode&quot;) {
-							if (node.components.uri1 in tempArray) {
-								tempArray[node.components.uri1].type = &quot;multiResNode&quot;;
-								//tempArray[node.components.uri1].merge(node); //TODO merge
-								//delete nodes[i];
-							} else {
-								tempArray[node.components.uri1] = node;
-							}
-						}
-					});
-					return nodes;
-				}
-			},
-
-			blankNode : {
-				fn : function(plugin, nodes, config) {
-					$.each(nodes, function(i, node) {
-						if (node.getType() == CONS.NODE_TYPES.stdNode) {
-							//TODO Blanknode
-							print(&quot;TODO Blanknode&quot;);
-						}
-					});
-					return nodes;
-				},
-				config : {
-
-				}
-			}
-
-		},
-		/**
-		 * Filters for tiles
-		 * 
-		 * @property defaults.tileFilters
-		 * @type Object
-		 */
-		tileFilters : {
-			/**
-			 * Scales tiles
-			 * 
-			 * @property defaults.tileFilters.scale
-			 * @type Object
-			 */
-			scale : {
-				fn : function(plugin, $tiles, config) {
-					
-					$.each($tiles, function(i, tile) {
-						var $tile = $(tile);
-						var node = $tile.data(&quot;node&quot;);
-						var nStyle;
-						if(node.style) { // Style passed via node
-							nStyle = node.style;
-						} else if (config.defaultStyles[node.getType()]) { // Style chosen via node type
-							nStyle = config.defaultStyles[node.getType()];
-						} else { // Default style
-							nStyle = config.defaultStyles[&quot;stdNode&quot;];
-						}
-						if (typeof nStyle.height != &quot;number&quot;) { // If height of tiles should be dynamic (depending on components)
-							if(node.dynLayoutFn) {	// Function passed via node
-								node.dynLayoutFn($tile, node, nStyle, config);
-							} else if (config.defaultDynLayoutFns[node.getType()]) { // Function chosen via node type
-								config.defaultDynLayoutFns[node.getType()]($tile, node, nStyle, config);
-							} else { // Default function
-								config.defaultDynLayoutFns[&quot;stdNode&quot;]($tile, node, nStyle, config);
-							}
-						} else {	// If height should be static
-							if(node.layoutFn) { // Function passed via node
-								node.layoutFn($tile, node, nStyle, config);
-							} else if (config.defaultLayoutFns[node.getType()]) { // Function chosen via node type
-								config.defaultLayoutFns[node.getType()]($tile, node, nStyle, config);
-							} else { // Default function
-								config.defaultLayoutFns[&quot;stdNode&quot;]($tile, node, nStyle, config);
-							}
-						}
-					});
-					return $tiles;
-				},
-				config : {
-					multiplicator : 1,
-					defaultLayoutFns : {
-						stdNode : function($tile, node, nStyle, config) {
-							var anchorY = $tile.height() + nStyle.topPadding;
-							var mult = config.multiplicator;
-							$tile.width(nStyle.width * mult);
-							var height = nStyle.height * mult;
-							$tile.height(height);
-							var contentHeight = height - (nStyle.topPadding + nStyle.bottomPadding * mult);
-							var temp = 0;
-							var cStyles = [];
-							$.each(node.components, function(i, component) {
-								if(component.style) {
-									cStyles[i] = component.style;
-								} else if (config.defaultContentStyles[component.type]) {
-									cStyles[i] = config.defaultContentStyles[component.type];
-								} else {
-									cStyles[i] = config.defaultContentStyles[&quot;stdComponent&quot;];
-								}
-								if (cStyles[i] &amp;&amp; (!cStyles[i].display || cStyles[i].display != &quot;none&quot;)) {
-									temp += cStyles[i].height;
-								}
-							});
-							$.each(node.components, function(i, component) {
-								if (cStyles[i] &amp;&amp; (!cStyles[i].display || cStyles[i].display != &quot;none&quot;)) {
-									var cStyle = cStyles[i];
-									if(component.layoutFn) {
-										anchorY = component.layoutFn($tile, node, nStyle, component, cStyle, config, anchorY, contentHeight, temp);
-									} else if (config.defaultContentLayoutFns[component.type]) {
-										anchorY = config.defaultContentLayoutFns[component.type]($tile, node, nStyle, component, cStyle, config, anchorY, contentHeight, temp);
-									} else {
-										anchorY = config.defaultContentLayoutFns[&quot;stdComponent&quot;]($tile, node, nStyle, component, cStyle, config, anchorY, contentHeight, temp);
-									}
-								}
-							});
-						}
-					},
-					defaultDynLayoutFns : {
-						stdNode : function($tile, node, nStyle, config) {
-							var startY = $tile.height();
-							var mult = config.multiplicator;
-							var anchorY = startY + (nStyle.topPadding  * mult);
-							$tile.width(nStyle.width * mult);
-							$.each(node.components, function(i, component) {
-								var cStyle;
-								if(component.style) {
-									cStyle = component.style;
-								} else if (config.defaultContentStyles[component.type]) {
-									cStyle = config.defaultContentStyles[component.type];
-								} else {
-									cStyle = config.defaultContentStyles[&quot;stdComponent&quot;];
-								}
-									if (cStyle &amp;&amp; (!cStyle.display || cStyle.display != &quot;none&quot;)) {
-										if(component.dynLayoutFn) {
-											anchorY = component.dynLayoutFn($tile, node, nStyle, component, cStyle, config, anchorY);
-										} else if (config.defaultContentDynLayoutFns[component.type]) {
-											anchorY = config.defaultContentDynLayoutFns[component.type]($tile, node, nStyle, component, cStyle, config, anchorY);
-										} else {
-											anchorY = config.defaultContentDynLayoutFns[&quot;stdComponent&quot;]($tile, node, nStyle, component, cStyle, config, anchorY);
-										}
-									}
-							});
-							$tile.height(anchorY + (nStyle.bottomPadding * mult) - startY);
-						}
-					},
-					defaultContentLayoutFns : {
-						predicate : function($tile, node, nStyle, component,
-								cStyle, config, anchorY, contentHeight, divisor) {
-							var $component = $tile.find(UTIL.toClassSelector(component.id));
-							print(UTIL.toClassSelector(component.id));
-							console.log($component)
-							var mult = config.multiplicator;
-							var cHeight = contentHeight * (cStyle.height / divisor) - nStyle.spacing * mult;
-							var cWidth = ((nStyle.width - nStyle.leftPadding - nStyle.rightPadding) * mult);
-							$component.height(cHeight);
-							$component.width(cWidth);
-							$component.css(&quot;top&quot;, anchorY);
-							$component.css(&quot;left&quot;, nStyle.leftPadding);
-							anchorY += (cHeight + nStyle.spacing * mult);
-							$component.children().height(cHeight);
-							var $typeImage = $tile.find(UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.typeImage));
-							var $predicate = $tile.find(UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.predicate));
-							var $predicateLabel = $tile.find(UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.predicateLabel));
-							var imageWidth = cWidth * 0.2;
-							$typeImage.height(&quot;auto&quot;);
-							$typeImage.width(imageWidth);
-							$predicateLabel.css(&quot;left&quot;, imageWidth);
-							$predicateLabel.width(cWidth - imageWidth);
-							$predicate.width(cWidth);
-							return anchorY;
-						},
-						stdComponent : function($tile, node, nStyle, component, cStyle, config, anchorY, contentHeight, divisor) {
-							var $component = $tile.find(UTIL.toClassSelector(component.id));
-							var mult = config.multiplicator;
-							var cHeight = contentHeight * (cStyle.height / divisor) - nStyle.spacing * mult;
-							$component.width((nStyle.width - nStyle.leftPadding - nStyle.rightPadding) * mult);
-							$component.height(cHeight);
-							$component.css(&quot;top&quot;, anchorY);
-							$component.css(&quot;left&quot;, nStyle.leftPadding);
-							anchorY += (cHeight + nStyle.spacing * mult);
-							return anchorY;
-						}
-					},
-					defaultContentDynLayoutFns : {
-						predicate : function($tile, node, nStyle, component,
-								cStyle, config, anchorY) {
-							var $component = $tile.find(UTIL.toClassSelector(component.id));
-							var mult = config.multiplicator;
-							var cHeight = cStyle.height * mult;
-							var cWidth = (nStyle.width - nStyle.leftPadding - nStyle.rightPadding) * mult;
-							$component.height(cHeight);
-							$component.width(cWidth);
-							$component.css(&quot;top&quot;, anchorY);
-							$component.css(&quot;left&quot;, nStyle.leftPadding);
-							anchorY += (cHeight + nStyle.spacing * mult);
-							$component.children().height(cHeight);
-							var $typeImage = $tile.find(UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.typeImage));
-							var $predicate = $tile.find(UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.predicate));
-							var $predicateLabel = $tile.find(UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.predicateLabel));
-							var imageWidth = cWidth * 0.2;
-							$typeImage.height(&quot;auto&quot;);
-							$typeImage.width(imageWidth);
-							$predicateLabel.css(&quot;left&quot;, imageWidth);
-							$predicateLabel.width(cWidth - imageWidth);
-							$predicate.width(cWidth);
-							return anchorY;
-						},
-						stdComponent : function($tile, node, nStyle, component, cStyle, config, anchorY) {
-							var $component = $tile.find(UTIL.toClassSelector(component.id));
-							var mult = config.multiplicator;
-							$component.width((nStyle.width - nStyle.leftPadding - nStyle.rightPadding) * mult);
-							$component.height(cStyle.height * mult);
-							$component.css(&quot;top&quot;, anchorY);
-							$component.css(&quot;left&quot;, nStyle.leftPadding);
-							anchorY += ((cStyle.height + nStyle.spacing) * mult);
-							return anchorY;
-						}
-					},
-					defaultStyles : {
-						/**
-						 * Styles of literal items.
-						 * 
-						 * @property defaults.tileFilters.scale.config.defaultStyles.literal
-						 * @type Object
-						 */
-						//literal : {
-							/**
-							 * Width of literal items.
-							 * 
-							 * @property defaults.tileFilters.scale.config.defaultStyles.literal.width
-							 * @type Integer
-							 * @default 200
-							 */
-							//width : 200,
-							/**
-							 * Height of literal items.
-							 * 
-							 * @property defaults.tileFilters.scale.config.defaultStyles.literal.height
-							 * @type Integer
-							 * @default 100
-							 */
-							//height : 100
-						//},
-						/**
-						 * Styles of res nodes.
-						 * 
-						 * @property defaults.tileFilters.scale.config.defaultStyles.stdNode
-						 * @type Object
-						 */
-						stdNode : {
-							/**
-							 * Width of items.
-							 * 
-							 * @property defaults.tileFilters.scale.config.defaultStyles.stdNode.width
-							 * @type Integer
-							 * @default 200
-							 */
-							width : 200,
-							/**
-							 * Height of items.
-							 * 
-							 * @property defaults.tileFilters.scale.config.defaultStyles.stdNode.width
-							 * @type Integer or String
-							 * @default 200 / dynamic
-							 */
-							height : &quot;dynamic&quot;,
-							topPadding : 10,
-							leftPadding : 10,
-							rightPadding : 10,
-							bottomPadding : 10,
-							spacing : 5
-						}
-					},
-					defaultContentStyles : {
-						predicate : {
-							height : 20
-						},
-						label : {
-							height : 40
-						},
-						stdComponent : {
-							height : 40
-						}
-					}
-				}
-			},
-
-			/**
-			 * Scales text of tiles
-			 * 
-			 * @property defaults.tileFilters.backgroundColor
-			 * @type Object
-			 */
-			textScale : {
-				webWorker : true,
-				fn : function(plugin, $tiles, config, view) {
-					// On layout done event
-					view.$viewContainer.on(CONS.EVENT_TYPES.layout.done, function() {
-						var $fitHere = $tiles.find(UTIL.toSelector(CONS.CSS_CLASSES.textScale));
-						//$fitHere.css({&quot;word-wrap&quot;:&quot;break-word&quot;});
-						$fitHere.parent().textfill({
-							maxFontPixels : 80,
-							minFontPixels : 8
-						});
-					});
-					return $tiles;
-				},
-				config : {
-					
-				}
-			},
-
-			/**
-			 * Sets backgroundColor for tiles
-			 * 
-			 * @property defaults.tileFilters.backgroundColor
-			 * @type Object
-			 */
-			backgroundColor : {
-				fn : function(plugin, $tiles, config) {
-					var counter = 0;
-					$.each($tiles,
-									function(i, tile) {
-										counter++;
-										var $tile = $(tile);
-										var colorArray;
-										var node = $tile.data(&quot;node&quot;);
-										if(node.style &amp;&amp; node.style.bgColors) {
-											colorArray = node.style.bgColors;
-										} else if (config.defaultStyles[node.getType()]) {
-											colorArray = config.defaultStyles[node.getType()].bgColors;
-										} else {
-											colorArray = config.defaultStyles[&quot;stdNode&quot;].bgColors;
-										}
-										var color = new RGBColor(colorArray[counter % colorArray.length]);
-										if (color) {
-											$tile.css(&quot;background-color&quot;,
-													&quot;rgba(&quot; + color.r + &quot;, &quot;
-															+ color.g + &quot;, &quot;
-															+ color.b + &quot; ,1)&quot;);
-										}
-									});
-					return $tiles;
-				},
-				config : {
-					defaultStyles : {
-						literal : {
-							/**
-							 * Color of literal items.
-							 * 
-							 * @property defaults.tileFilters.backgroundColor.config.defaultStyles.literal.bgColors
-							 * @type Array
-							 * @default [ &#x27;#777777&#x27; ]
-							 */
-							bgColors : [ &#x27;#777777&#x27; ]
-						},
-						blankNode : {
-							bgColors : [ &#x27;#777777&#x27; ]
-						},
-						stdNode : {
-							/**
-							 * Colors of items.
-							 * 
-							 * @property defaults.tileFilters.backgroundColor.config.defaultStyles.stdNode.bgColors
-							 * @type Array
-							 * @default [ &#x27;#e2674a&#x27;, &#x27;#99CC99&#x27;, &#x27;#3399CC&#x27;,
-							 *          &#x27;#33CCCC&#x27;, &#x27;#996699&#x27;, &#x27;#C24747&#x27;, &#x27;#FFCC66&#x27;,
-							 *          &#x27;#669999&#x27;, &#x27;#CC6699&#x27;, &#x27;#339966&#x27;, &#x27;#666699&#x27; ]
-							 */
-							bgColors : [ &#x27;#e2674a&#x27;, &#x27;#99CC99&#x27;, &#x27;#3399CC&#x27;, &#x27;#33CCCC&#x27;,
-										&#x27;#996699&#x27;, &#x27;#C24747&#x27;, &#x27;#FFCC66&#x27;, &#x27;#669999&#x27;,
-										&#x27;#CC6699&#x27;, &#x27;#339966&#x27;, &#x27;#666699&#x27; ]
-						}
-					}
-				}
-			},
-
-			/**
-			 * Loads background images
-			 * 
-			 * @property defaults.tileFilters.backgroundImg
-			 * @type Object
-			 */
-			backgroundImg : {
-				fn : function(plugin, $tiles) {
-					$
-							.each(
-									$tiles,
-									function(i, tile) {
-										var $tile = $(tile);
-										var node = $tile.data(&quot;node&quot;), image_url = &quot;&quot;;
-										switch (node.getType()) {
-										case CONS.NODE_TYPES.resNode:
-											image_url = node.getFComponentOT(&quot;uri&quot;).data;
-											break;
-
-										case CONS.NODE_TYPES.literal:
-											image_url = node.getFComponentOT(&quot;label&quot;).data.value;
-											break;
-										}
-										var tmpArray = image_url.replace(&quot;&gt;&quot;,
-												&quot;&quot;).split(&quot;.&quot;);
-										image_url.replace(&quot;&lt;&quot;, &quot;&quot;);
-										switch (tmpArray[tmpArray.length - 1]) {
-										case &quot;png&quot;:
-										case &quot;jpeg&quot;:
-										case &quot;svg&quot;:
-										case &quot;jpg&quot;:
-
-											if (image_url) {
-												var $img = $(&#x27;&lt;img src=&quot;&#x27;
-														+ image_url + &#x27;&quot;&gt;&#x27;);
-												$img
-														.load(function() {
-															var width = $img
-																	.width();
-															var height = $img
-																	.height();
-															var ratio = width
-																	/ height;
-															var tile_width = $tile
-																	.width();
-															var tile_height = $tile
-																	.height();
-															var tile_ration = tile_width
-																	/ tile_height;
-															var actual_width = 0;
-
-															if (tile_ration &gt; ratio) {
-																actual_width = tile_width
-																		/ ratio;
-																$img
-																		.width(tile_width
-																				/ ratio);
-																$img
-																		.height(tile_height);
-															} else {
-																$img
-																		.width(actual_width);
-																$img
-																		.height(tile_width
-																				* ratio);
-															}
-
-															// TODO opacity
-															// variable
-															$img
-																	.css({
-																		&quot;left&quot; : (tile_width - actual_width) / 2,
-																		&quot;opacity&quot; : 0.5,
-																		&quot;position&quot; : &quot;absolute&quot;
-																	});
-														});
-												$tile.prepend($img);
-											}
-											break;
-										}
-									});
-					return $tiles;
-				}
-			},
-
-			/**
-			 * Enables mouseover for URIs
-			 * 
-			 * @property defaults.tileFilters.predicateLabel
-			 * @type Object
-			 */
-			predicateLabel : {
-				fn : function(plugin, $tiles) {
-					$
-							.each(
-									$tiles,
-									function(i, tile) {
-										var $tile = $(tile);
-										var $predicate = $tile
-												.find(UTIL
-																.toSelector(CONS.CSS_CLASSES.tileClasses.predicate));
-										var $typeImage = $tile
-												.find(UTIL
-																.toSelector(CONS.CSS_CLASSES.tileClasses.typeImage));
-										var $predicateLabel = $tile
-												.find(UTIL
-																.toSelector(CONS.CSS_CLASSES.tileClasses.predicateLabel));
-
-										// Show full URI on mouse enter
-										$tile.on(&quot;mouseenter&quot;,
-												function() {
-													$predicate.css(&quot;visibility&quot;,
-															&quot;visible&quot;);
-													$typeImage.css(&quot;visibility&quot;,
-															&quot;hidden&quot;);
-													$predicateLabel.css(
-															&quot;visibility&quot;, &quot;hidden&quot;);
-												});
-
-										$tile
-												.on(
-														&quot;mouseleave&quot;,
-														function() {
-															$predicateLabel
-																	.stop(true,
-																			true);
-
-															// Timeout prevents
-															// flickering on
-															// mousemovement
-															window
-																	.setTimeout(
-																			function() {
-																				$predicate
-																						.css(
-																								&quot;visibility&quot;,
-																								&quot;hidden&quot;);
-																				$typeImage
-																						.css(
-																								&quot;visibility&quot;,
-																								&quot;visible&quot;);
-																				$predicateLabel
-																						.css(
-																								&quot;visibility&quot;,
-																								&quot;visible&quot;);
-																			},
-																			100);
-														});
-									});
-					return $tiles;
-				}
-			},
-
-			/**
-			 * Initializes the browsability of tiles
-			 * 
-			 * @property defaults.tileFilters.browsablity
-			 * @type Object
-			 */
-			browsablity : {
-				fn : function(plugin, $tiles, config) {
-					$.each($tiles, function(i, tile) {
-						var $tile = $(tile);
-						var node = $tile.data(&quot;node&quot;);
-						var nodeType = node.getType();
-						if (nodeType in config.types) {
-							$.each(config.types[nodeType].browsingFns, function(fnLabel, fn) {
-								fn(plugin, node, $tile);
-							});
-						} else {
-							$.each(config.defaultFns, function(fnLabel, fn) {
-								fn(plugin, node, $tile);
-							});
-						}
-					});
-					return $tiles;
-				},
-				config : {
-					types : {
-						blankNode : {
-									browsingFns : {
-										fn : function(plugin, node, $tile) {
-											$tile.click(function() {
-												//TODO
-											});
-										}
-									}
-						}
-					},
-					defaultFns : {
-						fn : function(plugin, node, $tile) {
-							$tile.click(function() {
-								plugin.addLayer(plugin.generateLayer($tile));
-							});
-						}
-					}
-				}
-			}
-		},
-		/**
-		 * Raw RDF data given on plugin startup. This data will be loaded into
-		 * the store.
+		 * Raw RDF data given on plugin startup. This data will be loaded into the
+		 * store.
 		 * 
 		 * @property defaults.data
 		 * @type String
@@ -3197,8 +2808,8 @@
 		 */
 		data : undefined,
 		/**
-		 * Path to file with Raw RDF data given on plugin startup. This file
-		 * will be parsed and loaded into the store.
+		 * Path to file with Raw RDF data given on plugin startup. This file will be
+		 * parsed and loaded into the store.
 		 * 
 		 * @property defaults.dataLoc
 		 * @type String
@@ -3231,8 +2842,7 @@
 		 */
 		templatesPath : &quot;templates_wrapped/templates.html&quot;,
 		/**
-		 * SPARQL resultset which can be used to insert data into the store on
-		 * init.
+		 * SPARQL resultset which can be used to insert data into the store on init.
 		 * 
 		 * @property defaults.sparqlData
 		 * @type Object
@@ -3287,6 +2897,727 @@
 		 */
 		layerOptions : {
 			/**
+			 * Filters to be used before node display. Filters only work on single
+			 * batches. The batchSize should be chosen big enough if Nodefilters are
+			 * to be used. New filters must have a unique identifier.
+			 * 
+			 * @property defaults.filters
+			 * @type Object
+			 */
+			nodeFilters : {
+				/**
+				 * Filters blacklisted resources defined by predicate URIs in config
+				 * options. Only RegEx allowed.
+				 * 
+				 * @property defaults.layerOptions.nodeFilters.blacklistPredURI
+				 * @type Object
+				 */
+				blacklistPredURI : {
+					fn : function(nodes, config) {
+						$.each(nodes, function(i, node) {
+							if (node.hasComponentType(&quot;predicate&quot;) &amp;&amp; config) {
+								$.each(config, function(j, exp) {
+									for (var i = 0; i &lt;= node.componentTypes.predicate; i++) {
+										var res = new RegExp(exp).exec(node.components.predicate[i].value);
+										if (res !== null) {
+											delete nodes[i];
+										}
+									}
+								});
+							}
+						});
+						return nodes;
+					},
+					config : new Array()
+				// Regex to be filtered
+				},
+
+				/**
+				 * Filters blacklisted resources defined by URIs in config options. Only
+				 * RegEx allowed.
+				 * 
+				 * @property defaults.layerOptions.nodeFilters.blacklistURI
+				 * @type Object
+				 */
+				blacklistURI : {
+					fn : function(nodes, config) {
+						$.each(nodes, function(i, node) {
+							if (node.hasComponentType(&quot;uri&quot;) &amp;&amp; config) {
+								$.each(config, function(j, exp) {
+									var res = new RegExp(exp).exec(node.components.uri[0]);
+									if (res !== null) {
+										delete nodes[i];
+									}
+								});
+							}
+						});
+						return nodes;
+					},
+					config : new Array()
+				// Regex to be filtered
+				},
+
+				/**
+				 * Merges resNodes describing the same resource (subject or object).
+				 * 
+				 * @property defaults.layerOptions.nodeFilters.multiResNode
+				 * @type Object
+				 */
+				multiResNode : {
+					fn : function(nodes, config) {
+//						var tempArray = new Array();
+//						$.each(nodes, function(i, node) {
+//							if (node.type === &quot;resNode&quot; || node.type === &quot;multiResNode&quot;) {
+//								if (node.components.uri[0].data in tempArray) {
+//									 tempArray[node.components.uri[0].data].type = &quot;multiResNode&quot;;
+//									 tempArray[node.components.uri[0].data].merge(node);
+//									 delete nodes[i];
+//								} else {
+//									tempArray[node.components.uri[0].data] = node;
+//								}
+//							}
+//						});
+						return nodes;
+					}
+				},
+
+				blankNode : {
+					fn : function(nodes, config) {
+						$.each(nodes, function(i, node) {
+							if (node.getType() == CONS.NODE_TYPES.blankNode) {
+								// TODO Blanknode
+								print(&quot;TODO Blanknode&quot;);
+							}
+						});
+						return nodes;
+					},
+					config : {
+
+					}
+				}
+
+			},
+			/**
+			 * Filters for tiles
+			 * 
+			 * @property defaults.layerOptions.tileFilters
+			 * @type Object
+			 */
+			tileFilters : {
+				/**
+				 * Scales tiles
+				 * 
+				 * @property defaults.layerOptions.tileFilters.scale
+				 * @type Object
+				 */
+				scale : {
+					fn : function($tiles, config) {
+
+						$.each($tiles, function(i, tile) {
+							var $tile = $(tile);
+							var node = $tile.data(&quot;node&quot;);
+							var nStyle;
+							if (node.style) { // Style passed via
+								// node
+								nStyle = node.style;
+							} else if (config.defaultStyles[node.getType()]) { // Style
+								// chosen
+								// via node type
+								nStyle = config.defaultStyles[node.getType()];
+							} else { // Default style
+								nStyle = config.defaultStyles[&quot;stdNode&quot;];
+							}
+							if (typeof nStyle.height != &quot;number&quot;) { // If
+								// height of iles should be dynamic (depending on components)
+								if (node.dynLayoutFn) { // Function
+									// passed
+									// via node
+									node.dynLayoutFn($tile, node, nStyle, config);
+								} else if (config.defaultDynLayoutFns[node.getType()]) { // Function
+									// chosen
+									// via node
+									// type
+									config.defaultDynLayoutFns[node.getType()]($tile, node, nStyle, config);
+								} else { // Default function
+									config.defaultDynLayoutFns[&quot;stdNode&quot;]($tile, node, nStyle, config);
+								}
+							} else { // If height should be
+								// static
+								if (node.layoutFn) { // Function
+									// passed
+									// via node
+									node.layoutFn($tile, node, nStyle, config);
+								} else if (config.defaultLayoutFns[node.getType()]) { // Function
+									// chosen
+									// via
+									// node
+									// type
+									config.defaultLayoutFns[node.getType()]($tile, node, nStyle, config);
+								} else { // Default function
+									config.defaultLayoutFns[&quot;stdNode&quot;]($tile, node, nStyle, config);
+								}
+							}
+						});
+						return $tiles;
+					},
+					config : {
+						multiplicator : 1,
+						defaultLayoutFns : {
+							stdNode : function($tile, node, nStyle, config) {
+								var anchorY = $tile.height() + nStyle.topPadding;
+								var mult = config.multiplicator;
+								$tile.width(nStyle.width * mult);
+								var height = nStyle.height * mult;
+								$tile.height(height);
+								var contentHeight = height - (nStyle.topPadding + nStyle.bottomPadding * mult);
+								var temp = 0;
+								var cStyles = {};
+								$.each(node.components, function(j, componentType) {
+									$.each(componentType, function(i, component) {
+										var id = component.id;
+										if (component.style) {
+											cStyles[id] = component.style;
+										} else if (config.defaultContentStyles[component.type]) {
+											cStyles[id] = config.defaultContentStyles[component.type];
+										} else {
+											cStyles[id] = config.defaultContentStyles[&quot;stdComponent&quot;];
+										}
+										if (cStyles[id] &amp;&amp; (!cStyles[id].display || cStyles[id].display != &quot;none&quot;)) {
+											temp += cStyles[id].height;
+										}
+									});
+								});
+								$.each(node.components, function(j, componentType) {
+									$.each(componentType, function(i, component) {
+										var id = component.id;
+										if (cStyles[id] &amp;&amp; (!cStyles[id].display || cStyles[id].display != &quot;none&quot;)) {
+											var cStyle = cStyles[id];
+											if (component.layoutFn) {
+												anchorY = component.layoutFn($tile, node, nStyle, component, cStyle, config,
+														anchorY, contentHeight, temp);
+											} else if (config.defaultContentLayoutFns[component.type]) {
+												anchorY = config.defaultContentLayoutFns[component.type]($tile, node,
+														nStyle, component, cStyle, config, anchorY, contentHeight, temp);
+											} else {
+												anchorY = config.defaultContentLayoutFns[&quot;stdComponent&quot;]($tile, node,
+														nStyle, component, cStyle, config, anchorY, contentHeight, temp);
+											}
+										}
+									});
+								});
+							}
+						},
+						defaultDynLayoutFns : {
+							stdNode : function($tile, node, nStyle, config) {
+								var startY = $tile.height();
+								var mult = config.multiplicator;
+								var anchorY = startY + (nStyle.topPadding * mult);
+								$tile.width(nStyle.width * mult);
+								$.each(node.components, function(j, componentType) {
+									$.each(componentType, function(i, component) {
+										var cStyle;
+										if (component.style) {
+											cStyle = component.style;
+										} else if (config.defaultContentStyles[component.type]) {
+											cStyle = config.defaultContentStyles[component.type];
+										} else {
+											cStyle = config.defaultContentStyles[&quot;stdComponent&quot;];
+										}
+										if (cStyle &amp;&amp; (!cStyle.display || cStyle.display != &quot;none&quot;)) {
+											if (component.dynLayoutFn) {
+												anchorY = component.dynLayoutFn($tile, node, nStyle, component, cStyle,
+														config, anchorY);
+											} else if (config.defaultContentDynLayoutFns[component.type]) {
+												anchorY = config.defaultContentDynLayoutFns[component.type]($tile, node,
+														nStyle, component, cStyle, config, anchorY);
+											} else {
+												anchorY = config.defaultContentDynLayoutFns[&quot;stdComponent&quot;]($tile, node,
+														nStyle, component, cStyle, config, anchorY);
+											}
+										}
+									});
+								});
+								$tile.height(anchorY + (nStyle.bottomPadding * mult) - startY);
+							}
+						},
+						defaultContentLayoutFns : {
+							predicate : function($tile, node, nStyle, component, cStyle, config, anchorY,
+									contentHeight, divisor) {
+								var $component = $tile.find(UTIL.toClassSelector(component.id));
+								print(UTIL.toClassSelector(component.id));
+								console.log($component)
+								var mult = config.multiplicator;
+								var cHeight = contentHeight * (cStyle.height / divisor) - nStyle.spacing * mult;
+								var cWidth = ((nStyle.width - nStyle.leftPadding - nStyle.rightPadding) * mult);
+								$component.height(cHeight);
+								$component.width(cWidth);
+								$component.css(&quot;top&quot;, anchorY);
+								$component.css(&quot;left&quot;, nStyle.leftPadding);
+								anchorY += (cHeight + nStyle.spacing * mult);
+								$component.children().height(cHeight);
+								var $typeImage = $tile.find(UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.typeImage));
+								var $predicate = $tile.find(UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.predicate));
+								var $predicateLabel = $tile.find(UTIL
+										.toSelector(CONS.CSS_CLASSES.tileClasses.predicateLabel));
+								var imageWidth = cWidth * 0.2;
+								$typeImage.height(&quot;auto&quot;);
+								$typeImage.width(imageWidth);
+								$predicateLabel.css(&quot;left&quot;, imageWidth);
+								$predicateLabel.width(cWidth - imageWidth);
+								$predicate.width(cWidth);
+								return anchorY;
+							},
+							stdComponent : function($tile, node, nStyle, component, cStyle, config, anchorY,
+									contentHeight, divisor) {
+								var $component = $tile.find(UTIL.toClassSelector(component.id));
+								var mult = config.multiplicator;
+								var cHeight = contentHeight * (cStyle.height / divisor) - nStyle.spacing * mult;
+								$component.width((nStyle.width - nStyle.leftPadding - nStyle.rightPadding) * mult);
+								$component.height(cHeight);
+								$component.css(&quot;top&quot;, anchorY);
+								$component.css(&quot;left&quot;, nStyle.leftPadding);
+								anchorY += (cHeight + nStyle.spacing * mult);
+								return anchorY;
+							}
+						},
+						defaultContentDynLayoutFns : {
+							predicate : function($tile, node, nStyle, component, cStyle, config, anchorY) {
+								var $component = $tile.find(UTIL.toClassSelector(component.id));
+								var mult = config.multiplicator;
+								var cHeight = cStyle.height * mult;
+								var cWidth = (nStyle.width - nStyle.leftPadding - nStyle.rightPadding) * mult;
+								$component.height(cHeight);
+								$component.width(cWidth);
+								$component.css(&quot;top&quot;, anchorY);
+								$component.css(&quot;left&quot;, nStyle.leftPadding);
+								anchorY += (cHeight + nStyle.spacing * mult);
+								$component.children().height(cHeight);
+								var $typeImage = $tile.find(UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.typeImage));
+								var $predicate = $tile.find(UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.predicate));
+								var $predicateLabel = $tile.find(UTIL
+										.toSelector(CONS.CSS_CLASSES.tileClasses.predicateLabel));
+								var imageWidth = cWidth * 0.2;
+								$typeImage.height(&quot;auto&quot;);
+								$typeImage.width(imageWidth);
+								$predicateLabel.css(&quot;left&quot;, imageWidth);
+								$predicateLabel.width(cWidth - imageWidth);
+								$predicate.width(cWidth);
+								return anchorY;
+							},
+							stdComponent : function($tile, node, nStyle, component, cStyle, config, anchorY) {
+								var $component = $tile.find(UTIL.toClassSelector(component.id));
+								var mult = config.multiplicator;
+								$component.width((nStyle.width - nStyle.leftPadding - nStyle.rightPadding) * mult);
+								$component.height(cStyle.height * mult);
+								$component.css(&quot;top&quot;, anchorY);
+								$component.css(&quot;left&quot;, nStyle.leftPadding);
+								anchorY += ((cStyle.height + nStyle.spacing) * mult);
+								return anchorY;
+							}
+						},
+						defaultStyles : {
+							/**
+							 * Styles of literal items.
+							 * 
+							 * @property defaults.layerOptions.tileFilters.scale.config.defaultStyles.literal
+							 * @type Object
+							 */
+							// literal : {
+							/**
+							 * Width of literal items.
+							 * 
+							 * @property defaults.layerOptions.tileFilters.scale.config.defaultStyles.literal.width
+							 * @type Integer
+							 * @default 200
+							 */
+							// width : 200,
+							/**
+							 * Height of literal items.
+							 * 
+							 * @property defaults.layerOptions.tileFilters.scale.config.defaultStyles.literal.height
+							 * @type Integer
+							 * @default 100
+							 */
+							// height : 100
+							// },
+							/**
+							 * Styles of res nodes.
+							 * 
+							 * @property defaults.layerOptions.tileFilters.scale.config.defaultStyles.stdNode
+							 * @type Object
+							 */
+							stdNode : {
+								/**
+								 * Width of items.
+								 * 
+								 * @property defaults.layerOptions.tileFilters.scale.config.defaultStyles.stdNode.width
+								 * @type Integer
+								 * @default 200
+								 */
+								width : 200,
+								/**
+								 * Height of items.
+								 * 
+								 * @property defaults.layerOptions.tileFilters.scale.config.defaultStyles.stdNode.width
+								 * @type Integer or String
+								 * @default 200 / dynamic
+								 */
+								height : &quot;dynamic&quot;,
+								topPadding : 10,
+								leftPadding : 10,
+								rightPadding : 10,
+								bottomPadding : 10,
+								spacing : 5
+							}
+						},
+						defaultContentStyles : {
+							predicate : {
+								height : 20
+							},
+							label : {
+								height : 60
+							},
+							stdComponent : {
+								height : 40
+							}
+						}
+					}
+				},
+
+				/**
+				 * Scales text of tiles
+				 * 
+				 * @property defaults.layerOptions.tileFilters.backgroundColor
+				 * @type Object
+				 */
+				textScale : {
+					webWorker : true,
+					fn : function($tiles, config, layer) {
+						// On layout done event
+						layer.view.$viewContainer.on(CONS.EVENT_TYPES.layout.done, function() {
+							var $fitHere = $tiles.find(UTIL.toSelector(CONS.CSS_CLASSES.textScale));
+							$.each($fitHere, function(i, val) {
+								var $parent = $(val).parent();
+								$parent.textfill({
+									maxFontPixels : config.maxFontPixels,
+									minFontPixels : config.minFontPixels,
+									fail : function() {
+										$parent.css({
+											&quot;overflow-y&quot; : &quot;auto&quot;,
+											&quot;word-wrap&quot; : &quot;break-word&quot;
+										});
+									}
+								});
+							});
+						});
+						return $tiles;
+					},
+					config : {
+						maxFontPixels : 80,
+						minFontPixels : 12
+					}
+				},
+
+				/**
+				 * Sets backgroundColor for tiles
+				 * 
+				 * @property defaults.layerOptions.tileFilters.backgroundColor
+				 * @type Object
+				 */
+				backgroundColor : {
+					fn : function($tiles, config) {
+						var counter = 0;
+						$.each($tiles, function(i, tile) {
+							counter++;
+							var $tile = $(tile);
+							var colorArray;
+							var node = $tile.data(&quot;node&quot;);
+							if (node.style &amp;&amp; node.style.bgColors) {
+								colorArray = node.style.bgColors;
+							} else if (config.defaultStyles[node.getType()]) {
+								colorArray = config.defaultStyles[node.getType()].bgColors;
+							} else {
+								colorArray = config.defaultStyles[&quot;stdNode&quot;].bgColors;
+							}
+							var color = new RGBColor(colorArray[counter % colorArray.length]);
+							if (color) {
+								$tile.css(&quot;background-color&quot;, &quot;rgba(&quot; + color.r + &quot;, &quot; + color.g + &quot;, &quot; + color.b
+										+ &quot; ,1)&quot;);
+							}
+						});
+						return $tiles;
+					},
+					config : {
+						defaultStyles : {
+							literal : {
+								/**
+								 * Color of literal items.
+								 * 
+								 * @property defaults.layerOptions.tileFilters.backgroundColor.config.defaultStyles.literal.bgColors
+								 * @type Array
+								 * @default [ &#x27;#777777&#x27; ]
+								 */
+								bgColors : [ &#x27;#777777&#x27; ]
+							},
+							blankNode : {
+								bgColors : [ &#x27;#777777&#x27; ]
+							},
+							stdNode : {
+								/**
+								 * Colors of items.
+								 * 
+								 * @property defaults.layerOptions.tileFilters.backgroundColor.config.defaultStyles.stdNode.bgColors
+								 * @type Array
+								 * @default [ &#x27;#e2674a&#x27;, &#x27;#99CC99&#x27;, &#x27;#3399CC&#x27;, &#x27;#33CCCC&#x27;,
+								 *          &#x27;#996699&#x27;, &#x27;#C24747&#x27;, &#x27;#FFCC66&#x27;, &#x27;#669999&#x27;,
+								 *          &#x27;#CC6699&#x27;, &#x27;#339966&#x27;, &#x27;#666699&#x27; ]
+								 */
+								bgColors : [ &#x27;#e2674a&#x27;, &#x27;#99CC99&#x27;, &#x27;#3399CC&#x27;, &#x27;#33CCCC&#x27;, &#x27;#996699&#x27;, &#x27;#C24747&#x27;,
+										&#x27;#FFCC66&#x27;, &#x27;#669999&#x27;, &#x27;#CC6699&#x27;, &#x27;#339966&#x27;, &#x27;#666699&#x27; ]
+							}
+						}
+					}
+				},
+
+				/**
+				 * Loads background images
+				 * 
+				 * @property defaults.layerOptions.tileFilters.backgroundImg
+				 * @type Object
+				 */
+				backgroundImg : {
+					fn : function($tiles, config) {
+						$.each($tiles, function(i, tile) {
+							var $tile = $(tile);
+							var node = $tile.data(&quot;node&quot;), image_url = &quot;&quot;;
+							switch (node.getType()) {
+							case CONS.NODE_TYPES.resNode:
+								image_url = node.getFComponentOT(&quot;uri&quot;).data;
+								break;
+
+							case CONS.NODE_TYPES.literal:
+								image_url = node.getFComponentOT(&quot;label&quot;).data.value;
+								break;
+							}
+							var tmpArray = image_url.replace(&quot;&gt;&quot;, &quot;&quot;).split(&quot;.&quot;);
+							image_url.replace(&quot;&lt;&quot;, &quot;&quot;);
+							switch (tmpArray[tmpArray.length - 1]) {
+							case &quot;png&quot;:
+							case &quot;jpeg&quot;:
+							case &quot;svg&quot;:
+							case &quot;jpg&quot;:
+
+								if (image_url) {
+									var $img = $(&#x27;&lt;img src=&quot;&#x27; + image_url + &#x27;&quot;&gt;&#x27;);
+									$img.load(function() {
+										var width = $img.width();
+										var height = $img.height();
+										var ratio = width / height;
+										var tile_width = $tile.width();
+										var tile_height = $tile.height();
+										var tile_ration = tile_width / tile_height;
+										var actual_width = 0;
+
+										if (tile_ration &gt; ratio) {
+											actual_width = tile_width / ratio;
+											$img.width(tile_width / ratio);
+											$img.height(tile_height);
+										} else {
+											$img.width(actual_width);
+											$img.height(tile_width * ratio);
+										}
+										$img.css({
+											&quot;left&quot; : (tile_width - actual_width) / 2,
+											&quot;opacity&quot; : config.opacity,
+											&quot;position&quot; : &quot;absolute&quot;
+										});
+									});
+									$tile.prepend($img);
+								}
+								break;
+							}
+						});
+						return $tiles;
+					},
+					config : {
+						opacity : 0.5
+					}
+				},
+
+				/**
+				 * Enables mouseover for URIs
+				 * 
+				 * @property defaults.layerOptions.tileFilters.predicateLabel
+				 * @type Object
+				 */
+				predicateLabel : {
+					fn : function($tiles) {
+						$.each($tiles, function(i, tile) {
+							var $tile = $(tile);
+							var $predicate = $tile.find(UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.predicate));
+							var $typeImage = $tile.find(UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.typeImage));
+							var $predicateLabel = $tile.find(UTIL
+									.toSelector(CONS.CSS_CLASSES.tileClasses.predicateLabel));
+
+							// Show full URI on mouse right
+							// click / prevent default
+							// contextmenu
+							$tile.get()[0].addEventListener(&#x27;contextmenu&#x27;, function(ev) {
+								ev.preventDefault();
+								if ($predicate.css(&quot;visibility&quot;) !== &quot;visible&quot;) {
+									$predicate.css(&quot;visibility&quot;, &quot;visible&quot;);
+									$typeImage.css(&quot;visibility&quot;, &quot;hidden&quot;);
+									$predicateLabel.css(&quot;visibility&quot;, &quot;hidden&quot;);
+
+								} else {
+									$predicate.css(&quot;visibility&quot;, &quot;hidden&quot;);
+									$typeImage.css(&quot;visibility&quot;, &quot;visible&quot;);
+									$predicateLabel.css(&quot;visibility&quot;, &quot;visible&quot;);
+								}
+								return false;
+							}, false);
+						});
+						return $tiles;
+					}
+				},
+
+				/**
+				 * Initializes the browsability of tiles
+				 * 
+				 * @property defaults.layerOptions.tileFilters.browsablity
+				 * @type Object
+				 */
+				browsablity : {
+					fn : function($tiles, config, layer) {
+						$.each($tiles, function(i, tile) {
+							var $tile = $(tile);
+							var node = $tile.data(&quot;node&quot;);
+							var nodeType = node.getType();
+							var layerGenFn;
+							var layerOptionsFn;
+							var onInitFn;
+							if (node.browsablity) {
+								if (node.browsablity.layerGenFn) {
+									layerGenFn = node.browsablity.layerGenFn;
+								}
+								if (node.browsablity.layerOptionsFn) {
+									layerOptionsFn = node.browsablity.layerOptionsFn;
+								}
+								if (node.browsablity.onInitFn) {
+									layerOptionsFn = node.browsablity.onInitFn;
+								}
+							} else if (nodeType in config.types) {
+								if (config.types[nodeType].layerGenFn) {
+									layerGenFn = config.types[nodeType].layerGenFn;
+								}
+								if (config.types[nodeType].layerOptionsFn) {
+									layerOptionsFn = config.types[nodeType].layerOptionsFn;
+								}
+								if (config.types[nodeType].onInitFn) {
+									layerOptionsFn = config.types[nodeType].onInitFn;
+								}
+							}
+							if (!layerGenFn) {
+								layerGenFn = config.defaultFns.layerGenFn;
+							}
+							if (!layerOptionsFn) {
+								layerOptionsFn = config.defaultFns.layerOptionsFn;
+							}
+							if (!onInitFn) {
+								onInitFn = config.defaultFns.onInitFn;
+							}
+							$tile.click(
+							// Save fns in function
+							function() {
+								return function() {
+									$tile.data(&#x27;isExpanded&#x27;, true);
+									var newLayer = layerGenFn(node, $tile, layer.$parent,
+											layerOptionsFn(layer.options));
+									if (newLayer) {
+										newLayer.initSwitch.attach(new Plugin.Listener(function() {
+											return function(sender) {
+												onInitFn(sender, layer);
+											}
+										}(onInitFn, layer)));
+									}
+								}(layerGenFn, layerOptionsFn, onInitFn, layer);
+							});
+						});
+						return $tiles;
+					},
+					config : {
+						types : {
+							blankNode : {
+								layerGenFn : function(node, $tile, $parent, newLayerOptions) {
+									//TODO
+								}
+							},
+							stdNode : {
+								layerGenFn : function(node, $tile, $parent, newLayerOptions) {
+									return new Plugin.Layers.Res($parent, newLayerOptions, $tile);
+								}
+							},
+							LiteralNode : {
+								layerGenFn : function(node, $tile, $parent, newLayerOptions) {
+									return new Plugin.Layers.Literal($parent, newLayerOptions, $tile);
+								}
+							}
+						},
+						defaultFns : {
+							layerOptionsFn : function(options) {
+								return $.extend(true, {}, options, {
+									layoutEngine : {
+										itemSelector : UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.tile),
+										getSortData : {
+											type : function($elem) {
+												var classes = $elem.attr(&quot;class&quot;);
+												return classes;
+											},
+											group : function($elem) {
+												var classes = $elem.attr(&quot;class&quot;);
+												var pattern = new RegExp(&quot;(\s)*[a-zA-Z0-9]*&quot; + CONS.TOKEN_TAG
+														+ &quot;[a-zA-Z0-9]*(\s)*&quot;, &#x27;g&#x27;);
+												var groups = classes.match(pattern), group = &quot;&quot;;
+												for (var i = 0; i &lt; groups.length; i++) {
+													group += groups[i] + &quot; &quot;;
+												}
+												return group;
+											}
+										}
+									},
+									viewOptions : {
+										filterBy : [ {
+											value : &quot;*&quot;,
+											label : &quot;showAll&quot;
+										}, {
+											value : CONS.CSS_CLASSES.typeClasses.incoming,
+											label : &quot;in&quot;
+										}, {
+											value : CONS.CSS_CLASSES.typeClasses.outgoing,
+											label : &quot;out&quot;
+										} ]
+									}
+								});
+							},
+							layerGenFn : function(node, $tile, $parent, newLayerOptions) {
+								return new Plugin.Layers.Res($parent, newLayerOptions, $tile);
+							},
+							onInitFn : function(sender, layer) {
+								layer.closeEvent.attach(new Plugin.Listener(function(sender) {
+									sender.filterEvent.notify({
+										&quot;action&quot; : &quot;removeLayer&quot;
+									});
+								}));
+								layer.filterEvent.notify({
+									&quot;action&quot; : &quot;addLayer&quot;,
+									&quot;args&quot; : sender
+								});
+							}
+						}
+					}
+				}
+			},
+			/**
 			 * Flag to indicate whether the sort interface should be generated.
 			 * 
 			 * @property defaults.layerOptions.generateSortOptions
@@ -3312,8 +3643,7 @@
 			 */
 			previewAsOverlay : true,
 			/**
-			 * Flag to indicate whether the filter interface should be
-			 * generated.
+			 * Flag to indicate whether the filter interface should be generated.
 			 * 
 			 * @property defaults.layerOptions.generateFilterOptions
 			 * @type Boolean
@@ -3329,15 +3659,15 @@
 			 */
 			modelOptions : {
 				/**
-				 * Batch size of items which can be loaded simultaniosly in the
-				 * view. Filters only work on single batches. The batchSize
-				 * should be chosen big enough if Nodefilters are to be used.
+				 * Batch size of items which can be loaded simultaniosly in the view.
+				 * Filters only work on single batches. The batchSize should be chosen
+				 * big enough if Nodefilters are to be used.
 				 * 
 				 * @property defaults.layerOptions.modelOptions.batchSize
 				 * @type Integer
-				 * @default 25
+				 * @default 500
 				 */
-				batchSize : 25
+				batchSize : 10
 
 			},
 			/**
@@ -3348,38 +3678,40 @@
 			 */
 			remoteOptions : {
 				/**
-				 * Default remote load query. Used on insertRemoteData() if no
-				 * query parameter is given.
+				 * Default remote load query. Used on insertRemoteData() if no query
+				 * parameter is given.
 				 * 
-				 * @property defaults.layerOptions.remoteOptions.defaultRemoteQuery
+				 * @property defaults.layerOptions.remoteOptions.defaultInitRemoteQuery
 				 * @type String
-				 * @default &quot;SELECT ?subject ?predicate ?object { BIND(
-				 *          rdfs:label as ?predicate) ?subject ?predicate
-				 *          ?object. ?subject a
-				 *          &lt;http://dbpedia.org/ontology/Place&gt; . ?subject
-				 *          &lt;http://dbpedia.org/property/rulingParty&gt; ?x } LIMIT
-				 *          500&quot;
+				 * @default &quot;SELECT ?subject ?predicate ?object { VALUES ?subject {
+				 *          &lt;http://dbpedia.org/resource/Berlin&gt;
+				 *          &lt;http://dbpedia.org/resource/Passau&gt;
+				 *          &lt;http://dbpedia.org/resource/Munich&gt;
+				 *          &lt;http://dbpedia.org/resource/Frankfurt&gt; } VALUES ?predicate {
+				 *          rdfs:label } ?subject ?predicate ?object. FILTER
+				 *          (lang(?object) = &#x27;en&#x27;) } LIMIT 150&quot;
 				 */
-				defaultRemoteQuery : &quot;SELECT ?subject ?predicate ?object { BIND( rdfs:label as ?predicate) ?subject ?predicate ?object. ?subject a &lt;http://dbpedia.org/ontology/Place&gt; . ?subject &lt;http://dbpedia.org/property/rulingParty&gt; ?x } LIMIT 500&quot;,
+				defaultInitRemoteQuery : &quot;SELECT ?subject ?predicate ?object { VALUES ?subject { &lt;http://dbpedia.org/resource/Berlin&gt; &lt;http://dbpedia.org/resource/Passau&gt; &lt;http://dbpedia.org/resource/Munich&gt; &lt;http://dbpedia.org/resource/Frankfurt&gt; } VALUES ?predicate { rdfs:label } ?subject ?predicate ?object. FILTER (lang(?object) = &#x27;en&#x27;) } LIMIT 150&quot;,
 				/**
 				 * Backend services to query on remote loading.
 				 * 
-				 * @property defaults.layerOptions.remoteOptions.remoteBackend
+				 * @property defaults.layerOptions.remoteOptions.remoteBackends
 				 * @type Array
 				 * @default [&quot;http://zaire.dimis.fim.uni-passau.de:8080/bigdata/sparql&quot;]
 				 */
-				remoteBackend : [ &quot;http://zaire.dimis.fim.uni-passau.de:8080/bigdata/sparql&quot; ],
+				remoteBackends : [ &quot;http://dbpedia.org/sparql&quot; ],
+
 				/**
 				 * Limit for items loaded by a single remote load.
 				 * 
 				 * @property defaults.layerOptions.remoteOptions.remoteLimit
-				 * @type Integer
+				 * @type Integer } *
 				 * @default 100
 				 */
 				remoteLimit : 100,
 				/**
-				 * Flag to indicate whether automatic remote load on detail view
-				 * should be done.
+				 * Flag to indicate whether automatic remote load on detail view should
+				 * be done.
 				 * 
 				 * @property defaults.layerOptions.remoteOptions.remoteDynamically
 				 * @type Boolean
@@ -3393,12 +3725,11 @@
 				 * @type Array
 				 * @default [&quot;http://zaire.dimis.fim.uni-passau.de:8080/bigdata/sparql&quot;,&quot;http://dbpedia.org/sparql&quot;]
 				 */
-				remoteLabelBackend : [
-						&quot;http://zaire.dimis.fim.uni-passau.de:8080/bigdata/sparql&quot;,
+				remoteLabelBackend : [ &quot;http://zaire.dimis.fim.uni-passau.de:8080/bigdata/sparql&quot;,
 						&quot;http://dbpedia.org/sparql&quot; ],
 				/**
-				 * Flag to indicate whether remote label information should be
-				 * loaded if needed.
+				 * Flag to indicate whether remote label information should be loaded if
+				 * needed.
 				 * 
 				 * @property defaults.layerOptions.remoteOptions.remoteLabels
 				 * @type Boolean
@@ -3414,8 +3745,7 @@
 			 */
 			viewOptions : {
 				/**
-				 * Flag to indicate whether the filter should use regular
-				 * expressions.
+				 * Flag to indicate whether the filter should use regular expressions.
 				 * 
 				 * @property defaults.layerOptions.viewOptions.supportRegExpFilter
 				 * @type Boolean
@@ -3446,18 +3776,13 @@
 					sortBy : &#x27;number&#x27;,
 					getSortData : {
 						number : function($elem) {
-							var number = $elem.hasClass(&#x27;item&#x27;) ? $elem
-									.find(
-											UTIL
-													.toSelector(CONS.CSS_CLASSES.tileClasses.number))
-									.text()
-									: $elem.attr(&#x27;data-number&#x27;);
+							var number = $elem.hasClass(&#x27;item&#x27;) ? $elem.find(
+									UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.number)).text() : $elem
+									.attr(&#x27;data-number&#x27;);
 							return parseInt(number, 10);
 						},
 						alphabetical : function($elem) {
-							var label = $elem
-									.find(UTIL
-											.toSelector(CONS.CSS_CLASSES.tileClasses.label)), itemText = label.length ? label
+							var label = $elem.find(UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.label)), itemText = label.length ? label
 									: $elem;
 							return itemText.text();
 						}
@@ -3476,7 +3801,7 @@
 		 * @private
 		 * @method _selfProxy
 		 * @param {Function}
-		 *            fn Function to modifie
+		 *          fn Function to modifie
 		 * @return function with modified context
 		 */
 		this._selfProxy = function(fn) {
@@ -3503,9 +3828,6 @@
 
 		this._expandedOverlaysCount = 0;
 
-		// SPARQL query variable
-		this._queries = {};
-
 		this.init();
 	}
 
@@ -3522,12 +3844,31 @@
 			var that = this, rdfStoreInitDfd = $.Deferred();
 			print(&quot;Init RDFSTORE&quot;);
 			if (isUndefinedOrNull(rdfStore)) {
-				rdfStore = new Plugin.RdfStore(that.options.rdfstoreOptions,
-						function(store) {
-							rdfStoreInitDfd.resolve();
-						});
+				rdfStore = new Plugin.RdfStore(that.options.rdfstoreOptions, function(store) {
+					rdfStoreInitDfd.resolve();
+				});
 			}
 			return rdfStoreInitDfd.promise();
+		},
+		/**
+		 * Initializes the remote data loader
+		 * 
+		 * @private
+		 * @method ;
+		 */
+		_initRemoteDataLoader : function() {
+			var that = this;
+			if (isUndefinedOrNull(remoteDataLoader)) {
+				remoteDataLoader = new Plugin.RemoteDataLoader(
+						this.options.layerOptions.remoteOptions.remoteBackends);
+			} else {
+				$.each(this.options.layerOptions.remoteOptions.remoteBackends, function(i, val) {
+					remoteDataLoader.addBackend(val);
+				});
+			}
+			remoteDataLoader.dataInserted.attach(new Plugin.Listener(function() {
+				that.updateLayers();
+			}));
 		},
 		/**
 		 * Initializes the templating
@@ -3537,38 +3878,41 @@
 		 */
 		_initTemplating : function() {
 			var that = this, templateInitDfd = $.Deferred();
-			
+
 			// Helper to get first component of given type
 			Handlebars.registerHelper(&#x27;toClass&#x27;, function(str) {
 				return UTIL.toClass(str);
 			});
-			
+
 			// Helper to get first component of given type
 			Handlebars.registerHelper(&#x27;tScaleWrap&#x27;, function(str) {
-				str = Handlebars.Utils.escapeExpression(str);//escape
-				return new Handlebars.SafeString(&quot;&lt;span class=&#x27;&quot; + CONS.CSS_CLASSES.textScale + &quot;&#x27; style=&#x27;position:static&#x27;&gt;&quot; + str + &quot;&lt;/span&gt;&quot;);//mark as encoded
+				str = Handlebars.Utils.escapeExpression(str);// escape
+				return new Handlebars.SafeString(&quot;&lt;span class=&#x27;&quot; + CONS.CSS_CLASSES.textScale
+						+ &quot;&#x27; style=&#x27;position:static&#x27;&gt;&quot; + str + &quot;&lt;/span&gt;&quot;);// mark
+				// as
+				// encoded
 			});
-			
+
 			// Helper to get first component of given type
 			Handlebars.registerHelper(&#x27;firstComp&#x27;, function(context, type, options) {
 				var out = &#x27;&#x27;;
 				if (context.hasComponentType(type)) {
-					out += options.fn(context.components[type+&quot;1&quot;]);
+					out += options.fn(context.components[type][0]);
 				}
 				return out;
 			});
-			
+
 			// Helper to get first component of given type
 			Handlebars.registerHelper(&#x27;hasCompType&#x27;, function(context, type, options) {
 				if (context.hasComponentType(type)) {
 					return options.fn(this);
 				}
 			});
-			
+
 			// Helper to get each component of given type
 			Handlebars.registerHelper(&#x27;compsEach&#x27;, function(context, type, options) {
 				var out = &#x27;&#x27;;
-				context.forEachComponentType(type, function(component){
+				context.forEachComponentType(type, function(component) {
 					out += options.fn(component);
 				});
 				return out;
@@ -3584,18 +3928,13 @@
 			});
 
 			// Helper to check if language of given context is undefined or &quot;en&quot;
-			Handlebars
-					.registerHelper(
-							&#x27;ifLang&#x27;,
-							function(context, options) {
-								if (context
-										&amp;&amp; (context.lang === undefined || context.lang === &quot;en&quot;)) {
-									return options.fn(this);
-								}
-							});
+			Handlebars.registerHelper(&#x27;ifLang&#x27;, function(context, options) {
+				if (context &amp;&amp; (context.lang === undefined || context.lang === &quot;en&quot;)) {
+					return options.fn(this);
+				}
+			});
 
-			Handlebars.registerHelper(&#x27;predicateLabelRetriver&#x27;, function(ctx,
-					options) {
+			Handlebars.registerHelper(&#x27;predicateLabelRetriver&#x27;, function(ctx, options) {
 				if (ctx &amp;&amp; !ctx.label) {
 					var uriArray = ctx.value.split(&quot;#&quot;);
 					if (uriArray.length === 1) {
@@ -3624,9 +3963,9 @@
 			var that = this;
 
 			// Generate SPARQL queries
-			that._queries = {
+			queryStore = {
 				initQueries : this.options.initQueries,
-				defaultRemoteQuery : this.options.layerOptions.remoteOptions.defaultRemoteQuery,
+				defaultInitRemoteQuery : this.options.layerOptions.remoteOptions.defaultInitRemoteQuery,
 				remoteSubjectOf : &quot; SELECT DISTINCT ?subject ?predicate ?object ?labelObj ?labelPred WHERE { BIND (&lt;&quot;
 						+ CONS.DUMMY
 						+ &quot;&gt; as ?subject) ?subject ?predicate ?object. OPTIONAL { ?object rdfs:label ?labelObj }. OPTIONAL { ?predicate rdfs:label ?labelPred }}&quot;,
@@ -3645,24 +3984,18 @@
 				literalIsObjectOf : &quot;SELECT DISTINCT ?subject ?predicate ?type ?label ?description WHERE {?subject ?predicate ?oLiteral. FILTER (STR(?oLiteral)=&#x27;&quot;
 						+ CONS.DUMMY
 						+ &quot;&#x27;). OPTIONAL { ?subject rdfs:label ?label}. OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }}&quot;,
-				previewQuery : &quot; SELECT DISTINCT ?label ?description ?type WHERE { &lt;&quot;
-						+ CONS.DUMMY
-						+ &quot;&gt; rdfs:label ?label . OPTIONAL { &lt;&quot;
-						+ CONS.DUMMY
-						+ &quot;&gt; rdfs:description ?description } . OPTIONAL { &lt;&quot;
-						+ CONS.DUMMY
-						+ &quot;&gt; rdfs:comment ?description } . OPTIONAL { &lt;&quot;
-						+ CONS.DUMMY + &quot;&gt; rdfs:type ?type}}&quot;,
-				label : &quot;SELECT DISTINCT ?label WHERE { &lt;&quot;
-						+ CONS.DUMMY
+				previewQuery : &quot; SELECT DISTINCT ?label ?description ?type WHERE { &lt;&quot; + CONS.DUMMY
+						+ &quot;&gt; rdfs:label ?label . OPTIONAL { &lt;&quot; + CONS.DUMMY
+						+ &quot;&gt; rdfs:description ?description } . OPTIONAL { &lt;&quot; + CONS.DUMMY
+						+ &quot;&gt; rdfs:comment ?description } . OPTIONAL { &lt;&quot; + CONS.DUMMY + &quot;&gt; rdfs:type ?type}}&quot;,
+				label : &quot;SELECT DISTINCT ?label WHERE { &lt;&quot; + CONS.DUMMY
 						+ &quot;&gt; rdfs:label ?label . FILTER(LANG(?label) = &#x27;&#x27; || LANGMATCHES(LANG(?label), &#x27;en&#x27;))}&quot;,
-				blankNodeQuery : &quot;SELECT DISTINCT ?object WHERE {&lt;&quot;
-						+ CONS.DUMMY + &quot;&gt; ?predicate ?object}&quot;
+				blankNodeQuery : &quot;SELECT DISTINCT ?object WHERE {&lt;&quot; + CONS.DUMMY + &quot;&gt; ?predicate ?object}&quot;
 			};
 		},
 		/**
-		 * Check whether the plugin is initialized with insertion options and
-		 * call insertion methods if needed.
+		 * Check whether the plugin is initialized with insertion options and call
+		 * insertion methods if needed.
 		 * 
 		 * @private
 		 * @method _checkInsertion
@@ -3673,30 +4006,17 @@
 			if (!isUndefinedOrNull(that.options.dataFormat)) {
 				if (!isUndefinedOrNull(that.options.dataLoc)) {
 					inserted = true;
-					that
-							._ajaxLoadData(
-									that.options.dataLoc,
-									that.options.dataFormat,
-									function(rdfData, dataFormat) {
-										rdfStore
-												.insertData(
-														rdfData,
-														dataFormat,
-														function() {
-															eventManagers[that.pluginID]
-																	.trigger(
-																			CONS.EVENT_TYPES.store.insert,
-																			that);
-														});
-									});
+					that._ajaxLoadData(that.options.dataLoc, that.options.dataFormat,
+							function(rdfData, dataFormat) {
+								rdfStore.insertData(rdfData, dataFormat, function() {
+									eventManagers[that.pluginID].trigger(CONS.EVENT_TYPES.store.insert, that);
+								});
+							});
 				} else if (!isUndefinedOrNull(that.options.data)) {
 					inserted = true;
-					rdfStore.insertData(that.options.data,
-							that.options.dataFormat, function() {
-								eventManagers[that.pluginID].trigger(
-										CONS.EVENT_TYPES.store.insert,
-										that);
-							});
+					rdfStore.insertData(that.options.data, that.options.dataFormat, function() {
+						eventManagers[that.pluginID].trigger(CONS.EVENT_TYPES.store.insert, that);
+					});
 				}
 			}
 			return inserted;
@@ -3707,17 +4027,16 @@
 		 * @private
 		 * @method _ajaxLoadData
 		 * @param {String}
-		 *            dataURL URL where the data is located
+		 *          dataURL URL where the data is located
 		 * @param {String}
-		 *            dataFormat Format of the data
+		 *          dataFormat Format of the data
 		 * @param {String}
-		 *            callback Function to call after loading with results
+		 *          callback Function to call after loading with results
 		 * @return function with modified context
 		 */
 		_ajaxLoadData : function(dataURL, dataFormat, callback) {
 			var that = this;
-			eventManagers[that.pluginID].trigger(
-					CONS.EVENT_TYPES.loading.start, that);
+			eventManagers[that.pluginID].trigger(CONS.EVENT_TYPES.loading.start, that);
 
 			// print(&quot;_ajaxLoadData&quot;);
 			$.ajax({
@@ -3726,12 +4045,10 @@
 				success : function(rdfData) {
 					callback(rdfData, dataFormat);
 				}
-			}).fail(
-					function() {
-						eventManagers[that.pluginID].trigger(
-								CONS.EVENT_TYPES.loading.done, that);
-						alert(CONS.MESSAGES.error.ajax);
-					});
+			}).fail(function() {
+				eventManagers[that.pluginID].trigger(CONS.EVENT_TYPES.loading.done, that);
+				alert(CONS.MESSAGES.error.ajax);
+			});
 		},
 		// &lt;!--- instance private functions ----&gt;
 
@@ -3745,91 +4062,58 @@
 
 			// Generate SPARQL Queries
 			that._generateQueries();
+			that._initRemoteDataLoader();
 
 			// Add insertion listener
-			eventManagers[this.pluginID].addEventHandler(
-					CONS.EVENT_TYPES.store.insert, function(ev) {
-						$.each(that._views, function(key, view) {
-							view.update();
-							print(&quot;view &quot; + key + &quot; is updating&quot;);
-						});
-					});
+			eventManagers[this.pluginID].addEventHandler(CONS.EVENT_TYPES.store.insert, function(ev) {
+				$.each(that._layers, function(key, layer) {
+					print(layer);
+					layer.update();
+					print(&quot;view &quot; + key + &quot; is updating&quot;);
+				});
+			});
 
 			// Add a smartresize listener (smartresize to be found in
 			// jQuery.isotope)
-			eventManagers[this.pluginID]
-					.addEventHandler(
-							&#x27;smartresize&#x27;,
-							function(ev, $invoker) {
+			eventManagers[this.pluginID].addEventHandler(&#x27;smartresize&#x27;, function(ev, $invoker) {
 
-								// &lt;---- overlay modification ----&gt;
-								var $overlays = that._$parent.children(UTIL
-										.toSelector(CONS.CSS_CLASSES.overlay));
-								$overlays.css(&#x27;clip&#x27;,
-										getClip(CONS.CSS_CLASSES.overlay));
-								var innerScrolls = $overlays
-										.find(UTIL
-												.toSelector(CONS.CSS_CLASSES.innerScroll));
-								innerScrolls
-										.css(
-												&quot;width&quot;,
-												($window.width()
-														- parseInt($overlays
-																.css(&quot;padding-left&quot;)) - parseInt($overlays
-														.css(&quot;padding-right&quot;)))
-														+ &quot;px&quot;);
-								innerScrolls
-										.css(
-												&quot;height&quot;,
-												$window.height()
-														- $overlays
-																.find(
-																		UTIL
-																				.toSelector(CONS.CSS_CLASSES.innerNoScroll))
-																.height()
-														+ &quot;px&quot;);
-								// &lt;!--- overlay modification ----&gt;
-							}, $window);
+				// &lt;---- overlay modification ----&gt;
+				var $overlays = that._$parent.children(UTIL.toSelector(CONS.CSS_CLASSES.overlay));
+				$overlays.css(&#x27;clip&#x27;, getClip(CONS.CSS_CLASSES.overlay));
+				var innerScrolls = $overlays.find(UTIL.toSelector(CONS.CSS_CLASSES.innerScroll));
+				innerScrolls.css(&quot;width&quot;,
+						($window.width() - parseInt($overlays.css(&quot;padding-left&quot;)) - parseInt($overlays
+								.css(&quot;padding-right&quot;)))
+								+ &quot;px&quot;);
+				innerScrolls.css(&quot;height&quot;, $window.height()
+						- $overlays.find(UTIL.toSelector(CONS.CSS_CLASSES.innerNoScroll)).height() + &quot;px&quot;);
+				// &lt;!--- overlay modification ----&gt;
+			}, $window);
 
 			if (that.options.generateTimeline) {
-				that._$timelineContainer = $(&#x27;&lt;div class=&quot;&#x27;
-						+ CONS.CSS_CLASSES.timelineContainer + &#x27;&quot;&gt;&#x27;);
-				that._$parent.prepend(that._$timelineContainer);
-				that._$timeline = $(&#x27;&lt;ul class=&quot;&#x27; + CONS.CSS_CLASSES.timeline
-						+ &#x27;&quot;&gt;&lt;/ul&gt;&#x27;);
-				that._$timelineContainer.append(that._$timeline);
+				this.timeLine = new Plugin.TimeLine(this._$parent);
 			}
 
 			// Init templating and RdfStore if needed
 			if (globalInitDfd.state() === &quot;pending&quot;) {
 				globalInitDfd = $.Deferred();
-				$
-						.when(that._initRdfStore(), that._initTemplating())
-						.done(
-								function() {
+				$.when(that._initRdfStore(), that._initTemplating()).done(function() {
 
-									// Load runtime templates
-									var tmp_templates = {};
-									$
-											.each(
-													that.options.nodeFilters,
-													function(i, filter) {
-														if (filter.template) {
-															if (templates[i]) {
-																console
-																		.log(&quot;Template with identifier &quot;
-																				+ i
-																				+ &quot; already defined&quot;);
-															} else {
-																tmp_templates[i] = Handlebars
-																		.compile(filter.template);
-															}
-														}
-													});
+					// Load runtime templates
+					var tmp_templates = {};
+					$.each(that.options.layerOptions.nodeFilters, function(i, filter) {
+						if (filter.template) {
+							if (templates[i]) {
+								console.log(&quot;Template with identifier &quot; + i + &quot; already defined&quot;);
+							} else {
+								tmp_templates[i] = Handlebars.compile(filter.template);
+							}
+						}
+					});
 
-									$.extend(true, templates, tmp_templates);
-									globalInitDfd.resolve();
-								});
+					$.extend(true, templates, tmp_templates);
+					globalInitDfd.resolve();
+				});
 			}
 
 			// when done check if sort options have to be initialized and data
@@ -3838,18 +4122,21 @@
 					function() {
 
 						// Init Layer
-						that._views = [];
-						that._views.push(new Plugin.InitLayer(that._$parent,
-								that.options.layerOptions, that));
-
-						if (!that._checkInsertion()) {
-							if (that.options.sparqlData === undefined) {
-								that._views[0].update();
-							} else {
-								that._views[0]
-										.addItems(that.options.sparqlData);
+						that._layers = {};
+						var layer = new Plugin.Layers.Inlay(that._$parent, that.options.layerOptions,
+								that.options.initQueries);
+						that.addLayer(layer);
+						that._layers[layer.id].initSwitch.attach(new Plugin.Listener(function(sender) {
+							print(&quot;Layer done&quot;);
+							print(sender);
+							if (!that._checkInsertion()) {
+								if (that.options.sparqlData === undefined) {
+									sender.update();
+								} else {
+									sender.addItems(that.options.sparqlData);
+								}
 							}
-						}
+						}));
 					});
 		},
 		/**
@@ -3857,89 +4144,36 @@
 		 * 
 		 * @method addLayer
 		 * @param {Plugin.Layer}
-		 *            layer Layer object to add to the plugin
+		 *          layer Layer object to add to the plugin
 		 */
 		addLayer : function(layer) {
-			this._views.push(layer);
-		},
-		/**
-		 * Generates Layer using given tile(with node data).
-		 * 
-		 * @method generateLayer
-		 * @param {jQuery}
-		 *            $tile Tile which holds node data
-		 */
-		generateLayer : function($tile) {
-			$tile.data(&#x27;isExpanded&#x27;, true);
-			var node = $tile.data(&quot;node&quot;), that = this, idAddition = Math
-					.random().toString(36).substr(2, 9);
-			var overlay = templates.overlayWrapper(appendCssClasses({
-				&quot;id&quot; : node.id + idAddition
-				,
-				&quot;nodeFilters&quot; : that.options.nodeFilters,
-				&quot;tileFilters&quot; : that.options.tileFilters
+			var that = this;
+			this._layers[layer.id] = layer;
+			
+			// Add listener for timeLine opening
+			var listener = new Plugin.Listener(function(sender) {
+				if (that.timeLine) {
+					that.timeLine.addLayer(sender);
+					sender.getTimeLineButton().on(&quot;click&quot;, function() {
+						that.timeLine.open();
+					});
+				}
+			});
+			layer.initSwitch.attach(listener);
+			layer.openEvent.attach(new Plugin.Listener(function(sender) {
+				that.$body.addClass(&#x27;noscroll&#x27;);
 			}));
-			that._$parent.append(overlay);
-			var $overlay = that._$parent.find(
-					UTIL.toSelector(CONS.CSS_CLASSES.overlay)).find(
-					&quot;div:contains(&#x27;&quot; + node.id + idAddition + &quot;&#x27;)&quot;).parent();
-			var newLayerOptions = $
-					.extend(
-							true,
-							{},
-							that.options.layerOptions,
-							{
-								layoutEngine : {
-									itemSelector : UTIL
-											.toSelector(CONS.CSS_CLASSES.tileClasses.tile),
-									getSortData : {
-										type : function($elem) {
-											var classes = $elem.attr(&quot;class&quot;);
-											return classes;
-										},
-										group : function($elem) {
-											var classes = $elem.attr(&quot;class&quot;);
-											var pattern = new RegExp(
-													&quot;(\s)*[a-zA-Z0-9]*&quot;
-															+ CONS.TOKEN_TAG
-															+ &quot;[a-zA-Z0-9]*(\s)*&quot;,
-													&#x27;g&#x27;);
-											var groups = classes.match(pattern), group = &quot;&quot;;
-											for (var i = 0; i &lt; groups.length; i++) {
-												group += groups[i] + &quot; &quot;;
-											}
-											return group;
-										}
-									}
-								},
-								viewOptions : {
-									filterBy : [
-											{
-												value : &quot;*&quot;,
-												label : &quot;showAll&quot;
-											},
-											{
-												value : CONS.CSS_CLASSES.typeClasses.incoming,
-												label : &quot;in&quot;
-											},
-											{
-												value : CONS.CSS_CLASSES.typeClasses.outgoing,
-												label : &quot;out&quot;
-											} ]
-								}
-							});
-			var newLayer;
-			if (node.getType() === CONS.NODE_TYPES.resNode) {
-				newLayer = new Plugin.DetailLayer($overlay, newLayerOptions,
-						that, $tile);
-			} else if (node.getType() === CONS.NODE_TYPES.literal) {
-				newLayer = new Plugin.DetailLayer($overlay, newLayerOptions,
-						that, $tile);
-			} else {
-				newLayer = new Plugin.DetailLayer($overlay, newLayerOptions,
-						that, $tile);
-			}
-			return newLayer;
+			layer.filterEvent.attach(new Plugin.Listener(function(sender, args) {
+				switch (args.action) {
+				case &quot;addLayer&quot;:
+					that.addLayer(args.args);
+					break;
+				case &quot;removeLayer&quot;:
+					that.removeLayer(sender);
+					break;
+				}
+			}));
+			layer.open();
 		},
 
 		/**
@@ -3947,44 +4181,38 @@
 		 * 
 		 * @method removeLayer
 		 * @param {Plugin.Layer}
-		 *            view Layer object to remove from the plugin
+		 *          view Layer object to remove from the plugin
 		 */
-		removeLayer : function(view) {
-			for (var i = 0; i &lt; this._views.length; i++)
-				if (this._views[i] === view) {
-					this._views.splice(i, 1);
-					if (this._views.length === 1) {
-						this.$body.removeClass(&#x27;noscroll&#x27;);
-					}
-					break;
-				}
+		removeLayer : function(layer) {
+			delete this._layers[layer.id];
+		},
+
+		/**
+		 * Update all layers of the plugin
+		 * 
+		 * @method updateLayers
+		 */
+		updateLayers : function() {
+			$.each(this._layers, function(i, val) {
+				val.update();
+			});
 		},
 		/**
 		 * Insert given rdf-data in the store.
 		 * 
 		 * @method insertData
 		 * @param {String}
-		 *            data Rdf-data to be inserted
+		 *          data Rdf-data to be inserted
 		 * @param {String}
-		 *            dataFormat Format of the data
+		 *          dataFormat Format of the data
 		 */
 		insertData : function(data, dataFormat) {
 			var that = this;
-			$
-					.when(globalInitDfd.promise())
-					.done(
-							function() {
-								rdfStore
-										.insertData(
-												data,
-												dataFormat,
-												function() {
-													eventManagers[that.pluginID]
-															.trigger(
-																	CONS.EVENT_TYPES.store.insert,
-																	that);
-												});
-							});
+			$.when(globalInitDfd.promise()).done(function() {
+				rdfStore.insertData(data, dataFormat, function() {
+					eventManagers[that.pluginID].trigger(CONS.EVENT_TYPES.store.insert, that);
+				});
+			});
 		},
 		/**
 		 * Insert rdf-data of given location in the store. Consider cross domain
@@ -3992,26 +4220,24 @@
 		 * 
 		 * @method insertDataPath
 		 * @param {String}
-		 *            dataURL URL where rdf data is to be found
+		 *          dataURL URL where rdf data is to be found
 		 * @param {String}
-		 *            dataFormat Format of the data
+		 *          dataFormat Format of the data
 		 */
 		insertDataPath : function(dataURL, dataFormat) {
 			var that = this;
-			$.when(globalInitDfd.promise()).done(
-					function() {
-						that._ajaxLoadData(dataURL, dataFormat, that
-								._selfProxy(that.insertData));
-					});
+			$.when(globalInitDfd.promise()).done(function() {
+				that._ajaxLoadData(dataURL, dataFormat, that._selfProxy(that.insertData));
+			});
 		},
 		/**
 		 * Insert rdf-data of given file in the store.
 		 * 
 		 * @method insertDataFile
 		 * @param {File}
-		 *            file File to parse
+		 *          file File to parse
 		 * @param {String}
-		 *            dataFormat Format of the data
+		 *          dataFormat Format of the data
 		 */
 		insertDataFile : function(file) {
 			var that = this, reader = new FileReader();
@@ -4049,27 +4275,24 @@
 			reader.readAsText(file);
 		},
 		/**
-		 * Insert rdf-data of given url SPARQL service in the store. Use the
-		 * given query. Is no query given use the default query.
+		 * Insert rdf-data of given url SPARQL service in the store. Use the given
+		 * query. Is no query given use the default query.
 		 * 
 		 * @method insertRemoteDataQuery
 		 * @param {String}
-		 *            url URL of the SPARQL service
+		 *          url URL of the SPARQL service
 		 * @param {String}
-		 *            query Query to fetch data
+		 *          query Query to fetch data
 		 */
 		insertRemoteDataQuery : function(url, query) {
 
-			var that = this;
-
-			$.when(globalInitDfd.promise()).done(
-					function() {
-						if (query === undefined || query === &quot;&quot;) {
-							query = that._queries.defaultRemoteQuery;
-						}
-						new Plugin.RemoteDataLoader([ url ], that.pluginID)
-								.insertByQuery(query);
-					});
+			$.when(globalInitDfd.promise()).done(function() {
+				if (query === undefined || query === &quot;&quot;) {
+					query = queryStore.defaultInitRemoteQuery;
+				}
+				console.log(query);
+				remoteDataLoader.insertByQuery(query, [ url ]);
+			});
 		},
 		/**
 		 * Clear the store and Layers.
@@ -4080,30 +4303,20 @@
 			var that = this;
 			rdfStore.executeQuery(&quot;CLEAR ALL&quot;, function() {
 				print(&quot;store cleared&quot;);
-				$.each(that._views, function(i, view) {
+				$.each(that._layers, function(i, view) {
 					view.removeAllItems();
 				});
 			});
-		},
-		/**
-		 * 
-		 */
-		addTileFilter : function() {
-			// TODO
-		},
-		addNodeFilter : function() {
-			// TODO
 		},
 		/**
 		 * Runs query on local store.
 		 * 
 		 * @method runQuery
 		 * @param query
-		 *            Query to run.
+		 *          Query to run.
 		 * @return results of query
 		 */
 		runQuery : function(query, callback) {
-			var that = this;
 			rdfStore.executeQuery(query, function(results) {
 				if (callback) {
 					callback(results);
@@ -4125,13 +4338,11 @@
 
 	// Lightweight plugin frame.
 	$.fn[pluginName] = function(options) {
-		return this
-				.each(function() {
-					if (!$.data(this, &quot;plugin_&quot; + pluginName)) {
-						$.data(this, &quot;plugin_&quot; + pluginName, new Plugin(this,
-								options));
-					}
-				});
+		return this.each(function() {
+			if (!$.data(this, &quot;plugin_&quot; + pluginName)) {
+				$.data(this, &quot;plugin_&quot; + pluginName, new Plugin(this, options));
+			}
+		});
 	};
 
 })(jQuery, window, document);

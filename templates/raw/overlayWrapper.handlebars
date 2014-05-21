@@ -1,6 +1,5 @@
 		      
-		<div class="{{CSS_CLASSES.overlay}}">
-            <div style="visibility:hidden">{{id}}</div>
+		<div class="{{CSS_CLASSES.overlay}} {{id}}">
             <!-- @ifdef F_SELECT -->
             <select multiple="multiple" id="filterSelect">
             {{#each nodeFilters}} <option value={{@key}} selected="selected"> {{@key}} </option> {{/each}}

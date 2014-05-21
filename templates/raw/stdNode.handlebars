@@ -3,15 +3,15 @@
             {{/compsEach}}
             {{#compsEach node "description"}}
                 {{#ifLang this}}
-                        <div class="{{toClass type}} {{toClass id}}" style="overflow-y: auto;">{{data.value}}</div>
+                        <div class="{{toClass type}} {{toClass id}}">{{tScaleWrap data.value}}</div>
                 {{/ifLang}}
             {{/compsEach}}
             {{#compsEach node "predicate"}}
                     <div class="{{toClass id}}">
                         <img class="{{../CSS_CLASSES.tileClasses.typeImage}}" src="img/{{data.type}}.png">
-                        <div class="{{../CSS_CLASSES.tileClasses.predicate}}" style="visibility:hidden">{{tScaleWrap data.value}}</div>
+                        <div class="{{../CSS_CLASSES.tileClasses.predicate}}" style="visibility:hidden; overflow-y:auto; word-wrap:break-word">{{tScaleWrap data.value}}</div>
                         {{#predicateLabelRetriver data}}
-                            <div class="{{../../CSS_CLASSES.tileClasses.predicateLabel}}">{{tScaleWrap data.label}}</div>
+                            <div class="{{../../CSS_CLASSES.tileClasses.predicateLabel}}" style="overflow-y:auto; word-wrap:break-word">{{tScaleWrap data.label}}</div>
                         {{/predicateLabelRetriver}}
                     </div>
             {{/compsEach}}

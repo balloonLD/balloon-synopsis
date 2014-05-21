@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>Plugin.InitLayer - bSynopsis</title>
+    <title>Plugin.Layers.Blank - bSynopsis</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/3.9.1/build/cssgrids/cssgrids-min.css">
     <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
     <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
@@ -51,17 +51,29 @@
             
                 <li><a href="../classes/Plugin.html">Plugin</a></li>
             
-                <li><a href="../classes/Plugin.DetailLayer.html">Plugin.DetailLayer</a></li>
+                <li><a href="../classes/Plugin.BlankNode.html">Plugin.BlankNode</a></li>
+            
+                <li><a href="../classes/Plugin.ComponentFactory.html">Plugin.ComponentFactory</a></li>
             
                 <li><a href="../classes/Plugin.EventManager.html">Plugin.EventManager</a></li>
             
-                <li><a href="../classes/Plugin.InitLayer.html">Plugin.InitLayer</a></li>
-            
                 <li><a href="../classes/Plugin.Layer.html">Plugin.Layer</a></li>
+            
+                <li><a href="../classes/Plugin.Layers.Blank.html">Plugin.Layers.Blank</a></li>
+            
+                <li><a href="../classes/Plugin.Layers.Inlay.html">Plugin.Layers.Inlay</a></li>
+            
+                <li><a href="../classes/Plugin.Layers.Literal.html">Plugin.Layers.Literal</a></li>
+            
+                <li><a href="../classes/Plugin.Layers.Res.html">Plugin.Layers.Res</a></li>
             
                 <li><a href="../classes/Plugin.LayoutEngine.html">Plugin.LayoutEngine</a></li>
             
+                <li><a href="../classes/Plugin.LiteralNode.html">Plugin.LiteralNode</a></li>
+            
                 <li><a href="../classes/Plugin.Node.html">Plugin.Node</a></li>
+            
+                <li><a href="../classes/Plugin.NodeFactory.html">Plugin.NodeFactory</a></li>
             
                 <li><a href="../classes/Plugin.RdfStore.html">Plugin.RdfStore</a></li>
             
@@ -70,6 +82,10 @@
                 <li><a href="../classes/Plugin.ResNode.html">Plugin.ResNode</a></li>
             
                 <li><a href="../classes/Plugin.TemplatesLoader.html">Plugin.TemplatesLoader</a></li>
+            
+                <li><a href="../classes/Plugin.TimeLine.html">Plugin.TimeLine</a></li>
+            
+                <li><a href="../classes/Plugin.TimeLine.Node.html">Plugin.TimeLine.Node</a></li>
             
                 <li><a href="../classes/RemoteEngine.html">RemoteEngine</a></li>
             
@@ -114,7 +130,7 @@
             <div class="apidocs">
                 <div id="docs-main">
                     <div class="content">
-                        <h1>Plugin.InitLayer Class</h1>
+                        <h1>Plugin.Layers.Blank Class</h1>
 <div class="box meta">
     
 
@@ -126,7 +142,7 @@
 
     
         <div class="foundat">
-            Defined in: <a href="../files/js_plugin_bSynopsis.js.html#l1882"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1882</code></a>
+            Defined in: <a href="../files/js_plugin_bSynopsis.js.html#l2391"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2391</code></a>
         </div>
     
 
@@ -149,8 +165,8 @@
 
     <div class="constructor">
         <h2>Constructor</h2>
-        <div id="method_Plugin.InitLayer" class="method item">
-    <h3 class="name"><code>Plugin.InitLayer</code></h3>
+        <div id="method_Plugin.Layers.Blank" class="method item">
+    <h3 class="name"><code>Plugin.Layers.Blank</code></h3>
 
     
         <div class="args">
@@ -203,7 +219,7 @@
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l1882"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1882</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l2391"><code>js&#x2F;plugin&#x2F;bSynopsis.js:2391</code></a>
         
         </p>
 
@@ -313,7 +329,28 @@
                             </li>
                         
                             <li class="index-item method inherited">
+                                <a href="#method__initLayerData">_initLayerData</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method inherited">
                                 <a href="#method_checkItems">checkItems</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method inherited">
+                                <a href="#method_getJQueryObj">getJQueryObj</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method inherited">
+                                <a href="#method_open">open</a>
 
                                 
                                 
@@ -327,6 +364,13 @@
                             </li>
                         
                             <li class="index-item method inherited">
+                                <a href="#method_removeHtml">removeHtml</a>
+
+                                
+                                
+                            </li>
+                        
+                            <li class="index-item method inherited inherited">
                                 <a href="#method_update">update</a>
 
                                 
@@ -390,7 +434,7 @@
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l1427"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1427</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l1842"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1842</code></a>
         
         </p>
 
@@ -421,6 +465,92 @@
 
                     <div class="param-description">
                         <p>node Node to fetch the predicate labels for</p>
+
+                    </div>
+
+                    
+                </li>
+            
+            </ul>
+        </div>
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method__initLayerData" class="method item inherited">
+    <h3 class="name"><code>_initLayerData</code></h3>
+
+    
+        <div class="args">
+            <span class="paren">(</span><ul class="args-list inline commas">
+            
+                <li class="arg">
+                    
+                        <code>!~YUIDOC_LINE~!</code>
+                    
+                </li>
+            
+            </ul><span class="paren">)</span>
+        </div>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="../classes/Plugin.Layer.html#method__initLayerData">Plugin.Layer</a>:
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l1603"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1603</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Private method to init Layer object.</p>
+
+    </div>
+
+    
+        <div class="params">
+            <h4>Parameters:</h4>
+
+            <ul class="params-list">
+            
+                <li class="param">
+                    
+                        <code class="param-name">!~YUIDOC_LINE~!</code>
+                        <span class="type">Object</span>
+                    
+
+                    
+
+                    <div class="param-description">
+                        <p>queries Queries to use for layer init</p>
 
                     </div>
 
@@ -476,7 +606,7 @@
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l1473"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1473</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l1884"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1884</code></a>
         
         </p>
 
@@ -523,6 +653,110 @@
 </div>
 
                 
+                    <div id="method_getJQueryObj" class="method item inherited">
+    <h3 class="name"><code>getJQueryObj</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="../classes/Plugin.Layer.html#method_getJQueryObj">Plugin.Layer</a>:
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l1694"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1694</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Get the div box of the overlay</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_open" class="method item inherited">
+    <h3 class="name"><code>open</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="../classes/Plugin.Layer.html#method_open">Plugin.Layer</a>:
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l1722"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1722</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Method to show the layer</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
                     <div id="method_removeAllItems" class="method item inherited">
     <h3 class="name"><code>removeAllItems</code></h3>
 
@@ -552,7 +786,7 @@
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l1395"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1395</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l1755"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1755</code></a>
         
         </p>
 
@@ -564,6 +798,58 @@
 
     <div class="description">
         <p>Clear the view</p>
+
+    </div>
+
+    
+
+    
+
+    
+</div>
+
+                
+                    <div id="method_removeHtml" class="method item inherited">
+    <h3 class="name"><code>removeHtml</code></h3>
+
+    
+        <span class="paren">()</span>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    <div class="meta">
+        
+            
+                <p>Inherited from
+                <a href="../classes/Plugin.Layer.html#method_removeHtml">Plugin.Layer</a>:
+            
+        
+        
+        <a href="../files/js_plugin_bSynopsis.js.html#l1703"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1703</code></a>
+        
+        </p>
+
+
+        
+
+        
+    </div>
+
+    <div class="description">
+        <p>Remove the div box of the overlay</p>
 
     </div>
 
@@ -598,13 +884,16 @@
 
     <div class="meta">
         
+            <p>Inherited from
+            <a href="../classes/Plugin.Layer.html#method_update">
+                Plugin.Layer
+            </a>
             
-                <p>Inherited from
-                <a href="../classes/Plugin.Layer.html#method_update">Plugin.Layer</a>:
+            but overwritten in
             
         
         
-        <a href="../files/js_plugin_bSynopsis.js.html#l1545"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1545</code></a>
+        <a href="../files/js_plugin_bSynopsis.js.html#l1712"><code>js&#x2F;plugin&#x2F;bSynopsis.js:1712</code></a>
         
         </p>
 
@@ -615,7 +904,7 @@
     </div>
 
     <div class="description">
-        <p>Get data for the model by querying the local store</p>
+        <p>Call the model update function to start selfupdating of the model</p>
 
     </div>
 
