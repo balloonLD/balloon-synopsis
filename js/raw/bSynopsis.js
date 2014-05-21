@@ -150,59 +150,6 @@
 	// Add css_prefix to css_classes
 	objPrefixer(CONS.CSS_PREFIX, CONS.CSS_CLASSES);
 	
-	// ========================= Generic Webworkers ===============================
-	  $.Hive.create({
-
-		    worker: 'worker.js',
-		    receive: function (data) {
-
-		      console.group('RECEIVED MESSAGE - WORKER: #' + data._from_);
-		        console.log( data );  
-		      console.groupEnd();   
-
-		      /*
-		      ------------------------------------------------------
-		        Possible uses:
-
-		        Populate a massive data table...
-
-		        Update a browser based IM client
-
-		        Update a feed reader app ( 1-to-1 worker to feed?)
-
-		        Handle audio data from typed array
-
-		        Handle pixel array
-		      ------------------------------------------------------        
-		      */
-
-		    },
-		    created: function (hive) {
-
-		      /*
-		      ------------------------------------------------------
-		        Possible uses:
-
-		        Impress the hell out of your friends by 
-		        executing code after all the workers are created
-		      ------------------------------------------------------  
-		      */        
-		    }
-		  });
-	  
-	  $.Hive.get(1).send({ 
-
-		    "message" : { 
-		      "a" : "a-value",
-		      "b" : "b-value",
-		      "c" : "c-value"
-		    }      
-
-		  }, function (data) {
-
-		    console.log('This is from a task specific message receipt callback');
-
-		  });  
 
 	// ========================= Extend Isotope ===============================
 	// Extend Isotope - groupRows custom layout mode
