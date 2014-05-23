@@ -489,15 +489,15 @@
 			// encode it!
 			var yql = 'http://query.yahooapis.com/v1/public/yql?q='
 					+ encodeURIComponent('use "http://triplr.org/sparyql/sparql.xml" as sparql; select * from sparql where query="'
-							+ query + '" and service="' + url) + '"&format=json&callback=cbFunc' + cnt;
+							+ query + '" and service="' + url) + '"&format=json';
 
 			// Request that YSQL string, and run a callback function.
 			// Pass a defined function to prevent cache-busting.
 			// $.getJSONP(yql, cbFunc);
 			$.ajax({
-				dataType : 'jsonp',
+				dataType : 'json',
 				url : yql,
-				success : window.cbFunc,
+				success : window["cbFunc"+cnt],
 				error : function(jqXHR, textStatus, errorThrown) {
 					// console.log(yql);
 					console.log("Error on yql query.");
@@ -1101,11 +1101,11 @@
 //		this.components = {}; // Components of the node
 //		if (data.predicate) { // Empty predicates are possible on init view
 //			this.filterables.push(UTIL.toFilterable(data.predicate.type));
-//			data.predicate.value = unescape(data.predicate.value);
+//			data.predicate.value = decodeURIComponent(data.predicate.value);
 //			factory.addComponent(this, "predicate", data.predicate);
 //		}
 //		if (data.description) {
-//			data.description.value = unescape(data.description.value);
+//			data.description.value = decodeURIComponent(data.description.value);
 //			factory.addComponent(this, "description", data.description);
 //		}
 //	}
@@ -1119,10 +1119,10 @@
 //		});
 //		if (isUndefinedOrNull(data.label)) {
 //			factory.addComponent("label", {
-//				value : unescape(this.uri)
+//				value : decodeURIComponent(this.uri)
 //			});
 //		} else {
-//			data.label.value = unescape(data.label.value);
+//			data.label.value = decodeURIComponent(data.label.value);
 //			factory.addComponent("label", data.label);
 //		}
 //		var id = that.components.uri[0].data;
@@ -1159,11 +1159,11 @@
 //		this.style = style;
 //		if (data.predicate) { // Empty predicates are possible on init view
 //			this.filterables.push(UTIL.toFilterable(data.predicate.type));
-//			data.predicate.value = unescape(data.predicate.value);
+//			data.predicate.value = decodeURIComponent(data.predicate.value);
 //			this.addComponent("predicate", data.predicate);
 //		}
 //		if (data.description) {
-//			data.description.value = unescape(data.description.value);
+//			data.description.value = decodeURIComponent(data.description.value);
 //			this.addComponent("description", data.description);
 //		}
 //	}
@@ -1199,11 +1199,11 @@
 		this.style = style;
 		if (data.predicate) { // Empty predicates are possible on init view
 			this.filterables.push(UTIL.toFilterable(data.predicate.type));
-			data.predicate.value = unescape(data.predicate.value);
+			data.predicate.value = decodeURIComponent(data.predicate.value);
 			this.addComponent("predicate", data.predicate);
 		}
 		if (data.description) {
-			data.description.value = unescape(data.description.value);
+			data.description.value = decodeURIComponent(data.description.value);
 			this.addComponent("description", data.description);
 		}
 	};
@@ -1441,10 +1441,10 @@
 		});
 		if (isUndefinedOrNull(data.label)) {
 			this.addComponent("label", {
-				value : unescape(this.uri)
+				value : decodeURIComponent(this.uri)
 			});
 		} else {
-			data.label.value = unescape(data.label.value);
+			data.label.value = decodeURIComponent(data.label.value);
 			this.addComponent("label", data.label);
 		}
 		this.id = generateID(); // Overwrite id
@@ -1487,7 +1487,7 @@
 			return id;
 		};
 		this.type = CONS.NODE_TYPES.literal;
-		data.subject.value = unescape(data.subject.value);
+		data.subject.value = decodeURIComponent(data.subject.value);
 		this.addComponent("label", data.subject);
 		this.id = generateID();
 	};
@@ -2494,7 +2494,10 @@
 
 		// remote needed?
 		remoteDataLoader.insertByQuery(remoteSubjectOf + " LIMIT " + that.options.remoteOptions.remoteLimit);
+		print("remoteloader")
 		remoteDataLoader.insertByQuery(remoteObjectOf + " LIMIT " + that.options.remoteOptions.remoteLimit);
+		print("query")
+		print(remoteObjectOf)
 	};
 
 	Plugin.Layers.Res.prototype.show = function() {
@@ -2813,6 +2816,8 @@
 				if (data.subject !== undefined) {
 					data = [ data ];
 				}
+				print(query);
+				print(data);
 				// Execute insertion
 				rdfStore.executeQuery(that.generateInsertionQuery(data), function() {
 					if (callback) {
@@ -2838,20 +2843,20 @@
 				// TODO BlankNodes
 				insertionQuery += "<" + val.subject.value + "> ";
 			}
-			insertionQuery += "<" + val.predicate.value + "> ";
+			insertionQuery += "<" + encodeURIComponent(val.predicate.value) + "> ";
 			if (val.object.type === "uri") {
-				insertionQuery += "<" + val.object.value + ">. ";
+				insertionQuery += "<" +val.object.value + ">. ";
 			} else if (val.object.type === "literal") {
-				insertionQuery += '"' + escape(val.object.value) + '". ';
+				insertionQuery += '"' + encodeURIComponent(val.object.value) + '". ';
 			}
 			if (val.labelSub) {
-				insertionQuery += '<' + val.subject.value + '> rdfs:label "' + val.labelSub.value + '". ';
+				insertionQuery += '<' + val.subject.value + '> rdfs:label "' + encodeURIComponent(val.labelSub.value) + '". ';
 			}
 			if (val.labelObj) {
-				insertionQuery += '<' + val.object.value + '> rdfs:label "' + val.labelObj.value + '". ';
+				insertionQuery += '<' + val.object.value + '> rdfs:label "' + encodeURIComponent(val.labelObj.value) + '". ';
 			}
 			if (val.labelPred) {
-				labelCache.add(val.predicate.value, val.labelPred.value);
+				labelCache.add(encodeURIComponent(val.predicate.value), encodeURIComponent(val.labelPred.value));
 			}
 		});
 		insertionQuery += "}";
@@ -3811,9 +3816,9 @@
 				 * 
 				 * @property defaults.layerOptions.remoteOptions.remoteLimit
 				 * @type Integer } *
-				 * @default 100
+				 * @default 50
 				 */
-				remoteLimit : 100,
+				remoteLimit : 50,
 				/**
 				 * Flag to indicate whether automatic remote load on detail view should
 				 * be done.
@@ -4074,15 +4079,15 @@
 			queryStore = {
 				initQueries : this.options.initQueries,
 				defaultInitRemoteQuery : this.options.layerOptions.remoteOptions.defaultInitRemoteQuery,
-				remoteSubjectOf : " SELECT DISTINCT ?subject ?predicate ?object ?labelObj ?labelPred WHERE { BIND (<"
+				remoteSubjectOf : " SELECT DISTINCT ?subject ?predicate ?object ?labelObj ?labelPred WHERE { VALUES ?subject {<"
 						+ CONS.DUMMY
-						+ "> as ?subject) ?subject ?predicate ?object. OPTIONAL { ?object rdfs:label ?labelObj }. OPTIONAL { ?predicate rdfs:label ?labelPred }}",
-				remoteObjectOf : " SELECT DISTINCT ?subject ?predicate ?object ?labelSub ?labelPred WHERE {BIND (<"
+						+ ">} ?subject ?predicate ?object. OPTIONAL { ?object rdfs:label ?labelObj }. OPTIONAL { ?predicate rdfs:label ?labelPred }}",
+				remoteObjectOf : " SELECT DISTINCT ?subject ?predicate ?object ?labelSub ?labelPred WHERE {VALUES ?object {<"
 						+ CONS.DUMMY
-						+ "> as ?object) ?subject ?predicate ?object. OPTIONAL { ?subject rdfs:label ?labelSub }. OPTIONAL { ?predicate rdfs:label ?labelPred }}",
-				remoteLiteralIsObjectOf : " SELECT DISTINCT ?subject ?predicate ?object ?labelSub ?labelPred WHERE {BIND ('"
+						+ ">} ?subject ?predicate ?object. OPTIONAL { ?subject rdfs:label ?labelSub }. OPTIONAL { ?predicate rdfs:label ?labelPred }}",
+				remoteLiteralIsObjectOf : " SELECT DISTINCT ?subject ?predicate ?object ?labelSub ?labelPred WHERE {VALUES ?object {'"
 						+ CONS.DUMMY
-						+ "' as ?object) ?subject ?predicate ?object. OPTIONAL { ?subject rdfs:label ?labelSub }. OPTIONAL { ?predicate rdfs:label ?labelPred }}",
+						+ "'} ?subject ?predicate ?object. OPTIONAL { ?subject rdfs:label ?labelSub }. OPTIONAL { ?predicate rdfs:label ?labelPred }}",
 				selectSubjectOf : " SELECT DISTINCT ?subject ?predicate ?label ?description WHERE {<"
 						+ CONS.DUMMY
 						+ "> ?predicate ?subject. OPTIONAL { ?subject rdfs:label ?label}. OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }}",
@@ -4266,7 +4271,7 @@
 			});
 			layer.initSwitch.attach(listener);
 			layer.openEvent.attach(new Plugin.Listener(function(sender) {
-				that.l = sender.id;
+				that._topLayer = sender.id;
 				that._extendedLayers[sender.id] = sender.zIndex;
 				that.$body.addClass('noscroll');
 				
