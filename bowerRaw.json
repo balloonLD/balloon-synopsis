@@ -11,7 +11,10 @@
     "isotope": "https://raw.githubusercontent.com/desandro/isotope/master/jquery.isotope.min.js",
     "modernizr": "~2.7.2",
     "rdfstore-js": "https://raw.githubusercontent.com/antoniogarrote/rdfstore-js/master/dist/browser/rdf_store_min.js",
-    "rgbcolor" : "http://www.phpied.com/files/rgbcolor/rgbcolor.js"
+    "rgbcolor" : "http://www.phpied.com/files/rgbcolor/rgbcolor.js",
+    <!-- todo workers -->,
+    <!-- "jquery.hive" : "https://raw.githubusercontent.com/rwaldron/jquery-hive/master/jquery.hive.js",-->
+    <!-- "jquery.hive.pollen" : "https://raw.githubusercontent.com/rwaldron/jquery-hive/master/jquery.hive.pollen.js"-->
     <!-- @ifdef F_SELECT -->,
     "multiSelect" : "http://ytjobwebsite.googlecode.com/svn-history/r478/trunk/job/webapp/js/plugin/multiselect/jquery.multiSelect.js",
     "deepCopy" : "http://oranlooney.com/static/javascript/deepCopy.js"

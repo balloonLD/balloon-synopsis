@@ -28,6 +28,7 @@ module.exports = function(grunt) {
 						// you run `grunt bower-install`
 						src : [ 'demos/*/*.html' // .html support...
 						],
+						exclude: [ /jquery.hive.pollen/]
 					}
 				},
 				copy : {

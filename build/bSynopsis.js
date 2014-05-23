@@ -46,6 +46,7 @@
 			options : "options",
 			optionCombo : "option-combo",
 			optionSet : "option-set",
+			optionButton : "option-button",
 			groupLabel : "groupLabel",
 			filter : "filter",
 			clearfix : "clearfix",
@@ -55,6 +56,7 @@
 			previewContent : "previewContent",
 			overlay : "overlay",
 			overlayContent : "overlayContent",
+			refresh : "refresh",
 			innerScroll : "innerScroll",
 			innerNoScroll : "innerNoScroll",
 			buttonClose : "close",
@@ -149,60 +151,6 @@
 
 	// Add css_prefix to css_classes
 	objPrefixer(CONS.CSS_PREFIX, CONS.CSS_CLASSES);
-	
-	// ========================= Generic Webworkers ===============================
-	  $.Hive.create({
-
-		    worker: 'worker.js',
-		    receive: function (data) {
-
-		      console.group('RECEIVED MESSAGE - WORKER: #' + data._from_);
-		        console.log( data );  
-		      console.groupEnd();   
-
-		      /*
-		      ------------------------------------------------------
-		        Possible uses:
-
-		        Populate a massive data table...
-
-		        Update a browser based IM client
-
-		        Update a feed reader app ( 1-to-1 worker to feed?)
-
-		        Handle audio data from typed array
-
-		        Handle pixel array
-		      ------------------------------------------------------        
-		      */
-
-		    },
-		    created: function (hive) {
-
-		      /*
-		      ------------------------------------------------------
-		        Possible uses:
-
-		        Impress the hell out of your friends by 
-		        executing code after all the workers are created
-		      ------------------------------------------------------  
-		      */        
-		    }
-		  });
-	  
-	  $.Hive.get(1).send({ 
-
-		    "message" : { 
-		      "a" : "a-value",
-		      "b" : "b-value",
-		      "c" : "c-value"
-		    }      
-
-		  }, function (data) {
-
-		    console.log('This is from a task specific message receipt callback');
-
-		  });  
 
 	// ========================= Extend Isotope ===============================
 	// Extend Isotope - groupRows custom layout mode
@@ -682,8 +630,9 @@
 			delete this._listeners[listener.id];
 		},
 		notify : function(args) {
+			var sender = this._sender;
 			$.each(this._listeners, function(i, val) {
-				val.fn(this.sender, args);
+				val.fn(sender, args);
 			});
 		}
 	};
@@ -1064,7 +1013,154 @@
 	Plugin.LayoutEngine.prototype.updateOptions = function(options) {
 		this._container.isotope(options);
 	};
-
+	
+//	Plugin.NodeDataFactory = {
+//			makeData : function(input) {
+//				var nodeData;
+//				switch (input.subject.token) {
+//				case UTIL.toToken(CONS.CSS_CLASSES.patternClasses.blanknode):
+//					nodeData = this.makeBlankNodeData(input);
+//					break;
+//				case UTIL.toToken(CONS.CSS_CLASSES.patternClasses.literal):
+//					nodeData = this.makeLiteralNodeData(input);
+//					break;
+//				case UTIL.toToken(CONS.CSS_CLASSES.patternClasses.uri):
+//					nodeData = this.makeResNodeData(input);
+//					break;
+//				default:
+//					console.log(CONS.MESSAGES.error.tokenType + input.subject.token);
+//				}
+//				return nodeData;
+//			},
+//			addComponent : function(nodeData, type, data, style) {
+//					if (!nodeData.components[type]) { // Increase counter
+//						nodeData.components[type] = [];
+//					}
+//					var id = type + nodeData.components[type].length;
+//					nodeData.components[type].push(Plugin.ComponentFactory.makeComp(id, type, data, style));
+//			},
+//			makeResNodeData : function(input) {
+//				var nodeData;
+//				if (input.label && (input.label.lang === undefined || input.label.lang === "en")) {
+//					nodeData = new Plugin.Nodes.Res.Data(input, factory);
+//					this.addStdComponents(nodeData);
+//				}
+//				return nodeData;
+//			},
+//			makeLiteralNodeData : function(input) {
+//				var nodeData;
+//				nodeData = new Plugin.Nodes.Literal.Data(input, factory);
+//				this.addStdComponents(nodeData);
+//				return nodeData;
+//			},
+//			makeBlankNodeData : function(input) {
+//				var nodeData;
+//				nodeData = new Plugin.Nodes.Blank.Data(input, factory);
+//				this.addStdComponents(nodeData);
+//				return nodeData;
+//			}
+//		};
+//	
+//	Plugin.Nodes = {};
+//	Plugin.Nodes.Res = function() {
+//		
+//	}
+//	
+//	Plugin.Nodes.Literal = function() {
+//		
+//	}
+//	
+//	Plugin.Nodes.Blank = function() {
+//		
+//	}
+//	
+//	Plugin.Node.Data = function(data, factory) {
+//		this.id = data.index; // ID for this node
+//		this.type = CONS.NODE_TYPES.stdNode; // Node Type
+//		this.useTemplateID = this.type; // Use Templated stored under this name
+//		this.filterables = []; // Classes used for filtering
+//		this.components = {}; // Components of the node
+//		if (data.predicate) { // Empty predicates are possible on init view
+//			this.filterables.push(UTIL.toFilterable(data.predicate.type));
+//			data.predicate.value = unescape(data.predicate.value);
+//			factory.addComponent(this, "predicate", data.predicate);
+//		}
+//		if (data.description) {
+//			data.description.value = unescape(data.description.value);
+//			factory.addComponent(this, "description", data.description);
+//		}
+//	}
+//	
+//	Plugin.Nodes.Res.Data = function(data, factory) {
+//		Plugin.Node.Data.call(this, data);
+//		var that = this;
+//		this.type = CONS.NODE_TYPES.resNode; // Overwrite std node type
+//		factory.addComponent("uri", data.subject.value, {
+//			display : "none"
+//		});
+//		if (isUndefinedOrNull(data.label)) {
+//			factory.addComponent("label", {
+//				value : unescape(this.uri)
+//			});
+//		} else {
+//			data.label.value = unescape(data.label.value);
+//			factory.addComponent("label", data.label);
+//		}
+//		var id = that.components.uri[0].data;
+//		that.forEachComponentType("predicate", function(predicate) {
+//			id += predicate.value;
+//		});
+//		this.id = id; // Overwrite id
+//	}
+//	
+//	Plugin.Nodes.Literal.Data = function(data, factory) {
+//		this.id = data.index; // ID for this node
+//		this.type = CONS.NODE_TYPES.stdNode; // Node Type
+//		this.useTemplateID = this.type; // Use Templated stored under this name
+//		this.filterables = []; // Classes used for filtering
+//		this.components = {}; // Components of the node
+//		this.style = style;
+//	}
+//	
+//	Plugin.Nodes.Blank.Data = function(data, factory) {
+//		this.id = data.index; // ID for this node
+//		this.type = CONS.NODE_TYPES.stdNode; // Node Type
+//		this.useTemplateID = this.type; // Use Templated stored under this name
+//		this.filterables = []; // Classes used for filtering
+//		this.components = {}; // Components of the node
+//		this.style = style;
+//	}
+//	
+//	Plugin.NodeJSON = function(data) {
+//		this.id = data.index; // ID for this node
+//		this.type = CONS.NODE_TYPES.stdNode; // Node Type
+//		this.useTemplateID = this.type; // Use Templated stored under this name
+//		this.filterables = []; // Classes used for filtering
+//		this.components = {}; // Components of the node
+//		this.style = style;
+//		if (data.predicate) { // Empty predicates are possible on init view
+//			this.filterables.push(UTIL.toFilterable(data.predicate.type));
+//			data.predicate.value = unescape(data.predicate.value);
+//			this.addComponent("predicate", data.predicate);
+//		}
+//		if (data.description) {
+//			data.description.value = unescape(data.description.value);
+//			this.addComponent("description", data.description);
+//		}
+//	}
+	
+	Plugin.DataTransformer = {
+		res : function(data) {
+			return data
+		},
+		literal : function(data) {
+			return
+		},
+		blank : function(data) {
+			return
+		}
+	}
+	
 	// ========================= bSynopsis: Node Class
 	/**
 	 * Base node to represent an abstract element of the rdf graph.
@@ -1214,26 +1310,43 @@
 	 */
 	Plugin.Node.prototype.merge = function(otherNode) {
 		var that = this, update = false;
-		$.each(otherNode.components, function(typeID, comps) {
-			$.each(comps, function(i, comp) {
-				var insert = true;
-				if(that.components[typeID]) {
-					for(var j = 0; j < that.components[typeID].length; j++) {
-						if(comp.equals(that.components[typeID][j])) {
-							insert = false;
-							break;
-						}
-					}
-				}
-				if(insert) {
-					that.addComponent(typeID, comp.data);
-					update = true;
-				}
-			});
-		});
+//		$.each(otherNode.components, function(typeID, comps) {
+//			$.each(comps, function(i, comp) {
+//				var insert = true;
+//				if(that.components[typeID]) {
+//					for(var j = 0; j < that.components[typeID].length; j++) {
+//						if(comp.equals(that.components[typeID][j])) {
+//							insert = false;
+//							break;
+//						}
+//					}
+//				}
+//				if(insert) {
+//					that.addComponent(typeID, comp.data);
+//					update = true;
+//				}
+//			});
+//		});
 		return update;
 	};
 	
+
+	/**
+	 * Node component to be shown on a tile
+	 * 
+	 * @class Plugin.Node
+	 * @constructor
+	 * @param {Object}
+	 *          data Data of a single resource of a select query. Must contain
+	 *          label and index.
+	 */
+	Plugin.Node.Component = function(id, type, data, style) {
+		this.id = id;
+		this.type = type;
+		this.data = data;
+		this.style = style;
+	};
+
 	/**
 	 * Class to construct nodes out of sparql result sets.
 	 * 
@@ -1276,34 +1389,20 @@
 			return comp;
 		}
 	};
-
-	/**
-	 * Node component to be shown on a tile
-	 * 
-	 * @class Plugin.Node
-	 * @constructor
-	 * @param {Object}
-	 *          data Data of a single resource of a select query. Must contain
-	 *          label and index.
-	 */
-	Plugin.Node.Component = function(id, type, data, style) {
-		this.id = id;
-		this.type = type;
-		this.data = data;
-		this.style = style;
-	};
+	
+	Plugin.Nodes = {};
 
 	/**
 	 * Extension of base node to represent an std element of the rdf graph.
 	 * 
-	 * @class Plugin.ResNode
+	 * @class Plugin.Nodes.Res
 	 * @extendes Plugin.Node
 	 * @constructor
 	 * @param {Object}
 	 *          data Data of a single resource of a select query. Must contain
 	 *          label and index.
 	 */
-	Plugin.ResNode = function(data) {
+	Plugin.Nodes.Res = function(data) {
 		// Call node constructor
 		Plugin.Node.call(this, data);
 		var that = this;
@@ -1330,8 +1429,8 @@
 		this.id = generateID(); // Overwrite id
 	};
 
-	Plugin.ResNode.prototype = Object.create(Plugin.Node.prototype);
-	Plugin.ResNode.prototype.constructor = Plugin.ResNode;
+	Plugin.Nodes.Res.prototype = Object.create(Plugin.Node.prototype);
+	Plugin.Nodes.Res.prototype.constructor = Plugin.Nodes.Res;
 
 	/**
 	 * Generate tile out of node and return it.
@@ -1340,7 +1439,7 @@
 	 * @method generateTile
 	 * @returns {jQuery}
 	 */
-	Plugin.ResNode.prototype.generateTile = function() {
+	Plugin.Nodes.Res.prototype.generateTile = function() {
 		var $tile = Plugin.Node.prototype.generateTile.call(this);
 		return $tile;
 	}
@@ -1348,13 +1447,13 @@
 	/**
 	 * Extension of base node to represent an literal element of the rdf graph.
 	 * 
-	 * @class Plugin.LiteralNode
+	 * @class Plugin.Nodes.Literal
 	 * @extendes Plugin.Node
 	 * @constructor
 	 * @param {Object}
 	 *          data Data of a single resource of a select query.
 	 */
-	Plugin.LiteralNode = function(data) {
+	Plugin.Nodes.Literal = function(data) {
 		var that = this;
 		// Call node constructor
 		Plugin.Node.call(this, data);
@@ -1372,8 +1471,8 @@
 		this.id = generateID();
 	};
 
-	Plugin.LiteralNode.prototype = Object.create(Plugin.Node.prototype);
-	Plugin.LiteralNode.prototype.constructor = Plugin.LiteralNode;
+	Plugin.Nodes.Literal.prototype = Object.create(Plugin.Node.prototype);
+	Plugin.Nodes.Literal.prototype.constructor = Plugin.Nodes.Literal;
 
 	/**
 	 * Generate tile out of node and return it.
@@ -1382,7 +1481,7 @@
 	 * @method generateTile
 	 * @returns {jQuery}
 	 */
-	Plugin.LiteralNode.prototype.generateTile = function() {
+	Plugin.Nodes.Literal.prototype.generateTile = function() {
 		var $tile = Plugin.Node.prototype.generateTile.call(this);
 		return $tile;
 	};
@@ -1390,13 +1489,13 @@
 	/**
 	 * Extension of base node to represent an literal element of the rdf graph.
 	 * 
-	 * @class Plugin.BlankNode
+	 * @class Plugin.Nodes.Blank
 	 * @extendes Plugin.Node
 	 * @constructor
 	 * @param {Object}
 	 *          data Data of a single resource of a select query.
 	 */
-	Plugin.BlankNode = function(data) {
+	Plugin.Nodes.Blank = function(data) {
 		// Call node constructor
 		Plugin.Node.call(this, data);
 		// Function for ID generation
@@ -1410,8 +1509,8 @@
 		this.id = generateID();
 	};
 
-	Plugin.BlankNode.prototype = Object.create(Plugin.Node.prototype);
-	Plugin.BlankNode.prototype.constructor = Plugin.BlankNode;
+	Plugin.Nodes.Blank.prototype = Object.create(Plugin.Node.prototype);
+	Plugin.Nodes.Blank.prototype.constructor = Plugin.Nodes.Blank;
 
 	/**
 	 * Generate tile out of node and return it.
@@ -1420,7 +1519,7 @@
 	 * @method generateTile
 	 * @returns {jQuery}
 	 */
-	Plugin.BlankNode.prototype.generateTile = function() {
+	Plugin.Nodes.Blank.prototype.generateTile = function() {
 		var $tile = Plugin.Node.prototype.generateTile.call(this);
 		return $tile;
 	};
@@ -1438,14 +1537,14 @@
 			var node;
 			switch (data.subject.token) {
 			case UTIL.toToken(CONS.CSS_CLASSES.patternClasses.blanknode):
-				node = new Plugin.BlankNode(data);
+				node = new Plugin.Nodes.Blank(data);
 				break;
 			case UTIL.toToken(CONS.CSS_CLASSES.patternClasses.literal):
-				node = new Plugin.LiteralNode(data, options.literalStyle);
+				node = new Plugin.Nodes.Literal(data, options.literalStyle);
 				break;
 			case UTIL.toToken(CONS.CSS_CLASSES.patternClasses.uri):
 				if (data.label && (data.label.lang === undefined || data.label.lang === "en")) {
-					node = new Plugin.ResNode(data, options.itemStyle);
+					node = new Plugin.Nodes.Res(data, options.itemStyle);
 				}
 				break;
 			default:
@@ -1634,6 +1733,7 @@
 			}
 		}
 		this._addCloseOnClick();
+		this._addRefreshOnClick();
 		this._addBackgroundColor();
 		this._initContent();
 		this.initSwitch.trigger();
@@ -1657,6 +1757,14 @@
 		var $close = this.$overlay.find('> span' + UTIL.toSelector(CONS.CSS_CLASSES.buttonClose));
 		$close.on("click", function() {
 			that.close();
+		});
+	};
+	
+	Plugin.Layer.prototype._addRefreshOnClick = function() {
+		var that = this;
+		var $refresh = this.$overlay.find(UTIL.toSelector(CONS.CSS_CLASSES.refresh));
+		$refresh.on("click", function() {
+			that.update();
 		});
 	};
 
@@ -1731,12 +1839,14 @@
 
 	Plugin.Layer.prototype.show = function() {
 		// Make overlay visible
+		this.zIndex = zIndex++;
 		this.$overlay.css({
 			clip : getClip(CONS.CSS_CLASSES.overlay),
 			opacity : 1,
-			zIndex : zIndex++,
+			zIndex : this.zIndex,
 			pointerEvents : 'auto'
 		});
+		this.openEvent.notify();
 	};
 
 	Plugin.Layer.prototype.close = function() {
@@ -1817,6 +1927,35 @@
 	};
 
 	Plugin.Layer.Model = function(viewQueries, options, labelQuery) {
+		
+//		var that = this;
+//		var nodes = JSON.stringify(this._nodes);
+//		print(nodes);
+//		//Test
+//		 $.Hive.create({
+//			// optional. if no 'count' property is set, Hive creates only 1 worker
+//			count: 1,
+//			// the worker file
+//			worker: '../../workers/model.js',
+//			// the receive ( convenience to writing out the addEventListener)
+//			receive: function (filtered) {
+//			/*
+//			jQuery.Hive manages serialization/deserialization
+//			*/
+//			console.log(filtered.data);
+//			 
+//			},
+//			created: function ( $hive ) {
+//			/*
+//			the `created` callback fires after the worker is created,
+//			the first argument is an array of the workers
+//			$().send() is the wrapper for postMessage() with complete
+//			serialization/deserialization
+//			*/
+//			$( $hive ).send({test : nodes});
+//			}
+//		});
+//		 print(JSON.parse(nodes));
 
 		var that = this;
 		this.viewQueries = viewQueries;
@@ -1878,7 +2017,7 @@
 	 * @return {Object} nodes A copy of the stored nodes
 	 */
 	Plugin.Layer.Model.prototype.getNodes = function() {
-		return this.nodes;
+		return this._nodes;
 	};
 
 	/**
@@ -2263,13 +2402,14 @@
 	Plugin.Layers.Res.prototype.show = function() {
 		// <---- overlay show function ---->
 		var that = this;
+		this.zIndex = zIndex++;
 		var previewClip = getClip(CONS.CSS_CLASSES.preview), overlayClip = getClip(CONS.CSS_CLASSES.overlay);
 
 		// Make overlay visible
 		this.$overlay.css({
 			clip : supportTransitions ? previewClip : overlayClip,
 			opacity : 1,
-			zIndex : zIndex++,
+			zIndex : this.zIndex,
 			pointerEvents : 'auto'
 		});
 
@@ -2349,7 +2489,8 @@
 		// Get queries
 		var queries = []
 		var literalIsObjectOf = replaceDummy(queryStore.literalIsObjectOf,
-				this.node.getFComponentOT("value").data);
+				this.node.getFComponentOT("label").data.value);
+		print(literalIsObjectOf);
 		queries.push({
 			query : literalIsObjectOf,
 			type : CONS.CSS_CLASSES.typeClasses.incoming
@@ -2662,6 +2803,8 @@
 	 * @type Object
 	 */
 	var defaults = {
+			//TODO workers
+		pathToWorkers : "../../workers/",
 		/**
 		 * Raw RDF data given on plugin startup. This data will be loaded into the
 		 * store.
@@ -3421,7 +3564,7 @@
 									return new Plugin.Layers.Res($parent, newLayerOptions, $tile);
 								}
 							},
-							LiteralNode : {
+							literal : {
 								layerGenFn : function(node, $tile, $parent, newLayerOptions) {
 									return new Plugin.Layers.Literal($parent, newLayerOptions, $tile);
 								}
@@ -3531,7 +3674,7 @@
 				 * @type Integer
 				 * @default 500
 				 */
-				batchSize : 10
+				batchSize : 500
 
 			},
 			/**
@@ -3674,6 +3817,9 @@
 		// <!--- instance private utility functions ---->
 
 		this.pluginID = generateId();
+		
+		this._extendedLayers = {};
+		this._topLayer;
 
 		this._$parent = $(obj);
 		this.$body = $('BODY');
@@ -3731,7 +3877,7 @@
 				});
 			}
 			remoteDataLoader.dataInserted.attach(new Plugin.Listener(function() {
-				that.updateLayers();
+				that.updateTopLayer();
 			}));
 		},
 		/**
@@ -3931,7 +4077,6 @@
 			// Add insertion listener
 			eventManagers[this.pluginID].addEventHandler(CONS.EVENT_TYPES.store.insert, function(ev) {
 				$.each(that._layers, function(key, layer) {
-					print(layer);
 					layer.update();
 					print("view " + key + " is updating");
 				});
@@ -3991,8 +4136,6 @@
 								that.options.initQueries);
 						that.addLayer(layer);
 						that._layers[layer.id].initSwitch.attach(new Plugin.Listener(function(sender) {
-							print("Layer done");
-							print(sender);
 							if (!that._checkInsertion()) {
 								if (that.options.sparqlData === undefined) {
 									sender.update();
@@ -4025,7 +4168,25 @@
 			});
 			layer.initSwitch.attach(listener);
 			layer.openEvent.attach(new Plugin.Listener(function(sender) {
+				that.l = sender.id;
+				that._extendedLayers[sender.id] = sender.zIndex;
 				that.$body.addClass('noscroll');
+				
+			}));
+			layer.closeEvent.attach(new Plugin.Listener(function(sender) {
+				delete that._extendedLayers[sender.id];
+				if($.isEmptyObject(that._extendedLayers)) {
+					that.$body.removeClass('noscroll');
+					var tmp = 0;
+					$.each(that._extendedLayers, function(layerID, zIndex) {
+						if(tmp < zIndex) {
+						tmp = zIndex;
+						that._topLayer = layerID;
+						}
+					});
+				} else {
+					delete that._topLayer;
+				}
 			}));
 			layer.filterEvent.attach(new Plugin.Listener(function(sender, args) {
 				switch (args.action) {
@@ -4056,10 +4217,10 @@
 		 * 
 		 * @method updateLayers
 		 */
-		updateLayers : function() {
-			$.each(this._layers, function(i, val) {
-				val.update();
-			});
+		updateTopLayer : function() {
+			if(this._topLayer) {
+				this._layers[this._topLayer].update();
+			}
 		},
 		/**
 		 * Insert given rdf-data in the store.
@@ -4262,7 +4423,15 @@ function program1(depth0,data) {
     + "\" data-option-key=\"filter\">\r\n                    ";
   stack2 = helpers.each.call(depth0, depth0.filterOptions, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += "\r\n            </ul>\r\n    </div>";
+  buffer += "\r\n            </ul>\r\n    </div>\r\n    <div class=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.optionCombo)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">\r\n            <ul class=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.optionButton)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + " "
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.clearfix)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">\r\n                <li><a class=\""
+    + escapeExpression(((stack1 = ((stack1 = depth0.CSS_CLASSES),stack1 == null || stack1 === false ? stack1 : stack1.refresh)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
+    + "\">Refresh</a></li>\r\n            </ul>\r\n    </div>";
   return buffer;
   });
 
