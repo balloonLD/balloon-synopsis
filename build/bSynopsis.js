@@ -1014,6 +1014,7 @@
 		this._container.isotope(options);
 	};
 	
+	//TODO Workers
 //	Plugin.NodeDataFactory = {
 //			makeData : function(input) {
 //				var nodeData;
@@ -1300,6 +1301,8 @@
 		return $tile;
 	};
 	
+	
+	// TODO do this in workers cause of performance
 	/**
 	 * Merges data of given node with own data.
 	 * 
@@ -1928,6 +1931,7 @@
 
 	Plugin.Layer.Model = function(viewQueries, options, labelQuery) {
 		
+// TODO Workers
 //		var that = this;
 //		var nodes = JSON.stringify(this._nodes);
 //		print(nodes);

@@ -12,7 +12,6 @@
         <script src="../../bower_components/isotope/index.js"></script>
         <script src="../../bower_components/rdfstore-js/index.js"></script>
         <script src="../../bower_components/rgbcolor/index.js"></script>
-        <script src="../../bower_components/jquery.hive/index.js"></script>
         <!-- endbower -->
         <script type="text/javascript" src="../../build/bSynopsis.js"></script>
         <!-- bower:css -->
@@ -67,22 +66,37 @@
                                 $(function() {
                                     $('.bSynopsis').bSynopsis({
                                         layerOptions : {
-                                            nodeFilters: {
-                                                blacklistURI: {
-                                                    config: new Array("/passau/i")
-                                                },
-                                                actor: {
-                                                    fn: function(nodes, config) {
-                                                        $.each(nodes, function(i, node) {
-                                                            if (node.hasComponentType("label") && node.components["label0"] == "TestPerson") {
-                                                                node.useTemplateIdentifier = "actor";
-                                                            }
-                                                        });
-                                                        return nodes;
-                                                    },
-                                                    template: "<div>I'm an actor!</div>"
-                                                }
-                                            },
+                                           nodeFilters: {
+                                              maps: {
+                                                  fn: function(nodes, config) {
+                                                      $.each(nodes, function(i, node) {
+                                                          if(node.hasComponentType("predicate")) {
+                                                         	    node.forEachComponentType("predicate", function(component) {
+                                                              if(component.data.value  === 'http://www.georss.org/georss/point') {
+                                                                 node.useTemplateID = 'maps';
+                                                                 node.lat = node.getFComponentOT("label").data.value.split(" ")[0];
+                                                                 node.long = node.getFComponentOT("label").data.value.split(" ")[1]
+                                                                 if(!node.style) {
+                                                               	  node.style = {};
+                                                                 }
+                                                                 node.style.width = '410px';
+                                                                 node.style.height = '200px';
+                                                                 node.layoutFn = function($tile, node, nStyle) {
+                                                               	  $tile.height(nStyle.height);
+                                                               	  $tile.width(nStyle.width);
+                                                                 }
+                                                                 node.dynLayoutFn = node.layoutFn;
+                                                              }
+                                                         	  });
+                                                          }
+                                                       });
+                                                      return nodes;
+                                                  },
+                                                  template: '<div><iframe width="410" height="200" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/?ie=UTF8&amp;t=m&amp;ll={{node.lat}},{{node.long}}&amp;spn=0.079502,0.145912&amp;z=12&amp;output=embed"></iframe></div>'
+                                              },
+
+                                          },
+
                                             remoteOptions : {
                                                 remoteLimit: 1000
                                             }
