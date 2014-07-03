@@ -5,11 +5,11 @@
  * @main Plugin
  * @param {} $
  * @param {}
- *          window
+ *           window
  * @param {}
- *          document
+ *           document
  * @param {}
- *          undefined
+ *           undefined
  */
 
 // safety net for unclosed plugins and/or chained functions
@@ -65,6 +65,7 @@
 			buttonTimeline : "btnTimeline",
 			sorter : "sorter",
 			textScale : "textScale",
+			textScaleDone : "textScaleDone",
 			tileClasses : {
 				tile : "tile",
 				content : "tileContent",
@@ -156,82 +157,82 @@
 	// Extend Isotope - groupRows custom layout mode
 	// Modified Version of
 	// http://isotope.metafizzy.co/custom-layout-modes/category-rows.html
-	$
-			.extend(
-					$.Isotope.prototype,
-					{
-						_groupRowsReset : function() {
-							this.groupRows = {
-								x : 0,
-								y : 0,
-								gutter : 0,
-								height : 0,
-								currentGroup : null
-							};
-						},
-						_groupRowsLayout : function($elems) {
-							var instance = this, containerWidth = this.element.width(), sortBy = this.options.sortBy, props = this.groupRows;
-
-							$elems
-									.each(function() {
-										var $this = $(this), atomW = $this.outerWidth(true), atomH = $this
-												.outerHeight(true), group = $.data(this, 'isotope-sort-data')[sortBy];
-
-										if (group !== props.currentGroup) {
-											// new group, new row
-											props.x = 0;
-											props.height += props.currentGroup ? instance.groupRows.gutter : 0;
-											props.y = props.height;
-											props.currentGroup = group;
-
-											if (instance.groupRows.gutter < atomH) {
-												instance.groupRows.gutter = atomH;
-											}
-
-										} else {
-
-											if (props.x !== 0 && atomW + props.x > containerWidth) {
-
-												// if this item cannot fit in
-												// the current row
-												props.x = 0;
-												props.y = props.height;
-											}
-										}
-
-										$this.find(UTIL.toSelector(CONS.CSS_CLASSES.groupLabel)).remove();
-										// label for new group
-										if (group !== '') {
-											var prefix = group.split("_")[0] + "_";
-											var groups = group.split(prefix), divBox = "<div class='"
-													+ CONS.CSS_CLASSES.groupLabel + "' >";
-											for (var i = 1; i < groups.length; i++) {
-												divBox += groups[i];
-											}
-											divBox += "</div>";
-											$this.append(divBox);
-										}
-
-										// position the atom
-										instance._pushPosition($this, props.x, props.y);
-
-										props.height = Math.max(props.y + atomH, props.height);
-										props.x += atomW;
-									});
-						},
-						_groupRowsGetContainerSize : function() {
-							return {
-								height : this.groupRows.height
-							};
-						},
-						_groupRowsResizeChanged : function() {
-							return true;
-						}
-
-					});
+// $
+// .extend(
+// $.Isotope.prototype,
+// {
+// _groupRowsReset : function() {
+// this.groupRows = {
+// x : 0,
+// y : 0,
+// gutter : 0,
+// height : 0,
+// currentGroup : null
+// };
+// },
+// _groupRowsLayout : function($elems) {
+// var instance = this, containerWidth = this.element.width(), sortBy =
+// this.options.sortBy, props = this.groupRows;
+//
+// $elems
+// .each(function() {
+// var $this = $(this), atomW = $this.outerWidth(true), atomH = $this
+// .outerHeight(true), group = $.data(this, 'isotope-sort-data')[sortBy];
+//
+// if (group !== props.currentGroup) {
+// // new group, new row
+// props.x = 0;
+// props.height += props.currentGroup ? instance.groupRows.gutter : 0;
+// props.y = props.height;
+// props.currentGroup = group;
+//
+// if (instance.groupRows.gutter < atomH) {
+// instance.groupRows.gutter = atomH;
+// }
+//
+// } else {
+//
+// if (props.x !== 0 && atomW + props.x > containerWidth) {
+//
+// // if this item cannot fit in
+// // the current row
+// props.x = 0;
+// props.y = props.height;
+// }
+// }
+//
+// $this.find(UTIL.toSelector(CONS.CSS_CLASSES.groupLabel)).remove();
+// // label for new group
+// if (group !== '') {
+// var prefix = group.split("_")[0] + "_";
+// var groups = group.split(prefix), divBox = "<div class='"
+// + CONS.CSS_CLASSES.groupLabel + "' >";
+// for (var i = 1; i < groups.length; i++) {
+// divBox += groups[i];
+// }
+// divBox += "</div>";
+// $this.append(divBox);
+// }
+//
+// // position the atom
+// instance._pushPosition($this, props.x, props.y);
+//
+// props.height = Math.max(props.y + atomH, props.height);
+// props.x += atomW;
+// });
+// },
+// _groupRowsGetContainerSize : function() {
+// return {
+// height : this.groupRows.height
+// };
+// },
+// _groupRowsResizeChanged : function() {
+// return true;
+// }
+//
+// });
 
 	// ========================= JQuery custom selectors
-	// ===============================
 	/**
 	 * class JQuery custom selectors
 	 * 
@@ -243,11 +244,11 @@
 	 * 
 	 * @method class-prefix
 	 * @param {}
-	 *          ele
+	 *           ele
 	 * @param {}
-	 *          index
+	 *           index
 	 * @param {}
-	 *          match
+	 *           match
 	 */
 	$.expr[':']['class-prefix'] = function(ele, index, match) {
 		var prefix = match[3];
@@ -266,11 +267,11 @@
 	 * 
 	 * @method regex
 	 * @param {}
-	 *          elem
+	 *           elem
 	 * @param {}
-	 *          index
+	 *           index
 	 * @param {}
-	 *          match
+	 *           match
 	 */
 	$.expr[':'].regex = function(elem, index, match) {
 		var matchParams = match[3].split(','), validLabels = /^(data|css):/, attr = {
@@ -284,9 +285,37 @@
 		}
 		return regex.test(jQuery(elem)[attr.method](attr.property));
 	};
+	
+	// ========================= JQuery textfill
+	// https://gist.github.com/mekwall/1263939 by Marcus Ekwall
+	// Additions by Thomas Weißgerber
+	(function($) {
+		$.fn.textfill = function(maxFontSize, minFontSize, fail) {
+		maxFontSize = parseInt(maxFontSize, 10);
+		minFontSize = parseInt(minFontSize, 10);
+		return this.each(function(){
+		var ourText = $("span", this),
+		parent = ourText.parent(),
+		maxHeight = parent.height(),
+		maxWidth = parent.width(),
+		fontSize = parseInt(ourText.css("fontSize"), 10),
+		tmpMultW = maxWidth/ourText.width(),
+		tmpMultH = maxHeight/ourText.height(),
+		multiplier = (tmpMultW < tmpMultH) ? tmpMultW : tmpMultH,
+		newSize = (fontSize*(multiplier-0.1));
+		if(maxFontSize > 0 && newSize > maxFontSize) {
+			newSize = maxFontSize;
+		}
+		if(minFontSize > 0 && newSize < minFontSize) {
+			newSize = minFontSize;
+			fail(parent);
+		}
+		ourText.css("fontSize", newSize);
+		});
+		};
+		})(jQuery);
 
 	// ========================= bSynopsis class private utility functions
-	// ===============================
 	/**
 	 * class private utility functions
 	 * 
@@ -298,7 +327,7 @@
 	 * 
 	 * @method isUndefinedOrNull
 	 * @param {Object}
-	 *          a Variable to check
+	 *           a Variable to check
 	 * @return {Boolean} Returns true on success
 	 */
 	function isUndefinedOrNull(a) {
@@ -327,9 +356,9 @@
 	 * 
 	 * @method replaceDummy
 	 * @param {String}
-	 *          query Query to work with
+	 *           query Query to work with
 	 * @param {String}
-	 *          replacement String to replace the CONS.DUMMY of given query
+	 *           replacement String to replace the CONS.DUMMY of given query
 	 * @return {String} Returns the query with replaced DUMMY constants
 	 */
 	function replaceDummy(query, replacement) {
@@ -343,7 +372,7 @@
 	 * @private
 	 * @method deepCopy
 	 * @param {Object}
-	 *          obj Object to clone
+	 *           obj Object to clone
 	 * @return copy of the object
 	 */
 	function deepCopy(obj) {
@@ -356,8 +385,8 @@
 	 * 
 	 * @method getWindowSize
 	 * @param {Boolean}
-	 *          withoutScrollbar Flag to assign if the scrollbar should be
-	 *          considered
+	 *           withoutScrollbar Flag to assign if the scrollbar should be
+	 *           considered
 	 * @return {Object} Object which contains the width and the height of the
 	 *         window.
 	 */
@@ -385,7 +414,7 @@
 	 * 
 	 * @method getClip
 	 * @param {String}
-	 *          name CSS name as defined in CONS.CSS_CLASSES of given div box
+	 *           name CSS name as defined in CONS.CSS_CLASSES of given div box
 	 * @return {Object} Rectangle Object / Clip data
 	 */
 	function getClip(name) {
@@ -411,7 +440,7 @@
 	 * 
 	 * @method getItemLayoutProp
 	 * @param {$item}
-	 *          $item JQuery item
+	 *           $item JQuery item
 	 * @return {Object} Object which contains the layoutprops
 	 */
 	function getItemLayoutProp($item) {
@@ -451,6 +480,8 @@
 	 * @constructor
 	 */
 	var RemoteEngine = function() {
+		
+		// TODO YQL timeout??
 
 		var counter = 0;
 
@@ -472,13 +503,13 @@
 
 				// Else, Maybe we requested a site that doesn't exist, and
 				// nothing returned.
-				else
+				else {
 					console.log('Nothing returned from getJSON.');
-				callback(null, success);
+					callback(null, success);
 
 				// Delete old callbackfunction
 				window["cbFunc" + cnt] = undefined;
-			};
+			}};
 
 			// If no query was passed, exit.
 			if (!query) {
@@ -504,7 +535,7 @@
 					// console.log(textStatus);
 					// console.log(jqXHR);
 					console.log(errorThrown);
-					callback(null, success);
+					window["cbFunc"+cnt]();
 				}
 			});
 		};
@@ -512,16 +543,16 @@
 	};
 
 	/**
-	 * Method for querying the given url with given query. Executes given callback
-	 * function with results.
+	 * Method for querying the given url with given query. Executes given
+	 * callback function with results.
 	 * 
 	 * @method executeQuery
 	 * @param {String}
-	 *          query Query to execute
+	 *           query Query to execute
 	 * @param {String}
-	 *          url URL of service to execute the query on
+	 *           url URL of service to execute the query on
 	 * @param {Function}
-	 *          callback Callback function to be executed with query results
+	 *           callback Callback function to be executed with query results
 	 */
 	RemoteEngine.prototype.executeQuery = function(query, url, callback) {
 		this._requestSPARQLCrossDomain(query, url, callback);
@@ -543,9 +574,9 @@
 	 * 
 	 * @method add
 	 * @param {String}
-	 *          key Key to map to the value
+	 *           key Key to map to the value
 	 * @param {String}
-	 *          val Value to add to the cache
+	 *           val Value to add to the cache
 	 */
 	Cache.prototype.add = function(key, val) {
 		this.values[key] = val;
@@ -556,7 +587,7 @@
 	 * 
 	 * @method retrieve
 	 * @param {String}
-	 *          key Key to map to the value
+	 *           key Key to map to the value
 	 * @return {String} Value to which the key maps
 	 */
 	Cache.prototype.retrieve = function(key) {
@@ -568,7 +599,7 @@
 	 * 
 	 * @method contains
 	 * @param {String}
-	 *          key Key to map to the value
+	 *           key Key to map to the value
 	 * @return {Boolean} true if cache contains a value for the given key
 	 */
 	Cache.prototype.contains = function(key) {
@@ -638,19 +669,27 @@
 	Plugin.Event = function(sender) {
 		this._sender = sender;
 		this._listeners = {};
+		this._oneTimeListeners = {};
 	};
 
 	Plugin.Event.prototype = {
 		attach : function(listener) {
 			this._listeners[listener.id] = listener;
 		},
+		once : function(listener) {
+			this._oneTimeListeners[listener.id] = listener;
+		},
 		dettach : function(listener) {
 			delete this._listeners[listener.id];
 		},
 		notify : function(args) {
-			var sender = this._sender;
+			var sender = this._sender, that = this;
 			$.each(this._listeners, function(i, val) {
 				val.fn(sender, args);
+			});
+			$.each(this._oneTimeListeners, function(i, val) {
+				val.fn(sender, args);
+				delete that._oneTimeListeners[i];
 			});
 		}
 	};
@@ -673,9 +712,10 @@
 		trigger : function(args) {
 			this._triggered = true;
 			this._args = args;
+			var that = this;
 			$.each(this._listeners, function(i, val) {
-				val.fn(this._sender, args);
-				delete this._listeners[i];
+				val.fn(that._sender, args);
+				delete that._listeners[i];
 			});
 		}
 	};
@@ -692,7 +732,7 @@
 	 * @class Plugin.EventManager
 	 * @constructor
 	 * @param {jQuery}
-	 *          stdObject Default object for adding of eventHandlers
+	 *           stdObject Default object for adding of eventHandlers
 	 */
 	Plugin.EventManager = function(stdObject) {
 		if (!stdObject) {
@@ -711,13 +751,13 @@
 	 * 
 	 * @method addEventHandler
 	 * @param {String}
-	 *          eventType Type of the event as defined in cons
+	 *           eventType Type of the event as defined in cons
 	 * @param {Function}
-	 *          handler Eventhandler function to trigger on event
+	 *           handler Eventhandler function to trigger on event
 	 * @param {String}
-	 *          object Object to add the eventhandler to
+	 *           object Object to add the eventhandler to
 	 * @param {String}
-	 *          id ID to add to the eventhandler
+	 *           id ID to add to the eventhandler
 	 */
 	Plugin.EventManager.prototype.addEventHandler = function(eventType, handler, object, id) {
 		var that = this;
@@ -741,11 +781,11 @@
 	 * 
 	 * @method removeEventHandler
 	 * @param {String}
-	 *          eventType Type of the event as defined in CONS
+	 *           eventType Type of the event as defined in CONS
 	 * @param {Function}
-	 *          id ID of the eventHandler to be removed
+	 *           id ID of the eventHandler to be removed
 	 * @param {String}
-	 *          object Object to remove the eventhandler from
+	 *           object Object to remove the eventhandler from
 	 */
 	Plugin.EventManager.prototype.removeEventHandler = function(eventType, id, object) {
 		var that = this;
@@ -772,11 +812,11 @@
 	 * 
 	 * @method trigger
 	 * @param {String}
-	 *          eventType Type of the event as defined in CONS
+	 *           eventType Type of the event as defined in CONS
 	 * @param {Object}
-	 *          param Array of parameters to give to the triggered function
+	 *           param Array of parameters to give to the triggered function
 	 * @param {String}
-	 *          object Object to trigger the event on
+	 *           object Object to trigger the event on
 	 */
 	Plugin.EventManager.prototype.trigger = function(eventType, param, object) {
 		if (object) {
@@ -807,9 +847,9 @@
 	 * @class Plugin.RdfStore
 	 * @constructor
 	 * @param {Object}
-	 *          options Options object for the rdf store
+	 *           options Options object for the rdf store
 	 * @param {Function}
-	 *          callback Callback function to execute after class creation
+	 *           callback Callback function to execute after class creation
 	 */
 	Plugin.RdfStore = function(options, callback) {
 		var that = this;
@@ -852,12 +892,12 @@
 	 * 
 	 * @method insertData
 	 * @param {String}
-	 *          data Data to insert into the store
+	 *           data Data to insert into the store
 	 * @param {String}
-	 *          dataFormat Format of given data
+	 *           dataFormat Format of given data
 	 * @param {Function}
-	 *          callback Callback function to be called after loading in the
-	 *          store.
+	 *           callback Callback function to be called after loading in the
+	 *           store.
 	 */
 	Plugin.RdfStore.prototype.insertData = function(data, dataFormat, callback) {
 		var that = this;
@@ -897,20 +937,20 @@
 	 * 
 	 * @method executeQuery
 	 * @param {String}
-	 *          query Data to insert into the store
+	 *           query Data to insert into the store
 	 * @param {Function}
-	 *          callback Callback function to be called with the results of the
-	 *          execution.
+	 *           callback Callback function to be called with the results of the
+	 *           execution.
 	 * @param {Function}
-	 *          fail Callback function to be called if the execution fails.
+	 *           fail Callback function to be called if the execution fails.
 	 */
 	Plugin.RdfStore.prototype.executeQuery = function(query, callback, fail) {
 		this._store.execute(this._queryPrefixes + query, function(success, results) {
 			if (success) {
-				callback(results);
+				callback(results, success);
 			} else {
 				print("Error on executing: " + query);
-				fail();
+				callback(null, success);
 			}
 		});
 	};
@@ -923,13 +963,13 @@
 	 * @class Plugin.LayoutEngine
 	 * @constructor
 	 * @param {jQuery}
-	 *          container Container to use the layout engine on
+	 *           container Container to use the layout engine on
 	 * @param {Object}
-	 *          options Options object for the layout engine
+	 *           options Options object for the layout engine
 	 */
-	Plugin.LayoutEngine = function(container, options) {
+	Plugin.LayoutEngine = function($container, options) {
 		var engine = this;
-		this._container = container;
+		this._container = $container;
 		this._funcQueue = [];
 		this._occupied = false;
 		this._internDoneEvent = new Plugin.Event(this);
@@ -937,11 +977,13 @@
 			engine._addNext();
 		}));
 		// Use isotope on layout callback to trigger event
-		container.isotope($.extend(options, {
-			onLayout : function() {
-				container.trigger(CONS.EVENT_TYPES.layout.done);
-			}
-		}));
+		$container.addClass("isotope");
+		$container.css({"overflow" : "hidden"});
+		$container.isotope(options);
+		$container.isotope( 'on', 'layoutComplete', function() {
+			engine._container.trigger(CONS.EVENT_TYPES.layout.done);
+			engine._internDoneEvent.notify();
+		});
 	};
 
 	Plugin.LayoutEngine.prototype._addNext = function(items) {
@@ -958,26 +1000,22 @@
 	 * 
 	 * @method add
 	 * @param {jQuery}
-	 *          items Div boxes which are to be added
+	 *           items Div boxes which are to be added
 	 * @param {Function}
-	 *          callback Callback function
+	 *           callback Callback function
 	 */
 	Plugin.LayoutEngine.prototype.add = function(items) {
+		var engine = this;
 		var fn = function(input) {
 			return function() {
 				var i = input;
-				engine._container.isotope("insert", i, function() {
-					engine._internDoneEvent.notify();
-				});
+				engine._container.isotope("insert", items);
 			};
 		};
-		var engine = this;
 		if (items) {
 			if (!this._occupied) {
 				this._occupied = true;
-				this._container.isotope("insert", items, function() {
-					engine._internDoneEvent.notify();
-				});
+				this._container.isotope("insert", items);
 			} else {
 				this._funcQueue.push(fn(items));
 			}
@@ -998,9 +1036,9 @@
 	 * 
 	 * @method remove
 	 * @param {jQuery}
-	 *          items Div boxes which are to be removed
+	 *           items Div boxes which are to be removed
 	 * @param {Function}
-	 *          callback Callback function
+	 *           callback Callback function
 	 */
 	Plugin.LayoutEngine.prototype.remove = function(items, callback) {
 		this._container.isotope("remove", items, callback);
@@ -1015,7 +1053,7 @@
 	 * 
 	 * @method updateSortData
 	 * @param {item}
-	 *          item Items for which sort data should be updated
+	 *           item Items for which sort data should be updated
 	 */
 	Plugin.LayoutEngine.prototype.updateSortData = function(item) {
 		this._container.isotope("updateSortData", item);
@@ -1026,147 +1064,11 @@
 	 * 
 	 * @method updateSortData
 	 * @param {Object}
-	 *          options Options object of the layout engine
+	 *           options Options object of the layout engine
 	 */
 	Plugin.LayoutEngine.prototype.updateOptions = function(options) {
 		this._container.isotope(options);
 	};
-	
-	//TODO Workers
-//	Plugin.NodeDataFactory = {
-//			makeData : function(input) {
-//				var nodeData;
-//				switch (input.subject.token) {
-//				case UTIL.toToken(CONS.CSS_CLASSES.patternClasses.blanknode):
-//					nodeData = this.makeBlankNodeData(input);
-//					break;
-//				case UTIL.toToken(CONS.CSS_CLASSES.patternClasses.literal):
-//					nodeData = this.makeLiteralNodeData(input);
-//					break;
-//				case UTIL.toToken(CONS.CSS_CLASSES.patternClasses.uri):
-//					nodeData = this.makeResNodeData(input);
-//					break;
-//				default:
-//					console.log(CONS.MESSAGES.error.tokenType + input.subject.token);
-//				}
-//				return nodeData;
-//			},
-//			addComponent : function(nodeData, type, data, style) {
-//					if (!nodeData.components[type]) { // Increase counter
-//						nodeData.components[type] = [];
-//					}
-//					var id = type + nodeData.components[type].length;
-//					nodeData.components[type].push(Plugin.ComponentFactory.makeComp(id, type, data, style));
-//			},
-//			makeResNodeData : function(input) {
-//				var nodeData;
-//				if (input.label && (input.label.lang === undefined || input.label.lang === "en")) {
-//					nodeData = new Plugin.Nodes.Res.Data(input, factory);
-//					this.addStdComponents(nodeData);
-//				}
-//				return nodeData;
-//			},
-//			makeLiteralNodeData : function(input) {
-//				var nodeData;
-//				nodeData = new Plugin.Nodes.Literal.Data(input, factory);
-//				this.addStdComponents(nodeData);
-//				return nodeData;
-//			},
-//			makeBlankNodeData : function(input) {
-//				var nodeData;
-//				nodeData = new Plugin.Nodes.Blank.Data(input, factory);
-//				this.addStdComponents(nodeData);
-//				return nodeData;
-//			}
-//		};
-//	
-//	Plugin.Nodes = {};
-//	Plugin.Nodes.Res = function() {
-//		
-//	}
-//	
-//	Plugin.Nodes.Literal = function() {
-//		
-//	}
-//	
-//	Plugin.Nodes.Blank = function() {
-//		
-//	}
-//	
-//	Plugin.Node.Data = function(data, factory) {
-//		this.id = data.index; // ID for this node
-//		this.type = CONS.NODE_TYPES.stdNode; // Node Type
-//		this.useTemplateID = this.type; // Use Templated stored under this name
-//		this.filterables = []; // Classes used for filtering
-//		this.components = {}; // Components of the node
-//		if (data.predicate) { // Empty predicates are possible on init view
-//			this.filterables.push(UTIL.toFilterable(data.predicate.type));
-//			data.predicate.value = decodeURIComponent(data.predicate.value);
-//			factory.addComponent(this, "predicate", data.predicate);
-//		}
-//		if (data.description) {
-//			data.description.value = decodeURIComponent(data.description.value);
-//			factory.addComponent(this, "description", data.description);
-//		}
-//	}
-//	
-//	Plugin.Nodes.Res.Data = function(data, factory) {
-//		Plugin.Node.Data.call(this, data);
-//		var that = this;
-//		this.type = CONS.NODE_TYPES.resNode; // Overwrite std node type
-//		factory.addComponent("uri", data.subject.value, {
-//			display : "none"
-//		});
-//		if (isUndefinedOrNull(data.label)) {
-//			factory.addComponent("label", {
-//				value : decodeURIComponent(this.uri)
-//			});
-//		} else {
-//			data.label.value = decodeURIComponent(data.label.value);
-//			factory.addComponent("label", data.label);
-//		}
-//		var id = that.components.uri[0].data;
-//		that.forEachComponentType("predicate", function(predicate) {
-//			id += predicate.value;
-//		});
-//		this.id = id; // Overwrite id
-//	}
-//	
-//	Plugin.Nodes.Literal.Data = function(data, factory) {
-//		this.id = data.index; // ID for this node
-//		this.type = CONS.NODE_TYPES.stdNode; // Node Type
-//		this.useTemplateID = this.type; // Use Templated stored under this name
-//		this.filterables = []; // Classes used for filtering
-//		this.components = {}; // Components of the node
-//		this.style = style;
-//	}
-//	
-//	Plugin.Nodes.Blank.Data = function(data, factory) {
-//		this.id = data.index; // ID for this node
-//		this.type = CONS.NODE_TYPES.stdNode; // Node Type
-//		this.useTemplateID = this.type; // Use Templated stored under this name
-//		this.filterables = []; // Classes used for filtering
-//		this.components = {}; // Components of the node
-//		this.style = style;
-//	}
-//	
-//	Plugin.NodeJSON = function(data) {
-//		this.id = data.index; // ID for this node
-//		this.type = CONS.NODE_TYPES.stdNode; // Node Type
-//		this.useTemplateID = this.type; // Use Templated stored under this name
-//		this.filterables = []; // Classes used for filtering
-//		this.components = {}; // Components of the node
-//		this.style = style;
-//		if (data.predicate) { // Empty predicates are possible on init view
-//			this.filterables.push(UTIL.toFilterable(data.predicate.type));
-//			data.predicate.value = decodeURIComponent(data.predicate.value);
-//			this.addComponent("predicate", data.predicate);
-//		}
-//		if (data.description) {
-//			data.description.value = decodeURIComponent(data.description.value);
-//			this.addComponent("description", data.description);
-//		}
-//	}
 	
 	Plugin.DataTransformer = {
 		res : function(data) {
@@ -1187,8 +1089,8 @@
 	 * @class Plugin.Node
 	 * @constructor
 	 * @param {Object}
-	 *          data Data of a single resource of a select query. Must contain
-	 *          index.
+	 *           data Data of a single resource of a select query. Must contain
+	 *           index.
 	 */
 	Plugin.Node = function(data, style) {
 		this.id = data.index; // ID for this node
@@ -1227,7 +1129,7 @@
 	 * 
 	 * @method getFComponentOT
 	 * @param {String}
-	 *          type Type to look for.
+	 *           type Type to look for.
 	 * @returns {Object}
 	 */
 	Plugin.Node.prototype.getFComponentOT = function(type) { // Increment
@@ -1245,7 +1147,7 @@
 	 * 
 	 * @method hasComponentType
 	 * @param {String}
-	 *          type Type to look for.
+	 *           type Type to look for.
 	 * @returns {Boolean}
 	 */
 	Plugin.Node.prototype.hasComponentType = function(type) { // Increment
@@ -1259,9 +1161,9 @@
 	 * 
 	 * @method forEachComponentType
 	 * @param {string}
-	 *          type Type to look for.
+	 *           type Type to look for.
 	 * @param {function}
-	 *          fn Function to execute.
+	 *           fn Function to execute.
 	 * @returns {Object}
 	 */
 	Plugin.Node.prototype.forEachComponentType = function(type, fn) {
@@ -1296,7 +1198,7 @@
 	 * 
 	 * @method setPredicateLabel
 	 * @param {Integer}
-	 *          ind
+	 *           ind
 	 * @param{String} label
 	 */
 	Plugin.Node.prototype.setPredicateLabel = function(i, label) {
@@ -1326,28 +1228,28 @@
 	 * 
 	 * @method setPredicateLabel
 	 * @param {Node}
-	 *          otherNode
+	 *           otherNode
 	 * @returns {Boolean}
 	 */
 	Plugin.Node.prototype.merge = function(otherNode) {
 		var that = this, update = false;
-//		$.each(otherNode.components, function(typeID, comps) {
-//			$.each(comps, function(i, comp) {
-//				var insert = true;
-//				if(that.components[typeID]) {
-//					for(var j = 0; j < that.components[typeID].length; j++) {
-//						if(comp.equals(that.components[typeID][j])) {
-//							insert = false;
-//							break;
-//						}
-//					}
-//				}
-//				if(insert) {
-//					that.addComponent(typeID, comp.data);
-//					update = true;
-//				}
-//			});
-//		});
+		 $.each(otherNode.components, function(typeID, comps) {
+		 $.each(comps, function(i, comp) {
+		 var insert = true;
+		 if(that.components[typeID]) {
+		 for(var j = 0; j < that.components[typeID].length; j++) {
+		 if(comp.equals(that.components[typeID][j])) {
+		 insert = false;
+		 break;
+		 }
+		 }
+		 }
+		 if(insert) {
+		 that.addComponent(typeID, comp.data);
+		 update = true;
+		 }
+		 });
+		 });
 		return update;
 	};
 	
@@ -1358,8 +1260,8 @@
 	 * @class Plugin.Node
 	 * @constructor
 	 * @param {Object}
-	 *          data Data of a single resource of a select query. Must contain
-	 *          label and index.
+	 *           data Data of a single resource of a select query. Must contain
+	 *           label and index.
 	 */
 	Plugin.Node.Component = function(id, type, data, style) {
 		this.id = id;
@@ -1374,10 +1276,10 @@
 	 * @class Plugin.ComponentFactory
 	 * @constructor
 	 * @param {Object}
-	 *          data Data of a single resource of a select query.
+	 *           data Data of a single resource of a select query.
 	 */
 	Plugin.ComponentFactory = {
-			//TODO equality etc
+			// TODO equality etc
 		makeComp : function(id, type, data, style) {
 			var comp;
 			if (style) {
@@ -1420,8 +1322,8 @@
 	 * @extendes Plugin.Node
 	 * @constructor
 	 * @param {Object}
-	 *          data Data of a single resource of a select query. Must contain
-	 *          label and index.
+	 *           data Data of a single resource of a select query. Must contain
+	 *           label and index.
 	 */
 	Plugin.Nodes.Res = function(data) {
 		// Call node constructor
@@ -1431,7 +1333,7 @@
 		var generateID = function() {
 			var id = that.components.uri[0].data;
 			that.forEachComponentType("predicate", function(predicate) {
-				id += predicate.value;
+				id += "_" + predicate.data.value;
 			});
 			return id;
 		};
@@ -1472,7 +1374,7 @@
 	 * @extendes Plugin.Node
 	 * @constructor
 	 * @param {Object}
-	 *          data Data of a single resource of a select query.
+	 *           data Data of a single resource of a select query.
 	 */
 	Plugin.Nodes.Literal = function(data) {
 		var that = this;
@@ -1482,7 +1384,7 @@
 		var generateID = function() {
 			var id = that.getFComponentOT("label").data.value;
 			that.forEachComponentType("predicate", function(predicate) {
-				id += predicate.value;
+				id += "_" + predicate.data.value;
 			});
 			return id;
 		};
@@ -1514,7 +1416,7 @@
 	 * @extendes Plugin.Node
 	 * @constructor
 	 * @param {Object}
-	 *          data Data of a single resource of a select query.
+	 *           data Data of a single resource of a select query.
 	 */
 	Plugin.Nodes.Blank = function(data) {
 		// Call node constructor
@@ -1551,7 +1453,7 @@
 	 * @class Plugin.NodeFactory
 	 * @constructor
 	 * @param {Object}
-	 *          data Data of a single resource of a select query.
+	 *           data Data of a single resource of a select query.
 	 */
 	Plugin.NodeFactory = {
 		makeNode : function(data, options) {
@@ -1630,7 +1532,7 @@
 	 * 
 	 * @method addLayer
 	 * @param {Plugin.Layer}
-	 *          layer Layer object to be added to timeline.
+	 *           layer Layer object to be added to timeline.
 	 */
 	Plugin.TimeLine.prototype.addLayer = function(layer) {
 		this.addNode(new Plugin.TimeLine.Node(layer));
@@ -1641,7 +1543,7 @@
 	 * 
 	 * @method addNode
 	 * @param {Plugin.TimeLine.Node}
-	 *          timeLineNode TimeLineNode added to timeline.
+	 *           timeLineNode TimeLineNode added to timeline.
 	 */
 	Plugin.TimeLine.prototype.addNode = function(timeLineNode) {
 		var that = this;
@@ -1695,11 +1597,11 @@
 	 * @class Plugin.Layer
 	 * @constructor
 	 * @param {jQuery}
-	 *          $parent Parent div container
+	 *           $parent Parent div container
 	 * @param {Object}
-	 *          options Options object of the view
+	 *           options Options object of the view
 	 * @param {Object}
-	 *          queries Queries to use in the view
+	 *           queries Queries to use in the view
 	 */
 	Plugin.Layer = function($parent, options, queries) {
 		var that = this;
@@ -1725,7 +1627,7 @@
 	 * 
 	 * @method _initLayerData
 	 * @param {Object}
-	 *          queries Queries to use for layer init
+	 *           queries Queries to use for layer init
 	 */
 	Plugin.Layer.prototype._initLayerData = function(queries) {
 		var that = this;
@@ -1747,8 +1649,7 @@
 		this.view = new Plugin.Layer.View(this.model, this.$content, this.options.viewOptions);
 		// Repaint on added items
 		this.model.itemsAdded.attach(new Plugin.Listener(function(sender, args) {
-			that.view.addTiles(that.getTilesToPaint(args.addedNodes, that.options.nodeFilters,
-					that.options.tileFilters));
+			that.view.addTiles(that.getTilesToPaint(args.addedNodes, that.options.nodeFilters, that.options.tileFilters));
 		}));
 
 		// Clear view on model clearing
@@ -1803,7 +1704,6 @@
 	};
 
 	Plugin.Layer.prototype.getTimeLineButton = function() {
-		print(this.$overlay.find(UTIL.toSelector(CONS.CSS_CLASSES.buttonTimeline)));
 		return this.$overlay.find(UTIL.toSelector(CONS.CSS_CLASSES.buttonTimeline));
 	};
 
@@ -1831,9 +1731,17 @@
 	};
 
 	Plugin.Layer.prototype._initContent = function() {
-		this.update();
-		if (this.options.remoteOptions.remoteDynamically && this.loadByRemote) {
-			this.loadByRemote();
+		if (this.options.remoteOptions.remoteDynamically) {
+			if (!this.options.remoteOptions.waitForRemote) {
+				this.update();
+			}
+			if (this.loadByRemote) {
+				this.loadByRemote();
+			} else {
+				print("LoadByRemote currently not defined");
+			}
+		} else {
+			this.update();
 		}
 	};
 
@@ -1862,6 +1770,7 @@
 	 */
 	Plugin.Layer.prototype.update = function() {
 		print("Layer " + this.id + " is updating.");
+	   print("Caller is " + arguments.callee.caller.toString());
 		this.model.update();
 	};
 
@@ -2016,34 +1925,34 @@
 	Plugin.Layer.Model = function(viewQueries, options, labelQuery) {
 		
 // TODO Workers
-//		var that = this;
-//		var nodes = JSON.stringify(this._nodes);
-//		print(nodes);
-//		//Test
-//		 $.Hive.create({
-//			// optional. if no 'count' property is set, Hive creates only 1 worker
-//			count: 1,
-//			// the worker file
-//			worker: '../../workers/model.js',
-//			// the receive ( convenience to writing out the addEventListener)
-//			receive: function (filtered) {
-//			/*
-//			jQuery.Hive manages serialization/deserialization
-//			*/
-//			console.log(filtered.data);
+// var that = this;
+// var nodes = JSON.stringify(this._nodes);
+// print(nodes);
+// //Test
+// $.Hive.create({
+// // optional. if no 'count' property is set, Hive creates only 1 worker
+// count: 1,
+// // the worker file
+// worker: '../../workers/model.js',
+// // the receive ( convenience to writing out the addEventListener)
+// receive: function (filtered) {
+// /*
+// jQuery.Hive manages serialization/deserialization
+// */
+// console.log(filtered.data);
 //			 
-//			},
-//			created: function ( $hive ) {
-//			/*
-//			the `created` callback fires after the worker is created,
-//			the first argument is an array of the workers
-//			$().send() is the wrapper for postMessage() with complete
-//			serialization/deserialization
-//			*/
-//			$( $hive ).send({test : nodes});
-//			}
-//		});
-//		 print(JSON.parse(nodes));
+// },
+// created: function ( $hive ) {
+// /*
+// the `created` callback fires after the worker is created,
+// the first argument is an array of the workers
+// $().send() is the wrapper for postMessage() with complete
+// serialization/deserialization
+// */
+// $( $hive ).send({test : nodes});
+// }
+// });
+// print(JSON.parse(nodes));
 
 		var that = this;
 		this.viewQueries = viewQueries;
@@ -2072,7 +1981,7 @@
 		 * @private
 		 * @method _fetchPredicateLabel
 		 * @param {Plugin.Node}
-		 *          node Node to fetch the predicate labels for
+		 *           node Node to fetch the predicate labels for
 		 */
 		this._fetchPredicateLabel = function(node) {
 
@@ -2118,7 +2027,7 @@
 	 * 
 	 * @method checkItems
 	 * @param {Object}
-	 *          resultSet ResultSet of a Select query
+	 *           resultSet ResultSet of a Select query
 	 */
 	Plugin.Layer.Model.prototype.checkItems = function(resultSet) {
 		var length = resultSet.length, that = this, batchSize = ((length < that.options.batchSize) ? length
@@ -2170,7 +2079,6 @@
 						that.nodesLength++;
 					} else {
 						// TODO check blankNode UPDATE ?
-						print(node);
 						print("blankNodeupdate");
 						node = undefined;
 					}
@@ -2182,6 +2090,7 @@
 				}
 			}
 		});
+		print(addedNodes);
 		this.itemsAdded.notify({
 			// @ifdef F_SELECT
 			"addedNodes" : deepCopy(addedNodes),
@@ -2205,7 +2114,9 @@
 		this.allResults = [];
 		// Concat all results for filtering before adding
 		for (var i = 0; i < this.viewQueries.length; i++) {
+			print(this.viewQueries[i].query);
 			rdfStore.executeQuery(this.viewQueries[i].query, function(results) {
+				print(results);
 				if (results && results.length !== 0) {
 					for (var j = 0; j < results.length; j++) {
 						// Add types for filtering
@@ -2235,6 +2146,7 @@
 		this.options = viewOptions;
 		this._model = model;
 		this.$outerContainer = $('<div class="' + CONS.CSS_CLASSES.outerContainer + '"></div>');
+		this.$outerContainer.css({"border-radius": "18px", "padding" : "5px 5px 5px 5px"});
 		this.$viewContainer = $('<div class="' + CONS.CSS_CLASSES.viewContainer + '"></div>');
 		$container.append(this.$outerContainer);
 		this.$outerContainer.append(this.$viewContainer);
@@ -2288,59 +2200,63 @@
 		$sorter.find('.' + this.options.layoutEngine.sortBy).addClass("selected");
 		var $sortLinks = this.$optionsContainer.find('a');
 
-		$sorter.append(templates.groupDropDown(appendCssClasses({
-			type : {
-				label : "type",
-				val : CONS.FA_TAG
-			},
-			token : {
-				label : "node-type",
-				val : CONS.TOKEN_TAG
-			}
-		})));
-		var $sorterGroup = $sorter.find('#GroupDropDown');
-
-		// Add onChange
-		$sorterGroup.change(function(e) {
-
-			// get href attribute, minus the '#'
-			var groupBy = $(this).val();
-
-			that.$outerContainer.find(UTIL.toSelector(CONS.CSS_CLASSES.sorter) + ' > > > .selected')
-					.removeClass('selected');
-			that.layoutEngine.updateOptions({
-				getSortData : {
-					group : function($elem) {
-						var classes = $elem.attr("class");
-						var pattern = new RegExp("(\s)*[a-zA-Z0-9]*" + groupBy + "[a-zA-Z0-9_]*(\s)*", 'g');
-						var groups = classes.match(pattern), group = "";
-						if (groups !== null) {
-							for (var i = 0; i < groups.length; i++) {
-								group += groups[i] + " ";
-							}
-						}
-						return group;
-					}
-				}
-			});
-			that.layoutEngine.updateSortData(that.$viewContainer.find(UTIL
-					.toSelector(CONS.CSS_CLASSES.tileClasses.tile)));
-			that.$outerContainer.find("> > " + UTIL.toSelector(CONS.CSS_CLASSES.groupLabel)).remove();
-			that.layoutEngine.updateOptions({
-				layoutMode : 'groupRows',
-				sortBy : "group"
-			});
-			return false;
-		});
+// $sorter.append(templates.groupDropDown(appendCssClasses({
+// type : {
+// label : "type",
+// val : CONS.FA_TAG
+// },
+// token : {
+// label : "node-type",
+// val : CONS.TOKEN_TAG
+// }
+// })));
+// var $sorterGroup = $sorter.find('#GroupDropDown');
+//
+// // Add onChange
+// $sorterGroup.change(function(e) {
+//
+// // get href attribute, minus the '#'
+// var groupBy = $(this).val();
+//
+// that.$outerContainer.find(UTIL.toSelector(CONS.CSS_CLASSES.sorter) + ' > > >
+// .selected')
+// .removeClass('selected');
+// that.layoutEngine.updateOptions({
+// getSortData : {
+// group : function($elem) {
+// var classes = $elem.attr("class");
+// var pattern = new RegExp("(\s)*[a-zA-Z0-9]*" + groupBy +
+// "[a-zA-Z0-9_]*(\s)*", 'g');
+// var groups = classes.match(pattern), group = "";
+// if (groups !== null) {
+// for (var i = 0; i < groups.length; i++) {
+// group += groups[i] + " ";
+// }
+// }
+// return group;
+// }
+// }
+// });
+// that.layoutEngine.updateSortData(that.$viewContainer.find(UTIL
+// .toSelector(CONS.CSS_CLASSES.tileClasses.tile)));
+// that.$outerContainer.find("> > " +
+// UTIL.toSelector(CONS.CSS_CLASSES.groupLabel)).remove();
+// that.layoutEngine.updateOptions({
+// layoutMode : 'groupRows',
+// sortBy : "group"
+// });
+// return false;
+// });
 
 		// Add onClick
 		$sortLinks.click(function() {
 			// get href attribute, minus the '#'
 			var sortName = $(this).attr('data-sort-value');
-			$sorterGroup.val("Group by...");
+			// $sorterGroup.val("Group by...");
 			that.$optionsContainer.find(UTIL.toSelector(CONS.CSS_CLASSES.sorter) + ' > > > .selected')
 					.removeClass("selected");
-			that.$outerContainer.find("> > " + UTIL.toSelector(CONS.CSS_CLASSES.groupLabel)).remove();
+			// that.$outerContainer.find("> > " +
+			// UTIL.toSelector(CONS.CSS_CLASSES.groupLabel)).remove();
 			$(this).addClass("selected");
 			that.layoutEngine.updateOptions({
 				layoutMode : 'masonry',
@@ -2382,31 +2298,31 @@
 
 		// Add onKey
 		$filterBox.keyup(function(e) {
-
-			// get href attribute, minus the '#'
-			var selector = $(this).val();
-			if (selector !== '') {
-				if (selector !== '*') {
-					if (that.options.supportRegExpFilter) {
-						try {
-							selector = "div:regex(class, " + selector + "), div > div:contains(" + selector + ")";
-						} catch (e) {
+			if(e.keyCode == 13) {
+				// get href attribute, minus the '#'
+				var selector = $(this).val();
+				if (selector !== '') {
+					if (selector !== '*') {
+						if (that.options.supportRegExpFilter) {
+							try {
+								selector = "div:regex(class, " + selector + "), div > div:contains(" + selector + ")";
+							} catch (e) {
+								selector = "div > div:contains(" + selector + ")";
+							}
+						} else {
 							selector = "div > div:contains(" + selector + ")";
 						}
-					} else {
-						selector = "div > div:contains(" + selector + ")";
 					}
+				} else {
+					selector = '*';
 				}
-			} else {
-				selector = '*';
+	
+				that.$outerContainer.find(UTIL.toSelector(CONS.CSS_CLASSES.filter) + ' > > > .selected')
+						.removeClass('selected');
+				that.layoutEngine.updateOptions({
+					filter : selector
+				});
 			}
-
-			that.$outerContainer.find(UTIL.toSelector(CONS.CSS_CLASSES.filter) + ' > > > .selected')
-					.removeClass('selected');
-			that.layoutEngine.updateOptions({
-				filter : selector
-			});
-			return false;
 		});
 	};
 
@@ -2421,11 +2337,11 @@
 	 * @extends Plugin.Layer
 	 * @constructor
 	 * @param {jQuery}
-	 *          $container Container of the initialization view
+	 *           $container Container of the initialization view
 	 * @param {Object}
-	 *          options Options object
+	 *           options Options object
 	 * @param {Plugin}
-	 *          plugin The parent plugin of the initialization view
+	 *           plugin The parent plugin of the initialization view
 	 */
 	Plugin.Layers.Res = function($container, options, $tile) {
 		this.$tile = $tile;
@@ -2487,17 +2403,29 @@
 	Plugin.Layers.Res.prototype.loadByRemote = function() {
 
 		var that = this;
+		var $innerNoScroll = that.$overlay.find(UTIL.toSelector(CONS.CSS_CLASSES.innerNoScroll));
+		
+		$innerNoScroll.css({"background-image" : "url('img/loader.gif')", "background-repeat" : "no-repeat", "background-position" : "center"});
 		// Get items who are in a relation to
 		// current item
 		var remoteSubjectOf = replaceDummy(queryStore.remoteSubjectOf, that.node.getFComponentOT("uri").data);
 		var remoteObjectOf = replaceDummy(queryStore.remoteObjectOf, that.node.getFComponentOT("uri").data);
-
+		
 		// remote needed?
 		remoteDataLoader.insertByQuery(remoteSubjectOf + " LIMIT " + that.options.remoteOptions.remoteLimit);
-		print("remoteloader")
 		remoteDataLoader.insertByQuery(remoteObjectOf + " LIMIT " + that.options.remoteOptions.remoteLimit);
-		print("query")
-		print(remoteObjectOf)
+		
+		var remoteDoneCount = 0;
+		// TODO inform model
+		remoteDataLoader.loadingDone.attach(new Plugin.Listener(function() {
+			remoteDoneCount++;
+			print("remoteDoneCount " + remoteDoneCount);
+			if(remoteDoneCount === 2) {
+				 that.update();
+				 $innerNoScroll.css({"background-image" : ""});
+				 remoteDataLoader.loadingDone.dettach(this);
+			}
+		}));
 	};
 
 	Plugin.Layers.Res.prototype.show = function() {
@@ -2577,11 +2505,11 @@
 	 * @extends Plugin.Layer
 	 * @constructor
 	 * @param {jQuery}
-	 *          $container Container of the initialization view
+	 *           $container Container of the initialization view
 	 * @param {Object}
-	 *          options Options object
+	 *           options Options object
 	 * @param {Plugin}
-	 *          plugin The parent plugin of the initialization view
+	 *           plugin The parent plugin of the initialization view
 	 */
 	Plugin.Layers.Literal = function($container, options, $tile) {
 		this.$tile = $tile;
@@ -2591,7 +2519,6 @@
 		var queries = []
 		var literalIsObjectOf = replaceDummy(queryStore.literalIsObjectOf,
 				this.node.getFComponentOT("label").data.value);
-		print(literalIsObjectOf);
 		queries.push({
 			query : literalIsObjectOf,
 			type : CONS.CSS_CLASSES.typeClasses.incoming
@@ -2637,11 +2564,11 @@
 	 * @extends Plugin.Layer
 	 * @constructor
 	 * @param {jQuery}
-	 *          $container Container of the initialization view
+	 *           $container Container of the initialization view
 	 * @param {Object}
-	 *          options Options object
+	 *           options Options object
 	 * @param {Plugin}
-	 *          plugin The parent plugin of the initialization view
+	 *           plugin The parent plugin of the initialization view
 	 */
 	Plugin.Layers.Blank = function($container, options) {
 		// TODO
@@ -2659,11 +2586,11 @@
 	 * @extends Plugin.Layer
 	 * @constructor
 	 * @param {jQuery}
-	 *          $container Container of the initialization view
+	 *           $container Container of the initialization view
 	 * @param {Object}
-	 *          options Options object
+	 *           options Options object
 	 * @param {Plugin}
-	 *          plugin The parent plugin of the initialization view
+	 *           plugin The parent plugin of the initialization view
 	 */
 	Plugin.Layers.Inlay = function($container, options, queries) {
 		Plugin.Layer.call(this, $container, options, queries);
@@ -2710,12 +2637,13 @@
 
 	// ========================= bSynopsis: TemplatesLoader Class
 	/**
-	 * Handlebars templates loader to load precompiled or nonprecompiled templates
+	 * Handlebars templates loader to load precompiled or nonprecompiled
+	 * templates
 	 * 
 	 * @class Plugin.TemplatesLoader
 	 * @constructor
 	 * @param {Deferred
-	 *          Object} dfd Deferred Object to resolve when loading is done
+	 *           Object} dfd Deferred Object to resolve when loading is done
 	 */
 	Plugin.TemplatesLoader = function(dfd) {
 		this._templateInitDfd = dfd;
@@ -2723,9 +2651,9 @@
 				"overlayContent", "overlayWrapper", "previewItem", "timelineWrapper", "timelineItem" ];
 
 		this._methodsAreLoaded = function(/*
-		 * array of templatenames which must be
-		 * loaded
-		 */) {
+														 * array of templatenames which must
+														 * be loaded
+														 */) {
 			var i = 0, methodName;
 			while (arguments[0[i++]] !== undefined) {
 				if (typeof templates[arguments[i]] !== 'function') {
@@ -2781,16 +2709,15 @@
 	 * @class Plugin.RemoteDataLoader
 	 * @constructor
 	 * @param {Array}
-	 *          remoteBackends Array of URLs of SPARQL services to query
+	 *           remoteBackends Array of URLs of SPARQL services to query
 	 * @param {Integer}
-	 *          pluginID ID of parten plugin
+	 *           pluginID ID of parten plugin
 	 */
 	Plugin.RemoteDataLoader = function(remoteBackends) {
 		this.backends = remoteBackends;
 		this.remoteEngine = new RemoteEngine();
 		this.loadingStarted = new Plugin.Event(this);
 		this.loadingDone = new Plugin.Event(this);
-		this.dataInserted = new Plugin.Event(this);
 	};
 
 	Plugin.RemoteDataLoader.prototype.addBackend = function(backend) {
@@ -2806,32 +2733,17 @@
 		}
 	};
 
-	Plugin.RemoteDataLoader.prototype._insertDataByQuery = function(query, service, callback) {
-		var that = this;
-		// Execute selection query
-		this.remoteEngine.executeQuery(query, service, function(data) {
-
-			// Generate insertionQuery out of the resultset.
-			if (data) {
-				if (data.subject !== undefined) {
-					data = [ data ];
-				}
-				print(query);
-				print(data);
-				// Execute insertion
-				rdfStore.executeQuery(that.generateInsertionQuery(data), function() {
-					if (callback) {
-						callback(true);
-					}
-				});
-			} else {
-				if (callback) {
-					callback(false);
-				}
+	Plugin.RemoteDataLoader.prototype.generateTypeInsertionQuery = function(data) {
+		var insertionQuery = "INSERT DATA {";
+		$.each(data, function(i, val) {
+			if(val.res && val.type) {
+				insertionQuery += "<" + val.res.value + "> a " + "<" + val.type.value + ">.";
 			}
 		});
+		insertionQuery += "}";
+		return insertionQuery;
 	};
-
+	
 	Plugin.RemoteDataLoader.prototype.generateInsertionQuery = function(data) {
 		var insertionQuery = "INSERT DATA {";
 		$.each(data, function(i, val) {
@@ -2843,7 +2755,7 @@
 				// TODO BlankNodes
 				insertionQuery += "<" + val.subject.value + "> ";
 			}
-			insertionQuery += "<" + encodeURIComponent(val.predicate.value) + "> ";
+			insertionQuery += "<" + val.predicate.value + "> ";
 			if (val.object.type === "uri") {
 				insertionQuery += "<" +val.object.value + ">. ";
 			} else if (val.object.type === "literal") {
@@ -2863,25 +2775,72 @@
 		return insertionQuery;
 	};
 
-	// Inserts Data by querying all services
-	Plugin.RemoteDataLoader.prototype.insertByQuery = function(query, backends) {
+	Plugin.RemoteDataLoader.prototype._loadRemoteAndInsert = function(query, service, fn, callback) {
+		// Execute selection query
+		this.remoteEngine.executeQuery(query, service, function(data, success) {
+			
+			// print("Remotequery: '" + query + "' was a success on " + service +
+			// "? \n" + success);
+			// Generate insertionQuery out of the resultset.
+			if (data && success) {
+				if (data.subject !== undefined) {
+					data = [ data ];
+				}
+				// print("Gives this results: ");
+				// print(data);
+				// Execute insertion
+				rdfStore.executeQuery(fn(data), function() {
+					if (callback) {
+						callback(success);
+					}
+				});
+			} else {
+				if (callback) {
+					callback(success);
+				}
+			}
+		});
+	};
+	
+	Plugin.RemoteDataLoader.prototype.executeQuery = function(query, backends, fn) {
 		var that = this;
-		var backendsToUse = this.backends;
-		if (backends) {
-			backendsToUse = backends;
-		}
-
 		// Inform the plugin something is loading
 		this.loadingStarted.notify();
-		$.each(backendsToUse, function(i, val) {
-			that._insertDataByQuery(query, val, function(success) {
-				// Inform the plugin loading is done
-				that.loadingDone.notify();
-				if (success) {
-					that.dataInserted.notify();
+		var count = -1;
+		var backendFlags = [];
+		$.each(backends, function(i, val) {
+			count++;
+			backendFlags[count] = false;
+			that._loadRemoteAndInsert(query, val, fn, function(success) {
+				backendFlags[count] = true;
+				var done = true;
+				for(var j = 0; j < backendFlags.length; j++) {
+					if(!backendFlags[j]) {
+						done = false;
+					}
+				}
+				if (done) {
+					that.loadingDone.notify(query);
 				}
 			});
-		});
+		});		
+	}
+
+	// Inserts Data by querying all services
+	Plugin.RemoteDataLoader.prototype.insertByQuery = function(query, backends) {
+		if (backends) {
+			this.executeQuery(query, backends, this.generateInsertionQuery);
+		} else {
+			this.executeQuery(query, this.backends, this.generateInsertionQuery);
+		}
+	};
+	
+	Plugin.RemoteDataLoader.prototype.insertTypesByQuery = function(query, backends) {
+		if (backends) {
+			this.executeQuery(query, backends, this.generateTypeInsertionQuery);
+		} else {
+			this.executeQuery(query, this.backends, this.generateTypeInsertionQuery);
+		}
 	};
 
 	// ========================= bSynopsis ===============================
@@ -2893,9 +2852,9 @@
 	 * @class Plugin
 	 * @constructor
 	 * @param {jQuery}
-	 *          obj Parent object of the plugin
+	 *           obj Parent object of the plugin
 	 * @param {Object}
-	 *          options Options for the plugin
+	 *           options Options for the plugin
 	 */
 
 	// Default options
@@ -2906,8 +2865,9 @@
 	 * @type Object
 	 */
 	var defaults = {
-			//TODO workers
+			// TODO workers
 		pathToWorkers : "../../workers/",
+		language : "en",
 		/**
 		 * Raw RDF data given on plugin startup. This data will be loaded into the
 		 * store.
@@ -2918,8 +2878,8 @@
 		 */
 		data : undefined,
 		/**
-		 * Path to file with Raw RDF data given on plugin startup. This file will be
-		 * parsed and loaded into the store.
+		 * Path to file with Raw RDF data given on plugin startup. This file will
+		 * be parsed and loaded into the store.
 		 * 
 		 * @property defaults.dataLoc
 		 * @type String
@@ -2952,7 +2912,8 @@
 		 */
 		templatesPath : "templates_wrapped/templates.html",
 		/**
-		 * SPARQL resultset which can be used to insert data into the store on init.
+		 * SPARQL resultset which can be used to insert data into the store on
+		 * init.
 		 * 
 		 * @property defaults.sparqlData
 		 * @type Object
@@ -3008,8 +2969,8 @@
 		layerOptions : {
 			/**
 			 * Filters to be used before node display. Filters only work on single
-			 * batches. The batchSize should be chosen big enough if Nodefilters are
-			 * to be used. New filters must have a unique identifier.
+			 * batches. The batchSize should be chosen big enough if Nodefilters
+			 * are to be used. New filters must have a unique identifier.
 			 * 
 			 * @property defaults.filters
 			 * @type Object
@@ -3043,8 +3004,8 @@
 				},
 
 				/**
-				 * Filters blacklisted resources defined by URIs in config options. Only
-				 * RegEx allowed.
+				 * Filters blacklisted resources defined by URIs in config options.
+				 * Only RegEx allowed.
 				 * 
 				 * @property defaults.layerOptions.nodeFilters.blacklistURI
 				 * @type Object
@@ -3075,18 +3036,18 @@
 				 */
 				multiResNode : {
 					fn : function(nodes, config) {
-//						var tempArray = new Array();
-//						$.each(nodes, function(i, node) {
-//							if (node.type === "resNode" || node.type === "multiResNode") {
-//								if (node.components.uri[0].data in tempArray) {
-//									 tempArray[node.components.uri[0].data].type = "multiResNode";
-//									 tempArray[node.components.uri[0].data].merge(node);
-//									 delete nodes[i];
-//								} else {
-//									tempArray[node.components.uri[0].data] = node;
-//								}
-//							}
-//						});
+						 var tempArray = new Array();
+						 $.each(nodes, function(i, node) {
+						 if (node.type === "resNode" || node.type === "multiResNode") {
+							 if (node.components.uri[0].data in tempArray) {
+								 tempArray[node.components.uri[0].data].type = "multiResNode";
+								 tempArray[node.components.uri[0].data].merge(node);
+								 delete nodes[i];
+							 } else {
+								 tempArray[node.components.uri[0].data] = node;
+							 }
+						 }
+						 });
 						return nodes;
 					}
 				},
@@ -3108,7 +3069,7 @@
 
 			},
 			/**
-			 * Filters for tiles
+			 * Define ilters for tiles
 			 * 
 			 * @property defaults.layerOptions.tileFilters
 			 * @type Object
@@ -3138,7 +3099,8 @@
 								nStyle = config.defaultStyles["stdNode"];
 							}
 							if (typeof nStyle.height != "number") { // If
-								// height of iles should be dynamic (depending on components)
+								// height of iles should be dynamic (depending on
+								// components)
 								if (node.dynLayoutFn) { // Function
 									// passed
 									// via node
@@ -3397,28 +3359,26 @@
 				/**
 				 * Scales text of tiles
 				 * 
-				 * @property defaults.layerOptions.tileFilters.backgroundColor
+				 * @property defaults.layerOptions.tileFilters.textScale
 				 * @type Object
 				 */
 				textScale : {
-					webWorker : true,
 					fn : function($tiles, config, layer) {
 						// On layout done event
-						layer.view.$viewContainer.on(CONS.EVENT_TYPES.layout.done, function() {
-							var $fitHere = $tiles.find(UTIL.toSelector(CONS.CSS_CLASSES.textScale));
-							$.each($fitHere, function(i, val) {
-								var $parent = $(val).parent();
-								$parent.textfill({
-									maxFontPixels : config.maxFontPixels,
-									minFontPixels : config.minFontPixels,
-									fail : function() {
-										$parent.css({
-											"overflow-y" : "auto",
-											"word-wrap" : "break-word"
-										});
-									}
+						layer.view.$viewContainer.on(CONS.EVENT_TYPES.layout.done, function(newInsertions) {
+							if(newInsertions) {
+								var startTime = new Date().getTime();
+								var $fitHere = $tiles.find(UTIL.toSelector(CONS.CSS_CLASSES.textScale));
+								$fitHere.parent().textfill(config.maxFontPixels, config.minFontPixels, function($parent) {
+									$parent.css({
+										"overflow-y" : "auto",
+										"word-wrap" : "break-word"
+									});
 								});
-							});
+								$fitHere.removeClass(CONS.CSS_CLASSES.textScale);
+								$fitHere.addClass(CONS.CSS_CLASSES.textScaleDone);
+								print("Event textScaleEvent done after: " + (new Date().getTime() - startTime) + " milisec");
+							}
 						});
 						return $tiles;
 					},
@@ -3438,21 +3398,60 @@
 					fn : function($tiles, config) {
 						var counter = 0;
 						$.each($tiles, function(i, tile) {
-							counter++;
 							var $tile = $(tile);
-							var colorArray;
 							var node = $tile.data("node");
-							if (node.style && node.style.bgColors) {
-								colorArray = node.style.bgColors;
-							} else if (config.defaultStyles[node.getType()]) {
-								colorArray = config.defaultStyles[node.getType()].bgColors;
+							if(node.getType() === CONS.NODE_TYPES.resNode || node.getType() === "multiResNode") {
+								var uri = node.getFComponentOT('uri').data;
+								var remoteQuery = "SELECT DISTINCT ?res ?type WHERE { VALUES ?res {<" + uri + ">} ?res a ?type}";
+								remoteDataLoader.insertTypesByQuery(remoteQuery);
+								remoteDataLoader.loadingDone.attach(new Plugin.Listener(function() { return function(sender, args){
+									if(args === remoteQuery) {
+										remoteDataLoader.loadingDone.dettach(this);
+										var query = replaceDummy(queryStore.typeQuery, uri);
+										rdfStore.executeQuery(query, function(res){
+											var color, rdfsColor;
+											$.each(res, function(i, val){
+												var currentUri = val.type.value;
+												if(currentUri.indexOf(namespaces.rdfs) !== -1 || currentUri.indexOf(namespaces.owl) !== -1 ) {
+													if(!color) {
+														if(rdfsColor) {
+															var scale = chroma.scale([rdfsColor.hex(), "#" + md5(currentUri).substring(0, 6)]).mode('lab');
+															rdfsColor = chroma(scale(0.5).hex());
+														} else {
+															rdfsColor = chroma("#" + md5(currentUri).substring(0, 6));
+														}
+													}
+												} else {
+													if(color) {
+														var scale = chroma.scale([color.hex(), chroma("#" + md5(currentUri).substring(0, 6))]);
+														color = chroma(scale(0.5).hex());
+													} else {
+														color = chroma("#" + md5(currentUri).substring(0, 6));
+													}
+												}
+											});
+											if(color) {
+												$tile.css("background-color", color);
+											} else if(rdfsColor) {
+												$tile.css("background-color", rdfsColor);
+											}
+										});
+									}
+								}}(uri)));
 							} else {
-								colorArray = config.defaultStyles["stdNode"].bgColors;
-							}
-							var color = new RGBColor(colorArray[counter % colorArray.length]);
-							if (color) {
-								$tile.css("background-color", "rgba(" + color.r + ", " + color.g + ", " + color.b
-										+ " ,1)");
+								counter++;
+								var colorArray, color;
+								if (node.style && node.style.bgColors) {
+									colorArray = node.style.bgColors;
+									color = new RGBColor(colorArray[counter % colorArray.length]);
+								} else if (config.defaultStyles[node.getType()]) {
+									colorArray = config.defaultStyles[node.getType()].bgColors;
+									color = new RGBColor(colorArray[counter % colorArray.length]);
+								}
+								if (color) {
+									$tile.css("background-color", "rgba(" + color.r + ", " + color.g + ", " + color.b
+											+ " ,1)");
+								}
 							}
 						});
 						return $tiles;
@@ -3467,24 +3466,27 @@
 								 * @type Array
 								 * @default [ '#777777' ]
 								 */
-								bgColors : [ '#777777' ]
+								bgColors : [ '#555555' ]
 							},
 							blankNode : {
-								bgColors : [ '#777777' ]
-							},
-							stdNode : {
-								/**
-								 * Colors of items.
-								 * 
-								 * @property defaults.layerOptions.tileFilters.backgroundColor.config.defaultStyles.stdNode.bgColors
-								 * @type Array
-								 * @default [ '#e2674a', '#99CC99', '#3399CC', '#33CCCC',
-								 *          '#996699', '#C24747', '#FFCC66', '#669999',
-								 *          '#CC6699', '#339966', '#666699' ]
-								 */
-								bgColors : [ '#e2674a', '#99CC99', '#3399CC', '#33CCCC', '#996699', '#C24747',
-										'#FFCC66', '#669999', '#CC6699', '#339966', '#666699' ]
+								bgColors : [ '#999999' ]
 							}
+// ,
+// stdNode : {
+// /**
+// * Colors of items.
+// *
+// * @property
+// defaults.layerOptions.tileFilters.backgroundColor.config.defaultStyles.stdNode.bgColors
+// * @type Array
+// * @default [ '#e2674a', '#99CC99', '#3399CC',
+// * '#33CCCC', '#996699', '#C24747', '#FFCC66',
+// * '#669999', '#CC6699', '#339966', '#666699' ]
+// */
+// bgColors : [ '#e2674a', '#99CC99', '#3399CC', '#33CCCC', '#996699',
+// '#C24747',
+// '#FFCC66', '#669999', '#CC6699', '#339966', '#666699' ]
+// }
 						}
 					}
 				},
@@ -3518,7 +3520,7 @@
 							case "jpg":
 
 								if (image_url) {
-									var $img = $('<img src="' + image_url + '">');
+									var $img = $('<img src="en.wikipedia.org/wiki/File:' + image_url + '">');
 									$img.load(function() {
 										var width = $img.width();
 										var height = $img.height();
@@ -3659,7 +3661,7 @@
 						types : {
 							blankNode : {
 								layerGenFn : function(node, $tile, $parent, newLayerOptions) {
-									//TODO
+									// TODO
 								}
 							},
 							stdNode : {
@@ -3725,6 +3727,71 @@
 							}
 						}
 					}
+				},
+				weight : {
+					fn : function($tiles, config) {
+						$.each($tiles, function(i, tile) {
+							var $tile = $(tile);
+							var node = $tile.data("node");
+							node.weight = 0;
+							$.each(config, function(ruleName, rule) {
+								node.weight = rule.fn(node, rule.data);
+							});
+							$tile.data("node", node);
+						});
+						return $tiles;
+					},
+					config : {
+						uriRule : {
+							fn : function(node, data) {
+								var uri = node.getFComponentOT("uri").data;
+								var weight = node.weight;
+								if(uri) {
+									$.each(data, function(str, value) {
+										if(uri.indexOf(str) !== -1) {
+											weight += value * Math.random();
+										}
+									});
+								}
+								return weight;
+							},
+							data : {
+								'http://www.w3.org/2000/01/rdf-schema#' : -1,
+								'http://www.w3.org/2002/07/owl#' : -1
+							}
+						},
+						predicateRule : {
+							fn : function(node, data) {
+								var weight = node.weight;
+								node.forEachComponentType("predicate", function() {
+									weight += data.val * Math.random();
+								});
+								return weight;
+							},
+							data : {
+								val : 0.5
+							}
+						},
+						templateRule : {
+							fn : function(node, data) {
+								var tempalteID = node.useTemplateID;
+								var weight = node.weight;
+								if(tempalteID) {
+									$.each(data, function(str, value) {
+										if(tempalteID === str) {
+											weight += value * (Math.random()+0.1);
+										}
+									});
+								}
+								return weight;
+							},
+							data : {
+								'maps' : 2,
+								'cityChart' : 1
+							}
+						}
+
+					}
 				}
 			},
 			/**
@@ -3769,15 +3836,15 @@
 			 */
 			modelOptions : {
 				/**
-				 * Batch size of items which can be loaded simultaniosly in the view.
-				 * Filters only work on single batches. The batchSize should be chosen
-				 * big enough if Nodefilters are to be used.
+				 * Batch size of items which can be loaded simultaniosly in the
+				 * view. Filters only work on single batches. The batchSize should
+				 * be chosen big enough if Nodefilters are to be used.
 				 * 
 				 * @property defaults.layerOptions.modelOptions.batchSize
 				 * @type Integer
-				 * @default 500
+				 * @default 2000
 				 */
-				batchSize : 500
+				batchSize : 2000
 
 			},
 			/**
@@ -3797,9 +3864,9 @@
 				 *          <http://dbpedia.org/resource/Berlin>
 				 *          <http://dbpedia.org/resource/Passau>
 				 *          <http://dbpedia.org/resource/Munich>
-				 *          <http://dbpedia.org/resource/Frankfurt> } VALUES ?predicate {
-				 *          rdfs:label } ?subject ?predicate ?object. FILTER
-				 *          (lang(?object) = 'en') } LIMIT 150"
+				 *          <http://dbpedia.org/resource/Frankfurt> } VALUES
+				 *          ?predicate { rdfs:label } ?subject ?predicate ?object.
+				 *          FILTER (lang(?object) = 'en') } LIMIT 150"
 				 */
 				defaultInitRemoteQuery : "SELECT ?subject ?predicate ?object { VALUES ?subject { <http://dbpedia.org/resource/Berlin> <http://dbpedia.org/resource/Passau> <http://dbpedia.org/resource/Munich> <http://dbpedia.org/resource/Frankfurt> } VALUES ?predicate { rdfs:label } ?subject ?predicate ?object. FILTER (lang(?object) = 'en') } LIMIT 150",
 				/**
@@ -3816,18 +3883,19 @@
 				 * 
 				 * @property defaults.layerOptions.remoteOptions.remoteLimit
 				 * @type Integer } *
-				 * @default 50
+				 * @default 1000
 				 */
-				remoteLimit : 50,
+				remoteLimit : 1000,
 				/**
-				 * Flag to indicate whether automatic remote load on detail view should
-				 * be done.
+				 * Flag to indicate whether automatic remote load on detail view
+				 * should be done.
 				 * 
 				 * @property defaults.layerOptions.remoteOptions.remoteDynamically
 				 * @type Boolean
 				 * @default true
 				 */
 				remoteDynamically : true,
+				waitForRemote : false,
 				/**
 				 * Remote backends to query for predicate label information.
 				 * 
@@ -3838,8 +3906,8 @@
 				remoteLabelBackend : [ "http://zaire.dimis.fim.uni-passau.de:8080/bigdata/sparql",
 						"http://dbpedia.org/sparql" ],
 				/**
-				 * Flag to indicate whether remote label information should be loaded if
-				 * needed.
+				 * Flag to indicate whether remote label information should be
+				 * loaded if needed.
 				 * 
 				 * @property defaults.layerOptions.remoteOptions.remoteLabels
 				 * @type Boolean
@@ -3855,7 +3923,8 @@
 			 */
 			viewOptions : {
 				/**
-				 * Flag to indicate whether the filter should use regular expressions.
+				 * Flag to indicate whether the filter should use regular
+				 * expressions.
 				 * 
 				 * @property defaults.layerOptions.viewOptions.supportRegExpFilter
 				 * @type Boolean
@@ -3883,15 +3952,30 @@
 				 * @type Object
 				 */
 				layoutEngine : {
-					sortBy : 'number',
+					masonry: {
+					    columnWidth: 1
+				   },
+					sortBy : 'weight',
 					getSortData : {
-						number : function($elem) {
-							var number = $elem.hasClass('item') ? $elem.find(
-									UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.number)).text() : $elem
-									.attr('data-number');
-							return parseInt(number, 10);
+						weight : function(elem) {
+							var $elem = $(elem);
+							var node = $elem.data("node");
+							var weight = node.weight;
+							if(!isUndefinedOrNull(weight)) {
+								return -1 * weight;
+							} else {
+								return 0;
+							}
 						},
-						alphabetical : function($elem) {
+// number : function(elem) {
+// var $elem = $(elem);
+// var number = $elem.hasClass('item') ? $elem.find(
+// UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.number)).text() : $elem
+// .attr('data-number');
+// return parseInt(number, 10);
+// },
+						alphabetical : function(elem) {
+							var $elem = $(elem);
 							var label = $elem.find(UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.label)), itemText = label.length ? label
 									: $elem;
 							return itemText.text();
@@ -3911,7 +3995,7 @@
 		 * @private
 		 * @method _selfProxy
 		 * @param {Function}
-		 *          fn Function to modifie
+		 *           fn Function to modifie
 		 * @return function with modified context
 		 */
 		this._selfProxy = function(fn) {
@@ -3979,9 +4063,10 @@
 					remoteDataLoader.addBackend(val);
 				});
 			}
-			remoteDataLoader.dataInserted.attach(new Plugin.Listener(function() {
-				that.updateTopLayer();
-			}));
+			// TODO update on datainsertion
+// remoteDataLoader.loadingDone.attach(new Plugin.Listener(function() {
+// that.updateTopLayer();
+// }));
 		},
 		/**
 		 * Initializes the templating
@@ -4081,19 +4166,20 @@
 				defaultInitRemoteQuery : this.options.layerOptions.remoteOptions.defaultInitRemoteQuery,
 				remoteSubjectOf : " SELECT DISTINCT ?subject ?predicate ?object ?labelObj ?labelPred WHERE { VALUES ?subject {<"
 						+ CONS.DUMMY
-						+ ">} ?subject ?predicate ?object. OPTIONAL { ?object rdfs:label ?labelObj }. OPTIONAL { ?predicate rdfs:label ?labelPred }}",
+						+ ">} ?subject ?predicate ?object. OPTIONAL { ?object rdfs:label ?labelObj }. OPTIONAL { ?predicate rdfs:label ?labelPred }. FILTER(isIRI(?object)  || (LANG(?object) = '' || LANGMATCHES(LANG(?object), '" + that.options.language + "'))). FILTER(LANG(?labelPred) = '' || LANGMATCHES(LANG(?labelPred), '" + that.options.language + "')). FILTER(LANG(?labelObj) = '' || LANGMATCHES(LANG(?labelObj), '" + that.options.language + "'))}",
 				remoteObjectOf : " SELECT DISTINCT ?subject ?predicate ?object ?labelSub ?labelPred WHERE {VALUES ?object {<"
 						+ CONS.DUMMY
-						+ ">} ?subject ?predicate ?object. OPTIONAL { ?subject rdfs:label ?labelSub }. OPTIONAL { ?predicate rdfs:label ?labelPred }}",
+						+ ">} ?subject ?predicate ?object. OPTIONAL { ?subject rdfs:label ?labelSub }. OPTIONAL { ?predicate rdfs:label ?labelPred }. FILTER(isIRI(?subject)  || (LANG(?subject) = '' || LANGMATCHES(LANG(?subject), '" + that.options.language + "'))). FILTER(LANG(?labelPred) = '' || LANGMATCHES(LANG(?labelPred), '" + that.options.language + "')). FILTER(LANG(?labelSub) = '' || LANGMATCHES(LANG(?labelSub), '" + that.options.language + "'))}",
 				remoteLiteralIsObjectOf : " SELECT DISTINCT ?subject ?predicate ?object ?labelSub ?labelPred WHERE {VALUES ?object {'"
 						+ CONS.DUMMY
 						+ "'} ?subject ?predicate ?object. OPTIONAL { ?subject rdfs:label ?labelSub }. OPTIONAL { ?predicate rdfs:label ?labelPred }}",
 				selectSubjectOf : " SELECT DISTINCT ?subject ?predicate ?label ?description WHERE {<"
 						+ CONS.DUMMY
 						+ "> ?predicate ?subject. OPTIONAL { ?subject rdfs:label ?label}. OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }}",
-				selectObjectOf : " SELECT DISTINCT ?subject ?predicate ?type ?label ?description WHERE {?subject ?predicate <"
+				selectObjectOf : " SELECT DISTINCT ?subject ?predicate ?label ?description WHERE {?subject ?predicate <"
 						+ CONS.DUMMY
 						+ ">. OPTIONAL { ?subject rdfs:label ?label}. OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }}",
+				typeQuery : "SELECT DISTINCT ?type WHERE {<"+ CONS.DUMMY +"> a ?type} ORDER BY ?type",
 				literalIsObjectOf : "SELECT DISTINCT ?subject ?predicate ?type ?label ?description WHERE {?subject ?predicate ?oLiteral. FILTER (STR(?oLiteral)='"
 						+ CONS.DUMMY
 						+ "'). OPTIONAL { ?subject rdfs:label ?label}. OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }}",
@@ -4102,7 +4188,7 @@
 						+ "> rdfs:description ?description } . OPTIONAL { <" + CONS.DUMMY
 						+ "> rdfs:comment ?description } . OPTIONAL { <" + CONS.DUMMY + "> rdfs:type ?type}}",
 				label : "SELECT DISTINCT ?label WHERE { <" + CONS.DUMMY
-						+ "> rdfs:label ?label . FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), 'en'))}",
+						+ "> rdfs:label ?label . FILTER(LANG(?label) = '' || LANGMATCHES(LANG(?label), '" + that.options.language + "'))}",
 				blankNodeQuery : "SELECT DISTINCT ?object WHERE {<" + CONS.DUMMY + "> ?predicate ?object}"
 			};
 		},
@@ -4140,11 +4226,11 @@
 		 * @private
 		 * @method _ajaxLoadData
 		 * @param {String}
-		 *          dataURL URL where the data is located
+		 *           dataURL URL where the data is located
 		 * @param {String}
-		 *          dataFormat Format of the data
+		 *           dataFormat Format of the data
 		 * @param {String}
-		 *          callback Function to call after loading with results
+		 *           callback Function to call after loading with results
 		 * @return function with modified context
 		 */
 		_ajaxLoadData : function(dataURL, dataFormat, callback) {
@@ -4179,15 +4265,16 @@
 
 			// Add insertion listener
 			eventManagers[this.pluginID].addEventHandler(CONS.EVENT_TYPES.store.insert, function(ev) {
+				// TODO update on insertion
 				$.each(that._layers, function(key, layer) {
-					layer.update();
-					print("view " + key + " is updating");
+					// layer.update();
+					print("view " + key + " has to be updated updating");
 				});
 			});
 
 			// Add a smartresize listener (smartresize to be found in
 			// jQuery.isotope)
-			eventManagers[this.pluginID].addEventHandler('smartresize', function(ev, $invoker) {
+			eventManagers[this.pluginID].addEventHandler('throttledresize', function(ev, $invoker) {
 
 				// <---- overlay modification ---->
 				var $overlays = that._$parent.children(UTIL.toSelector(CONS.CSS_CLASSES.overlay));
@@ -4238,6 +4325,7 @@
 						var layer = new Plugin.Layers.Inlay(that._$parent, that.options.layerOptions,
 								that.options.initQueries);
 						that.addLayer(layer);
+						that._topLayer = layer.id;
 						that._layers[layer.id].initSwitch.attach(new Plugin.Listener(function(sender) {
 							if (!that._checkInsertion()) {
 								if (that.options.sparqlData === undefined) {
@@ -4254,7 +4342,7 @@
 		 * 
 		 * @method addLayer
 		 * @param {Plugin.Layer}
-		 *          layer Layer object to add to the plugin
+		 *           layer Layer object to add to the plugin
 		 */
 		addLayer : function(layer) {
 			var that = this;
@@ -4309,7 +4397,7 @@
 		 * 
 		 * @method removeLayer
 		 * @param {Plugin.Layer}
-		 *          view Layer object to remove from the plugin
+		 *           view Layer object to remove from the plugin
 		 */
 		removeLayer : function(layer) {
 			delete this._layers[layer.id];
@@ -4330,15 +4418,16 @@
 		 * 
 		 * @method insertData
 		 * @param {String}
-		 *          data Rdf-data to be inserted
+		 *           data Rdf-data to be inserted
 		 * @param {String}
-		 *          dataFormat Format of the data
+		 *           dataFormat Format of the data
 		 */
 		insertData : function(data, dataFormat) {
 			var that = this;
 			$.when(globalInitDfd.promise()).done(function() {
 				rdfStore.insertData(data, dataFormat, function() {
 					eventManagers[that.pluginID].trigger(CONS.EVENT_TYPES.store.insert, that);
+					that.updateTopLayer();
 				});
 			});
 		},
@@ -4348,9 +4437,9 @@
 		 * 
 		 * @method insertDataPath
 		 * @param {String}
-		 *          dataURL URL where rdf data is to be found
+		 *           dataURL URL where rdf data is to be found
 		 * @param {String}
-		 *          dataFormat Format of the data
+		 *           dataFormat Format of the data
 		 */
 		insertDataPath : function(dataURL, dataFormat) {
 			var that = this;
@@ -4363,9 +4452,9 @@
 		 * 
 		 * @method insertDataFile
 		 * @param {File}
-		 *          file File to parse
+		 *           file File to parse
 		 * @param {String}
-		 *          dataFormat Format of the data
+		 *           dataFormat Format of the data
 		 */
 		insertDataFile : function(file) {
 			var that = this, reader = new FileReader();
@@ -4408,18 +4497,20 @@
 		 * 
 		 * @method insertRemoteDataQuery
 		 * @param {String}
-		 *          url URL of the SPARQL service
+		 *           url URL of the SPARQL service
 		 * @param {String}
-		 *          query Query to fetch data
+		 *           query Query to fetch data
 		 */
 		insertRemoteDataQuery : function(url, query) {
-
+			var that = this;
 			$.when(globalInitDfd.promise()).done(function() {
 				if (query === undefined || query === "") {
 					query = queryStore.defaultInitRemoteQuery;
 				}
-				console.log(query);
 				remoteDataLoader.insertByQuery(query, [ url ]);
+				remoteDataLoader.loadingDone.once(new Plugin.Listener(function() {
+						that.updateTopLayer();
+				}));
 			});
 		},
 		/**
@@ -4441,7 +4532,7 @@
 		 * 
 		 * @method runQuery
 		 * @param query
-		 *          Query to run.
+		 *           Query to run.
 		 * @return results of query
 		 */
 		runQuery : function(query, callback) {

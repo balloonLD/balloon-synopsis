@@ -1,4 +1,4 @@
-	<div class="{{CSS_CLASSES.tileClasses.tile}} {{#each node.filterables}}{{toClass .}} {{/each}}{{#if node.token}}{{toClass node.token}}{{/if}} {{toClass node.id}}">
+	<div class="{{CSS_CLASSES.tileClasses.tile}} {{#each node.filterables}}{{.}}{{/each}}{{#if node.token}}{{toClass node.token}}{{/if}} {{toClass node.id}}">
 		{{#firstComp node "uri"}}
 			<h2 class="{{CSS_CLASSES.tileClasses.showURI}}" style="display:none">{{data}}</h2>
 		{{/firstComp}}

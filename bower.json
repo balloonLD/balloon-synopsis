@@ -7,11 +7,13 @@
   "dependencies": {
     "jquery": "~2.1.0",
     "handlebars.js": "http://builds.handlebarsjs.com.s3.amazonaws.com/handlebars-v1.3.0.js",
-    "jquery-textfill-try": "https://raw.githubusercontent.com/jquery-textfill/jquery-textfill/master/jquery.textfill.min.js",
-    "isotope": "https://raw.githubusercontent.com/desandro/isotope/master/jquery.isotope.min.js",
+    "isotope": "~2.0.0",
     "modernizr": "~2.7.2",
     "rdfstore-js": "https://raw.githubusercontent.com/antoniogarrote/rdfstore-js/master/dist/browser/rdf_store_min.js",
-    "rgbcolor" : "http://www.phpied.com/files/rgbcolor/rgbcolor.js"
+    "throttledresize": "https://raw.githubusercontent.com/louisremi/jquery-smartresize/master/jquery.throttledresize.js",
+    "rgbcolor" : "http://www.phpied.com/files/rgbcolor/rgbcolor.js",
+    "js-md5" : "~1.1.0",
+    "chroma-js" : "~0.5.6"
   },
   "keywords": [
     "rdf",

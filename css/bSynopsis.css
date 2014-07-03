@@ -243,6 +243,7 @@ html,body {
 	overflow: hidden;
 	position: relative;
 	color: #222;
+	background-color: #777777;
 }
 
 .synopsis_tile * {

@@ -84,9 +84,9 @@ dbpedia:Passau	dbpprop:wordnet_type	ns20:synset-city-noun-3 ;
 	foaf:depiction	<http://upload.wikimedia.org/wikipedia/commons/4/48/Passau_Innpromenade.jpg> .
 @prefix ns21:	<http://en.wikipedia.org/wiki/> .
 dbpedia:Passau	foaf:isPrimaryTopicOf	ns21:Passau ;
-	<http://dbpedia.org/property/h%C3%B6he>	"294"^^xsd:int ;
-	dbpprop:gemeindeschlüssel	9262000 ;
-	dbpprop:fläche	70 ;
-	dbpprop:bürgermeister	"J\u00FCrgen Dupper"@en ;
-	dbpprop:höhe	294 ;
-	dbpprop:bürgermeistertitel	"Oberb\u00FCrgermeister"@en .
+	<http://dbpedia.org/property/h\u00F6he>	"294"^^xsd:int ;
+	dbpprop:gemeindeschlï¿½ssel	9262000 ;
+	dbpprop:fl\u00E4che	70 ;
+	dbpprop:b\u00FCrgermeister	"J\u00FCrgen Dupper"@en ;
+	dbpprop:h\u00F6he	294 ;
+	dbpprop:b\u00FCrgermeistertitel	"Oberb\u00FCrgermeister"@en .

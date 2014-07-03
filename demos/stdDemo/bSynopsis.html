@@ -8,10 +8,27 @@
         <script src="../../bower_components/modernizr/modernizr.js"></script>
         <script src="../../bower_components/jquery/dist/jquery.js"></script>
         <script src="../../bower_components/handlebars.js/index.js"></script>
-        <script src="../../bower_components/jquery-textfill-try/index.js"></script>
-        <script src="../../bower_components/isotope/index.js"></script>
+        <script src="../../bower_components/get-style-property/get-style-property.js"></script>
+        <script src="../../bower_components/get-size/get-size.js"></script>
+        <script src="../../bower_components/matches-selector/matches-selector.js"></script>
+        <script src="../../bower_components/eventie/eventie.js"></script>
+        <script src="../../bower_components/doc-ready/doc-ready.js"></script>
+        <script src="../../bower_components/eventEmitter/EventEmitter.js"></script>
+        <script src="../../bower_components/jquery-bridget/jquery.bridget.js"></script>
+        <script src="../../bower_components/outlayer/item.js"></script>
+        <script src="../../bower_components/outlayer/outlayer.js"></script>
+        <script src="../../bower_components/masonry/masonry.js"></script>
+        <script src="../../bower_components/isotope/js/item.js"></script>
+        <script src="../../bower_components/isotope/js/layout-mode.js"></script>
+        <script src="../../bower_components/isotope/js/isotope.js"></script>
+        <script src="../../bower_components/isotope/js/layout-modes/vertical.js"></script>
+        <script src="../../bower_components/isotope/js/layout-modes/fit-rows.js"></script>
+        <script src="../../bower_components/isotope/js/layout-modes/masonry.js"></script>
         <script src="../../bower_components/rdfstore-js/index.js"></script>
+        <script src="../../bower_components/throttledresize/index.js"></script>
         <script src="../../bower_components/rgbcolor/index.js"></script>
+        <script src="../../bower_components/js-md5/js/md5.js"></script>
+        <script src="../../bower_components/chroma-js/chroma.js"></script>
         <!-- endbower -->
         <script type="text/javascript" src="../../build/bSynopsis.js"></script>
         <!-- bower:css -->
@@ -40,7 +57,12 @@
                 value="http://dbpedia.org/sparql">
             <p>
                 <label for="queryinputbox">Remote data query:</label>
-                <textarea name="queryinputbox">SELECT ?subject ?predicate ?object { VALUES ?subject { <http://dbpedia.org/resource/Berlin> <http://dbpedia.org/resource/Passau> <http://dbpedia.org/resource/Munich> <http://dbpedia.org/resource/Frankfurt> } VALUES ?predicate { rdfs:label } ?subject ?predicate ?object. FILTER (lang(?object) = 'en') } LIMIT 150
+                <textarea name="queryinputbox">SELECT ?subject ?predicate ?object { 
+    VALUES ?subject { <http://dbpedia.org/resource/Berlin> <http://dbpedia.org/resource/Passau> <http://dbpedia.org/resource/Munich> <http://dbpedia.org/resource/Frankfurt>     }
+    VALUES ?predicate { rdfs:label }                                        
+    ?subject ?predicate ?object. 
+    FILTER (lang(?object) = 'en')
+} LIMIT 150
                             </textarea>
                             <p>
                                 <input type="button" name="insertRemote" value="Insert remote data"
@@ -51,12 +73,12 @@
                                        onclick="$('.bSynopsis').data('plugin_bSynopsis').clearStore();">
                             </form>
                 <form>
-                <label for="queryinputbox">Remote data query:</label>
+                <label for="queryinputbox">Run query on local store:</label>
                 <textarea name="localQueryinputbox">SELECT ?s ?p ?o WHERE { ?s ?p ?o }
                             </textarea>
                             <p>
                 <input type="button" name="runQuery" value="Run query on local store"
-                       onclick="$('.bSynopsis').data('plugin_bSynopsis').runQuery(this.form.localQueryinputbox.value, console.log);">
+                       onclick="$('.bSynopsis').data('plugin_bSynopsis').runQuery(this.form.localQueryinputbox.value, function(res){console.log(res);});">
                 </form>
 
 
@@ -67,6 +89,92 @@
                                     $('.bSynopsis').bSynopsis({
                                         layerOptions : {
                                            nodeFilters: {
+                                              cityChart : {
+                                                 fn : function(nodes, config) {
+                                                   var typeMap = {};
+                                                   $.each(nodes, function(i, node) {
+                                                     node.forEachComponentType("predicate", function(component) {
+                                                       var uri = component.data.value;
+                                                       if(uri.indexOf("http://dbpedia.org/property/") === 0) {
+                                                         var uriSplit = uri.substring(28);
+                                                         var chartType;
+                                                         var pre;
+                                                         var pos = 0;
+                                                         if(uriSplit) {
+                                                           pre = uriSplit.substring(0, 3);
+                                                           switch (pre) {
+                                                             case "jan" : pos = 1;
+                                                             break;
+                                                             case "feb" : pos = 2;
+                                                             break;
+                                                             case "mar" : pos = 3;
+                                                             break;
+                                                             case "apr" : pos = 4;
+                                                             break;
+                                                             case "may" : pos = 5;
+                                                             break;
+                                                             case "jun" : pos = 6;
+                                                             break;
+                                                             case "jul" : pos = 7;
+                                                             break;
+                                                             case "aug" : pos = 8;
+                                                             break;
+                                                             case "sep" : pos = 9;
+                                                             break;
+                                                             case "oct" : pos = 10;
+                                                             break;
+                                                             case "nov" : pos = 11;
+                                                             break;
+                                                             case "dec" : pos = 12;
+                                                           }
+                                                         }
+                                                         if(pos > 0) {
+                                                           chartType = uriSplit.substring(3);
+                                                           if(!typeMap[chartType]) {
+                                                             var chartNode = node;
+                                                             chartNode.id = chartNode.id + "cityChart";
+                                                             typeMap[chartType] = chartNode;
+                                                             chartNode.cityChartData = {};
+                                                             chartNode.cityChartData.type = chartType;
+                                                             chartNode.cityChartData[pos] = node.getFComponentOT("label").data.value;
+                                                             var data = chartNode.cityChartData;
+                                                             chartNode.getChartValues = function(){
+                                                               return function() {
+                                                                 var values = "";
+                                                                 for(var i = 1; i <= 12; i++) {
+                                                                   if(i > 1) {
+                                                                     values += ",";
+                                                                   }
+                                                                   values += data[i] ? data[i] : 0;
+                                                                 }
+                                                                 return values;
+                                                               };
+                                                               }(data);
+                                                             chartNode.getChartLabels = "jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec";
+                                                             chartNode.useTemplateID = 'cityChart';
+                                                                     if(!chartNode.style) {
+                                                                       chartNode.style = {};
+                                                                     }
+                                                             chartNode.style.width = '410px';
+                                                             chartNode.style.height = '200px';
+                                                             chartNode.layoutFn = function($tile, node, nStyle) {
+                                                                       $tile.height(nStyle.height);
+                                                                       $tile.width(nStyle.width);
+                                                                     }
+                                                             chartNode.dynLayoutFn = chartNode.layoutFn;
+                                                           } else {
+                                                             typeMap[chartType].cityChartData[pos] = node.getFComponentOT("label").data.value;
+                                                             delete nodes[i];
+                                                           }
+                                                         }
+                                                         
+                                                       }
+                                                     });
+                                                   });
+                                                   return nodes;
+                                                 },
+                                                  template: '<div><iframe width="410" height="200" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://chart.apis.google.com/chart?cht=bvs&chd=t:{{node.getChartValues}}&chds=a&chs=410x200&chl={{node.getChartLabels}}&chxt=y&chtt={{node.cityChartData.type}}"></iframe></div>'
+                                               },
                                               maps: {
                                                   fn: function(nodes, config) {
                                                       $.each(nodes, function(i, node) {
