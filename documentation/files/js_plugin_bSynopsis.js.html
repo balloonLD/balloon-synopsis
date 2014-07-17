@@ -293,80 +293,80 @@
 	// Extend Isotope - groupRows custom layout mode
 	// Modified Version of
 	// http://isotope.metafizzy.co/custom-layout-modes/category-rows.html
-// $
-// .extend(
-// $.Isotope.prototype,
-// {
-// _groupRowsReset : function() {
-// this.groupRows = {
-// x : 0,
-// y : 0,
-// gutter : 0,
-// height : 0,
-// currentGroup : null
-// };
-// },
-// _groupRowsLayout : function($elems) {
-// var instance = this, containerWidth = this.element.width(), sortBy =
-// this.options.sortBy, props = this.groupRows;
-//
-// $elems
-// .each(function() {
-// var $this = $(this), atomW = $this.outerWidth(true), atomH = $this
-// .outerHeight(true), group = $.data(this, &#x27;isotope-sort-data&#x27;)[sortBy];
-//
-// if (group !== props.currentGroup) {
-// // new group, new row
-// props.x = 0;
-// props.height += props.currentGroup ? instance.groupRows.gutter : 0;
-// props.y = props.height;
-// props.currentGroup = group;
-//
-// if (instance.groupRows.gutter &lt; atomH) {
-// instance.groupRows.gutter = atomH;
-// }
-//
-// } else {
-//
-// if (props.x !== 0 &amp;&amp; atomW + props.x &gt; containerWidth) {
-//
-// // if this item cannot fit in
-// // the current row
-// props.x = 0;
-// props.y = props.height;
-// }
-// }
-//
-// $this.find(UTIL.toSelector(CONS.CSS_CLASSES.groupLabel)).remove();
-// // label for new group
-// if (group !== &#x27;&#x27;) {
-// var prefix = group.split(&quot;_&quot;)[0] + &quot;_&quot;;
-// var groups = group.split(prefix), divBox = &quot;&lt;div class=&#x27;&quot;
-// + CONS.CSS_CLASSES.groupLabel + &quot;&#x27; &gt;&quot;;
-// for (var i = 1; i &lt; groups.length; i++) {
-// divBox += groups[i];
-// }
-// divBox += &quot;&lt;/div&gt;&quot;;
-// $this.append(divBox);
-// }
-//
-// // position the atom
-// instance._pushPosition($this, props.x, props.y);
-//
-// props.height = Math.max(props.y + atomH, props.height);
-// props.x += atomW;
-// });
-// },
-// _groupRowsGetContainerSize : function() {
-// return {
-// height : this.groupRows.height
-// };
-// },
-// _groupRowsResizeChanged : function() {
-// return true;
-// }
-//
-// });
+	// $
+	// .extend(
+	// $.Isotope.prototype,
+	// {
+	// _groupRowsReset : function() {
+	// this.groupRows = {
+	// x : 0,
+	// y : 0,
+	// gutter : 0,
+	// height : 0,
+	// currentGroup : null
+	// };
+	// },
+	// _groupRowsLayout : function($elems) {
+	// var instance = this, containerWidth = this.element.width(), sortBy =
+	// this.options.sortBy, props = this.groupRows;
+	//
+	// $elems
+	// .each(function() {
+	// var $this = $(this), atomW = $this.outerWidth(true), atomH = $this
+	// .outerHeight(true), group = $.data(this, &#x27;isotope-sort-data&#x27;)[sortBy];
+	//
+	// if (group !== props.currentGroup) {
+	// // new group, new row
+	// props.x = 0;
+	// props.height += props.currentGroup ? instance.groupRows.gutter : 0;
+	// props.y = props.height;
+	// props.currentGroup = group;
+	//
+	// if (instance.groupRows.gutter &lt; atomH) {
+	// instance.groupRows.gutter = atomH;
+	// }
+	//
+	// } else {
+	//
+	// if (props.x !== 0 &amp;&amp; atomW + props.x &gt; containerWidth) {
+	//
+	// // if this item cannot fit in
+	// // the current row
+	// props.x = 0;
+	// props.y = props.height;
+	// }
+	// }
+	//
+	// $this.find(UTIL.toSelector(CONS.CSS_CLASSES.groupLabel)).remove();
+	// // label for new group
+	// if (group !== &#x27;&#x27;) {
+	// var prefix = group.split(&quot;_&quot;)[0] + &quot;_&quot;;
+	// var groups = group.split(prefix), divBox = &quot;&lt;div class=&#x27;&quot;
+	// + CONS.CSS_CLASSES.groupLabel + &quot;&#x27; &gt;&quot;;
+	// for (var i = 1; i &lt; groups.length; i++) {
+	// divBox += groups[i];
+	// }
+	// divBox += &quot;&lt;/div&gt;&quot;;
+	// $this.append(divBox);
+	// }
+	//
+	// // position the atom
+	// instance._pushPosition($this, props.x, props.y);
+	//
+	// props.height = Math.max(props.y + atomH, props.height);
+	// props.x += atomW;
+	// });
+	// },
+	// _groupRowsGetContainerSize : function() {
+	// return {
+	// height : this.groupRows.height
+	// };
+	// },
+	// _groupRowsResizeChanged : function() {
+	// return true;
+	// }
+	//
+	// });
 
 	// ========================= JQuery custom selectors
 	/**
@@ -421,35 +421,31 @@
 		}
 		return regex.test(jQuery(elem)[attr.method](attr.property));
 	};
-	
+
 	// ========================= JQuery textfill
 	// https://gist.github.com/mekwall/1263939 by Marcus Ekwall
 	// Additions by Thomas Weißgerber
 	(function($) {
 		$.fn.textfill = function(maxFontSize, minFontSize, fail) {
-		maxFontSize = parseInt(maxFontSize, 10);
-		minFontSize = parseInt(minFontSize, 10);
-		return this.each(function(){
-		var ourText = $(&quot;span&quot;, this),
-		parent = ourText.parent(),
-		maxHeight = parent.height(),
-		maxWidth = parent.width(),
-		fontSize = parseInt(ourText.css(&quot;fontSize&quot;), 10),
-		tmpMultW = maxWidth/ourText.width(),
-		tmpMultH = maxHeight/ourText.height(),
-		multiplier = (tmpMultW &lt; tmpMultH) ? tmpMultW : tmpMultH,
-		newSize = (fontSize*(multiplier-0.1));
-		if(maxFontSize &gt; 0 &amp;&amp; newSize &gt; maxFontSize) {
-			newSize = maxFontSize;
-		}
-		if(minFontSize &gt; 0 &amp;&amp; newSize &lt; minFontSize) {
-			newSize = minFontSize;
-			fail(parent);
-		}
-		ourText.css(&quot;fontSize&quot;, newSize);
-		});
+			maxFontSize = parseInt(maxFontSize, 10);
+			minFontSize = parseInt(minFontSize, 10);
+			return this
+					.each(function(i, val) {
+						var ourText = $(val), parent = ourText.parent(), maxHeight = parent.height(), maxWidth = parent
+								.width(), fontSize = parseInt(ourText.css(&quot;fontSize&quot;), 10), tmpMultW = maxWidth
+								/ ourText.width(), tmpMultH = maxHeight / ourText.height(), multiplier = (tmpMultW &lt; tmpMultH) ? tmpMultW
+								: tmpMultH, newSize = (fontSize * (multiplier - 0.1));
+						if (maxFontSize &gt; 0 &amp;&amp; newSize &gt; maxFontSize) {
+							newSize = maxFontSize;
+						}
+						if (minFontSize &gt; 0 &amp;&amp; newSize &lt; minFontSize) {
+							newSize = minFontSize;
+							fail(parent);
+						}
+						ourText.css(&quot;fontSize&quot;, newSize);
+					});
 		};
-		})(jQuery);
+	})(jQuery);
 
 	// ========================= bSynopsis class private utility functions
 	/**
@@ -598,7 +594,7 @@
 	 * @constructor
 	 */
 	var RemoteEngine = function() {
-		
+
 		// TODO YQL timeout??
 
 		var counter = 0;
@@ -606,10 +602,52 @@
 		// This function uses YQL to give a SPARQL query to a remote service.
 		// Accepts a query, the adress of the service and a callback function to
 		// run.
-		this._requestSPARQLCrossDomain = function(query, url, callback) {
+		this._corsRequestSPARQL = function(query, url, callback) {
 
 			var that = this, success = false, cnt = counter++;
 
+			// Use cnt to stop callbackoverwriting on simultan calls
+			window[&quot;cbFunc&quot; + cnt] = function(data, textStatus, jqXHR) {
+				// If we have something to work with...
+				if (data &amp;&amp; data.results &amp;&amp; data.results.bindings) {
+					success = true;
+					callback(data.results.bindings, success);
+				}
+
+				// Else, Maybe we requested a site that doesn&#x27;t exist, and
+				// nothing returned.
+				else {
+					console.log(&#x27;Nothing returned from getJSON.&#x27;);
+					callback(null, success);
+
+					// Delete old callbackfunction
+					window[&quot;cbFunc&quot; + cnt] = undefined;
+				}
+			};
+
+			// TODO cors timeout?
+			var service = url + &quot;?default-graph-uri=http%3A%2F%2Fdbpedia.org&amp;query=&quot; + encodeURI(query)
+					+ &quot;&amp;format=application%2Fsparql-results%2Bjson&amp;timeout=300000&quot;
+			&quot;&quot;
+			// If no query was passed, exit.
+			if (!query) {
+				alert(&#x27;No query was passed.&#x27;);
+			}
+			$.ajax({
+				type : &#x27;post&#x27;,
+				dataType: &quot;json&quot;,
+				url : service,
+				success : window[&quot;cbFunc&quot; + cnt],
+				error : function(jqXHR, textStatus, errorThrown) {
+					console.log(&quot;Error on cors query.&quot;);
+					console.log(errorThrown);
+					window[&quot;cbFunc&quot; + cnt]();
+				}
+			});
+		};
+
+		this._yqlRequestSPARQL = function(query, url, callback) {
+			var success = false, cnt = counter++;
 			// Use cnt to stop callbackoverwriting on simultan calls
 			window[&quot;cbFunc&quot; + cnt] = function(data, textStatus, jqXHR) {
 
@@ -625,9 +663,10 @@
 					console.log(&#x27;Nothing returned from getJSON.&#x27;);
 					callback(null, success);
 
-				// Delete old callbackfunction
-				window[&quot;cbFunc&quot; + cnt] = undefined;
-			}};
+					// Delete old callbackfunction
+					window[&quot;cbFunc&quot; + cnt] = undefined;
+				}
+			};
 
 			// If no query was passed, exit.
 			if (!query) {
@@ -644,16 +683,17 @@
 			// Pass a defined function to prevent cache-busting.
 			// $.getJSONP(yql, cbFunc);
 			$.ajax({
+				type : &#x27;post&#x27;,
 				dataType : &#x27;json&#x27;,
 				url : yql,
-				success : window[&quot;cbFunc&quot;+cnt],
+				success : window[&quot;cbFunc&quot; + cnt],
 				error : function(jqXHR, textStatus, errorThrown) {
 					// console.log(yql);
 					console.log(&quot;Error on yql query.&quot;);
 					// console.log(textStatus);
 					// console.log(jqXHR);
 					console.log(errorThrown);
-					window[&quot;cbFunc&quot;+cnt]();
+					window[&quot;cbFunc&quot; + cnt]();
 				}
 			});
 		};
@@ -673,7 +713,11 @@
 	 *           callback Callback function to be executed with query results
 	 */
 	RemoteEngine.prototype.executeQuery = function(query, url, callback) {
-		this._requestSPARQLCrossDomain(query, url, callback);
+		if (url.indexOf(&quot;yql:&quot;) === 0) {
+			this._yqlRequestSPARQL(query, url.slice(4), callback);
+		} else {
+			this._corsRequestSPARQL(query, url, callback);
+		}
 	};
 
 	// ========================= Cache class ===============================
@@ -1087,31 +1131,73 @@
 	 */
 	Plugin.LayoutEngine = function($container, options) {
 		var engine = this;
+		this._options = options;
 		this._container = $container;
 		this._funcQueue = [];
 		this._occupied = false;
 		this._internDoneEvent = new Plugin.Event(this);
+		this.partialDoneEvent = new Plugin.Event(this);
+		this.doneEvent = new Plugin.Event(this);
 		this._internDoneEvent.attach(new Plugin.Listener(function(sender) {
 			engine._addNext();
 		}));
-		// Use isotope on layout callback to trigger event
-		$container.addClass(&quot;isotope&quot;);
-		$container.css({&quot;overflow&quot; : &quot;hidden&quot;});
-		$container.isotope(options);
-		$container.isotope( &#x27;on&#x27;, &#x27;layoutComplete&#x27;, function() {
-			engine._container.trigger(CONS.EVENT_TYPES.layout.done);
-			engine._internDoneEvent.notify();
+
+		$container.addClass(&quot;layoutEngine&quot;);
+		$container.css({
+			&quot;overflow&quot; : &quot;hidden&quot;
 		});
 	};
 
 	Plugin.LayoutEngine.prototype._addNext = function(items) {
 		if (this._funcQueue.length &gt; 0) {
-			setTimeout(this._funcQueue.shift(), 100);
+			setTimeout(this._funcQueue.shift(), this._options.clusterWait);
 		} else {
 			this._occupied = false;
-			print(&quot;unoccupy&quot;);
+			if (this.startTime) {
+				print(&quot;Unoccupy. All layouting done after &quot; + (new Date().getTime() - this.startTime) + &quot; ms&quot;);
+				this.doneEvent.notify();
+				this.startTime = undefined;
+			}
 		}
 	}
+
+	Plugin.LayoutEngine.prototype._setStartTime = function(items) {
+		if (!this.startTime) {
+			this.startTime = new Date().getTime();
+		}
+	}
+
+	Plugin.LayoutEngine.prototype.add = function(items) {
+	};
+
+	Plugin.LayoutEngine.prototype.remove = function(items, callback) {
+	};
+
+	Plugin.LayoutEngine.prototype.removeAll = function(callback) {
+	};
+
+	Plugin.LayoutEngine.prototype.updateOptions = function(options) {
+	};
+
+	Plugin.LayoutEngine.prototype.sort = function(opts) {
+	};
+
+	Plugin.LayoutEngine.prototype.filter = function(fn) {
+	};
+
+	Plugin.LayoutEngines = {};
+
+	Plugin.LayoutEngines.Isotope = function($container, options) {
+		Plugin.LayoutEngine.call(this, $container, options);
+		var engine = this;
+		this._container.isotope(options.isotope.options);
+		this._container.isotope(&#x27;on&#x27;, &#x27;layoutComplete&#x27;, function() {
+			engine._internDoneEvent.notify();
+		});
+	}
+
+	Plugin.LayoutEngines.Isotope.prototype = Object.create(Plugin.LayoutEngine.prototype);
+	Plugin.LayoutEngines.Isotope.prototype.constructor = Plugin.LayoutEngines.Isotope;
 
 	/**
 	 * Adds items to the layout engine
@@ -1122,18 +1208,30 @@
 	 * @param {Function}
 	 *           callback Callback function
 	 */
-	Plugin.LayoutEngine.prototype.add = function(items) {
+	Plugin.LayoutEngines.Isotope.prototype.add = function(items) {
 		var engine = this;
+		engine._setStartTime();
 		var fn = function(input) {
 			return function() {
-				var i = input;
+				engine._occupied = true;
+				var stepSize = engine._options.clusterSize;
+				if (items.length &gt; stepSize &amp;&amp; stepSize &gt; 0) {
+					var tmp = items;
+					tmp = tmp.slice(stepSize);
+					items = items.slice(0, stepSize);
+					engine.add(tmp);
+				}
+				var timeStamp = new Date().getTime();
+				engine._container.isotope(&#x27;once&#x27;, &#x27;layoutComplete&#x27;, function() {
+					print(&quot;Added items to layoutEngine in &quot; + (new Date().getTime() - timeStamp) + &quot; ms&quot;);
+					engine.partialDoneEvent.notify(items);
+				});
 				engine._container.isotope(&quot;insert&quot;, items);
 			};
 		};
 		if (items) {
 			if (!this._occupied) {
-				this._occupied = true;
-				this._container.isotope(&quot;insert&quot;, items);
+				fn(items)();
 			} else {
 				this._funcQueue.push(fn(items));
 			}
@@ -1145,7 +1243,7 @@
 	 * 
 	 * @method reLayout
 	 */
-	Plugin.LayoutEngine.prototype.reLayout = function() {
+	Plugin.LayoutEngines.Isotope.prototype.reLayout = function() {
 		this._container.isotope(&quot;reLayout&quot;);
 	};
 
@@ -1158,23 +1256,12 @@
 	 * @param {Function}
 	 *           callback Callback function
 	 */
-	Plugin.LayoutEngine.prototype.remove = function(items, callback) {
+	Plugin.LayoutEngines.Isotope.prototype.remove = function(items, callback) {
 		this._container.isotope(&quot;remove&quot;, items, callback);
 	};
 
-	Plugin.LayoutEngine.prototype.removeAll = function(callback) {
+	Plugin.LayoutEngines.Isotope.prototype.removeAll = function(callback) {
 		this._container.html(&#x27;&#x27;);
-	};
-
-	/**
-	 * Update the sort data of the layout engine on specified items
-	 * 
-	 * @method updateSortData
-	 * @param {item}
-	 *           item Items for which sort data should be updated
-	 */
-	Plugin.LayoutEngine.prototype.updateSortData = function(item) {
-		this._container.isotope(&quot;updateSortData&quot;, item);
 	};
 
 	/**
@@ -1184,22 +1271,168 @@
 	 * @param {Object}
 	 *           options Options object of the layout engine
 	 */
-	Plugin.LayoutEngine.prototype.updateOptions = function(options) {
+	Plugin.LayoutEngines.Isotope.prototype.updateOptions = function(options) {
 		this._container.isotope(options);
 	};
-	
-	Plugin.DataTransformer = {
-		res : function(data) {
-			return data
-		},
-		literal : function(data) {
-			return
-		},
-		blank : function(data) {
-			return
+
+	/**
+	 * Update the sort data of the layout engine on specified items
+	 * 
+	 * @method updateSortData
+	 * @param {item}
+	 *           item Items for which sort data should be updated
+	 */
+	Plugin.LayoutEngines.Isotope.prototype.sort = function(name, fn) {
+		this.startTime = new Date().getTime();
+		if (!this._options.isotope.options.getSortData.hasOwnProperty(name)) {
+			var tmpSD = {};
+			tmpSD[name] = fn;
+			print(&quot;adding tmpSD&quot;);
+			this.updateOptions({
+				getSortData : tmpSD
+			});
+		}
+		this.updateOptions({
+			sortBy : name
+		});
+	};
+
+	Plugin.LayoutEngines.Isotope.prototype.filter = function(selector) {
+		this.startTime = new Date().getTime();
+		if (selector !== &#x27;&#x27;) {
+			if (selector !== &#x27;*&#x27;) {
+				if (this._options.supportRegExpFilter) {
+					try {
+						selector = &quot;div:regex(class, &quot; + selector + &quot;), div &gt; div:contains(&quot; + selector + &quot;)&quot;;
+					} catch (e) {
+						selector = &quot;div &gt; div:contains(&quot; + selector + &quot;)&quot;;
+					}
+				} else {
+					selector = &quot;div &gt; div:contains(&quot; + selector + &quot;)&quot;;
+				}
+			}
+		} else {
+			selector = &#x27;*&#x27;;
+		}
+		this.updateOptions({
+			filter : selector
+		});
+	};
+	Plugin.LayoutEngines.Shuffle = function($container, options) {
+		Plugin.LayoutEngine.call(this, $container, options);
+		var engine = this;
+		this._container.shuffle(options.shuffle.options);
+		this._container.on(&#x27;layout.shuffle&#x27;, function() {
+			engine._internDoneEvent.notify();
+		});
+	}
+
+	Plugin.LayoutEngines.Shuffle.prototype = Object.create(Plugin.LayoutEngine.prototype);
+	Plugin.LayoutEngines.Shuffle.prototype.constructor = Plugin.LayoutEngines.Shuffle;
+
+	/**
+	 * Adds items to the layout engine
+	 * 
+	 * @method add
+	 * @param {jQuery}
+	 *           items Div boxes which are to be added
+	 * @param {Function}
+	 *           callback Callback function
+	 */
+	Plugin.LayoutEngines.Shuffle.prototype.add = function(items) {
+		var engine = this;
+		engine._setStartTime();
+		var fn = function(items) {
+			return function() {
+				engine._occupied = true;
+				var stepSize = engine._options.clusterSize;
+				if (items.length &gt; stepSize &amp;&amp; stepSize &gt; 0) {
+					var tmp = items;
+					tmp = tmp.slice(stepSize);
+					items = items.slice(0, stepSize);
+					engine.add(tmp);
+				}
+				var timeStamp = new Date().getTime();
+				engine._container.one(&#x27;layout.shuffle&#x27;, function() {
+					print(&quot;Added items to layoutEngine in &quot; + (new Date().getTime() - timeStamp) + &quot; ms&quot;);
+					engine.partialDoneEvent.notify(items);
+				});
+				engine._container.append(items);
+				engine._container.shuffle(&quot;appended&quot;, items);
+			};
+		};
+		if (items) {
+			if (!this._occupied) {
+				fn(items)();
+			} else {
+				this._funcQueue.push(fn(items));
+			}
+		}
+	};
+
+	/**
+	 * Remove items from the layout engine
+	 * 
+	 * @method remove
+	 * @param {jQuery}
+	 *           items Div boxes which are to be removed
+	 * @param {Function}
+	 *           callback Callback function
+	 */
+	Plugin.LayoutEngines.Shuffle.prototype.remove = function(items) {
+		this._container.shuffle(&#x27;remove&#x27;, items);
+	};
+
+	Plugin.LayoutEngines.Shuffle.prototype.removeAll = function(callback) {
+		this._container.html(&#x27;&#x27;);
+	};
+
+	/**
+	 * Update the options of the layout engine
+	 * 
+	 * @method updateOptions
+	 * @param {Object}
+	 *           options Options object of the layout engine
+	 */
+	Plugin.LayoutEngines.Shuffle.prototype.updateOptions = function(options) {
+		this._container.shuffle(options);
+	};
+
+	Plugin.LayoutEngines.Shuffle.prototype.sort = function(name, fn) {
+		this.startTime = new Date().getTime();
+		this._container.shuffle(&#x27;sort&#x27;, {
+			by : fn
+		});
+	};
+
+	Plugin.LayoutEngines.Shuffle.prototype.filter = function(selector, type, fn) {
+		this.startTime = new Date().getTime();
+		var tmp;
+		if (typeof fn === &quot;function&quot;) {
+			tmp = fn;
+		} else if (this.options.shuffle.filterFns.hasOwnProperty(type)) {
+			tmp = this.options.shuffle.filterFns[type];
+		}
+		this._container.shuffle(&#x27;shuffle&#x27;, tmp);
+	};
+	Plugin.LayoutEngineFactory = {
+		make : function($container, options) {
+			var engine;
+			print(options);
+			switch (options.useEngine) {
+			case &quot;isotope&quot;:
+				engine = new Plugin.LayoutEngines.Isotope($container, options);
+				break;
+			case &quot;shuffle&quot;:
+				engine = new Plugin.LayoutEngines.Shuffle($container, options);
+				break;
+			default:
+				alert(&quot;No layout engine defined.&quot;);
+			}
+			return engine;
 		}
 	}
-	
+
 	// ========================= bSynopsis: Node Class
 	/**
 	 * Base node to represent an abstract element of the rdf graph.
@@ -1285,7 +1518,7 @@
 	 * @returns {Object}
 	 */
 	Plugin.Node.prototype.forEachComponentType = function(type, fn) {
-		if(this.components[type]) {
+		if (this.components[type]) {
 			for (var i = 0; i &lt; this.components[type].length; i++) {
 				fn(this.components[type][i]);
 			}
@@ -1338,8 +1571,7 @@
 		$tile.data(&quot;node&quot;, this);
 		return $tile;
 	};
-	
-	
+
 	// TODO do this in workers cause of performance
 	/**
 	 * Merges data of given node with own data.
@@ -1351,26 +1583,25 @@
 	 */
 	Plugin.Node.prototype.merge = function(otherNode) {
 		var that = this, update = false;
-		 $.each(otherNode.components, function(typeID, comps) {
-		 $.each(comps, function(i, comp) {
-		 var insert = true;
-		 if(that.components[typeID]) {
-		 for(var j = 0; j &lt; that.components[typeID].length; j++) {
-		 if(comp.equals(that.components[typeID][j])) {
-		 insert = false;
-		 break;
-		 }
-		 }
-		 }
-		 if(insert) {
-		 that.addComponent(typeID, comp.data);
-		 update = true;
-		 }
-		 });
-		 });
+		$.each(otherNode.components, function(typeID, comps) {
+			$.each(comps, function(i, comp) {
+				var insert = true;
+				if (that.components[typeID]) {
+					for (var j = 0; j &lt; that.components[typeID].length; j++) {
+						if (comp.equals(that.components[typeID][j])) {
+							insert = false;
+							break;
+						}
+					}
+				}
+				if (insert) {
+					that.addComponent(typeID, comp.data);
+					update = true;
+				}
+			});
+		});
 		return update;
 	};
-	
 
 	/**
 	 * Node component to be shown on a tile
@@ -1397,7 +1628,7 @@
 	 *           data Data of a single resource of a select query.
 	 */
 	Plugin.ComponentFactory = {
-			// TODO equality etc
+		// TODO equality etc
 		makeComp : function(id, type, data, style) {
 			var comp;
 			if (style) {
@@ -1423,14 +1654,14 @@
 				break;
 			default:
 				comp.equals = function(other) {
-				return (this.type === other.type) &amp;&amp; (this.data.value === other.data.value);
+					return (this.type === other.type) &amp;&amp; (this.data.value === other.data.value);
 				}
 				console.log(CONS.MESSAGES.error.compType + type);
 			}
 			return comp;
 		}
 	};
-	
+
 	Plugin.Nodes = {};
 
 	/**
@@ -1574,7 +1805,7 @@
 	 *           data Data of a single resource of a select query.
 	 */
 	Plugin.NodeFactory = {
-		makeNode : function(data, options) {
+		make : function(data, options) {
 			var node;
 			switch (data.subject.token) {
 			case UTIL.toToken(CONS.CSS_CLASSES.patternClasses.blanknode):
@@ -1613,7 +1844,7 @@
 	/**
 	 * Open timeline overlay.
 	 * 
-	 * @method open#
+	 * @method open
 	 */
 	Plugin.TimeLine.prototype.open = function() {
 		if (this._$timelineContainer.data(&quot;isExpanded&quot;)) {
@@ -1683,9 +1914,11 @@
 		var that = this;
 		this.clickEvent = new Plugin.Event(this);
 		this.layer = layer;
-		this.$timelineNode = $(templates.timelineItem({
-			label : (layer.node &amp;&amp; layer.node.hasComponentType(&quot;label&quot;)) ? layer.node.getFComponentOT(&quot;label&quot;).data.value : layer.id
-		}));
+		this.$timelineNode = $(templates
+				.timelineItem({
+					label : (layer.node &amp;&amp; layer.node.hasComponentType(&quot;label&quot;)) ? layer.node
+							.getFComponentOT(&quot;label&quot;).data.value : layer.id
+				}));
 		if (layer.$tile) {
 			this.$timelineNode.css({
 				&quot;background-color&quot; : layer.$tile.css(&quot;background-color&quot;)
@@ -1733,6 +1966,14 @@
 		this.initDfd = $.Deferred();
 		this.$parent = $parent;
 		this.options = options;
+		
+		// When open
+		this.openEvent.once(new Plugin.Listener(function(sender) {
+			// When rest is init
+			that.initSwitch.attach(new Plugin.Listener(function(sender) {
+				that._initContent();
+			}));
+		}));
 		$.when(that._addOverlay()).done(function() {
 			$.when(that._addOverlayContent()).done(function() {
 				that._initLayerData(queries);
@@ -1754,7 +1995,8 @@
 		this.view = new Plugin.Layer.View(this.model, this.$content, this.options.viewOptions);
 		// Repaint on added items
 		this.model.itemsAdded.attach(new Plugin.Listener(function(sender, args) {
-			that.view.addTiles(that.getTilesToPaint(args.addedNodes, that.options.nodeFilters, that.options.tileFilters));
+			that.view.addTiles(that.getTilesToPaint(args.addedNodes, that.options.nodeFilters,
+					that.options.tileFilters));
 		}));
 
 		// Clear view on model clearing
@@ -1769,27 +2011,20 @@
 				this.view.addSorter();
 			}
 			if (this.options.generateFilterOptions) {
-				this.view.addIsotopeFilter();
+				this.view.appendFilterDiv(function() {
+					that.view.addFilterLinkFn();
+					that.view.addFilterBoxFn();
+				});
 			}
 		}
 		this._addCloseOnClick();
 		this._addRefreshOnClick();
 		this._addBackgroundColor();
-		this._initContent();
 		this.initSwitch.trigger();
 	};
 
 	Plugin.Layer.prototype._addBackgroundColor = function() {
 		this.$overlay.css(&quot;background-color&quot;, &quot;grey&quot;);
-	};
-
-	Plugin.Layer.prototype._addFilterSelection = function() {
-		var that = this;
-		this.$overlay.find(&quot;#filterSelect&quot;).multiSelect({
-			&#x27;selectAllText&#x27; : CONS.MESSAGES.out.selectAllFilters
-		}, function(select) {
-			that.switchFilterState(select.val());
-		});
 	};
 
 	Plugin.Layer.prototype._addCloseOnClick = function() {
@@ -1799,7 +2034,7 @@
 			that.close();
 		});
 	};
-	
+
 	Plugin.Layer.prototype._addRefreshOnClick = function() {
 		var that = this;
 		var $refresh = this.$overlay.find(UTIL.toSelector(CONS.CSS_CLASSES.refresh));
@@ -1832,9 +2067,11 @@
 	};
 
 	Plugin.Layer.prototype._initContent = function() {
-		if (this.options.remoteOptions.remoteDynamically) {
-			if (!this.options.remoteOptions.waitForRemote) {
-				this.update();
+		var that = this;
+		if (that.options.remoteOptions.remoteDynamically) {
+			if (!that.options.remoteOptions.waitForRemote) {
+				that.update();
+
 			}
 			if (this.loadByRemote) {
 				this.loadByRemote();
@@ -1871,7 +2108,7 @@
 	 */
 	Plugin.Layer.prototype.update = function() {
 		print(&quot;Layer &quot; + this.id + &quot; is updating.&quot;);
-	   print(&quot;Caller is &quot; + arguments.callee.caller.toString());
+		//print(&quot;Caller is &quot; + arguments.callee.caller.toString());
 		this.model.update();
 	};
 
@@ -1930,17 +2167,26 @@
 		} else {
 			filters = this.options.nodeFilters;
 		}
-		var startTime = new Date().getTime();
 
 		// Run nodeFilters on nodes
+		var allStart = new Date().getTime();
+		var startTime = allStart;
+		var tmp;
+		print(&quot;Start node filters:&quot;);
 		$.each(filters, function(i, filter) {
+			if (tmp) {
+				print(&quot;Filter &quot; + tmp + &quot; done in: &quot; + (new Date().getTime() - startTime) + &quot; milisec&quot;);
+			}
+			tmp = i;
+			startTime = new Date().getTime();
 			if (!$.isEmptyObject(nodes)) {
 				nodes = filter.fn(nodes, filter.config, that);
 			} else {
 				console.log(CONS.MESSAGES.warn.filterInput);
 			}
-			print(&quot;Filter &quot; + i + &quot; done at: &quot; + (new Date().getTime() - startTime) + &quot; milisec&quot;);
 		});
+		print(&quot;Filter &quot; + tmp + &quot; done in: &quot; + (new Date().getTime() - startTime) + &quot; milisec&quot;);
+		print(&quot;All node filter done after: &quot; + (new Date().getTime() - startTime) + &quot; milisec&quot;);
 		return nodes;
 	};
 
@@ -1955,7 +2201,6 @@
 
 	Plugin.Layer.prototype.runTileFilters = function($tiles, tileFilters) {
 		var that = this;
-		var startTime = new Date().getTime();
 
 		// Generate all tiles
 		if (tileFilters) {
@@ -1966,45 +2211,53 @@
 
 		// Run tileFilters on tiles
 		$tiles = $tiles.children();
-		print(&quot;Start tile filters at: &quot; + (new Date().getTime() - startTime) + &quot; milisec&quot;);
+		var allStart = new Date().getTime();
+		var startTime = allStart;
+		var tmp;
 		$.each(filters, function(i, filter) {
+			if (tmp) {
+				print(&quot;Filter &quot; + tmp + &quot; done in: &quot; + (new Date().getTime() - startTime) + &quot; milisec&quot;);
+			}
+			tmp = i;
+			startTime = new Date().getTime();
 			$tiles = filter.fn($tiles, filter.config, that);
-			print(&quot;Filter &quot; + i + &quot; done at: &quot; + (new Date().getTime() - startTime) + &quot; milisec&quot;);
 		});
+		print(&quot;Filter &quot; + tmp + &quot; done in: &quot; + (new Date().getTime() - startTime) + &quot; milisec&quot;);
+		print(&quot;All tile filters done after: &quot; + (new Date().getTime() - allStart) + &quot; milisec&quot;);
 		return $tiles;
 	};
 
 	Plugin.Layer.Model = function(viewQueries, options, labelQuery) {
-		
-// TODO Workers
-// var that = this;
-// var nodes = JSON.stringify(this._nodes);
-// print(nodes);
-// //Test
-// $.Hive.create({
-// // optional. if no &#x27;count&#x27; property is set, Hive creates only 1 worker
-// count: 1,
-// // the worker file
-// worker: &#x27;../../workers/model.js&#x27;,
-// // the receive ( convenience to writing out the addEventListener)
-// receive: function (filtered) {
-// /*
-// jQuery.Hive manages serialization/deserialization
-// */
-// console.log(filtered.data);
-//			 
-// },
-// created: function ( $hive ) {
-// /*
-// the &#x60;created&#x60; callback fires after the worker is created,
-// the first argument is an array of the workers
-// $().send() is the wrapper for postMessage() with complete
-// serialization/deserialization
-// */
-// $( $hive ).send({test : nodes});
-// }
-// });
-// print(JSON.parse(nodes));
+
+		// TODO Workers
+		// var that = this;
+		// var nodes = JSON.stringify(this._nodes);
+		// print(nodes);
+		// //Test
+		// $.Hive.create({
+		// // optional. if no &#x27;count&#x27; property is set, Hive creates only 1 worker
+		// count: 1,
+		// // the worker file
+		// worker: &#x27;../../workers/model.js&#x27;,
+		// // the receive ( convenience to writing out the addEventListener)
+		// receive: function (filtered) {
+		// /*
+		// jQuery.Hive manages serialization/deserialization
+		// */
+		// console.log(filtered.data);
+		//			 
+		// },
+		// created: function ( $hive ) {
+		// /*
+		// the &#x60;created&#x60; callback fires after the worker is created,
+		// the first argument is an array of the workers
+		// $().send() is the wrapper for postMessage() with complete
+		// serialization/deserialization
+		// */
+		// $( $hive ).send({test : nodes});
+		// }
+		// });
+		// print(JSON.parse(nodes));
 
 		var that = this;
 		this.viewQueries = viewQueries;
@@ -2066,7 +2319,6 @@
 	 * @return {Object} nodes A copy of the stored nodes
 	 */
 	Plugin.Layer.Model.prototype.getNodes = function() {
-		return this._nodes;
 	};
 
 	/**
@@ -2087,7 +2339,7 @@
 		$.each(batch, function(i, val) {
 			val.subject.token = UTIL.toToken(UTIL.toClass(val.subject.token));
 			val.index = that.nodesLength + 1;
-			var node = Plugin.NodeFactory.makeNode(val, that.options);
+			var node = Plugin.NodeFactory.make(val, that.options);
 
 			if (node) {
 
@@ -2188,12 +2440,16 @@
 		this.options = viewOptions;
 		this._model = model;
 		this.$outerContainer = $(&#x27;&lt;div class=&quot;&#x27; + CONS.CSS_CLASSES.outerContainer + &#x27;&quot;&gt;&lt;/div&gt;&#x27;);
-		this.$outerContainer.css({&quot;border-radius&quot;: &quot;18px&quot;, &quot;padding&quot; : &quot;5px 5px 5px 5px&quot;});
+		this.$outerContainer.css({
+			&quot;border-radius&quot; : &quot;18px&quot;,
+			&quot;padding&quot; : &quot;5px 5px 5px 5px&quot;
+		});
 		this.$viewContainer = $(&#x27;&lt;div class=&quot;&#x27; + CONS.CSS_CLASSES.viewContainer + &#x27;&quot;&gt;&lt;/div&gt;&#x27;);
 		$container.append(this.$outerContainer);
 		this.$outerContainer.append(this.$viewContainer);
 		this.$viewContainer.css(&quot;width&quot;, &quot;100%&quot;);
-		this.layoutEngine = new Plugin.LayoutEngine(this.$viewContainer, viewOptions.layoutEngine);
+		this.layoutEngine = Plugin.LayoutEngineFactory.make(this.$viewContainer,
+				viewOptions.layoutEngineOptions);
 
 		this._getCorrespondingTile = function(node) {
 			var $tile = this.$viewContainer.find(UTIL.toClassSelector(node.id));
@@ -2216,7 +2472,6 @@
 	};
 
 	Plugin.Layer.View.prototype.addTiles = function($tiles) {
-		var that = this;
 		this.layoutEngine.add($tiles);
 	};
 
@@ -2229,66 +2484,13 @@
 	Plugin.Layer.View.prototype.addSorter = function() {
 		// Add sortoptions
 		var that = this;
-
-		var sortData = $.extend({}, this.options.layoutEngine.getSortData);
-		delete sortData[&quot;group&quot;];
+		var sortData = $.extend({}, this.options.sortFns);
 		var sortOptions = templates.sortOptions(appendCssClasses({
 			optionSet : sortData
 		}));
 		this.$optionsContainer.prepend(sortOptions);
 		var $sorter = this.$optionsContainer.find(&#x27; &gt; &#x27; + UTIL.toSelector(CONS.CSS_CLASSES.sorter));
-
-		// Set selected on view
-		$sorter.find(&#x27;.&#x27; + this.options.layoutEngine.sortBy).addClass(&quot;selected&quot;);
 		var $sortLinks = this.$optionsContainer.find(&#x27;a&#x27;);
-
-// $sorter.append(templates.groupDropDown(appendCssClasses({
-// type : {
-// label : &quot;type&quot;,
-// val : CONS.FA_TAG
-// },
-// token : {
-// label : &quot;node-type&quot;,
-// val : CONS.TOKEN_TAG
-// }
-// })));
-// var $sorterGroup = $sorter.find(&#x27;#GroupDropDown&#x27;);
-//
-// // Add onChange
-// $sorterGroup.change(function(e) {
-//
-// // get href attribute, minus the &#x27;#&#x27;
-// var groupBy = $(this).val();
-//
-// that.$outerContainer.find(UTIL.toSelector(CONS.CSS_CLASSES.sorter) + &#x27; &gt; &gt; &gt;
-// .selected&#x27;)
-// .removeClass(&#x27;selected&#x27;);
-// that.layoutEngine.updateOptions({
-// getSortData : {
-// group : function($elem) {
-// var classes = $elem.attr(&quot;class&quot;);
-// var pattern = new RegExp(&quot;(\s)*[a-zA-Z0-9]*&quot; + groupBy +
-// &quot;[a-zA-Z0-9_]*(\s)*&quot;, &#x27;g&#x27;);
-// var groups = classes.match(pattern), group = &quot;&quot;;
-// if (groups !== null) {
-// for (var i = 0; i &lt; groups.length; i++) {
-// group += groups[i] + &quot; &quot;;
-// }
-// }
-// return group;
-// }
-// }
-// });
-// that.layoutEngine.updateSortData(that.$viewContainer.find(UTIL
-// .toSelector(CONS.CSS_CLASSES.tileClasses.tile)));
-// that.$outerContainer.find(&quot;&gt; &gt; &quot; +
-// UTIL.toSelector(CONS.CSS_CLASSES.groupLabel)).remove();
-// that.layoutEngine.updateOptions({
-// layoutMode : &#x27;groupRows&#x27;,
-// sortBy : &quot;group&quot;
-// });
-// return false;
-// });
 
 		// Add onClick
 		$sortLinks.click(function() {
@@ -2300,71 +2502,51 @@
 			// that.$outerContainer.find(&quot;&gt; &gt; &quot; +
 			// UTIL.toSelector(CONS.CSS_CLASSES.groupLabel)).remove();
 			$(this).addClass(&quot;selected&quot;);
-			that.layoutEngine.updateOptions({
-				layoutMode : &#x27;masonry&#x27;,
-				sortBy : sortName
-			});
+			that.layoutEngine.sort(sortName, sortData[sortName]);
 			return false;
 		});
 	};
 
-	Plugin.Layer.View.prototype.addIsotopeFilter = function() {
-		// Add options
-		var that = this;
+	Plugin.Layer.View.prototype.appendFilterDiv = function(callback) {
 		var filterOptions = templates.filterOptions(appendCssClasses({
-			filterOptions : that.options.filterBy
+			filterOptions : this.options.filterBy
 		}));
-		this.$optionsContainer.append(filterOptions);
+		this.$filter = $(filterOptions);
+		this.$optionsContainer.append(this.$filter);
+		print(&quot;outfilt&quot;);
+		this.$filterLinks = this.$filter.filter(UTIL.toSelector(CONS.CSS_CLASSES.filter)).find(&quot;a&quot;);
+		this.$filterBox = this.$filter.find(&#x27;#filterField&#x27;);
+		if (callback) {
+			callback();
+		}
+	}
 
-		var $filter = this.$optionsContainer.find(&#x27; &gt; &#x27; + UTIL.toSelector(CONS.CSS_CLASSES.filter));
-		var $filterLinks = $filter.find(&#x27;a&#x27;);
+	Plugin.Layer.View.prototype.addFilterBoxFn = function() {
+		var that = this;
+		// Add onKey
+		this.$filterBox.keyup(function(e) {
+			if (e.keyCode == 13) {
+				var selector = $(this).val().toLowerCase();
+				that.$filterLinks.removeClass(&#x27;selected&#x27;);
+				that.layoutEngine.filter(selector, &quot;contains&quot;);
+			}
+		});
+	};
 
+	Plugin.Layer.View.prototype.addFilterLinkFn = function() {
+		var that = this;
 		// Add onClick
-		$filterLinks.click(function() {
-			// get href attribute, minus the &#x27;#&#x27;
+		this.$filterLinks.click(function() {
 			var selector = $(this).attr(&#x27;data-filter-value&#x27;);
 			if (selector !== &#x27;*&#x27;) {
 				selector = &quot;.&quot; + CONS.FA_TAG + selector;
 			}
-			that.$outerContainer.find(UTIL.toSelector(CONS.CSS_CLASSES.filter) + &#x27; &gt; &gt; &gt; .selected&#x27;)
-					.removeClass(&#x27;selected&#x27;);
+			that.$filterLinks.removeClass(&#x27;selected&#x27;);
+			that.$filterBox.val(&#x27;Enter search here.&#x27;);
 			$(this).addClass(&#x27;selected&#x27;);
-			that.layoutEngine.updateOptions({
-				filter : selector
-			});
+			// TODO filter
+			that.layoutEngine.filter(selector, &quot;class&quot;);
 			return false;
-		});
-
-		$filter.append(&#x27;&lt;input id=&quot;filterField&quot; type=&quot;text&quot; size=&quot;25&quot; value=&quot;Enter search here.&quot;&gt;&#x27;);
-		var $filterBox = $filter.find(&#x27;#filterField&#x27;);
-
-		// Add onKey
-		$filterBox.keyup(function(e) {
-			if(e.keyCode == 13) {
-				// get href attribute, minus the &#x27;#&#x27;
-				var selector = $(this).val();
-				if (selector !== &#x27;&#x27;) {
-					if (selector !== &#x27;*&#x27;) {
-						if (that.options.supportRegExpFilter) {
-							try {
-								selector = &quot;div:regex(class, &quot; + selector + &quot;), div &gt; div:contains(&quot; + selector + &quot;)&quot;;
-							} catch (e) {
-								selector = &quot;div &gt; div:contains(&quot; + selector + &quot;)&quot;;
-							}
-						} else {
-							selector = &quot;div &gt; div:contains(&quot; + selector + &quot;)&quot;;
-						}
-					}
-				} else {
-					selector = &#x27;*&#x27;;
-				}
-	
-				that.$outerContainer.find(UTIL.toSelector(CONS.CSS_CLASSES.filter) + &#x27; &gt; &gt; &gt; .selected&#x27;)
-						.removeClass(&#x27;selected&#x27;);
-				that.layoutEngine.updateOptions({
-					filter : selector
-				});
-			}
 		});
 	};
 
@@ -2446,28 +2628,36 @@
 
 		var that = this;
 		var $innerNoScroll = that.$overlay.find(UTIL.toSelector(CONS.CSS_CLASSES.innerNoScroll));
+
+		$innerNoScroll.css({
+			&quot;background-image&quot; : &quot;url(&#x27;img/loader.gif&#x27;)&quot;,
+			&quot;background-repeat&quot; : &quot;no-repeat&quot;,
+			&quot;background-position&quot; : &quot;center&quot;
+		});
 		
-		$innerNoScroll.css({&quot;background-image&quot; : &quot;url(&#x27;img/loader.gif&#x27;)&quot;, &quot;background-repeat&quot; : &quot;no-repeat&quot;, &quot;background-position&quot; : &quot;center&quot;});
+		// multiplactor 2 is num of queries
+		var remoteToDo = remoteDataLoader.backends.length * 2;
+		var remoteDoneCount = 0;
+		remoteDataLoader.loadingDone.attach(new Plugin.Listener(function() {
+			remoteDoneCount++;
+			print(&quot;remoteDoneCount &quot; + remoteDoneCount);
+			that.update();
+			if (remoteDoneCount === remoteToDo) {
+				$innerNoScroll.css({
+					&quot;background-image&quot; : &quot;&quot;
+				});
+				remoteDataLoader.loadingDone.dettach(this);
+			}
+		}));
+		
 		// Get items who are in a relation to
 		// current item
 		var remoteSubjectOf = replaceDummy(queryStore.remoteSubjectOf, that.node.getFComponentOT(&quot;uri&quot;).data);
 		var remoteObjectOf = replaceDummy(queryStore.remoteObjectOf, that.node.getFComponentOT(&quot;uri&quot;).data);
-		
+
 		// remote needed?
 		remoteDataLoader.insertByQuery(remoteSubjectOf + &quot; LIMIT &quot; + that.options.remoteOptions.remoteLimit);
 		remoteDataLoader.insertByQuery(remoteObjectOf + &quot; LIMIT &quot; + that.options.remoteOptions.remoteLimit);
-		
-		var remoteDoneCount = 0;
-		// TODO inform model
-		remoteDataLoader.loadingDone.attach(new Plugin.Listener(function() {
-			remoteDoneCount++;
-			print(&quot;remoteDoneCount &quot; + remoteDoneCount);
-			if(remoteDoneCount === 2) {
-				 that.update();
-				 $innerNoScroll.css({&quot;background-image&quot; : &quot;&quot;});
-				 remoteDataLoader.loadingDone.dettach(this);
-			}
-		}));
 	};
 
 	Plugin.Layers.Res.prototype.show = function() {
@@ -2693,9 +2883,9 @@
 				&quot;overlayContent&quot;, &quot;overlayWrapper&quot;, &quot;previewItem&quot;, &quot;timelineWrapper&quot;, &quot;timelineItem&quot; ];
 
 		this._methodsAreLoaded = function(/*
-														 * array of templatenames which must
-														 * be loaded
-														 */) {
+		 * array of templatenames which must
+		 * be loaded
+		 */) {
 			var i = 0, methodName;
 			while (arguments[0[i++]] !== undefined) {
 				if (typeof templates[arguments[i]] !== &#x27;function&#x27;) {
@@ -2715,27 +2905,6 @@
 			this._templateInitDfd.reject();
 			return false;
 		}
-	};
-
-	Plugin.TemplatesLoader.prototype.extractByFile = function(path) {
-		// Get external template file
-		var _that = this;
-		$.get(path, function(data) {
-			var $fakeDiv = $(&quot;&lt;div&gt;&quot;);
-			$fakeDiv.append(data);
-
-			$fakeDiv.children().each(function(i, val) {
-				var partial = (val.id.indexOf(&quot;par_&quot;) !== -1);
-				if (partial) {
-					val.id = val.id.slice(4);
-				}
-				templates[val.id] = Handlebars.compile($(val).html());
-				if (partial) {
-					Handlebars.registerPartial(val.id, $(val).html());
-				}
-			});
-			_that._isLoaded();
-		}, &quot;html&quot;);
 	};
 
 	Plugin.TemplatesLoader.prototype.getPrecompiledTemplates = function() {
@@ -2778,14 +2947,14 @@
 	Plugin.RemoteDataLoader.prototype.generateTypeInsertionQuery = function(data) {
 		var insertionQuery = &quot;INSERT DATA {&quot;;
 		$.each(data, function(i, val) {
-			if(val.res &amp;&amp; val.type) {
+			if (val.res &amp;&amp; val.type) {
 				insertionQuery += &quot;&lt;&quot; + val.res.value + &quot;&gt; a &quot; + &quot;&lt;&quot; + val.type.value + &quot;&gt;.&quot;;
 			}
 		});
 		insertionQuery += &quot;}&quot;;
 		return insertionQuery;
 	};
-	
+
 	Plugin.RemoteDataLoader.prototype.generateInsertionQuery = function(data) {
 		var insertionQuery = &quot;INSERT DATA {&quot;;
 		$.each(data, function(i, val) {
@@ -2799,15 +2968,20 @@
 			}
 			insertionQuery += &quot;&lt;&quot; + val.predicate.value + &quot;&gt; &quot;;
 			if (val.object.type === &quot;uri&quot;) {
-				insertionQuery += &quot;&lt;&quot; +val.object.value + &quot;&gt;. &quot;;
+				insertionQuery += &quot;&lt;&quot; + val.object.value + &quot;&gt;. &quot;;
 			} else if (val.object.type === &quot;literal&quot;) {
+				insertionQuery += &#x27;&quot;&#x27; + encodeURIComponent(val.object.value) + &#x27;&quot;. &#x27;;
+			} else if (val.object.type === &quot;typed-literal&quot;) {
+				// TODO typed-literals
 				insertionQuery += &#x27;&quot;&#x27; + encodeURIComponent(val.object.value) + &#x27;&quot;. &#x27;;
 			}
 			if (val.labelSub) {
-				insertionQuery += &#x27;&lt;&#x27; + val.subject.value + &#x27;&gt; rdfs:label &quot;&#x27; + encodeURIComponent(val.labelSub.value) + &#x27;&quot;. &#x27;;
+				insertionQuery += &#x27;&lt;&#x27; + val.subject.value + &#x27;&gt; rdfs:label &quot;&#x27;
+						+ encodeURIComponent(val.labelSub.value) + &#x27;&quot;. &#x27;;
 			}
 			if (val.labelObj) {
-				insertionQuery += &#x27;&lt;&#x27; + val.object.value + &#x27;&gt; rdfs:label &quot;&#x27; + encodeURIComponent(val.labelObj.value) + &#x27;&quot;. &#x27;;
+				insertionQuery += &#x27;&lt;&#x27; + val.object.value + &#x27;&gt; rdfs:label &quot;&#x27;
+						+ encodeURIComponent(val.labelObj.value) + &#x27;&quot;. &#x27;;
 			}
 			if (val.labelPred) {
 				labelCache.add(encodeURIComponent(val.predicate.value), encodeURIComponent(val.labelPred.value));
@@ -2820,16 +2994,16 @@
 	Plugin.RemoteDataLoader.prototype._loadRemoteAndInsert = function(query, service, fn, callback) {
 		// Execute selection query
 		this.remoteEngine.executeQuery(query, service, function(data, success) {
-			
-			// print(&quot;Remotequery: &#x27;&quot; + query + &quot;&#x27; was a success on &quot; + service +
-			// &quot;? \n&quot; + success);
+
+			print(&quot;Remotequery: &#x27;&quot; + query + &quot;&#x27; was a success on &quot; + service +
+			&quot;? \n&quot; + success);
 			// Generate insertionQuery out of the resultset.
 			if (data &amp;&amp; success) {
 				if (data.subject !== undefined) {
 					data = [ data ];
 				}
-				// print(&quot;Gives this results: &quot;);
-				// print(data);
+				print(&quot;Gives this results: &quot;);
+				print(data);
 				// Execute insertion
 				rdfStore.executeQuery(fn(data), function() {
 					if (callback) {
@@ -2843,7 +3017,7 @@
 			}
 		});
 	};
-	
+
 	Plugin.RemoteDataLoader.prototype.executeQuery = function(query, backends, fn) {
 		var that = this;
 		// Inform the plugin something is loading
@@ -2856,8 +3030,8 @@
 			that._loadRemoteAndInsert(query, val, fn, function(success) {
 				backendFlags[count] = true;
 				var done = true;
-				for(var j = 0; j &lt; backendFlags.length; j++) {
-					if(!backendFlags[j]) {
+				for (var j = 0; j &lt; backendFlags.length; j++) {
+					if (!backendFlags[j]) {
 						done = false;
 					}
 				}
@@ -2865,8 +3039,18 @@
 					that.loadingDone.notify(query);
 				}
 			});
-		});		
-	}
+		});
+	};
+	
+	Plugin.RemoteDataLoader.prototype.insertByResultset = function(data, callback) {
+		var that = this;
+		rdfStore.executeQuery(this.generateInsertionQuery(data), function() {
+			that.loadingDone.notify(&quot;&quot;);
+			if (callback) {
+				callback();
+			}
+		});
+	};
 
 	// Inserts Data by querying all services
 	Plugin.RemoteDataLoader.prototype.insertByQuery = function(query, backends) {
@@ -2876,7 +3060,7 @@
 			this.executeQuery(query, this.backends, this.generateInsertionQuery);
 		}
 	};
-	
+
 	Plugin.RemoteDataLoader.prototype.insertTypesByQuery = function(query, backends) {
 		if (backends) {
 			this.executeQuery(query, backends, this.generateTypeInsertionQuery);
@@ -2907,7 +3091,7 @@
 	 * @type Object
 	 */
 	var defaults = {
-			// TODO workers
+		// TODO workers
 		pathToWorkers : &quot;../../workers/&quot;,
 		language : &quot;en&quot;,
 		/**
@@ -2937,24 +3121,7 @@
 		 */
 		dataFormat : undefined,
 		/**
-		 * Flag to activate the usage of precompiled handlebars templates.
-		 * 
-		 * @property defaults.templatesPrecompiled
-		 * @type Boolean
-		 * @default true
-		 */
-		templatesPrecompiled : true,
-		/**
-		 * Path of the html file which can be used to load handlebars templates
-		 * dynamically.
-		 * 
-		 * @property defaults.templatesPath
-		 * @type String
-		 * @default &quot;templates_wrapped/templates.html&quot;
-		 */
-		templatesPath : &quot;templates_wrapped/templates.html&quot;,
-		/**
-		 * SPARQL resultset which can be used to insert data into the store on
+		 * SPARQL resultset bindings which can be used to insert data into the store on
 		 * init.
 		 * 
 		 * @property defaults.sparqlData
@@ -2984,6 +3151,7 @@
 		initQueries : [ {
 			query : &quot;SELECT ?subject ?label ?description ?type WHERE { ?subject rdfs:label ?label . OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }. OPTIONAL {?subject rdfs:type ?type}}&quot;
 		} ],
+		openDetailOnInit : &quot;&quot;,
 		/**
 		 * Options for the rdf store class. Uses rdfstore-js
 		 * https://github.com/antoniogarrote/rdfstore-js options structure.
@@ -3078,18 +3246,18 @@
 				 */
 				multiResNode : {
 					fn : function(nodes, config) {
-						 var tempArray = new Array();
-						 $.each(nodes, function(i, node) {
-						 if (node.type === &quot;resNode&quot; || node.type === &quot;multiResNode&quot;) {
-							 if (node.components.uri[0].data in tempArray) {
-								 tempArray[node.components.uri[0].data].type = &quot;multiResNode&quot;;
-								 tempArray[node.components.uri[0].data].merge(node);
-								 delete nodes[i];
-							 } else {
-								 tempArray[node.components.uri[0].data] = node;
-							 }
-						 }
-						 });
+						var tempArray = new Array();
+						$.each(nodes, function(i, node) {
+							if (node.type === &quot;resNode&quot; || node.type === &quot;multiResNode&quot;) {
+								if (node.components.uri[0].data in tempArray) {
+									tempArray[node.components.uri[0].data].type = &quot;multiResNode&quot;;
+									tempArray[node.components.uri[0].data].merge(node);
+									delete nodes[i];
+								} else {
+									tempArray[node.components.uri[0].data] = node;
+								}
+							}
+						});
 						return nodes;
 					}
 				},
@@ -3207,8 +3375,8 @@
 										if (cStyles[id] &amp;&amp; (!cStyles[id].display || cStyles[id].display != &quot;none&quot;)) {
 											var cStyle = cStyles[id];
 											if (component.layoutFn) {
-												anchorY = component.layoutFn($tile, node, nStyle, component, cStyle, config,
-														anchorY, contentHeight, temp);
+												anchorY = component.layoutFn($tile, node, nStyle, component, cStyle,
+														config, anchorY, contentHeight, temp);
 											} else if (config.defaultContentLayoutFns[component.type]) {
 												anchorY = config.defaultContentLayoutFns[component.type]($tile, node,
 														nStyle, component, cStyle, config, anchorY, contentHeight, temp);
@@ -3407,11 +3575,14 @@
 				textScale : {
 					fn : function($tiles, config, layer) {
 						// On layout done event
-						layer.view.$viewContainer.on(CONS.EVENT_TYPES.layout.done, function(newInsertions) {
-							if(newInsertions) {
+						// TODO fix if hidden
+						layer.view.layoutEngine.partialDoneEvent.attach(new Plugin.Listener(function(e,
+								newInsertions) {
+							newInsertions = $(newInsertions);
+							if (newInsertions) {
 								var startTime = new Date().getTime();
-								var $fitHere = $tiles.find(UTIL.toSelector(CONS.CSS_CLASSES.textScale));
-								$fitHere.parent().textfill(config.maxFontPixels, config.minFontPixels, function($parent) {
+								var $fitHere = newInsertions.find(UTIL.toSelector(CONS.CSS_CLASSES.textScale));
+								$fitHere.textfill(config.maxFontPixels, config.minFontPixels, function($parent) {
 									$parent.css({
 										&quot;overflow-y&quot; : &quot;auto&quot;,
 										&quot;word-wrap&quot; : &quot;break-word&quot;
@@ -3419,9 +3590,10 @@
 								});
 								$fitHere.removeClass(CONS.CSS_CLASSES.textScale);
 								$fitHere.addClass(CONS.CSS_CLASSES.textScaleDone);
-								print(&quot;Event textScaleEvent done after: &quot; + (new Date().getTime() - startTime) + &quot; milisec&quot;);
+								print(&quot;Event textScaleEvent done after: &quot; + (new Date().getTime() - startTime)
+										+ &quot; milisec&quot;);
 							}
-						});
+						}));
 						return $tiles;
 					},
 					config : {
@@ -3438,48 +3610,77 @@
 				 */
 				backgroundColor : {
 					fn : function($tiles, config) {
+						var colorizeFn = function(res, $tile) {
+							var color, rdfsColor;
+							$.each(res, function(i, val) {
+								var currentUri = val.type.value;
+								if (currentUri.indexOf(namespaces.rdfs) !== -1
+										|| currentUri.indexOf(namespaces.owl) !== -1) {
+									if (!color) {
+										if (rdfsColor) {
+											var scale = chroma.scale(
+													[ rdfsColor.hex(), &quot;#&quot; + md5(currentUri).substring(0, 6) ])
+													.mode(&#x27;lch&#x27;);
+											rdfsColor = chroma(scale(0.5).hex());
+										} else {
+											rdfsColor = chroma(&quot;#&quot; + md5(currentUri).substring(0, 6));
+										}
+									}
+								} else {
+									if (color) {
+										var scale = chroma
+												.scale([ color.hex(), &quot;#&quot; + md5(currentUri).substring(0, 6) ])
+												.mode(&#x27;lch&#x27;);
+										color = chroma(scale(0.5).hex());
+									} else {
+										color = chroma(&quot;#&quot; + md5(currentUri).substring(0, 6));
+									}
+								}
+							});
+							if (color) {
+								//TODO
+								//Dirty brightness fix;
+								if(color._rgb[0] &gt; 200 &amp;&amp; color._rgb[1] &gt; 200 &amp;&amp; color._rgb[2] &gt; 200) {
+									color._rgb[0] = color._rgb[0]-50;
+									color._rgb[1] = color._rgb[1]-50;
+									color._rgb[2] = color._rgb[2]-50;
+								}
+								$tile.css(&quot;background-color&quot;, color);
+							} else if (rdfsColor) {
+								//TODO
+								//Dirty brightness fix;
+								if(rdfsColor._rgb[0] &gt; 200 &amp;&amp; rdfsColor._rgb[1] &gt; 200 &amp;&amp; rdfsColor._rgb[2] &gt; 200) {
+									rdfsColor._rgb[0] = rdfsColor._rgb[0]-50;
+									rdfsColor._rgb[1] = rdfsColor._rgb[1]-50;
+									rdfsColor._rgb[2] = rdfsColor._rgb[2]-50;
+								}
+								$tile.css(&quot;background-color&quot;, rdfsColor);
+							}
+						};
 						var counter = 0;
+						var cbTiles = [];
+						var batches = [];
+						var queryStart = &quot;SELECT DISTINCT ?res ?type WHERE { VALUES ?res {&quot;
+						var remoteQuery = &quot;SELECT DISTINCT ?res ?type WHERE { VALUES ?res {&quot;
+						batches.push({count : 0, cbTiles : [], query : queryStart});
 						$.each($tiles, function(i, tile) {
 							var $tile = $(tile);
 							var node = $tile.data(&quot;node&quot;);
-							if(node.getType() === CONS.NODE_TYPES.resNode || node.getType() === &quot;multiResNode&quot;) {
+							if (node.getType() === CONS.NODE_TYPES.resNode || node.getType() === &quot;multiResNode&quot;) {
 								var uri = node.getFComponentOT(&#x27;uri&#x27;).data;
-								var remoteQuery = &quot;SELECT DISTINCT ?res ?type WHERE { VALUES ?res {&lt;&quot; + uri + &quot;&gt;} ?res a ?type}&quot;;
-								remoteDataLoader.insertTypesByQuery(remoteQuery);
-								remoteDataLoader.loadingDone.attach(new Plugin.Listener(function() { return function(sender, args){
-									if(args === remoteQuery) {
-										remoteDataLoader.loadingDone.dettach(this);
-										var query = replaceDummy(queryStore.typeQuery, uri);
-										rdfStore.executeQuery(query, function(res){
-											var color, rdfsColor;
-											$.each(res, function(i, val){
-												var currentUri = val.type.value;
-												if(currentUri.indexOf(namespaces.rdfs) !== -1 || currentUri.indexOf(namespaces.owl) !== -1 ) {
-													if(!color) {
-														if(rdfsColor) {
-															var scale = chroma.scale([rdfsColor.hex(), &quot;#&quot; + md5(currentUri).substring(0, 6)]).mode(&#x27;lab&#x27;);
-															rdfsColor = chroma(scale(0.5).hex());
-														} else {
-															rdfsColor = chroma(&quot;#&quot; + md5(currentUri).substring(0, 6));
-														}
-													}
-												} else {
-													if(color) {
-														var scale = chroma.scale([color.hex(), chroma(&quot;#&quot; + md5(currentUri).substring(0, 6))]);
-														color = chroma(scale(0.5).hex());
-													} else {
-														color = chroma(&quot;#&quot; + md5(currentUri).substring(0, 6));
-													}
-												}
-											});
-											if(color) {
-												$tile.css(&quot;background-color&quot;, color);
-											} else if(rdfsColor) {
-												$tile.css(&quot;background-color&quot;, rdfsColor);
-											}
-										});
-									}
-								}}(uri)));
+								var bLeng = batches.length-1;
+								if(batches[bLeng].count &lt; config.batchSize) {
+									batches[bLeng].count++;
+									batches[bLeng].cbTiles.push($tile);
+									batches[bLeng].query += &quot;&lt;&quot; + uri + &quot;&gt;&quot;;
+								} else {
+									//finish query
+									batches[bLeng].query += &quot;} ?res a ?type}&quot;;
+									bLeng++;
+									batches.push({count : 1, cbTiles : [], query : queryStart});
+									batches[bLeng].cbTiles.push($tile);
+									batches[bLeng].query += &quot;&lt;&quot; + uri + &quot;&gt;&quot;;
+								}
 							} else {
 								counter++;
 								var colorArray, color;
@@ -3496,9 +3697,34 @@
 								}
 							}
 						});
+						
+						// finish last query
+						batches[batches.length-1].query += &quot;} ?res a ?type}&quot;;
+						
+						// For each batch
+						if(batches[0].count &gt; 0) {
+							$.each(batches, function(i, batch){
+								remoteDataLoader.insertTypesByQuery(batch.query);
+								remoteDataLoader.loadingDone.attach(new Plugin.Listener(function(e, query) {
+									if(query == batch.query) {
+										remoteDataLoader.loadingDone.dettach(this);
+										$.each(batch.cbTiles, function(j, tile){
+											var $tile = $(tile);
+											var node = $tile.data(&quot;node&quot;);
+											var uri = node.getFComponentOT(&#x27;uri&#x27;).data;
+											var localQuery = replaceDummy(queryStore.typeQuery, uri);
+											rdfStore.executeQuery(localQuery, function(res) {
+												colorizeFn(res, $tile);
+											});
+										});
+									}
+								}));
+							});
+						}
 						return $tiles;
 					},
 					config : {
+						batchSize : 100,
 						defaultStyles : {
 							literal : {
 								/**
@@ -3513,22 +3739,23 @@
 							blankNode : {
 								bgColors : [ &#x27;#999999&#x27; ]
 							}
-// ,
-// stdNode : {
-// /**
-// * Colors of items.
-// *
-// * @property
-// defaults.layerOptions.tileFilters.backgroundColor.config.defaultStyles.stdNode.bgColors
-// * @type Array
-// * @default [ &#x27;#e2674a&#x27;, &#x27;#99CC99&#x27;, &#x27;#3399CC&#x27;,
-// * &#x27;#33CCCC&#x27;, &#x27;#996699&#x27;, &#x27;#C24747&#x27;, &#x27;#FFCC66&#x27;,
-// * &#x27;#669999&#x27;, &#x27;#CC6699&#x27;, &#x27;#339966&#x27;, &#x27;#666699&#x27; ]
-// */
-// bgColors : [ &#x27;#e2674a&#x27;, &#x27;#99CC99&#x27;, &#x27;#3399CC&#x27;, &#x27;#33CCCC&#x27;, &#x27;#996699&#x27;,
-// &#x27;#C24747&#x27;,
-// &#x27;#FFCC66&#x27;, &#x27;#669999&#x27;, &#x27;#CC6699&#x27;, &#x27;#339966&#x27;, &#x27;#666699&#x27; ]
-// }
+						// ,
+						// stdNode : {
+						// /**
+						// * Colors of items.
+						// *
+						// * @property
+						// defaults.layerOptions.tileFilters.backgroundColor.config.defaultStyles.stdNode.bgColors
+						// * @type Array
+						// * @default [ &#x27;#e2674a&#x27;, &#x27;#99CC99&#x27;, &#x27;#3399CC&#x27;,
+						// * &#x27;#33CCCC&#x27;, &#x27;#996699&#x27;, &#x27;#C24747&#x27;, &#x27;#FFCC66&#x27;,
+						// * &#x27;#669999&#x27;, &#x27;#CC6699&#x27;, &#x27;#339966&#x27;, &#x27;#666699&#x27; ]
+						// */
+						// bgColors : [ &#x27;#e2674a&#x27;, &#x27;#99CC99&#x27;, &#x27;#3399CC&#x27;, &#x27;#33CCCC&#x27;,
+						// &#x27;#996699&#x27;,
+						// &#x27;#C24747&#x27;,
+						// &#x27;#FFCC66&#x27;, &#x27;#669999&#x27;, &#x27;#CC6699&#x27;, &#x27;#339966&#x27;, &#x27;#666699&#x27; ]
+						// }
 						}
 					}
 				},
@@ -3541,6 +3768,8 @@
 				 */
 				backgroundImg : {
 					fn : function($tiles, config) {
+						// TODO image path?
+						return $tiles;
 						$.each($tiles, function(i, tile) {
 							var $tile = $(tile);
 							var node = $tile.data(&quot;node&quot;), image_url = &quot;&quot;;
@@ -3720,25 +3949,6 @@
 						defaultFns : {
 							layerOptionsFn : function(options) {
 								return $.extend(true, {}, options, {
-									layoutEngine : {
-										itemSelector : UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.tile),
-										getSortData : {
-											type : function($elem) {
-												var classes = $elem.attr(&quot;class&quot;);
-												return classes;
-											},
-											group : function($elem) {
-												var classes = $elem.attr(&quot;class&quot;);
-												var pattern = new RegExp(&quot;(\s)*[a-zA-Z0-9]*&quot; + CONS.TOKEN_TAG
-														+ &quot;[a-zA-Z0-9]*(\s)*&quot;, &#x27;g&#x27;);
-												var groups = classes.match(pattern), group = &quot;&quot;;
-												for (var i = 0; i &lt; groups.length; i++) {
-													group += groups[i] + &quot; &quot;;
-												}
-												return group;
-											}
-										}
-									},
 									viewOptions : {
 										filterBy : [ {
 											value : &quot;*&quot;,
@@ -3788,9 +3998,9 @@
 							fn : function(node, data) {
 								var uri = node.getFComponentOT(&quot;uri&quot;).data;
 								var weight = node.weight;
-								if(uri) {
+								if (uri) {
 									$.each(data, function(str, value) {
-										if(uri.indexOf(str) !== -1) {
+										if (uri.indexOf(str) !== -1) {
 											weight += value * Math.random();
 										}
 									});
@@ -3818,10 +4028,10 @@
 							fn : function(node, data) {
 								var tempalteID = node.useTemplateID;
 								var weight = node.weight;
-								if(tempalteID) {
+								if (tempalteID) {
 									$.each(data, function(str, value) {
-										if(tempalteID === str) {
-											weight += value * (Math.random()+0.1);
+										if (tempalteID === str) {
+											weight += value * (Math.random() + 0.1);
 										}
 									});
 								}
@@ -3964,15 +4174,24 @@
 			 * @type Object
 			 */
 			viewOptions : {
-				/**
-				 * Flag to indicate whether the filter should use regular
-				 * expressions.
-				 * 
-				 * @property defaults.layerOptions.viewOptions.supportRegExpFilter
-				 * @type Boolean
-				 * @default true
-				 */
-				supportRegExpFilter : true,
+				sortFns : {
+					weight : function(elem) {
+						var $elem = $(elem);
+						var node = $elem.data(&quot;node&quot;);
+						var weight = node.weight;
+						if (!isUndefinedOrNull(weight)) {
+							return -1 * weight;
+						} else {
+							return 0;
+						}
+					},
+					alphabetical : function(elem) {
+						var $elem = $(elem);
+						var label = $elem.find(UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.label)), itemText = label.length ? label
+								: $elem;
+						return itemText.text();
+					}
+				},
 
 				/**
 				 * Default filter to be added to the filter interface.
@@ -3990,37 +4209,69 @@
 				 * Options for the layoutEngine. Uses isotope
 				 * http://isotope.metafizzy.co/ options structure.
 				 * 
-				 * @property defaults.layerOptions.viewOptions.layoutEngine
+				 * @property defaults.layerOptions.viewOptions.layoutEngineOptions
 				 * @type Object
 				 */
-				layoutEngine : {
-					masonry: {
-					    columnWidth: 1
-				   },
-					sortBy : &#x27;weight&#x27;,
-					getSortData : {
-						weight : function(elem) {
-							var $elem = $(elem);
-							var node = $elem.data(&quot;node&quot;);
-							var weight = node.weight;
-							if(!isUndefinedOrNull(weight)) {
-								return -1 * weight;
-							} else {
-								return 0;
+				layoutEngineOptions : {
+					/**
+					 * Flag to indicate whether the filter should use regular
+					 * expressions if the chosen layout supports it.
+					 * 
+					 * @property defaults.layerOptions.viewOptions.layoutEngineOptions.supportRegExpFilter
+					 * @type Boolean
+					 * @default true
+					 */
+					supportRegExpFilter : true,
+					useEngine : &quot;isotope&quot;,
+					clusterSize : 10,
+					clusterWait : 10
+					,
+					shuffle : {
+						filterFns : {
+							&quot;contains&quot; : function($el, shuffle) {
+								// Only search elements in the current group
+								if (shuffle.group !== &#x27;all&#x27; &amp;&amp; $.inArray(shuffle.group, $el.data(&#x27;groups&#x27;)) === -1) {
+									return false;
+								}
+								var text = $.trim($el.text()).toLowerCase();
+								return text.indexOf(selector) !== -1;
+							},
+							&quot;class&quot; : function($el, shuffle) {
+								return $el.hasClass(selector);
 							}
 						},
-// number : function(elem) {
-// var $elem = $(elem);
-// var number = $elem.hasClass(&#x27;item&#x27;) ? $elem.find(
-// UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.number)).text() : $elem
-// .attr(&#x27;data-number&#x27;);
-// return parseInt(number, 10);
-// },
-						alphabetical : function(elem) {
-							var $elem = $(elem);
-							var label = $elem.find(UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.label)), itemText = label.length ? label
-									: $elem;
-							return itemText.text();
+						options : {
+							itemSelector : UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.tile),
+							columnWidth : 1,
+							sequentialFadeDelay : 0,
+							supported : false
+						}
+					}
+					,
+					isotope : {
+						options : {
+							itemSelector : UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.tile),
+							transitionDuration : 0,
+							layoutMode : &#x27;packery&#x27;,
+							sortBy : &#x27;weight&#x27;,
+							getSortData : {
+								weight : function(elem) {
+									var $elem = $(elem);
+									var node = $elem.data(&quot;node&quot;);
+									var weight = node.weight;
+									if (!isUndefinedOrNull(weight)) {
+										return -1 * weight;
+									} else {
+										return 0;
+									}
+								},
+								alphabetical : function(elem) {
+									var $elem = $(elem);
+									var label = $elem.find(UTIL.toSelector(CONS.CSS_CLASSES.tileClasses.label)), itemText = label.length ? label
+											: $elem;
+									return itemText.text();
+								}
+							}
 						}
 					}
 				}
@@ -4046,7 +4297,7 @@
 		// &lt;!--- instance private utility functions ----&gt;
 
 		this.pluginID = generateId();
-		
+
 		this._extendedLayers = {};
 		this._topLayer;
 
@@ -4106,9 +4357,9 @@
 				});
 			}
 			// TODO update on datainsertion
-// remoteDataLoader.loadingDone.attach(new Plugin.Listener(function() {
-// that.updateTopLayer();
-// }));
+			// remoteDataLoader.loadingDone.attach(new Plugin.Listener(function() {
+			// that.updateTopLayer();
+			// }));
 		},
 		/**
 		 * Initializes the templating
@@ -4186,11 +4437,7 @@
 			});
 
 			var loader = new Plugin.TemplatesLoader(templateInitDfd);
-			if (that.options.templatesPrecompiled) {
-				loader.getPrecompiledTemplates();
-			} else {
-				loader.extractByFile(that.options.templatesPath);
-			}
+			loader.getPrecompiledTemplates();
 			return templateInitDfd.promise();
 		},
 		/**
@@ -4208,10 +4455,20 @@
 				defaultInitRemoteQuery : this.options.layerOptions.remoteOptions.defaultInitRemoteQuery,
 				remoteSubjectOf : &quot; SELECT DISTINCT ?subject ?predicate ?object ?labelObj ?labelPred WHERE { VALUES ?subject {&lt;&quot;
 						+ CONS.DUMMY
-						+ &quot;&gt;} ?subject ?predicate ?object. OPTIONAL { ?object rdfs:label ?labelObj }. OPTIONAL { ?predicate rdfs:label ?labelPred }. FILTER(isIRI(?object)  || (LANG(?object) = &#x27;&#x27; || LANGMATCHES(LANG(?object), &#x27;&quot; + that.options.language + &quot;&#x27;))). FILTER(LANG(?labelPred) = &#x27;&#x27; || LANGMATCHES(LANG(?labelPred), &#x27;&quot; + that.options.language + &quot;&#x27;)). FILTER(LANG(?labelObj) = &#x27;&#x27; || LANGMATCHES(LANG(?labelObj), &#x27;&quot; + that.options.language + &quot;&#x27;))}&quot;,
+						+ &quot;&gt;} ?subject ?predicate ?object. OPTIONAL { ?object rdfs:label ?labelObj }. OPTIONAL { ?predicate rdfs:label ?labelPred }. FILTER(isIRI(?object)  || (LANG(?object) = &#x27;&#x27; || LANGMATCHES(LANG(?object), &#x27;&quot;
+						+ that.options.language
+						+ &quot;&#x27;))). FILTER(LANG(?labelPred) = &#x27;&#x27; || LANGMATCHES(LANG(?labelPred), &#x27;&quot;
+						+ that.options.language
+						+ &quot;&#x27;)). FILTER(LANG(?labelObj) = &#x27;&#x27; || LANGMATCHES(LANG(?labelObj), &#x27;&quot;
+						+ that.options.language + &quot;&#x27;))}&quot;,
 				remoteObjectOf : &quot; SELECT DISTINCT ?subject ?predicate ?object ?labelSub ?labelPred WHERE {VALUES ?object {&lt;&quot;
 						+ CONS.DUMMY
-						+ &quot;&gt;} ?subject ?predicate ?object. OPTIONAL { ?subject rdfs:label ?labelSub }. OPTIONAL { ?predicate rdfs:label ?labelPred }. FILTER(isIRI(?subject)  || (LANG(?subject) = &#x27;&#x27; || LANGMATCHES(LANG(?subject), &#x27;&quot; + that.options.language + &quot;&#x27;))). FILTER(LANG(?labelPred) = &#x27;&#x27; || LANGMATCHES(LANG(?labelPred), &#x27;&quot; + that.options.language + &quot;&#x27;)). FILTER(LANG(?labelSub) = &#x27;&#x27; || LANGMATCHES(LANG(?labelSub), &#x27;&quot; + that.options.language + &quot;&#x27;))}&quot;,
+						+ &quot;&gt;} ?subject ?predicate ?object. OPTIONAL { ?subject rdfs:label ?labelSub }. OPTIONAL { ?predicate rdfs:label ?labelPred }. FILTER(isIRI(?subject)  || (LANG(?subject) = &#x27;&#x27; || LANGMATCHES(LANG(?subject), &#x27;&quot;
+						+ that.options.language
+						+ &quot;&#x27;))). FILTER(LANG(?labelPred) = &#x27;&#x27; || LANGMATCHES(LANG(?labelPred), &#x27;&quot;
+						+ that.options.language
+						+ &quot;&#x27;)). FILTER(LANG(?labelSub) = &#x27;&#x27; || LANGMATCHES(LANG(?labelSub), &#x27;&quot;
+						+ that.options.language + &quot;&#x27;))}&quot;,
 				remoteLiteralIsObjectOf : &quot; SELECT DISTINCT ?subject ?predicate ?object ?labelSub ?labelPred WHERE {VALUES ?object {&#x27;&quot;
 						+ CONS.DUMMY
 						+ &quot;&#x27;} ?subject ?predicate ?object. OPTIONAL { ?subject rdfs:label ?labelSub }. OPTIONAL { ?predicate rdfs:label ?labelPred }}&quot;,
@@ -4221,7 +4478,7 @@
 				selectObjectOf : &quot; SELECT DISTINCT ?subject ?predicate ?label ?description WHERE {?subject ?predicate &lt;&quot;
 						+ CONS.DUMMY
 						+ &quot;&gt;. OPTIONAL { ?subject rdfs:label ?label}. OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }}&quot;,
-				typeQuery : &quot;SELECT DISTINCT ?type WHERE {&lt;&quot;+ CONS.DUMMY +&quot;&gt; a ?type} ORDER BY ?type&quot;,
+				typeQuery : &quot;SELECT DISTINCT ?type WHERE {&lt;&quot; + CONS.DUMMY + &quot;&gt; a ?type} ORDER BY ?type&quot;,
 				literalIsObjectOf : &quot;SELECT DISTINCT ?subject ?predicate ?type ?label ?description WHERE {?subject ?predicate ?oLiteral. FILTER (STR(?oLiteral)=&#x27;&quot;
 						+ CONS.DUMMY
 						+ &quot;&#x27;). OPTIONAL { ?subject rdfs:label ?label}. OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }}&quot;,
@@ -4230,7 +4487,8 @@
 						+ &quot;&gt; rdfs:description ?description } . OPTIONAL { &lt;&quot; + CONS.DUMMY
 						+ &quot;&gt; rdfs:comment ?description } . OPTIONAL { &lt;&quot; + CONS.DUMMY + &quot;&gt; rdfs:type ?type}}&quot;,
 				label : &quot;SELECT DISTINCT ?label WHERE { &lt;&quot; + CONS.DUMMY
-						+ &quot;&gt; rdfs:label ?label . FILTER(LANG(?label) = &#x27;&#x27; || LANGMATCHES(LANG(?label), &#x27;&quot; + that.options.language + &quot;&#x27;))}&quot;,
+						+ &quot;&gt; rdfs:label ?label . FILTER(LANG(?label) = &#x27;&#x27; || LANGMATCHES(LANG(?label), &#x27;&quot;
+						+ that.options.language + &quot;&#x27;))}&quot;,
 				blankNodeQuery : &quot;SELECT DISTINCT ?object WHERE {&lt;&quot; + CONS.DUMMY + &quot;&gt; ?predicate ?object}&quot;
 			};
 		},
@@ -4369,11 +4627,23 @@
 						that.addLayer(layer);
 						that._topLayer = layer.id;
 						that._layers[layer.id].initSwitch.attach(new Plugin.Listener(function(sender) {
+							
+							// Open detail on init
+							if(that.options.openDetailOnInit != &quot;&quot;) {
+								layer.view.layoutEngine.doneEvent.once(new Plugin.Listener(function(sender) {
+									setTimeout(function() {
+										layer.view.layoutEngine._container.find(&quot;div:contains(&quot; + that.options.openDetailOnInit + &quot;)&quot;).click();
+									}, 200);
+								}));
+							}
+							// Insert data
 							if (!that._checkInsertion()) {
 								if (that.options.sparqlData === undefined) {
-									sender.update();
+									layer.update();
 								} else {
-									sender.addItems(that.options.sparqlData);
+									remoteDataLoader.insertByResultset(that.options.sparqlData, function(){
+										layer.update();
+									});
 								}
 							}
 						}));
@@ -4389,7 +4659,7 @@
 		addLayer : function(layer) {
 			var that = this;
 			this._layers[layer.id] = layer;
-			
+
 			// Add listener for timeLine opening
 			var listener = new Plugin.Listener(function(sender) {
 				if (that.timeLine) {
@@ -4404,17 +4674,16 @@
 				that._topLayer = sender.id;
 				that._extendedLayers[sender.id] = sender.zIndex;
 				that.$body.addClass(&#x27;noscroll&#x27;);
-				
 			}));
 			layer.closeEvent.attach(new Plugin.Listener(function(sender) {
 				delete that._extendedLayers[sender.id];
-				if($.isEmptyObject(that._extendedLayers)) {
+				if ($.isEmptyObject(that._extendedLayers)) {
 					that.$body.removeClass(&#x27;noscroll&#x27;);
 					var tmp = 0;
 					$.each(that._extendedLayers, function(layerID, zIndex) {
-						if(tmp &lt; zIndex) {
-						tmp = zIndex;
-						that._topLayer = layerID;
+						if (tmp &lt; zIndex) {
+							tmp = zIndex;
+							that._topLayer = layerID;
 						}
 					});
 				} else {
@@ -4451,7 +4720,7 @@
 		 * @method updateLayers
 		 */
 		updateTopLayer : function() {
-			if(this._topLayer) {
+			if (this._topLayer) {
 				this._layers[this._topLayer].update();
 			}
 		},
@@ -4551,7 +4820,7 @@
 				}
 				remoteDataLoader.insertByQuery(query, [ url ]);
 				remoteDataLoader.loadingDone.once(new Plugin.Listener(function() {
-						that.updateTopLayer();
+					that.updateTopLayer();
 				}));
 			});
 		},

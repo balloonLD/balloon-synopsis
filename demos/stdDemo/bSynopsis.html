@@ -8,6 +8,9 @@
         <script src="../../bower_components/modernizr/modernizr.js"></script>
         <script src="../../bower_components/jquery/dist/jquery.js"></script>
         <script src="../../bower_components/handlebars.js/index.js"></script>
+        <script src="../../bower_components/rdfstore-js/index.js"></script>
+        <script src="../../bower_components/throttledresize/index.js"></script>
+        <script src="../../bower_components/rgbcolor/index.js"></script>
         <script src="../../bower_components/get-style-property/get-style-property.js"></script>
         <script src="../../bower_components/get-size/get-size.js"></script>
         <script src="../../bower_components/matches-selector/matches-selector.js"></script>
@@ -24,11 +27,17 @@
         <script src="../../bower_components/isotope/js/layout-modes/vertical.js"></script>
         <script src="../../bower_components/isotope/js/layout-modes/fit-rows.js"></script>
         <script src="../../bower_components/isotope/js/layout-modes/masonry.js"></script>
-        <script src="../../bower_components/rdfstore-js/index.js"></script>
-        <script src="../../bower_components/throttledresize/index.js"></script>
-        <script src="../../bower_components/rgbcolor/index.js"></script>
+        <script src="../../bower_components/classie/classie.js"></script>
+        <script src="../../bower_components/packery/js/rect.js"></script>
+        <script src="../../bower_components/packery/js/packer.js"></script>
+        <script src="../../bower_components/packery/js/item.js"></script>
+        <script src="../../bower_components/packery/js/packery.js"></script>
+        <script src="../../bower_components/isotope-packery/packery-mode.js"></script>
+        <script src="../../bower_components/shufflejs/dist/jquery.shuffle.js"></script>
         <script src="../../bower_components/js-md5/js/md5.js"></script>
         <script src="../../bower_components/chroma-js/chroma.js"></script>
+        <script src="../../bower_components/multiSelect/index.js"></script>
+        <script src="../../bower_components/deepCopy/index.js"></script>
         <!-- endbower -->
         <script type="text/javascript" src="../../build/bSynopsis.js"></script>
         <!-- bower:css -->
@@ -87,7 +96,9 @@
 
                                 $(function() {
                                     $('.bSynopsis').bSynopsis({
-                                        layerOptions : {
+                                    	  sparqlData : [{ "subject": { "type": "uri", "value": "http://dbpedia.org/resource/Frankfurt" }  , "predicate": { "type": "uri", "value": "http://www.w3.org/2000/01/rdf-schema#label" } , "object": { "type": "literal", "xml:lang": "en", "value": "Frankfurt" }},{ "subject": { "type": "uri", "value": "http://dbpedia.org/resource/Berlin" } , "predicate": { "type": "uri", "value": "http://www.w3.org/2000/01/rdf-schema#label" } , "object": { "type": "literal", "xml:lang": "en", "value": "Berlin" }},{ "subject": { "type": "uri", "value": "http://dbpedia.org/resource/Munich" } , "predicate": { "type": "uri", "value": "http://www.w3.org/2000/01/rdf-schema#label" } , "object": { "type": "literal", "xml:lang": "en", "value": "Munich" }}, { "subject": { "type": "uri", "value": "http://dbpedia.org/resource/Passau" } , "predicate": { "type": "uri", "value": "http://www.w3.org/2000/01/rdf-schema#label" } , "object": { "type": "literal", "xml:lang": "en", "value": "Passau" }}],
+                                    	  openDetailOnInit : "http://dbpedia.org/resource/Passau",
+                                    	  layerOptions : {
                                            nodeFilters: {
                                               cityChart : {
                                                  fn : function(nodes, config) {
@@ -204,10 +215,16 @@
                                               },
 
                                           },
-
-                                            remoteOptions : {
-                                                remoteLimit: 1000
-                                            }
+                                          remoteOptions : {
+                                              remoteLimit: 1000
+                                          },
+                                          viewOptions : {
+                                          	layoutEngineOptions : {
+                                              clusterSize : 999999,
+                                              clusterWait : 0,
+                                          		useEngine : "isotope"
+                                          	}
+                                          }
                                         }
                                     });
                                 });

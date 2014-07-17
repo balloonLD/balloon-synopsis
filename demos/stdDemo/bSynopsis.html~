@@ -1,0 +1,128 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <title>bSynopsis</title>
+        <!--[if lt IE 9]><script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+        <!-- bower:js -->
+        <script src="../../bower_components/modernizr/modernizr.js"></script>
+        <script src="../../bower_components/jquery/dist/jquery.js"></script>
+        <script src="../../bower_components/handlebars.js/index.js"></script>
+        <script src="../../bower_components/jquery-textfill-try/index.js"></script>
+        <script src="../../bower_components/get-style-property/get-style-property.js"></script>
+        <script src="../../bower_components/get-size/get-size.js"></script>
+        <script src="../../bower_components/matches-selector/matches-selector.js"></script>
+        <script src="../../bower_components/eventie/eventie.js"></script>
+        <script src="../../bower_components/doc-ready/doc-ready.js"></script>
+        <script src="../../bower_components/eventEmitter/EventEmitter.js"></script>
+        <script src="../../bower_components/jquery-bridget/jquery.bridget.js"></script>
+        <script src="../../bower_components/outlayer/item.js"></script>
+        <script src="../../bower_components/outlayer/outlayer.js"></script>
+        <script src="../../bower_components/masonry/masonry.js"></script>
+        <script src="../../bower_components/isotope/js/item.js"></script>
+        <script src="../../bower_components/isotope/js/layout-mode.js"></script>
+        <script src="../../bower_components/isotope/js/isotope.js"></script>
+        <script src="../../bower_components/isotope/js/layout-modes/vertical.js"></script>
+        <script src="../../bower_components/isotope/js/layout-modes/fit-rows.js"></script>
+        <script src="../../bower_components/isotope/js/layout-modes/masonry.js"></script>
+        <script src="../../bower_components/rdfstore-js/index.js"></script>
+        <script src="../../bower_components/rgbcolor/index.js"></script>
+        <!-- endbower -->
+        <script type="text/javascript" src="../../build/bSynopsis.js"></script>
+        <!-- bower:css -->
+        <!-- endbower -->
+        <link rel="stylesheet" href="../../css/bSynopsis.css" type="text/css" />
+        <link rel="stylesheet" href="demo.css" type="text/css" />
+
+    </head>
+    <body>
+        <div class="bSynopsis"></div>
+        <br>
+        <form>
+            <label for="inputbox">DataURL:</label> <input type="text"
+                                                          name="inputbox" value="data/turtle.ttl">
+            <p>
+                <input type="button" name="insert" value="Insert data"
+                       onclick="$('.bSynopsis').data('plugin_bSynopsis').insertDataPath(this.form.inputbox.value, 'text/turtle');">
+        </form>
+        <form>
+            <label for="inputFile">Local turtle file:</label>
+            <input type="file" id="inputFile"  onchange="$('.bSynopsis').data('plugin_bSynopsis').insertDataFile(this.files[0]);">
+        </form>
+        <form>
+            <label for="serviceinputbox">Remote data service:</label> <input
+                type="text" name="serviceinputbox"
+                value="http://dbpedia.org/sparql">
+            <p>
+                <label for="queryinputbox">Remote data query:</label>
+                <textarea name="queryinputbox">SELECT ?subject ?predicate ?object { 
+    VALUES ?subject { <http://dbpedia.org/resource/Berlin> <http://dbpedia.org/resource/Passau> <http://dbpedia.org/resource/Munich> <http://dbpedia.org/resource/Frankfurt>     }
+    VALUES ?predicate { rdfs:label }                                        
+    ?subject ?predicate ?object. 
+    FILTER (lang(?object) = 'en')
+} LIMIT 150
+                            </textarea>
+                            <p>
+                                <input type="button" name="insertRemote" value="Insert remote data"
+                                       onclick="$('.bSynopsis').data('plugin_bSynopsis').insertRemoteDataQuery(this.form.serviceinputbox.value, this.form.queryinputbox.value);">
+                                </form>
+                            <form>
+                                <input type="button" name="clearStore" value="clearStore"
+                                       onclick="$('.bSynopsis').data('plugin_bSynopsis').clearStore();">
+                            </form>
+                <form>
+                <label for="queryinputbox">Remote data query:</label>
+                <textarea name="localQueryinputbox">SELECT ?s ?p ?o WHERE { ?s ?p ?o }
+                            </textarea>
+                            <p>
+                <input type="button" name="runQuery" value="Run query on local store"
+                       onclick="$('.bSynopsis').data('plugin_bSynopsis').runQuery(this.form.localQueryinputbox.value, console.log);">
+                </form>
+
+
+
+                            <script type="text/javascript">
+
+                                $(function() {
+                                    $('.bSynopsis').bSynopsis({
+                                        layerOptions : {
+                                           nodeFilters: {
+                                              maps: {
+                                                  fn: function(nodes, config) {
+                                                      $.each(nodes, function(i, node) {
+                                                          if(node.hasComponentType("predicate")) {
+                                                         	    node.forEachComponentType("predicate", function(component) {
+                                                              if(component.data.value  === 'http://www.georss.org/georss/point') {
+                                                                 node.useTemplateID = 'maps';
+                                                                 node.lat = node.getFComponentOT("label").data.value.split(" ")[0];
+                                                                 node.long = node.getFComponentOT("label").data.value.split(" ")[1]
+                                                                 if(!node.style) {
+                                                               	  node.style = {};
+                                                                 }
+                                                                 node.style.width = '410px';
+                                                                 node.style.height = '200px';
+                                                                 node.layoutFn = function($tile, node, nStyle) {
+                                                               	  $tile.height(nStyle.height);
+                                                               	  $tile.width(nStyle.width);
+                                                                 }
+                                                                 node.dynLayoutFn = node.layoutFn;
+                                                              }
+                                                         	  });
+                                                          }
+                                                       });
+                                                      return nodes;
+                                                  },
+                                                  template: '<div><iframe width="410" height="200" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/?ie=UTF8&amp;t=m&amp;ll={{node.lat}},{{node.long}}&amp;spn=0.079502,0.145912&amp;z=12&amp;output=embed"></iframe></div>'
+                                              },
+
+                                          },
+
+                                            remoteOptions : {
+                                                remoteLimit: 1000
+                                            }
+                                        }
+                                    });
+                                });
+                            </script>
+                            </body>
+                            </html>

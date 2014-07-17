@@ -7,13 +7,18 @@
   "dependencies": {
     "jquery": "~2.1.0",
     "handlebars.js": "http://builds.handlebarsjs.com.s3.amazonaws.com/handlebars-v1.3.0.js",
-    "isotope": "~2.0.0",
     "modernizr": "~2.7.2",
     "rdfstore-js": "https://raw.githubusercontent.com/antoniogarrote/rdfstore-js/master/dist/browser/rdf_store_min.js",
     "throttledresize": "https://raw.githubusercontent.com/louisremi/jquery-smartresize/master/jquery.throttledresize.js",
     "rgbcolor" : "http://www.phpied.com/files/rgbcolor/rgbcolor.js",
+    "isotope": "~2.0.0",
+    "isotope-packery" : "~1.0.0",
+    "shufflejs" : "~2.1.1",
     "js-md5" : "~1.1.0",
     "chroma-js" : "~0.5.6"
+,
+    "multiSelect" : "http://ytjobwebsite.googlecode.com/svn-history/r478/trunk/job/webapp/js/plugin/multiselect/jquery.multiSelect.js",
+    "deepCopy" : "http://oranlooney.com/static/javascript/deepCopy.js"
   },
   "keywords": [
     "rdf",

@@ -1,7 +1,9 @@
 module.exports = function(grunt) {
 
 	var DEBUG = true;
-	var F_SELECT = undefined;
+	var F_SELECT = false;
+	var LAYOUT_ISOTOPE = true;
+	var LAYOUT_SHUFFLE = true;
 
 	// Project configuration.
 	grunt.initConfig({
@@ -54,7 +56,9 @@ module.exports = function(grunt) {
 			options : {
 				context : {
 					DEBUG : DEBUG,
-					F_SELECT : F_SELECT
+					F_SELECT : F_SELECT,
+					LAYOUT_ISOTOPE : LAYOUT_ISOTOPE,
+					LAYOUT_SHUFFLE : LAYOUT_SHUFFLE
 				}
 			},
 			inline : {
