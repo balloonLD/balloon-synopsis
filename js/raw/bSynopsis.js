@@ -2615,29 +2615,31 @@
 			"background-position" : "center"
 		});
 		
+		// Get items who are in a relation to
+		// current item
+		var remoteSubjectOf = replaceDummy(queryStore.remoteSubjectOf, that.node.getFComponentOT("uri").data)  + " LIMIT " + that.options.remoteOptions.remoteLimit;
+		var remoteObjectOf = replaceDummy(queryStore.remoteObjectOf, that.node.getFComponentOT("uri").data) + " LIMIT " + that.options.remoteOptions.remoteLimit;
+		
 		// multiplactor 2 is num of queries
 		var remoteToDo = remoteDataLoader.backends.length * 2;
 		var remoteDoneCount = 0;
-		remoteDataLoader.loadingDone.attach(new Plugin.Listener(function() {
-			remoteDoneCount++;
-			print("remoteDoneCount " + remoteDoneCount);
-			that.update();
-			if (remoteDoneCount === remoteToDo) {
-				$innerNoScroll.css({
-					"background-image" : ""
-				});
-				remoteDataLoader.loadingDone.dettach(this);
+		remoteDataLoader.loadingDone.attach(new Plugin.Listener(function(e, query) {
+			if (query === remoteSubjectOf || query === remoteObjectOf) {
+				remoteDoneCount++;
+				print("remoteDoneCount " + remoteDoneCount);
+				that.update();
+				if (remoteDoneCount === remoteToDo) {
+					$innerNoScroll.css({
+						"background-image" : ""
+					});
+					remoteDataLoader.loadingDone.dettach(this);
+				}
 			}
 		}));
-		
-		// Get items who are in a relation to
-		// current item
-		var remoteSubjectOf = replaceDummy(queryStore.remoteSubjectOf, that.node.getFComponentOT("uri").data);
-		var remoteObjectOf = replaceDummy(queryStore.remoteObjectOf, that.node.getFComponentOT("uri").data);
 
 		// remote needed?
-		remoteDataLoader.insertByQuery(remoteSubjectOf + " LIMIT " + that.options.remoteOptions.remoteLimit);
-		remoteDataLoader.insertByQuery(remoteObjectOf + " LIMIT " + that.options.remoteOptions.remoteLimit);
+		remoteDataLoader.insertByQuery(remoteSubjectOf);
+		remoteDataLoader.insertByQuery(remoteObjectOf);
 	};
 
 	Plugin.Layers.Res.prototype.show = function() {
