@@ -11,6 +11,7 @@
         <script src="../../bower_components/rdfstore-js/index.js"></script>
         <script src="../../bower_components/throttledresize/index.js"></script>
         <script src="../../bower_components/rgbcolor/index.js"></script>
+        <script src="../../bower_components/magnific-popup/dist/jquery.magnific-popup.js"></script>
         <script src="../../bower_components/get-style-property/get-style-property.js"></script>
         <script src="../../bower_components/get-size/get-size.js"></script>
         <script src="../../bower_components/matches-selector/matches-selector.js"></script>
@@ -41,6 +42,7 @@
         <!-- endbower -->
         <script type="text/javascript" src="../../build/bSynopsis.js"></script>
         <!-- bower:css -->
+        <link rel="stylesheet" href="../../bower_components/magnific-popup/dist/magnific-popup.css" />
         <!-- endbower -->
         <link rel="stylesheet" href="../../css/bSynopsis.css" type="text/css" />
         <link rel="stylesheet" href="demo.css" type="text/css" />
@@ -89,15 +91,22 @@
                 <input type="button" name="runQuery" value="Run query on local store"
                        onclick="$('.bSynopsis').data('plugin_bSynopsis').runQuery(this.form.localQueryinputbox.value, function(res){console.log(res);});">
                 </form>
-
-
-
+                <form id="labelformremote">
+                  <label for="labelinputremote">Search for label remote:</label>
+                  <input type="text" name="labelinputremote" id="labelinputremote" value="Passau"/>
+                  <input type="button"  value="Search remote"
+                       onclick="$('.bSynopsis').data('plugin_bSynopsis').insertRemoteAndOpenViewByLabel(this.form.labelinputremote.value);">
+                </form>
+                <form id="labelform">
+                  <label for="labelinput">Search for label local:</label>
+                  <input type="text" name="labelinput" id="labelinput" value="Passau"/>
+                  <input type="button" value="Search local"
+                       onclick="$('.bSynopsis').data('plugin_bSynopsis').openViewByLabel(this.form.labelinput.value);">
+                </form>
                             <script type="text/javascript">
 
                                 $(function() {
                                     $('.bSynopsis').bSynopsis({
-                                    	  sparqlData : [{ "subject": { "type": "uri", "value": "http://dbpedia.org/resource/Frankfurt" }  , "predicate": { "type": "uri", "value": "http://www.w3.org/2000/01/rdf-schema#label" } , "object": { "type": "literal", "xml:lang": "en", "value": "Frankfurt" }},{ "subject": { "type": "uri", "value": "http://dbpedia.org/resource/Berlin" } , "predicate": { "type": "uri", "value": "http://www.w3.org/2000/01/rdf-schema#label" } , "object": { "type": "literal", "xml:lang": "en", "value": "Berlin" }},{ "subject": { "type": "uri", "value": "http://dbpedia.org/resource/Munich" } , "predicate": { "type": "uri", "value": "http://www.w3.org/2000/01/rdf-schema#label" } , "object": { "type": "literal", "xml:lang": "en", "value": "Munich" }}, { "subject": { "type": "uri", "value": "http://dbpedia.org/resource/Passau" } , "predicate": { "type": "uri", "value": "http://www.w3.org/2000/01/rdf-schema#label" } , "object": { "type": "literal", "xml:lang": "en", "value": "Passau" }}],
-                                    	  openDetailOnInit : "http://dbpedia.org/resource/Passau",
                                     	  layerOptions : {
                                            nodeFilters: {
                                               cityChart : {

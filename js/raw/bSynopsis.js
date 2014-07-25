@@ -330,6 +330,14 @@
 		return ((typeof a === "undefined") || (a === null));
 	}
 
+	function construct(constructor, args) {
+		function F() {
+			return constructor.apply(this, args);
+		}
+		F.prototype = constructor.prototype;
+		return new F();
+	}
+
 	// @if DEBUG
 	// Only print to console, if DEBUG mode is enabled
 	var print = console.log.bind(console);
@@ -517,7 +525,7 @@
 			}
 			$.ajax({
 				type : 'post',
-				dataType: "json",
+				dataType : "json",
 				url : service,
 				success : window["cbFunc" + cnt],
 				error : function(jqXHR, textStatus, errorThrown) {
@@ -1704,11 +1712,11 @@
 				node = new Plugin.Nodes.Blank(data);
 				break;
 			case UTIL.toToken(CONS.CSS_CLASSES.patternClasses.literal):
-				node = new Plugin.Nodes.Literal(data, options.literalStyle);
+				node = new Plugin.Nodes.Literal(data);
 				break;
 			case UTIL.toToken(CONS.CSS_CLASSES.patternClasses.uri):
 				if (data.label && (data.label.lang === undefined || data.label.lang === "en")) {
-					node = new Plugin.Nodes.Res(data, options.itemStyle);
+					node = new Plugin.Nodes.Res(data);
 				}
 				break;
 			default:
@@ -1858,7 +1866,7 @@
 		this.initDfd = $.Deferred();
 		this.$parent = $parent;
 		this.options = options;
-		
+
 		// When open
 		this.openEvent.once(new Plugin.Listener(function(sender) {
 			// When rest is init
@@ -1988,6 +1996,7 @@
 
 	Plugin.Layer.prototype._initContent = function() {
 		var that = this;
+		print("initContent");
 		if (that.options.remoteOptions.remoteDynamically) {
 			if (!that.options.remoteOptions.waitForRemote) {
 				that.update();
@@ -2028,7 +2037,7 @@
 	 */
 	Plugin.Layer.prototype.update = function() {
 		print("Layer " + this.id + " is updating.");
-		//print("Caller is " + arguments.callee.caller.toString());
+		// print("Caller is " + arguments.callee.caller.toString());
 		this.model.update();
 	};
 
@@ -2493,7 +2502,6 @@
 		}));
 		this.$filter = $(filterOptions);
 		this.$optionsContainer.append(this.$filter);
-		print("outfilt");
 		this.$filterLinks = this.$filter.filter(UTIL.toSelector(CONS.CSS_CLASSES.filter)).find("a");
 		this.$filterBox = this.$filter.find('#filterField');
 		if (callback) {
@@ -2505,11 +2513,9 @@
 		var that = this;
 		// Add onKey
 		this.$filterBox.keyup(function(e) {
-			if (e.keyCode == 13) {
-				var selector = $(this).val().toLowerCase();
-				that.$filterLinks.removeClass('selected');
-				that.layoutEngine.filter(selector, "contains");
-			}
+			var selector = $(this).val().toLowerCase();
+			that.$filterLinks.removeClass('selected');
+			that.layoutEngine.filter(selector, "contains");
 		});
 	};
 
@@ -2614,12 +2620,14 @@
 			"background-repeat" : "no-repeat",
 			"background-position" : "center"
 		});
-		
+
 		// Get items who are in a relation to
 		// current item
-		var remoteSubjectOf = replaceDummy(queryStore.remoteSubjectOf, that.node.getFComponentOT("uri").data)  + " LIMIT " + that.options.remoteOptions.remoteLimit;
-		var remoteObjectOf = replaceDummy(queryStore.remoteObjectOf, that.node.getFComponentOT("uri").data) + " LIMIT " + that.options.remoteOptions.remoteLimit;
-		
+		var remoteSubjectOf = replaceDummy(queryStore.remoteSubjectOf, that.node.getFComponentOT("uri").data)
+				+ " LIMIT " + that.options.remoteOptions.remoteLimit;
+		var remoteObjectOf = replaceDummy(queryStore.remoteObjectOf, that.node.getFComponentOT("uri").data)
+				+ " LIMIT " + that.options.remoteOptions.remoteLimit;
+
 		// multiplactor 2 is num of queries
 		var remoteToDo = remoteDataLoader.backends.length * 2;
 		var remoteDoneCount = 0;
@@ -2711,6 +2719,91 @@
 		// <!--- overlay hide ---->
 	};
 
+	Plugin.Layers.InlayRes = function($container, options, uri) {
+		this.uri = uri;
+		// Get queries
+		var queries = []
+		var subjectOfQuery = replaceDummy(queryStore.selectSubjectOf, uri);
+		var objectOfQuery = replaceDummy(queryStore.selectObjectOf, uri);
+		queries.push({
+			query : subjectOfQuery,
+			type : CONS.CSS_CLASSES.typeClasses.outgoing
+		});
+		queries.push({
+			query : objectOfQuery,
+			type : CONS.CSS_CLASSES.typeClasses.incoming
+		});
+		Plugin.Layer.call(this, $container, options, queries);
+	};
+
+	// pseudo class inheritance
+	Plugin.Layers.InlayRes.prototype = Object.create(Plugin.Layer.prototype);
+	Plugin.Layers.InlayRes.prototype.constructor = Plugin.Layers.Res;
+
+	Plugin.Layers.InlayRes.prototype.loadByRemote = function() {
+		print("loadrem");
+		var that = this;
+		var remoteSubjectOf = replaceDummy(queryStore.remoteSubjectOf, that.uri) + " LIMIT "
+				+ that.options.remoteOptions.remoteLimit;
+		var remoteObjectOf = replaceDummy(queryStore.remoteObjectOf, that.uri) + " LIMIT "
+				+ that.options.remoteOptions.remoteLimit;
+
+		// multiplactor 2 is num of queries
+		var remoteToDo = remoteDataLoader.backends.length * 2;
+		var remoteDoneCount = 0;
+		remoteDataLoader.loadingDone.attach(new Plugin.Listener(function(e, query) {
+			if (query === remoteSubjectOf || query === remoteObjectOf) {
+				remoteDoneCount++;
+				print("remoteDoneCount " + remoteDoneCount);
+				that.update();
+				if (remoteDoneCount === remoteToDo) {
+					remoteDataLoader.loadingDone.dettach(this);
+				}
+			}
+		}));
+
+		// remote needed?
+		remoteDataLoader.insertByQuery(remoteSubjectOf);
+		remoteDataLoader.insertByQuery(remoteObjectOf);
+	};
+
+	Plugin.Layers.InlayRes.prototype._addOverlay = function() {
+		var overlayContentAddedDfd = $.Deferred();
+		this.$overlay = this.$parent;
+		overlayContentAddedDfd.resolve();
+		return overlayContentAddedDfd.promise();
+	};
+
+	Plugin.Layers.InlayRes.prototype._addBackgroundColor = function() {
+
+	};
+
+	Plugin.Layers.InlayRes.prototype._addOverlayContent = function() {
+		var overlayContentAddedDfd = $.Deferred();
+		this.$content = $("<div class=" + CONS.CSS_CLASSES.overlayContent + "></div>");
+		this.$overlay.append(this.$content);
+		overlayContentAddedDfd.resolve();
+		return overlayContentAddedDfd.promise();
+	};
+
+	Plugin.Layers.InlayRes.prototype.open = function() {
+		this.openEvent.notify();
+	};
+
+	Plugin.Layers.InlayRes.prototype.show = function() {
+		this.$overlay.css({
+			position : "static",
+			opacity : 1,
+			pointerEvents : 'auto'
+		});
+	};
+
+	Plugin.Layers.InlayRes.prototype.hide = function() {
+		this.$overlay.css({
+			opacity : 0
+		});
+	};
+
 	// ========================= bSynopsis: LiteralNodeLayer Class
 	/**
 	 * Initialization view of the plugin
@@ -2792,7 +2885,7 @@
 	Plugin.Layers.Blank.prototype = Object.create(Plugin.Layer.prototype);
 	Plugin.Layers.Blank.prototype.constructor = Plugin.Layers.Blank;
 
-	// ========================= bSynopsis: BlankNodeLayer Class
+	// ========================= bSynopsis: Layers Inlay Class
 	/**
 	 * Initialization view of the plugin
 	 * 
@@ -2865,9 +2958,9 @@
 				"overlayContent", "overlayWrapper", "previewItem", "timelineWrapper", "timelineItem" ];
 
 		this._methodsAreLoaded = function(/*
-		 * array of templatenames which must
-		 * be loaded
-		 */) {
+														 * array of templatenames which must
+														 * be loaded
+														 */) {
 			var i = 0, methodName;
 			while (arguments[0[i++]] !== undefined) {
 				if (typeof templates[arguments[i]] !== 'function') {
@@ -2977,8 +3070,7 @@
 		// Execute selection query
 		this.remoteEngine.executeQuery(query, service, function(data, success) {
 
-			print("Remotequery: '" + query + "' was a success on " + service +
-			"? \n" + success);
+			print("Remotequery: '" + query + "' was a success on " + service + "? \n" + success);
 			// Generate insertionQuery out of the resultset.
 			if (data && success) {
 				if (data.subject !== undefined) {
@@ -3023,7 +3115,7 @@
 			});
 		});
 	};
-	
+
 	Plugin.RemoteDataLoader.prototype.insertByResultset = function(data, callback) {
 		var that = this;
 		rdfStore.executeQuery(this.generateInsertionQuery(data), function() {
@@ -3103,8 +3195,8 @@
 		 */
 		dataFormat : undefined,
 		/**
-		 * SPARQL resultset bindings which can be used to insert data into the store on
-		 * init.
+		 * SPARQL resultset bindings which can be used to insert data into the
+		 * store on init.
 		 * 
 		 * @property defaults.sparqlData
 		 * @type Object
@@ -3119,20 +3211,14 @@
 		 * @default true
 		 */
 		generateTimeline : true,
-		/**
-		 * Query/queries to use for the initialization view of the plugin.
-		 * 
-		 * @property defaults.initQueries
-		 * @type Object
-		 * @default [ { query : "SELECT ?subject ?label ?description ?type WHERE {
-		 *          ?subject rdfs:label ?label . OPTIONAL { ?subject
-		 *          rdfs:description ?description } . OPTIONAL { ?subject
-		 *          rdfs:comment ?description }. OPTIONAL {?subject rdfs:type
-		 *          ?type}}" } ]
-		 */
-		initQueries : [ {
-			query : "SELECT ?subject ?label ?description ?type WHERE { ?subject rdfs:label ?label . OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }. OPTIONAL {?subject rdfs:type ?type}}"
-		} ],
+		initLayer : {
+			name : "Inlay",
+			args : [ [ {
+				query : "SELECT ?subject ?label ?description ?type WHERE { ?subject rdfs:label ?label . OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }. OPTIONAL {?subject rdfs:type ?type}}"
+			} ] ]
+		// name : "Res",
+		// args : ["http://dbpedia.org/resource/Passau"]
+		},
 		openDetailOnInit : "",
 		/**
 		 * Options for the rdf store class. Uses rdfstore-js
@@ -3620,21 +3706,21 @@
 								}
 							});
 							if (color) {
-								//TODO
-								//Dirty brightness fix;
-								if(color._rgb[0] > 200 && color._rgb[1] > 200 && color._rgb[2] > 200) {
-									color._rgb[0] = color._rgb[0]-50;
-									color._rgb[1] = color._rgb[1]-50;
-									color._rgb[2] = color._rgb[2]-50;
+								// TODO
+								// Dirty brightness fix;
+								if (color._rgb[0] > 200 && color._rgb[1] > 200 && color._rgb[2] > 200) {
+									color._rgb[0] = color._rgb[0] - 50;
+									color._rgb[1] = color._rgb[1] - 50;
+									color._rgb[2] = color._rgb[2] - 50;
 								}
 								$tile.css("background-color", color);
 							} else if (rdfsColor) {
-								//TODO
-								//Dirty brightness fix;
-								if(rdfsColor._rgb[0] > 200 && rdfsColor._rgb[1] > 200 && rdfsColor._rgb[2] > 200) {
-									rdfsColor._rgb[0] = rdfsColor._rgb[0]-50;
-									rdfsColor._rgb[1] = rdfsColor._rgb[1]-50;
-									rdfsColor._rgb[2] = rdfsColor._rgb[2]-50;
+								// TODO
+								// Dirty brightness fix;
+								if (rdfsColor._rgb[0] > 200 && rdfsColor._rgb[1] > 200 && rdfsColor._rgb[2] > 200) {
+									rdfsColor._rgb[0] = rdfsColor._rgb[0] - 50;
+									rdfsColor._rgb[1] = rdfsColor._rgb[1] - 50;
+									rdfsColor._rgb[2] = rdfsColor._rgb[2] - 50;
 								}
 								$tile.css("background-color", rdfsColor);
 							}
@@ -3644,22 +3730,30 @@
 						var batches = [];
 						var queryStart = "SELECT DISTINCT ?res ?type WHERE { VALUES ?res {"
 						var remoteQuery = "SELECT DISTINCT ?res ?type WHERE { VALUES ?res {"
-						batches.push({count : 0, cbTiles : [], query : queryStart});
+						batches.push({
+							count : 0,
+							cbTiles : [],
+							query : queryStart
+						});
 						$.each($tiles, function(i, tile) {
 							var $tile = $(tile);
 							var node = $tile.data("node");
 							if (node.getType() === CONS.NODE_TYPES.resNode || node.getType() === "multiResNode") {
 								var uri = node.getFComponentOT('uri').data;
-								var bLeng = batches.length-1;
-								if(batches[bLeng].count < config.batchSize) {
+								var bLeng = batches.length - 1;
+								if (batches[bLeng].count < config.batchSize) {
 									batches[bLeng].count++;
 									batches[bLeng].cbTiles.push($tile);
 									batches[bLeng].query += "<" + uri + ">";
 								} else {
-									//finish query
+									// finish query
 									batches[bLeng].query += "} ?res a ?type}";
 									bLeng++;
-									batches.push({count : 1, cbTiles : [], query : queryStart});
+									batches.push({
+										count : 1,
+										cbTiles : [],
+										query : queryStart
+									});
 									batches[bLeng].cbTiles.push($tile);
 									batches[bLeng].query += "<" + uri + ">";
 								}
@@ -3679,18 +3773,18 @@
 								}
 							}
 						});
-						
+
 						// finish last query
-						batches[batches.length-1].query += "} ?res a ?type}";
-						
+						batches[batches.length - 1].query += "} ?res a ?type}";
+
 						// For each batch
-						if(batches[0].count > 0) {
-							$.each(batches, function(i, batch){
+						if (batches[0].count > 0) {
+							$.each(batches, function(i, batch) {
 								remoteDataLoader.insertTypesByQuery(batch.query);
 								remoteDataLoader.loadingDone.attach(new Plugin.Listener(function(e, query) {
-									if(query == batch.query) {
+									if (query == batch.query) {
 										remoteDataLoader.loadingDone.dettach(this);
-										$.each(batch.cbTiles, function(j, tile){
+										$.each(batch.cbTiles, function(j, tile) {
 											var $tile = $(tile);
 											var node = $tile.data("node");
 											var uri = node.getFComponentOT('uri').data;
@@ -4437,8 +4531,9 @@
 
 			// Generate SPARQL queries
 			queryStore = {
-				initQueries : this.options.initQueries,
 				defaultInitRemoteQuery : this.options.layerOptions.remoteOptions.defaultInitRemoteQuery,
+				remoteResByLabel : "SELECT DISTINCT ?subject ?predicate ?object WHERE { VALUES ?predicate {rdfs:label} VALUES ?object {'"
+						+ CONS.DUMMY + "'@" + that.options.language + "} ?subject ?predicate ?object}",
 				remoteSubjectOf : " SELECT DISTINCT ?subject ?predicate ?object ?labelObj ?labelPred WHERE { VALUES ?subject {<"
 						+ CONS.DUMMY
 						+ ">} ?subject ?predicate ?object. OPTIONAL { ?object rdfs:label ?labelObj }. OPTIONAL { ?predicate rdfs:label ?labelPred }. FILTER(isIRI(?object)  || (LANG(?object) = '' || LANGMATCHES(LANG(?object), '"
@@ -4465,6 +4560,9 @@
 						+ CONS.DUMMY
 						+ ">. OPTIONAL { ?subject rdfs:label ?label}. OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }}",
 				typeQuery : "SELECT DISTINCT ?type WHERE {<" + CONS.DUMMY + "> a ?type} ORDER BY ?type",
+				labelIsObjectOf : "SELECT DISTINCT ?subject ?label WHERE { ?subject <" + namespaces.rdfs + "label> ?label. FILTER (STR(?label)='"
+					+ CONS.DUMMY
+					+ "')}",
 				literalIsObjectOf : "SELECT DISTINCT ?subject ?predicate ?type ?label ?description WHERE {?subject ?predicate ?oLiteral. FILTER (STR(?oLiteral)='"
 						+ CONS.DUMMY
 						+ "'). OPTIONAL { ?subject rdfs:label ?label}. OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }}",
@@ -4608,17 +4706,23 @@
 
 						// Init Layer
 						that._layers = {};
-						var layer = new Plugin.Layers.Inlay(that._$parent, that.options.layerOptions,
-								that.options.initQueries);
+						var args = [];
+						args.push(that._$parent);
+						args.push(that.options.layerOptions);
+						// prepend parent and options to arg array
+						args = args.concat(that.options.initLayer.args);
+						// call constructor with apply args
+						var layer = construct(Plugin.Layers[that.options.initLayer.name], args);
 						that.addLayer(layer);
 						that._topLayer = layer.id;
 						that._layers[layer.id].initSwitch.attach(new Plugin.Listener(function(sender) {
-							
+
 							// Open detail on init
-							if(that.options.openDetailOnInit != "") {
+							if (that.options.openDetailOnInit != "") {
 								layer.view.layoutEngine.doneEvent.once(new Plugin.Listener(function(sender) {
 									setTimeout(function() {
-										layer.view.layoutEngine._container.find("div:contains(" + that.options.openDetailOnInit + ")").click();
+										layer.view.layoutEngine._container.find(
+												"div:contains(" + that.options.openDetailOnInit + ")").click();
 									}, 200);
 								}));
 							}
@@ -4627,7 +4731,7 @@
 								if (that.options.sparqlData === undefined) {
 									layer.update();
 								} else {
-									remoteDataLoader.insertByResultset(that.options.sparqlData, function(){
+									remoteDataLoader.insertByResultset(that.options.sparqlData, function() {
 										layer.update();
 									});
 								}
@@ -4787,6 +4891,71 @@
 				});
 			};
 			reader.readAsText(file);
+		},
+		insertRemoteByLabel : function(str) {
+			$.when(globalInitDfd.promise()).done(function() {
+				var query = replaceDummy(queryStore.remoteResByLabel, str);
+				remoteDataLoader.insertByQuery(query);
+			});
+		},
+		openViewByLabel : function(str) {
+			var that = this;
+			var fail = function() {
+				alert("Didn't find an entry for " + str + ".");
+			};
+			var openLayer = function(data) {
+				var node = new Plugin.Nodes.Res(data);
+				var tile = node.generateTile();
+				// TODO no layer given hack
+				// TODO Backgroundcolor event?
+				tile.css({ "background-color" : "#444444"});
+				var tileWrapped = that.options.layerOptions.tileFilters.backgroundColor.fn({
+					0 : tile
+				}, that.options.layerOptions.tileFilters.backgroundColor.config, this._topLayer);
+				remoteDataLoader.loadingDone.once(new Plugin.Listener(function() {
+					var layer = new Plugin.Layers.Res(that._$parent, that.options.layerOptions, tileWrapped[0]);
+					that.addLayer(layer);
+				}));
+			};
+			var query = replaceDummy(queryStore.labelIsObjectOf, str);
+			rdfStore.executeQuery(
+							query,
+							function(results) {
+								if (results && results.length > 0) {
+									if (results.length === 1) {
+										openLayer(results[0]);
+									} else {
+										var div = $("<div style='height: auto; width: auto; margin-right: auto; margin-left: auto; max-width: 500px; background-color: #111111'> What item should be viewed?<ul></ul></div>");
+										var ul = div.find("ul");
+										for (var i = 0; i < results.length; i++) {
+											var data = results[i];
+											var li = $("<li><a>" + data.subject.value + "</a></li>");
+											li.click(function(data) {
+												return function(e) {
+													openLayer(data);
+													$.magnificPopup.close();
+												}
+											}(data));
+											ul.append(li);
+										}
+										$.magnificPopup.open({
+											items : {
+												src : div,
+												type : 'inline'
+											}
+										});
+									}
+								} else {
+									fail();
+								}
+							}, fail);
+		},
+		insertRemoteAndOpenViewByLabel : function(str) {
+			var that = this;
+			that.insertRemoteByLabel(str);
+			remoteDataLoader.loadingDone.once(new Plugin.Listener(function() {
+				that.openViewByLabel(str);
+			}));
 		},
 		/**
 		 * Insert rdf-data of given url SPARQL service in the store. Use the given

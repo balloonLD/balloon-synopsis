@@ -11,6 +11,7 @@
     "rdfstore-js": "https://raw.githubusercontent.com/antoniogarrote/rdfstore-js/master/dist/browser/rdf_store_min.js",
     "throttledresize": "https://raw.githubusercontent.com/louisremi/jquery-smartresize/master/jquery.throttledresize.js",
     "rgbcolor" : "http://www.phpied.com/files/rgbcolor/rgbcolor.js",
+    "magnific-popup" : "0.9.9",
     <!-- @ifdef LAYOUT_ISOTOPE -->
     "isotope": "~2.0.0",
     "isotope-packery" : "~1.0.0",
