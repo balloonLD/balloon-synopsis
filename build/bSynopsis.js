@@ -3572,7 +3572,7 @@
 										if (rdfsColor) {
 											var scale = chroma.scale(
 													[ rdfsColor.hex(), "#" + md5(currentUri).substring(0, 6) ])
-													.mode('lch');
+													.mode('lab');
 											rdfsColor = chroma(scale(0.5).hex());
 										} else {
 											rdfsColor = chroma("#" + md5(currentUri).substring(0, 6));
@@ -3582,7 +3582,7 @@
 									if (color) {
 										var scale = chroma
 												.scale([ color.hex(), "#" + md5(currentUri).substring(0, 6) ])
-												.mode('lch');
+												.mode('lab');
 										color = chroma(scale(0.5).hex());
 									} else {
 										color = chroma("#" + md5(currentUri).substring(0, 6));
@@ -4414,6 +4414,9 @@
 				defaultInitRemoteQuery : this.options.layerOptions.remoteOptions.defaultInitRemoteQuery,
 				remoteResByLabel : "SELECT DISTINCT ?subject ?predicate ?object WHERE { VALUES ?predicate {rdfs:label} VALUES ?object {'"
 						+ CONS.DUMMY + "'@" + that.options.language + "} ?subject ?predicate ?object}",
+				remoteResByUri : "SELECT DISTINCT ?subject ?predicate ?object WHERE { VALUES ?subject {<" + CONS.DUMMY + ">} VALUES ?predicate { rdfs:label } ?subject ?predicate ?object. FILTER(LANG(?object) = '' || LANGMATCHES(LANG(?object), '"
+						+ that.options.language
+						+ "'))}",
 				remoteSubjectOf : " SELECT DISTINCT ?subject ?predicate ?object ?labelObj ?labelPred WHERE { VALUES ?subject {<"
 						+ CONS.DUMMY
 						+ ">} ?subject ?predicate ?object. OPTIONAL { ?object rdfs:label ?labelObj }. OPTIONAL { ?predicate rdfs:label ?labelPred }. FILTER(isIRI(?object)  || (LANG(?object) = '' || LANGMATCHES(LANG(?object), '"
@@ -4440,7 +4443,8 @@
 						+ CONS.DUMMY
 						+ ">. OPTIONAL { ?subject rdfs:label ?label}. OPTIONAL { ?subject rdfs:description ?description } . OPTIONAL { ?subject rdfs:comment ?description }}",
 				typeQuery : "SELECT DISTINCT ?type WHERE {<" + CONS.DUMMY + "> a ?type} ORDER BY ?type",
-				labelIsObjectOf : "SELECT DISTINCT ?subject ?label WHERE { ?subject <" + namespaces.rdfs + "label> ?label. FILTER (STR(?label)='"
+				getLabelOf : "SELECT DISTINCT ?label WHERE { <" + CONS.DUMMY + "> rdfs:label ?label } LIMIT 1",
+				labelIsObjectOf : "SELECT DISTINCT ?subject ?label WHERE { ?subject rdfs:label ?label. FILTER (STR(?label)='"
 					+ CONS.DUMMY
 					+ "')}",
 				literalIsObjectOf : "SELECT DISTINCT ?subject ?predicate ?type ?label ?description WHERE {?subject ?predicate ?oLiteral. FILTER (STR(?oLiteral)='"
@@ -4596,6 +4600,9 @@
 						that.addLayer(layer);
 						that._topLayer = layer.id;
 						that._layers[layer.id].initSwitch.attach(new Plugin.Listener(function(sender) {
+							if(that.options.initLayer.hide) {
+								that._$parent.find(UTIL.toSelector(CONS.CSS_CLASSES.outerContainer)).css({opacity : 0, visibility : "hidden"});
+							}
 
 							// Open detail on init
 							if (that.options.openDetailOnInit != "") {
@@ -4772,6 +4779,45 @@
 			};
 			reader.readAsText(file);
 		},
+		insertRemoteByUri : function(str) {
+			$.when(globalInitDfd.promise()).done(function() {
+				var query = replaceDummy(queryStore.remoteResByUri, str);
+				remoteDataLoader.insertByQuery(query);
+			});
+		},
+		openViewByUri : function(str) {
+			var that = this;
+			var fail = function() {
+				alert("Didn't find an entry for " + str + ".");
+			};
+			var openLayer = function(data) {
+				var node = new Plugin.Nodes.Res(data);
+				var tile = node.generateTile();
+				// TODO no layer given hack
+				// TODO Backgroundcolor event?
+				tile.css({ "background-color" : "#444444"});
+				var tileWrapped = that.options.layerOptions.tileFilters.backgroundColor.fn({
+					0 : tile
+				}, that.options.layerOptions.tileFilters.backgroundColor.config, this._topLayer);
+				remoteDataLoader.loadingDone.once(new Plugin.Listener(function() {
+					var layer = new Plugin.Layers.Res(that._$parent, that.options.layerOptions, tileWrapped[0]);
+					that.addLayer(layer);
+				}));
+			};
+			var query = replaceDummy(queryStore.getLabelOf, str);
+			rdfStore.executeQuery(
+							query,
+							function(results) {
+								if (results && results.length > 0) {
+									results[0].subject = {};
+									results[0].subject.token = "uri";
+									results[0].subject.value = str;
+									openLayer(results[0]);
+								} else {
+									fail();
+								}
+							}, fail);
+		},
 		insertRemoteByLabel : function(str) {
 			$.when(globalInitDfd.promise()).done(function() {
 				var query = replaceDummy(queryStore.remoteResByLabel, str);
@@ -4829,6 +4875,13 @@
 									fail();
 								}
 							}, fail);
+		},
+		insertRemoteAndOpenViewByUri : function(str) {
+			var that = this;
+			that.insertRemoteByUri(str);
+			remoteDataLoader.loadingDone.once(new Plugin.Listener(function() {
+				that.openViewByUri(str);
+			}));
 		},
 		insertRemoteAndOpenViewByLabel : function(str) {
 			var that = this;
