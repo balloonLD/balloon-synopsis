@@ -77,15 +77,12 @@ html,body {
 	height: 100%;
 }
 
-.synopsis {
-    	padding: 20px;
-	font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande',
-		'Lucida Sans Unicode', Arial, sans-serif;
-	font-size: 13px;
-	line-height: 1.7em;
+.bSynopsis {
+	font-family:  'Lato', sans-serif;
 	background: #fbfbfb;
 	color: #FFF;
 	overflow: auto;
+	font-weight: lighter;
 }
 
 .synopsis_outerContainer {
@@ -93,7 +90,6 @@ html,body {
 	left: 2%;
 	margin-bottom: 20px;
 	margin-top: 50px;
-	background: #f3f3f3;
 	position:   relative;
 }
 
