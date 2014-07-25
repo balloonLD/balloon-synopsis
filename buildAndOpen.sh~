@@ -1,4 +1,0 @@
-#build
-grunt
-
-chromium-browser --disable-web-security --allow-file-access-from-files file:///home/tmy/Synopsis-RDF/GitHub/balloon-synopsis/demos/stdDemo/bSynopsis.html
