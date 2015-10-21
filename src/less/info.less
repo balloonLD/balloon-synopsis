@@ -1,0 +1,59 @@
+@import "include/variables";
+
+.@{monolog} {
+  overflow: hidden;
+  z-index: 99999;
+  position: fixed;
+  -webkit-opacity: 0;
+  -moz-opacity: 0;
+  opacity: 0;
+  top: 5px;
+  left: 5%;
+  width: 90%;
+  height: 80px;
+  border-radius: 25px;
+  background-color: #222;
+  display: none;
+  color: #ffffff;
+  -webkit-transition: opacity 0.4s ease-in-out;
+  -moz-transition: opacity 0.4s ease-in-out;
+  -ms-transition: opacity 0.4s ease-in-out;
+  -o-transition: opacity 0.4s ease-in-out;
+  transition: opacity 0.4s ease-in-out;
+}
+
+.@{monolog}.@{fadeIn} {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  opacity: 0.8;
+}
+
+.@{monolog}.@{fadeIn}:hover {
+  opacity: 0.9;
+  -webkit-transition: opacity 0.2s ease-in;
+  -moz-transition: opacity 0.2s ease-in;
+  -ms-transition: opacity 0.2s ease-in;
+  -o-transition: opacity 0.2s ease-in;
+  transition: opacity 0.2s ease-in;
+}
+
+.@{monolog} > span {
+  opacity: 0.5;
+  position: relative;
+  display: inline-block;
+  padding: 5px 5px 5px 0px;
+  width: 90%;
+  text-align: center;
+  vertical-align: middle;
+  bottom: 0px;
+  -webkit-transition: bottom 0.5s ease;
+  -moz-transition: bottom 0.5s ease;
+  -ms-transition: bottom 0.5s ease;
+  -o-transition: bottom 0.5s ease;
+  transition: bottom 0.5s ease;
+}
+
+.@{monolog} > span:last-child {
+  opacity: 1;
+}

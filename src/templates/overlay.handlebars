@@ -1,0 +1,21 @@
+<div class="{{CSS.overlay}}" style="z-index : {{z_index}};">
+    <div class="{{CSS.menu}} navbar">
+        <div class="container">
+            <div class="navbar-header syn_menu_label navbar-left">
+                <a class="navbar-brand" disabled="">
+                    <b>{{label}}</b>
+                    <small>{{label_small}}</small>
+                </a>
+            </div>
+            <div class="collapse navbar-collapse syn_navbar_collapse navbar-right">
+                <ul class="{{CSS.overlay_menu}} nav navbar-nav">
+                    {{#each nav}}
+                        <li><a id="{{this.id}}" href="#">{{get_filter msg this.id}}</a></li>
+                    {{/each}}
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="{{CSS.overlay_content}}">
+    </div>
+</div>

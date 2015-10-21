@@ -1,0 +1,251 @@
+.syn_monolog {
+  overflow: hidden;
+  z-index: 99999;
+  position: fixed;
+  -webkit-opacity: 0;
+  -moz-opacity: 0;
+  opacity: 0;
+  top: 5px;
+  left: 5%;
+  width: 90%;
+  height: 80px;
+  border-radius: 25px;
+  background-color: #222;
+  display: none;
+  color: #ffffff;
+  -webkit-transition: opacity 0.4s ease-in-out;
+  -moz-transition: opacity 0.4s ease-in-out;
+  -ms-transition: opacity 0.4s ease-in-out;
+  -o-transition: opacity 0.4s ease-in-out;
+  transition: opacity 0.4s ease-in-out;
+}
+.syn_monolog.syn_fadeIn {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  opacity: 0.8;
+}
+.syn_monolog.syn_fadeIn:hover {
+  opacity: 0.9;
+  -webkit-transition: opacity 0.2s ease-in;
+  -moz-transition: opacity 0.2s ease-in;
+  -ms-transition: opacity 0.2s ease-in;
+  -o-transition: opacity 0.2s ease-in;
+  transition: opacity 0.2s ease-in;
+}
+.syn_monolog > span {
+  opacity: 0.5;
+  position: relative;
+  display: inline-block;
+  padding: 5px 5px 5px 0px;
+  width: 90%;
+  text-align: center;
+  vertical-align: middle;
+  bottom: 0px;
+  -webkit-transition: bottom 0.5s ease;
+  -moz-transition: bottom 0.5s ease;
+  -ms-transition: bottom 0.5s ease;
+  -o-transition: bottom 0.5s ease;
+  transition: bottom 0.5s ease;
+}
+.syn_monolog > span:last-child {
+  opacity: 1;
+}
+.syn_scroll_box {
+  overflow-y: auto;
+}
+.syn_scroll_box_content {
+  overflow: visible;
+  max-height: 0;
+  flex-wrap: wrap;
+  display: flex;
+  justify-content: center;
+}
+.syn_scroll_box_content.syn_fadeIn {
+  -webkit-transition: max-height 25s ease-in-out;
+  -moz-transition: max-height 25s ease-in-out;
+  -ms-transition: max-height 25s ease-in-out;
+  -o-transition: max-height 25s ease-in-out;
+  transition: max-height 25s ease-in-out;
+  max-height: 999999px;
+}
+.syn_scroll_box_content.syn_show {
+  max-height: 99999px;
+}
+/**** Overlay ****/
+.syn_no_scroll {
+  overflow: hidden;
+}
+.syn_overlay {
+  opacity: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  -webkit-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+  display: none;
+}
+.syn_overlay.syn_fadeIn {
+  opacity: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+}
+.syn_overlay > .syn_menu {
+  flex: 0 1 auto;
+  background-color: darkgray;
+  margin-bottom: 0px;
+}
+.syn_overlay > .syn_menu a {
+  color: black;
+}
+.syn_overlay > .syn_menu .syn_disabled a {
+  color: darkslategrey;
+  text-decoration: line-through;
+}
+.syn_overlay > .syn_overlay_content {
+  display: flex;
+  flex: 1 1 auto;
+  background-color: white;
+  max-height: 100%;
+  height: 0px;
+}
+/**** Layer ****/
+.syn_layer {
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+}
+.syn_layer > .syn_menu {
+  flex: 0 1 auto;
+  margin: 5px;
+  min-height: 30px;
+}
+.syn_layer > .syn_layout_container {
+  flex: 1 1 auto;
+  margin: 5px;
+}
+.syn_layer > .syn_layout_footer {
+  flex: 0 1 auto;
+  margin: 5px;
+  min-height: 20px;
+  text-align: center;
+  text-shadow: #000000;
+  background-color: darkgray;
+}
+/**** Progress ****/
+.syn_progress_container_wrap {
+  border-radius: 25px;
+  position: fixed;
+  bottom: 10px;
+  left: 0;
+  background-color: #222;
+  color: #ffffff;
+  display: none;
+  -webkit-transition: opacity 0.4s ease-in-out;
+  -moz-transition: opacity 0.4s ease-in-out;
+  -ms-transition: opacity 0.4s ease-in-out;
+  -o-transition: opacity 0.4s ease-in-out;
+  transition: opacity 0.4s ease-in-out;
+  z-index: 99999;
+  -webkit-opacity: 0;
+  -moz-opacity: 0;
+  opacity: 0;
+  text-align: right;
+  height: 80px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+}
+.syn_progress_container_wrap.syn_fadeIn {
+  display: flex;
+  flex-direction: column;
+  opacity: 0.8;
+}
+.syn_progress_container_wrap.syn_fadeIn:hover {
+  opacity: 0.9;
+  -webkit-transition: opacity 0.2s ease-in;
+  -moz-transition: opacity 0.2s ease-in;
+  -ms-transition: opacity 0.2s ease-in;
+  -o-transition: opacity 0.2s ease-in;
+  transition: opacity 0.2s ease-in;
+}
+.syn_progress_container {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  text-align: center;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  overflow-y: auto;
+}
+.syn_progress_container > .progress {
+  margin: 5px;
+  top: 6px;
+}
+/**** Misc ****/
+.syn_disabled {
+  color: grey;
+}
+.syn_tile {
+  width: 200px;
+  height: auto;
+  min-height: 50px;
+  max-height: 510px;
+  max-width: 510px;
+  background-color: grey;
+  margin: 2px 2px 2px 2px;
+  overflow: hidden;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.syn_tile > * {
+  flex-shrink: 0;
+  padding-left: 3px;
+  padding-right: 3px;
+}
+.syn_tile .syn_shrink {
+  flex-shrink: 1;
+}
+.syn_tile .syn_hidden {
+  display: none;
+}
+.syn_tile .syn_y_scroll {
+  overflow-y: auto;
+}
+.syn_uri {
+  text-wrap: normal;
+  word-wrap: break-word;
+}
+.syn_literal {
+  width: auto;
+  height: auto;
+  max-height: 510px;
+  max-width: 510px;
+  background-color: grey;
+  margin: 2px 2px 2px 2px;
+  overflow: hidden;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.syn_uri_to_label {
+  font-style: italic;
+}
+.syn_thumbnail {
+  max-width: 100px;
+  max-height: 100px;
+  padding: 5px 5px 5px 5px;
+  text-align: center;
+  height: auto;
+  width: auto;
+}

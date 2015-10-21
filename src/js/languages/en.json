@@ -1,0 +1,20 @@
+{
+  "filter" : "Filter",
+  "sorter" : "Sort: ",
+  "sorter_default" : "by ...",
+  "back" : "back",
+  "history" : "history",
+  "close" : "close",
+  "sort.alphabet" : "alphabetically",
+  "sort.random" : "random",
+  "sort.weight" : "tile type",
+  "filter.in" : "only subjects",
+  "filter.out" : "only objects",
+  "filter_options" : "+ condition",
+  "stop_remote": "stop remote loading",
+  "more": "more",
+  "n_tiles": "tiles",
+  "and": "and",
+  "empty": "No data",
+  "no_browse": "Browsing for this tile type disabled. Type: "
+}

@@ -1,0 +1,48 @@
+<div class="{{CSS.layer}}{{#each class_in}} {{this}}{{/each}}">
+    <div class="{{CSS.menu}} container-fluid">
+        <div class="row">
+            <div class="col-lg-offset-2 col-md-offset-1 col-xs-offset-0 col-lg-5 col-md-6 col-xs-7 {{CSS.filter}}">
+                <div class="input-group">
+                    <input type="text" class="form-control" aria-label="...">
+
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-default {{CSS.filter_btn}}"
+                                aria-expanded="false"> {{get_msg msg "filter"}} <span></span></button>
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                aria-expanded="false"> {{get_msg msg "filter_options"}} <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                            {{#each filter}}
+                                <li><a class="{{this.id}}" href="#">{{prefix msg "sorter-prefix" this.id}}</a></li>
+                            {{/each}}
+                        </ul>
+                    </div>
+                    <!-- /btn-group -->
+                </div>
+                <!-- /input-group -->
+            </div>
+            <div class="col-lg-3 col-md-4 col-xs-5 {{CSS.sorter}}">
+                <div class="dropdown">
+                    <label class="control-label" for="sortDropDown"
+                           style="text-align:right">{{get_msg msg "sorter"}}</label>
+                    <button class="btn btn-default dropdown-toggle" type="button" id="sortDropDown"
+                            data-toggle="dropdown" aria-expanded="true">
+                        {{get_msg msg "sorter_default"}}
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="col-sm-8 dropdown-menu" role="menu" aria-labelledby="sortDropDown">
+                        {{#each sorter}}
+                            <li><a class="{{this.id}}" href="#">{{prefix msg "filter-prefix" this.id}}</a></li>
+                        {{/each}}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="{{CSS.layout_container}}">
+
+    </div>
+    <div class="{{CSS.layout_footer}}">
+        {{get_msg msg "empty"}}
+    </div>
+</div>

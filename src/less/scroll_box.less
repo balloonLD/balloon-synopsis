@@ -1,0 +1,26 @@
+@import "include/variables";
+
+.@{scroll_box} {
+  overflow-y: auto;
+}
+
+.@{scroll_box_content} {
+  overflow: visible;
+  max-height: 0;
+  flex-wrap: wrap;
+  display: flex;
+  justify-content: center;
+}
+
+.@{scroll_box_content}.@{fadeIn} {
+  -webkit-transition: max-height 25.0s ease-in-out;
+  -moz-transition: max-height 25.0s ease-in-out;
+  -ms-transition: max-height 25.0s ease-in-out;
+  -o-transition: max-height 25.0s ease-in-out;
+  transition: max-height 25.0s ease-in-out;
+  max-height: 999999px;
+}
+
+.@{scroll_box_content}.@{show} {
+  max-height: 99999px;
+}

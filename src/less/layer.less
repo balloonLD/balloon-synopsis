@@ -1,0 +1,30 @@
+@import "include/variables";
+
+/**** Layer ****/
+.@{layer} {
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+}
+
+.@{layer} > .@{menu} {
+  flex: 0 1 auto;
+  margin: 5px;
+  min-height: 30px;
+}
+
+.@{layer} > .@{layout_container} {
+  flex: 1 1 auto;
+  margin: 5px;
+}
+
+.@{layer} > .@{layout_footer} {
+  flex: 0 1 auto;
+  margin: 5px;
+  min-height: 20px;
+  text-align: center;
+  text-shadow: #000000;
+  background-color: darkgray;
+}

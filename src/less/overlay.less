@@ -1,0 +1,50 @@
+@import "include/variables";
+
+/**** Overlay ****/
+.@{no_scroll} {
+  overflow: hidden;
+}
+
+.@{overlay} {
+  opacity: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  -webkit-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+  transition: all 0.2s ease;
+  display: none;
+}
+
+.@{overlay}.@{fadeIn} {
+  opacity: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-flow: column;
+}
+
+.@{overlay} > .@{menu} {
+  flex: 0 1 auto;
+  background-color: darkgray;
+  margin-bottom: 0px;
+}
+
+.@{overlay} > .@{menu} a {
+  color: black;
+}
+
+.@{overlay} > .@{menu} .@{disabled} a {
+  color: darkslategrey;
+  text-decoration: line-through;
+}
+
+.@{overlay} > .@{overlay_content} {
+  display: flex;
+  flex: 1 1 auto;
+  background-color: white;
+  max-height: 100%;
+  height: 0px;
+}

@@ -1,0 +1,41 @@
+@import "./../include/variables";
+
+.@{tile} {
+  width: 200px;
+  height: auto;
+  min-height: 50px;
+  max-height: 510px;
+  max-width: 510px;
+  background-color: grey;
+  margin: 2px 2px 2px 2px;
+  overflow: hidden;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.@{tile} > * {
+  flex-shrink: 0;
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+.@{tile} .@{shrink} {
+  flex-shrink: 1;
+}
+
+.@{tile} .@{hidden} {
+  display: none;
+}
+
+.@{tile} .@{y_scroll} {
+  overflow-y: auto;
+}
+
+.@{uri} {
+  text-wrap: normal;
+  word-wrap: break-word;
+}
+
+@import "literal";

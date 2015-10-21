@@ -1,153 +1,170 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
-	var DEBUG = true;
-	var F_SELECT = false;
-	var LAYOUT_ISOTOPE = true;
-	var LAYOUT_SHUFFLE = true;
+    var CSS;
 
-	// Project configuration.
-	grunt.initConfig({
-		pkg : grunt.file.readJSON('package.json'),
-		bower : {
-			install : {
-				options : {
-					targetDir : './js/lib',
-					layout : 'byType',
-					install : true,
-					verbose : false,
-					cleanTargetDir : false,
-					cleanBowerDir : false,
-					bowerOptions : {}
-				}
-			}
-		},
-		bowerInstall : {
+    // Project configuration.
+    grunt.initConfig({
+        pkg: grunt.file.readJSON('package.json'),
+        bowerInstall: {
+            install: {
+                options: {
+                    copy: false,
+                    layout: 'byType',
+                    install: true,
+                    cleanBowerDir: false,
+                    bowerOptions: {}
+                }
+            }
+        },
+        copy: {
+            worker: {
+                files: [
+                    {
+                        rename: function (dest, src) {
+                            console.log( src);
+                            if (src) {
+                                return dest + "<%= pkg.name %>_" + src;
+                            } else {
+                                return dest;
+                            }
+                        },
+                        expand: true,
+                        cwd: 'src/worker/',
+                        src: '**',
+                        dest: 'build/',
+                        flatten: false
+                    }
+                ]
+            }
+        },
+        wiredep: {
+            target: {
+                src: ['demos/*/*.html'],
+                fileTypes: {
+                    html: {
+                        detect: {
+                            js: /<script.*src=['"]([^'"]+)/gi,
+                            css: /<link.*href=['"]([^'"]+)/gi
+                        },
+                        replace: {
+                            js: '<script type="text/javascript" src="{{filePath}}"></script>',
+                            css: '<link rel="stylesheet" href="{{filePath}}" />'
+                        }
+                    }
+                }
+            }
+        },
+        handlebars: {
+            compile: {
+                options: {
+                    commonjs: true,
+                    namespace: false,
+                    partialRegex: /^par_/,
+                    processName: function (filePath) {
+                        var tmp = filePath.split(/[/.]/);
+                        return tmp.slice(2, tmp.length - 1).join('.');
+                    },
+                    processPartialName: function (filePath) {
+                        var tmp = filePath.split(/[/.]/);
+                        return tmp.slice(2, tmp.length - 1).join('.');
+                    }
+                },
+                files: {
+                    "src/js/templates.js": ["src/templates/**/*.handlebars"]
+                }
+            }
+        },
+        yuidoc: {
+            compile: {
+                name: '<%= pkg.name %>',
+                description: '<%= pkg.description %>',
+                version: '<%= pkg.version %>',
+                url: '<%= pkg.homepage %>',
+                options: {
+                    paths: 'build/',
+                    outdir: 'documentation/'
+                }
+            }
+        },
+        browserify: {
+            test: {
+                src: 'spec/*.js',
+                dest: 'tmp/specs.js'
+            },
+            compile: {
+                src: 'src/js/<%= pkg.name %>.js',
+                dest: 'build/<%= pkg.name %>.js'
+            }
+        },
+        jasmine: {
+            customTemplate: {
+                options: {
+                    specs: 'tmp/specs.js',
+                    vendor: [
+                        "bower_components/jquery/dist/jquery.min.js",
+                        "bower_components/handlebars/handlebars.min.js",
+                        "bower_components/bows/dist/bows.min.js",
+                        "bower_components/rdfstore/dist/rdfstore_min.js",
+                        "bower_components/modernizr/modernizr.js",
+                        "bower_components/underscore/underscore-min.js",
+                        "bower_components/backbone/backbone.js"
+                    ]
+                }
+            }
+        },
+        clean: {
+            tmp: ["tmp"]
+        }
+    });
 
-			target : {
+    // Load the plugin that provides the "bower" task. (Package dependencies)
+    grunt.loadNpmTasks('grunt-bower-task');
 
-				// Point to the files that should be updated when
-				// you run `grunt bower-install`
-				src : [ 'demos/*/*.html'],
-				exclude : [ /jquery.hive.pollen/ ],
-				dependencies : true,
-				devDependencies : false
-			}
-		},
-		copy : {
-			main : {
-				files : [ {
-					expand : true,
-					cwd : 'templates/raw/',
-					src : '**',
-					dest : 'templates/preprocessed/',
-					flatten : false
-				}, {
-					expand : true,
-					cwd : 'js/raw/',
-					src : '**',
-					dest : 'js/plugin/',
-					flatten : false
-				}
+    grunt.renameTask('bower', 'bowerInstall');
 
-				]
-			}
-		},
-		preprocess : {
-			options : {
-				context : {
-					DEBUG : DEBUG,
-					F_SELECT : F_SELECT,
-					LAYOUT_ISOTOPE : LAYOUT_ISOTOPE,
-					LAYOUT_SHUFFLE : LAYOUT_SHUFFLE
-				}
-			},
-			inline : {
-				src : [ 'templates/preprocessed/*.handlebars', 'js/plugin/bSynopsis.js' ],
-				options : {
-					inline : true
-				}
-			},
-			bower : {
-				src : "bowerRaw.json",
-				dest : "bower.json"
-			}
-		},
-		handlebars : {
-			compile : {
-				options : {
-					processName : function(filename) {
-						console.log()
-						return filename.split('.')[0].split('/')[2];
-					},
-					processPartialName : function(filePath) { // input:  templates/_header.hbs
-						return filePath.split('.')[0].split('/')[1].split('_')[1]; // output: _header.hbs
-					},
-					namespace : "<%= pkg.name %>.templates",
-					partialRegex : /^par_/
-				},
-				files : {
-					"js/plugin/templates.js" : [ "templates/preprocessed/*.handlebars" ]
-				}
-			}
-		},
-		yuidoc : {
-			compile : {
-				name : '<%= pkg.name %>',
-				description : '<%= pkg.description %>',
-				version : '<%= pkg.version %>',
-				url : '<%= pkg.homepage %>',
-				options : {
-					paths : 'js/plugin/',
-					outdir : 'documentation/'
-				}
-			}
-		},
-		concat : {
-			options : {
-				separator : ';'
-			},
-			dist : {
-				src : [ 'js/plugin/*.js' ],
-				dest : 'build/<%= pkg.name %>.js'
-			}
-		},
-		uglify : {
-			options : {
-				banner : '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
-			},
-			build : {
-				src : 'build/<%= pkg.name %>.js',
-				dest : 'build/<%= pkg.name %>.min.js'
-			}
-		}
-	});
+    // Load the plugin that provides the "grunt-wiredep" task. (Package dependencies script tag injection)
+    grunt.loadNpmTasks('grunt-wiredep');
 
-	// Load the plugin that provides the "bower" task. (Package dependencies)
-	grunt.loadNpmTasks('grunt-bower-task');
+    grunt.loadNpmTasks('grunt-browserify');
 
-	// Load the plugin that provides the "bower" task. (Package dependencies script tag injection)
-	grunt.loadNpmTasks('grunt-bower-install');
+    grunt.loadNpmTasks('grunt-contrib-copy');
 
-	// Used to copy templates before inline preprocessing
-	grunt.loadNpmTasks('grunt-contrib-copy');
+    // Load the plugin that provides the "handlebars" task. (HTML templating)
+    grunt.loadNpmTasks('grunt-contrib-handlebars');
 
-	// Load the plugin that provides the preprocess task. (ifdefs)
-	grunt.loadNpmTasks('grunt-preprocess');
+    // Load the plugin that provides documentation generation.
+    grunt.loadNpmTasks('grunt-contrib-yuidoc');
 
-	// Load the plugin that provides the "handlebars" task. (HTML templating)
-	grunt.loadNpmTasks('grunt-contrib-handlebars');
+    // Load the plugin that provides deleting of tmp.
+    grunt.loadNpmTasks('grunt-contrib-clean');
 
-	// Load the plugin that provides the "concatination" task. (javascript file concatination)
-	grunt.loadNpmTasks('grunt-contrib-concat');
+    // Load CSS pre-compiler
+    grunt.loadNpmTasks('assemble-less');
 
-	// Load the plugin that provides documentation generation.
-	grunt.loadNpmTasks('grunt-contrib-yuidoc');
+    // Load qunit testing
+    grunt.loadNpmTasks('grunt-contrib-jasmine');
 
-	// Load the plugin that provides the "uglify" task.
-	grunt.loadNpmTasks('grunt-contrib-uglify');
+    // Load variables
+    grunt.registerTask('less-config', 'Fetches variables for less class names.', function () {
+        var done = this.async();
+        CSS = require("./src/js/const/css.js");
+        grunt.config.set("less", {
+            production: {
+                options: {
+                    globalVars: CSS
+                },
+                files: {
+                    "./build/css/<%= pkg.name %>.css": "src/less/main.less"
+                }
+            }
+        });
+        done();
+    });
 
-	// Default task(s).
-	grunt.registerTask('default', [ 'copy', 'preprocess', 'bower', 'bowerInstall', 'handlebars', 'yuidoc',
-			'concat', 'uglify' ]);
+    // Default task(s).
+    grunt.registerTask('default', ['copy', 'less-config', 'bowerInstall', 'less:production', 'handlebars', 'browserify', 'wiredep', 'jasmine', 'yuidoc', 'clean']);
+    grunt.registerTask('without_jasmin', ['copy', 'less-config', 'bowerInstall', 'less:production', 'handlebars', 'browserify', 'wiredep', 'yuidoc', 'clean']);
+    grunt.registerTask('without_bower', ['copy', 'less-config', 'less:production', 'handlebars', 'browserify', 'jasmine', 'yuidoc', 'clean']);
+    grunt.registerTask('without_bower_n_jasmin', ['copy', 'less-config', 'less:production', 'handlebars', 'browserify', 'yuidoc', 'clean']);
 
 };
