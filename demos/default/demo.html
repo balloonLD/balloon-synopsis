@@ -16,7 +16,7 @@
     <script type="text/javascript" src="../../bower_components/js-md5/js/md5.js"></script>
     <script type="text/javascript" src="../../bower_components/limit/limit.js"></script>
     <script type="text/javascript" src="../../bower_components/chroma-js/chroma.js"></script>
-    <script type="text/javascript" src="../../bower_components/tooltipster/js/jquery.tooltipster.min.js"></script>
+    <script type="text/javascript" src="../../bower_components/tooltipster/dist/js/tooltipster.bundle.js"></script>
     <!-- endbower -->
     <!--[if lt IE 9]>
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../../build/synopsis.js"></script>
     <!-- bower:css -->
     <link rel="stylesheet" href="../../bower_components/fontawesome/css/font-awesome.css" />
-    <link rel="stylesheet" href="../../bower_components/tooltipster/css/tooltipster.css" />
+    <link rel="stylesheet" href="../../bower_components/tooltipster/dist/css/tooltipster.bundle.css" />
     <!-- endbower -->
     <link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.css" />
     <link rel="stylesheet" href="../../build/css/synopsis.css" type="text/css"/>
@@ -110,6 +110,9 @@
 </div>
 
 <script type="text/javascript">
+    if (!Synopsis) {
+        var Synopsis = require("../../src/js/synopsis.js");
+    }
     var synopsis, layer = null;
     $(function () {
         $('.synopsis').synopsis({

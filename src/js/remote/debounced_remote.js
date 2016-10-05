@@ -72,7 +72,7 @@ Debounced_remote_loader.prototype.run_on_remote = function () {
 
 Debounced_remote_loader.prototype.pop_query = function () {
     var values = this.values;
-    this.query_length = encodeURIComponent(query).length;
+    this.query_length = encodeURIComponent(this.query).length;
     this.values = [];
     var replacement = "Filter (";
     for (var i = 0; i < values.length; i++) {

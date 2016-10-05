@@ -74,7 +74,7 @@ var Decorator = function () {
                         if (!colorize(d, resource_uri)) {
                             var color_query = "SELECT DISTINCT ?o WHERE {<" + resource_uri + "> rdf:type ?o. }";
                             synopsis.store_wrap.store.execute(color_query, function (e, res) {
-                                if (res.length == 0) {
+                                if (res == undefined || res.length == 0) {
                                     debounced_remote_loader.add_value(resource_uri, function (bindings) {
                                         if (!colorize(d, resource_uri) && bindings.length > 0) {
                                             add_to_color_map(resource_uri, bindings, function () {

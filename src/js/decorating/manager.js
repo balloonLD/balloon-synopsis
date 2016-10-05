@@ -10,10 +10,11 @@ var Manager = function (opt, synopsis) {
     this.synopsis = synopsis;
     this._opt = $.extend(true, {}, defaults, opt);
     var decorator_keys = Object.keys(defaults.decorators);
-    for (var i = 0; i < decorator_keys.length; i++) {
-        if (opt.decorators[decorator_keys[i]])
-            this._opt.decorators[decorator_keys[i]] = $.extend(true, {}, defaults.decorators[decorator_keys[i]], opt.decorators[decorator_keys[i]]);
-    }
+    if (opt.decorators)
+        for (var i = 0; i < decorator_keys.length; i++) {
+            if (opt.decorators[decorator_keys[i]])
+                this._opt.decorators[decorator_keys[i]] = $.extend(true, {}, defaults.decorators[decorator_keys[i]], opt.decorators[decorator_keys[i]]);
+        }
 };
 
 Manager.prototype.decorate = function (divs, cb) {

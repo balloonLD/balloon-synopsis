@@ -93,20 +93,20 @@ module.exports={
     &quot;url&quot;: &quot;https://github.com/schlegel/balloon-synopsis&quot;
   },
   &quot;devDependencies&quot;: {
+    &quot;assemble-less&quot;: &quot;~0.7.0&quot;,
     &quot;browserify&quot;: &quot;~5.10.1&quot;,
     &quot;browserify-shim&quot;: &quot;~3.8.5&quot;,
-    &quot;grunt&quot;: &quot;~0.4.4&quot;,
-    &quot;grunt-contrib-copy&quot; : &quot;~0.5.0&quot;,
-    &quot;grunt-contrib-yuidoc&quot;: &quot;~0.5.0&quot;,
-    &quot;grunt-contrib-handlebars&quot;: &quot;~0.5.4&quot;,
+    &quot;grunt&quot;: &quot;^0.4.0&quot;,
+    &quot;grunt-bower-requirejs&quot;: &quot;~1.1.0&quot;,
     &quot;grunt-bower-task&quot;: &quot;~0.4.0&quot;,
-    &quot;grunt-wiredep&quot;: &quot;~1.7.1&quot;,
-    &quot;grunt-contrib-jshint&quot;: &quot;~0.4.1&quot;,
     &quot;grunt-browserify&quot;: &quot;~3.7.0&quot;,
     &quot;grunt-contrib-clean&quot;: &quot;~0.6.0&quot;,
-    &quot;grunt-bower-requirejs&quot;: &quot;~1.1.0&quot;,
-    &quot;assemble-less&quot;: &quot;~0.7.0&quot;,
-    &quot;grunt-contrib-jasmine&quot;: &quot;~0.8.2&quot;
+    &quot;grunt-contrib-copy&quot;: &quot;~0.5.0&quot;,
+    &quot;grunt-contrib-handlebars&quot;: &quot;~0.5.4&quot;,
+    &quot;grunt-contrib-jasmine&quot;: &quot;~0.8.2&quot;,
+    &quot;grunt-contrib-jshint&quot;: &quot;~0.4.1&quot;,
+    &quot;grunt-contrib-yuidoc&quot;: &quot;~0.5.0&quot;,
+    &quot;grunt-wiredep&quot;: &quot;~1.7.1&quot;
   },
   &quot;browserify-shim&quot;: {
     &quot;jquery&quot;: &quot;global:$&quot;,
@@ -121,9 +121,12 @@ module.exports={
     &quot;js-md5&quot;: &quot;global:md5&quot;
   },
   &quot;browserify&quot;: {
-    &quot;transform&quot;: [&quot;browserify-shim&quot;]
+    &quot;transform&quot;: [
+      &quot;browserify-shim&quot;
+    ]
   }
 }
+
 },{}],2:[function(require,module,exports){
 var name = require(&quot;./general_plugin.js&quot;).name;
 var css = {
@@ -338,7 +341,7 @@ var Decorator = function () {
                         if (!colorize(d, resource_uri)) {
                             var color_query = &quot;SELECT DISTINCT ?o WHERE {&lt;&quot; + resource_uri + &quot;&gt; rdf:type ?o. }&quot;;
                             synopsis.store_wrap.store.execute(color_query, function (e, res) {
-                                if (res.length == 0) {
+                                if (res == undefined || res.length == 0) {
                                     debounced_remote_loader.add_value(resource_uri, function (bindings) {
                                         if (!colorize(d, resource_uri) &amp;&amp; bindings.length &gt; 0) {
                                             add_to_color_map(resource_uri, bindings, function () {
@@ -471,6 +474,10 @@ var Decorator = function () {
         &quot;incoming.named&quot;: true,
         &quot;multi.named&quot;: true
     };
+    var isValidUri = function (value) {
+        return /^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})).?)(?::\d{2,5})?(?:[/?#]\S*)?$/i.test( value );
+    };
+
     this.decorate = function (divs, synopsis, config, cb) {
         var language = synopsis.msg.get_language();
         var debounced_remote_loader = new Debounced_remote(synopsis, &quot;SELECT DISTINCT ?value ?o WHERE { ?value rdfs:label ?o.&quot; + Debounced_remote.dummy + &quot; }&quot;, null);
@@ -490,7 +497,7 @@ var Decorator = function () {
 
                             // Get uri and check if we can labelize it
                             var uri = ele.data(&quot;uri&quot;);
-                            if (!labelize(ele, uri, language)) {
+                            if (isValidUri(uri) &amp;&amp; !labelize(ele, uri, language)) {
                                 var label_query = &quot;SELECT DISTINCT ?o WHERE {{&lt;&quot; + uri + &quot;&gt; rdfs:label ?o. } UNION {&lt;&quot; + uri + &quot;&gt; foaf:name ?o. }}&quot;;
                                 synopsis.store_wrap.store.execute(label_query, function (_ele, _uri) {
                                     return function (_, res) {
@@ -652,10 +659,11 @@ var Manager = function (opt, synopsis) {
     this.synopsis = synopsis;
     this._opt = $.extend(true, {}, defaults, opt);
     var decorator_keys = Object.keys(defaults.decorators);
-    for (var i = 0; i &lt; decorator_keys.length; i++) {
-        if (opt.decorators[decorator_keys[i]])
-            this._opt.decorators[decorator_keys[i]] = $.extend(true, {}, defaults.decorators[decorator_keys[i]], opt.decorators[decorator_keys[i]]);
-    }
+    if (opt.decorators)
+        for (var i = 0; i &lt; decorator_keys.length; i++) {
+            if (opt.decorators[decorator_keys[i]])
+                this._opt.decorators[decorator_keys[i]] = $.extend(true, {}, defaults.decorators[decorator_keys[i]], opt.decorators[decorator_keys[i]]);
+        }
 };
 
 Manager.prototype.decorate = function (divs, cb) {
@@ -702,7 +710,7 @@ var templating = require(&quot;../../templating&quot;), Base_detripler = require
 
 var ID = &quot;incoming.named&quot;;
 
-var Detripler = function (config) {
+var Detripler = function () {
     Base_detripler.call(this, ID);
     this.worker = true;
     this.template_id = &quot;tiles.incoming.named&quot;;
@@ -1594,7 +1602,7 @@ module.exports = History;
 var CSS = require(&quot;./../const/css.js&quot;), templating = require(&#x27;./../templating.js&#x27;);
 
 var Nav = function (fn, l, ele, c) {
-    this._$html = $(templating[&quot;components.nav&quot;]({CSS: CSS, class: c, label: l}));
+    this._$html = $(templating[&quot;components.nav&quot;]({CSS: CSS, class_in: c, label: l}));
     this._fn = fn;
     this._$html.on(&quot;click&quot;, this._fn);
     if (ele)
@@ -2629,7 +2637,7 @@ Overlay.prototype.get_content = function () {
 Overlay.prototype.show = function (clip) {
     if (clip)
         log(clip);
-    //TODO setze ausgangspunkt für transition
+    //TODO transition start
 
     this._$html.addClass(CSS.fadeIn);
 };
@@ -2637,7 +2645,7 @@ Overlay.prototype.show = function (clip) {
 Overlay.prototype.hide = function (clip, cb) {
     if (clip)
         log(clip);
-    // TODO setze endpunkt für transition
+    // TODO transition end
 
     if (cb)
         // TODO hide transition
@@ -2736,7 +2744,7 @@ module.exports = Overlay_manager;
  * Singleton Progress box creation.
  **/
 
-var $ = (typeof window !== &quot;undefined&quot; ? window[&#x27;$&#x27;] : typeof global !== &quot;undefined&quot; ? global[&#x27;$&#x27;] : null), CSS = require(&quot;./const/css.js&quot;), U_layout = require(&quot;./util/layout.js&quot;), templating = require(&#x27;./templating&#x27;), e_ext = require(&quot;./util/event_obj_extender&quot;);
+var $ = (typeof window !== &quot;undefined&quot; ? window[&#x27;$&#x27;] : typeof global !== &quot;undefined&quot; ? global[&#x27;$&#x27;] : null), CSS = require(&quot;./const/css.js&quot;), templating = require(&#x27;./templating&#x27;), e_ext = require(&quot;./util/event_obj_extender&quot;);
 
 var DONE_DELETE = 1200, DONE_FADE = 1000;
 
@@ -2834,7 +2842,7 @@ Progress.prototype.make_n_add_bar = function (label, n) {
     return bar;
 };
 
-Progress.prototype.show = function (msg) {
+Progress.prototype.show = function () {
     this._$html.addClass(CSS.fadeIn);
 };
 
@@ -2846,7 +2854,7 @@ var instance = new Progress();
 
 module.exports = instance;
 }).call(this,typeof global !== &quot;undefined&quot; ? global : typeof self !== &quot;undefined&quot; ? self : typeof window !== &quot;undefined&quot; ? window : {})
-},{&quot;./const/css.js&quot;:2,&quot;./templating&quot;:51,&quot;./util/event_obj_extender&quot;:52,&quot;./util/layout.js&quot;:53}],46:[function(require,module,exports){
+},{&quot;./const/css.js&quot;:2,&quot;./templating&quot;:51,&quot;./util/event_obj_extender&quot;:52}],46:[function(require,module,exports){
 var e_ext = require(&quot;../util/event_obj_extender&quot;);
 
 var max_url_length = 2000;
@@ -2921,7 +2929,7 @@ Debounced_remote_loader.prototype.run_on_remote = function () {
 
 Debounced_remote_loader.prototype.pop_query = function () {
     var values = this.values;
-    this.query_length = encodeURIComponent(query).length;
+    this.query_length = encodeURIComponent(this.query).length;
     this.values = [];
     var replacement = &quot;Filter (&quot;;
     for (var i = 0; i &lt; values.length; i++) {
@@ -3688,15 +3696,15 @@ function program1(depth0,data) {
   return buffer;
   }
 
-  buffer += &quot;&lt;li&gt;\r\n    &lt;a class=\&quot;&quot;
+  buffer += &quot;&lt;li&gt;\n    &lt;a class=\&quot;&quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.btn)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1));
-  stack2 = helpers.each.call(depth0, depth0[&#x27;class&#x27;], {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  stack2 = helpers.each.call(depth0, depth0.class_in, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += &quot;\&quot; href=\&quot;#\&quot;&gt;\r\n        &quot;;
+  buffer += &quot;\&quot; href=\&quot;#\&quot;&gt;\n        &quot;;
   if (stack2 = helpers.label) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
   else { stack2 = depth0.label; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
   buffer += escapeExpression(stack2)
-    + &quot;\r\n    &lt;/a&gt;\r\n&lt;/li&gt;&quot;;
+    + &quot;\n    &lt;/a&gt;\n&lt;/li&gt;&quot;;
   return buffer;
   });
 
@@ -3708,7 +3716,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
   buffer += &quot;&lt;div class=\&quot;&quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.scroll_box_content)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\r\n&lt;/div&gt;&quot;;
+    + &quot;\&quot;&gt;\n&lt;/div&gt;&quot;;
   return buffer;
   });
 
@@ -3720,7 +3728,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
   buffer += &quot;&lt;div class=\&quot;&quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.history)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\r\n&lt;/div&gt;&quot;;
+    + &quot;\&quot;&gt;\n&lt;/div&gt;&quot;;
   return buffer;
   });
 
@@ -3740,65 +3748,65 @@ function program1(depth0,data) {
 function program3(depth0,data) {
   
   var buffer = &quot;&quot;, stack1, options;
-  buffer += &quot;\r\n                                &lt;li&gt;&lt;a class=\&quot;&quot;
+  buffer += &quot;\n                                &lt;li&gt;&lt;a class=\&quot;&quot;
     + escapeExpression(((stack1 = depth0.id),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + &quot;\&quot; href=\&quot;#\&quot;&gt;&quot;;
   options = {hash:{},data:data};
   buffer += escapeExpression(((stack1 = helpers.prefix || depth0.prefix),stack1 ? stack1.call(depth0, depth0.msg, &quot;sorter-prefix&quot;, depth0.id, options) : helperMissing.call(depth0, &quot;prefix&quot;, depth0.msg, &quot;sorter-prefix&quot;, depth0.id, options)))
-    + &quot;&lt;/a&gt;&lt;/li&gt;\r\n                            &quot;;
+    + &quot;&lt;/a&gt;&lt;/li&gt;\n                            &quot;;
   return buffer;
   }
 
 function program5(depth0,data) {
   
   var buffer = &quot;&quot;, stack1, options;
-  buffer += &quot;\r\n                            &lt;li&gt;&lt;a class=\&quot;&quot;
+  buffer += &quot;\n                            &lt;li&gt;&lt;a class=\&quot;&quot;
     + escapeExpression(((stack1 = depth0.id),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + &quot;\&quot; href=\&quot;#\&quot;&gt;&quot;;
   options = {hash:{},data:data};
   buffer += escapeExpression(((stack1 = helpers.prefix || depth0.prefix),stack1 ? stack1.call(depth0, depth0.msg, &quot;filter-prefix&quot;, depth0.id, options) : helperMissing.call(depth0, &quot;prefix&quot;, depth0.msg, &quot;filter-prefix&quot;, depth0.id, options)))
-    + &quot;&lt;/a&gt;&lt;/li&gt;\r\n                        &quot;;
+    + &quot;&lt;/a&gt;&lt;/li&gt;\n                        &quot;;
   return buffer;
   }
 
   buffer += &quot;&lt;div class=\&quot;&quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.layer)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1));
-  stack2 = helpers.each.call(depth0, depth0[&#x27;class&#x27;], {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
+  stack2 = helpers.each.call(depth0, depth0.class_in, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += &quot;\&quot;&gt;\r\n    &lt;div class=\&quot;&quot;
+  buffer += &quot;\&quot;&gt;\n    &lt;div class=\&quot;&quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.menu)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot; container-fluid\&quot;&gt;\r\n        &lt;div class=\&quot;row\&quot;&gt;\r\n            &lt;div class=\&quot;col-lg-offset-2 col-md-offset-1 col-xs-offset-0 col-lg-5 col-md-6 col-xs-7 &quot;
+    + &quot; container-fluid\&quot;&gt;\n        &lt;div class=\&quot;row\&quot;&gt;\n            &lt;div class=\&quot;col-lg-offset-2 col-md-offset-1 col-xs-offset-0 col-lg-5 col-md-6 col-xs-7 &quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.filter)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\r\n                &lt;div class=\&quot;input-group\&quot;&gt;\r\n                    &lt;input type=\&quot;text\&quot; class=\&quot;form-control\&quot; aria-label=\&quot;...\&quot;&gt;\r\n\r\n                    &lt;div class=\&quot;input-group-btn\&quot;&gt;\r\n                        &lt;button type=\&quot;button\&quot; class=\&quot;btn btn-default &quot;
+    + &quot;\&quot;&gt;\n                &lt;div class=\&quot;input-group\&quot;&gt;\n                    &lt;input type=\&quot;text\&quot; class=\&quot;form-control\&quot; aria-label=\&quot;...\&quot;&gt;\n\n                    &lt;div class=\&quot;input-group-btn\&quot;&gt;\n                        &lt;button type=\&quot;button\&quot; class=\&quot;btn btn-default &quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.filter_btn)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;\r\n                                aria-expanded=\&quot;false\&quot;&gt; &quot;;
+    + &quot;\&quot;\n                                aria-expanded=\&quot;false\&quot;&gt; &quot;;
   options = {hash:{},data:data};
   buffer += escapeExpression(((stack1 = helpers.get_msg || depth0.get_msg),stack1 ? stack1.call(depth0, depth0.msg, &quot;filter&quot;, options) : helperMissing.call(depth0, &quot;get_msg&quot;, depth0.msg, &quot;filter&quot;, options)))
-    + &quot; &lt;/span&gt;&lt;/button&gt;\r\n                        &lt;button type=\&quot;button\&quot; class=\&quot;btn btn-default dropdown-toggle\&quot; data-toggle=\&quot;dropdown\&quot;\r\n                                aria-expanded=\&quot;false\&quot;&gt; &quot;;
+    + &quot; &lt;span&gt;&lt;/span&gt;&lt;/button&gt;\n                        &lt;button type=\&quot;button\&quot; class=\&quot;btn btn-default dropdown-toggle\&quot; data-toggle=\&quot;dropdown\&quot;\n                                aria-expanded=\&quot;false\&quot;&gt; &quot;;
   options = {hash:{},data:data};
   buffer += escapeExpression(((stack1 = helpers.get_msg || depth0.get_msg),stack1 ? stack1.call(depth0, depth0.msg, &quot;filter_options&quot;, options) : helperMissing.call(depth0, &quot;get_msg&quot;, depth0.msg, &quot;filter_options&quot;, options)))
-    + &quot; &lt;span class=\&quot;caret\&quot;&gt;&lt;/span&gt;\r\n                        &lt;/button&gt;\r\n                        &lt;ul class=\&quot;dropdown-menu dropdown-menu-right\&quot; role=\&quot;menu\&quot;&gt;\r\n                            &quot;;
+    + &quot; &lt;span class=\&quot;caret\&quot;&gt;&lt;/span&gt;\n                        &lt;/button&gt;\n                        &lt;ul class=\&quot;dropdown-menu dropdown-menu-right\&quot; role=\&quot;menu\&quot;&gt;\n                            &quot;;
   stack2 = helpers.each.call(depth0, depth0.filter, {hash:{},inverse:self.noop,fn:self.program(3, program3, data),data:data});
   if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += &quot;\r\n                        &lt;/ul&gt;\r\n                    &lt;/div&gt;\r\n                    &lt;!-- /btn-group --&gt;\r\n                &lt;/div&gt;\r\n                &lt;!-- /input-group --&gt;\r\n            &lt;/div&gt;\r\n            &lt;div class=\&quot;col-lg-3 col-md-4 col-xs-5 &quot;
+  buffer += &quot;\n                        &lt;/ul&gt;\n                    &lt;/div&gt;\n                    &lt;!-- /btn-group --&gt;\n                &lt;/div&gt;\n                &lt;!-- /input-group --&gt;\n            &lt;/div&gt;\n            &lt;div class=\&quot;col-lg-3 col-md-4 col-xs-5 &quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.sorter)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\r\n                &lt;div class=\&quot;dropdown\&quot;&gt;\r\n                    &lt;label class=\&quot;control-label\&quot; for=\&quot;sortDropDown\&quot;\r\n                           style=\&quot;text-align:right\&quot;&gt;&quot;;
+    + &quot;\&quot;&gt;\n                &lt;div class=\&quot;dropdown\&quot;&gt;\n                    &lt;label class=\&quot;control-label\&quot; for=\&quot;sortDropDown\&quot;\n                           style=\&quot;text-align:right\&quot;&gt;&quot;;
   options = {hash:{},data:data};
   buffer += escapeExpression(((stack1 = helpers.get_msg || depth0.get_msg),stack1 ? stack1.call(depth0, depth0.msg, &quot;sorter&quot;, options) : helperMissing.call(depth0, &quot;get_msg&quot;, depth0.msg, &quot;sorter&quot;, options)))
-    + &quot;&lt;/label&gt;\r\n                    &lt;button class=\&quot;btn btn-default dropdown-toggle\&quot; type=\&quot;button\&quot; id=\&quot;sortDropDown\&quot;\r\n                            data-toggle=\&quot;dropdown\&quot; aria-expanded=\&quot;true\&quot;&gt;\r\n                        &quot;;
+    + &quot;&lt;/label&gt;\n                    &lt;button class=\&quot;btn btn-default dropdown-toggle\&quot; type=\&quot;button\&quot; id=\&quot;sortDropDown\&quot;\n                            data-toggle=\&quot;dropdown\&quot; aria-expanded=\&quot;true\&quot;&gt;\n                        &quot;;
   options = {hash:{},data:data};
   buffer += escapeExpression(((stack1 = helpers.get_msg || depth0.get_msg),stack1 ? stack1.call(depth0, depth0.msg, &quot;sorter_default&quot;, options) : helperMissing.call(depth0, &quot;get_msg&quot;, depth0.msg, &quot;sorter_default&quot;, options)))
-    + &quot;\r\n                        &lt;span class=\&quot;caret\&quot;&gt;&lt;/span&gt;\r\n                    &lt;/button&gt;\r\n                    &lt;ul class=\&quot;col-sm-8 dropdown-menu\&quot; role=\&quot;menu\&quot; aria-labelledby=\&quot;sortDropDown\&quot;&gt;\r\n                        &quot;;
+    + &quot;\n                        &lt;span class=\&quot;caret\&quot;&gt;&lt;/span&gt;\n                    &lt;/button&gt;\n                    &lt;ul class=\&quot;col-sm-8 dropdown-menu\&quot; role=\&quot;menu\&quot; aria-labelledby=\&quot;sortDropDown\&quot;&gt;\n                        &quot;;
   stack2 = helpers.each.call(depth0, depth0.sorter, {hash:{},inverse:self.noop,fn:self.program(5, program5, data),data:data});
   if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += &quot;\r\n                    &lt;/ul&gt;\r\n                &lt;/div&gt;\r\n            &lt;/div&gt;\r\n        &lt;/div&gt;\r\n    &lt;/div&gt;\r\n    &lt;div class=\&quot;&quot;
+  buffer += &quot;\n                    &lt;/ul&gt;\n                &lt;/div&gt;\n            &lt;/div&gt;\n        &lt;/div&gt;\n    &lt;/div&gt;\n    &lt;div class=\&quot;&quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.layout_container)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\r\n\r\n    &lt;/div&gt;\r\n    &lt;div class=\&quot;&quot;
+    + &quot;\&quot;&gt;\n\n    &lt;/div&gt;\n    &lt;div class=\&quot;&quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.layout_footer)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\r\n        &quot;;
+    + &quot;\&quot;&gt;\n        &quot;;
   options = {hash:{},data:data};
   buffer += escapeExpression(((stack1 = helpers.get_msg || depth0.get_msg),stack1 ? stack1.call(depth0, depth0.msg, &quot;empty&quot;, options) : helperMissing.call(depth0, &quot;get_msg&quot;, depth0.msg, &quot;empty&quot;, options)))
-    + &quot;\r\n    &lt;/div&gt;\r\n&lt;/div&gt;&quot;;
+    + &quot;\n    &lt;/div&gt;\n&lt;/div&gt;&quot;;
   return buffer;
   });
 
@@ -3810,12 +3818,12 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = &quot;&quot;, stack1, options;
-  buffer += &quot;\r\n                        &lt;li&gt;&lt;a id=\&quot;&quot;
+  buffer += &quot;\n                        &lt;li&gt;&lt;a id=\&quot;&quot;
     + escapeExpression(((stack1 = depth0.id),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + &quot;\&quot; href=\&quot;#\&quot;&gt;&quot;;
   options = {hash:{},data:data};
   buffer += escapeExpression(((stack1 = helpers.get_filter || depth0.get_filter),stack1 ? stack1.call(depth0, depth0.msg, depth0.id, options) : helperMissing.call(depth0, &quot;get_filter&quot;, depth0.msg, depth0.id, options)))
-    + &quot;&lt;/a&gt;&lt;/li&gt;\r\n                    &quot;;
+    + &quot;&lt;/a&gt;&lt;/li&gt;\n                    &quot;;
   return buffer;
   }
 
@@ -3825,24 +3833,24 @@ function program1(depth0,data) {
   if (stack2 = helpers.z_index) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
   else { stack2 = depth0.z_index; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
   buffer += escapeExpression(stack2)
-    + &quot;;\&quot;&gt;\r\n    &lt;div class=\&quot;&quot;
+    + &quot;;\&quot;&gt;\n    &lt;div class=\&quot;&quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.menu)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot; navbar\&quot;&gt;\r\n        &lt;div class=\&quot;container\&quot;&gt;\r\n            &lt;div class=\&quot;navbar-header syn_menu_label navbar-left\&quot;&gt;\r\n                &lt;a class=\&quot;navbar-brand\&quot; disabled=\&quot;\&quot;&gt;\r\n                    &lt;b&gt;&quot;;
+    + &quot; navbar\&quot;&gt;\n        &lt;div class=\&quot;container\&quot;&gt;\n            &lt;div class=\&quot;navbar-header syn_menu_label navbar-left\&quot;&gt;\n                &lt;a class=\&quot;navbar-brand\&quot; disabled=\&quot;\&quot;&gt;\n                    &lt;b&gt;&quot;;
   if (stack2 = helpers.label) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
   else { stack2 = depth0.label; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
   buffer += escapeExpression(stack2)
-    + &quot;&lt;/b&gt;\r\n                    &lt;small&gt;&quot;;
+    + &quot;&lt;/b&gt;\n                    &lt;small&gt;&quot;;
   if (stack2 = helpers.label_small) { stack2 = stack2.call(depth0, {hash:{},data:data}); }
   else { stack2 = depth0.label_small; stack2 = typeof stack2 === functionType ? stack2.apply(depth0) : stack2; }
   buffer += escapeExpression(stack2)
-    + &quot;&lt;/small&gt;\r\n                &lt;/a&gt;\r\n            &lt;/div&gt;\r\n            &lt;div class=\&quot;collapse navbar-collapse syn_navbar_collapse navbar-right\&quot;&gt;\r\n                &lt;ul class=\&quot;&quot;
+    + &quot;&lt;/small&gt;\n                &lt;/a&gt;\n            &lt;/div&gt;\n            &lt;div class=\&quot;collapse navbar-collapse syn_navbar_collapse navbar-right\&quot;&gt;\n                &lt;ul class=\&quot;&quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.overlay_menu)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot; nav navbar-nav\&quot;&gt;\r\n                    &quot;;
+    + &quot; nav navbar-nav\&quot;&gt;\n                    &quot;;
   stack2 = helpers.each.call(depth0, depth0.nav, {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += &quot;\r\n                &lt;/ul&gt;\r\n            &lt;/div&gt;\r\n        &lt;/div&gt;\r\n    &lt;/div&gt;\r\n    &lt;div class=\&quot;&quot;
+  buffer += &quot;\n                &lt;/ul&gt;\n            &lt;/div&gt;\n        &lt;/div&gt;\n    &lt;/div&gt;\n    &lt;div class=\&quot;&quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.overlay_content)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\r\n    &lt;/div&gt;\r\n&lt;/div&gt;&quot;;
+    + &quot;\&quot;&gt;\n    &lt;/div&gt;\n&lt;/div&gt;&quot;;
   return buffer;
   });
 
@@ -3854,7 +3862,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
   buffer += &quot;&lt;div class=\&quot;&quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.overlay_container)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\r\n&lt;/div&gt;&quot;;
+    + &quot;\&quot;&gt;\n&lt;/div&gt;&quot;;
   return buffer;
   });
 
@@ -3866,9 +3874,9 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 
   buffer += &quot;&lt;div class=\&quot;&quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.progress_container_wrap)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot; col-lg-offset-1 col-md-offset-1 col-xs-offset-1 col-lg-10 col-md-10 col-xs-10\&quot;&gt;\r\n    &lt;div class=\&quot;&quot;
+    + &quot; col-lg-offset-1 col-md-offset-1 col-xs-offset-1 col-lg-10 col-md-10 col-xs-10\&quot;&gt;\n    &lt;div class=\&quot;&quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.progress_container)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt; &lt;/div&gt;\r\n&lt;/div&gt;&quot;;
+    + &quot;\&quot;&gt; &lt;/div&gt;\n&lt;/div&gt;&quot;;
   return buffer;
   });
 
@@ -3878,13 +3886,13 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   var buffer = &quot;&quot;, stack1, functionType=&quot;function&quot;, escapeExpression=this.escapeExpression;
 
 
-  buffer += &quot;&lt;div class=\&quot;col-lg-2 col-md-3 col-xs-4\&quot; style=\&quot;display: flex; flex-direction: column; justify-content: center;\&quot;&gt;\r\n    &lt;div&gt;\r\n        &quot;;
+  buffer += &quot;&lt;div class=\&quot;col-lg-2 col-md-3 col-xs-4\&quot; style=\&quot;display: flex; flex-direction: column; justify-content: center;\&quot;&gt;\n    &lt;div&gt;\n        &quot;;
   if (stack1 = helpers.label) { stack1 = stack1.call(depth0, {hash:{},data:data}); }
   else { stack1 = depth0.label; stack1 = typeof stack1 === functionType ? stack1.apply(depth0) : stack1; }
   buffer += escapeExpression(stack1)
-    + &quot;\r\n    &lt;/div&gt;\r\n    &lt;div class=\&quot;progress\&quot;&gt;\r\n        &lt;div class=\&quot;&quot;
+    + &quot;\n    &lt;/div&gt;\n    &lt;div class=\&quot;progress\&quot;&gt;\n        &lt;div class=\&quot;&quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.progress_bar)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot; progress-bar progress-bar-success\&quot; style=\&quot;width: 0%\&quot;&gt;&lt;/div&gt;\r\n    &lt;/div&gt;\r\n&lt;/div&gt;&quot;;
+    + &quot; progress-bar progress-bar-success\&quot; style=\&quot;width: 0%\&quot;&gt;&lt;/div&gt;\n    &lt;/div&gt;\n&lt;/div&gt;&quot;;
   return buffer;
   });
 
@@ -3900,9 +3908,9 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.detripler)),stack1 == null || stack1 === false ? stack1 : stack1.id)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + &quot; &quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.semantic_color)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\r\n    &quot;
+    + &quot;\&quot;&gt;\n    &quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.label)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\r\n&lt;/div&gt;&quot;;
+    + &quot;\n&lt;/div&gt;&quot;;
   return buffer;
   });
 
@@ -3918,19 +3926,19 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.detripler)),stack1 == null || stack1 === false ? stack1 : stack1.id)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + &quot; &quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.semantic_color)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\r\n    &lt;b&gt;Subgraph:&lt;/b&gt;\r\n    &lt;div class=\&quot;&quot;
+    + &quot;\&quot;&gt;\n    &lt;b&gt;Subgraph:&lt;/b&gt;\n    &lt;div class=\&quot;&quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.uri)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + &quot; &quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.dynamic_text_size)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\r\n        &quot;
+    + &quot;\&quot;&gt;\n        &quot;
     + escapeExpression(((stack1 = ((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.triple)),stack1 == null || stack1 === false ? stack1 : stack1.subject)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\r\n    &lt;/div&gt;\r\n    &lt;b&gt;is subject of:&lt;/b&gt;\r\n    &lt;div class=\&quot;&quot;
+    + &quot;\n    &lt;/div&gt;\n    &lt;b&gt;is subject of:&lt;/b&gt;\n    &lt;div class=\&quot;&quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.uri)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + &quot; &quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.dynamic_text_size)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\r\n        &quot;
+    + &quot;\&quot;&gt;\n        &quot;
     + escapeExpression(((stack1 = ((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.triple)),stack1 == null || stack1 === false ? stack1 : stack1.predicate)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\r\n    &lt;/div&gt;\r\n&lt;/div&gt;&quot;;
+    + &quot;\n    &lt;/div&gt;\n&lt;/div&gt;&quot;;
   return buffer;
   });
 
@@ -3946,19 +3954,19 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.detripler)),stack1 == null || stack1 === false ? stack1 : stack1.id)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + &quot; &quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.semantic_color)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\r\n    &lt;b&gt;Resource:&lt;/b&gt;\r\n    &lt;div class=\&quot;&quot;
+    + &quot;\&quot;&gt;\n    &lt;b&gt;Resource:&lt;/b&gt;\n    &lt;div class=\&quot;&quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.uri)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + &quot; &quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.dynamic_text_size)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\r\n        &quot;
+    + &quot;\&quot;&gt;\n        &quot;
     + escapeExpression(((stack1 = ((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.triple)),stack1 == null || stack1 === false ? stack1 : stack1.subject)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\r\n    &lt;/div&gt;\r\n    &lt;b&gt;is subject of:&lt;/b&gt;\r\n    &lt;div class=\&quot;&quot;
+    + &quot;\n    &lt;/div&gt;\n    &lt;b&gt;is subject of:&lt;/b&gt;\n    &lt;div class=\&quot;&quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.uri)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + &quot; &quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.dynamic_text_size)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\r\n        &quot;
+    + &quot;\&quot;&gt;\n        &quot;
     + escapeExpression(((stack1 = ((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.triple)),stack1 == null || stack1 === false ? stack1 : stack1.predicate)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\r\n    &lt;/div&gt;\r\n&lt;/div&gt;&quot;;
+    + &quot;\n    &lt;/div&gt;\n&lt;/div&gt;&quot;;
   return buffer;
   });
 
@@ -3972,11 +3980,11 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.tile)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + &quot; &quot;
     + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.detripler)),stack1 == null || stack1 === false ? stack1 : stack1.id)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot; style=\&quot;width:404px; height: 200px\&quot;&gt;\r\n    &lt;iframe width=\&quot;404\&quot; height=\&quot;200\&quot; frameborder=\&quot;0\&quot; scrolling=\&quot;no\&quot; marginheight=\&quot;0\&quot; marginwidth=\&quot;0\&quot; src=\&quot;https://maps.google.com/?ie=UTF8&amp;amp;t=m&amp;amp;ll=&quot;
+    + &quot;\&quot; style=\&quot;width:404px; height: 200px\&quot;&gt;\n    &lt;iframe width=\&quot;404\&quot; height=\&quot;200\&quot; frameborder=\&quot;0\&quot; scrolling=\&quot;no\&quot; marginheight=\&quot;0\&quot; marginwidth=\&quot;0\&quot; src=\&quot;https://maps.google.com/?ie=UTF8&amp;amp;t=m&amp;amp;ll=&quot;
     + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.longitude)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + &quot;,&quot;
     + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.latitude)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;&amp;amp;spn=0.079502,0.145912&amp;amp;z=12&amp;amp;output=embed\&quot;&gt;&lt;/iframe&gt;\r\n&lt;/div&gt;&quot;;
+    + &quot;&amp;amp;spn=0.079502,0.145912&amp;amp;z=12&amp;amp;output=embed\&quot;&gt;&lt;/iframe&gt;\n&lt;/div&gt;&quot;;
   return buffer;
   });
 
@@ -3988,32 +3996,32 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 function program1(depth0,data) {
   
   var buffer = &quot;&quot;, stack1, stack2;
-  buffer += &quot;\r\n    &lt;b&gt;is object of:&lt;/b&gt;\r\n    &quot;;
+  buffer += &quot;\n    &lt;b&gt;is object of:&lt;/b&gt;\n    &quot;;
   stack2 = helpers.each.call(depth0, ((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.triples)),stack1 == null || stack1 === false ? stack1 : stack1.out), {hash:{},inverse:self.noop,fn:self.programWithDepth(2, program2, data, depth0),data:data});
   if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += &quot;\r\n    &quot;;
+  buffer += &quot;\n    &quot;;
   return buffer;
   }
 function program2(depth0,data,depth1) {
   
   var buffer = &quot;&quot;, stack1;
-  buffer += &quot;\r\n        &lt;div class=\&quot;&quot;
+  buffer += &quot;\n        &lt;div class=\&quot;&quot;
     + escapeExpression(((stack1 = ((stack1 = depth1.CSS),stack1 == null || stack1 === false ? stack1 : stack1.uri)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + &quot; &quot;
     + escapeExpression(((stack1 = ((stack1 = depth1.CSS),stack1 == null || stack1 === false ? stack1 : stack1.dynamic_text_size)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\r\n            &quot;
+    + &quot;\&quot;&gt;\n            &quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.predicate),stack1 == null || stack1 === false ? stack1 : stack1.nominalValue)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\r\n        &lt;/div&gt;\r\n    &quot;;
+    + &quot;\n        &lt;/div&gt;\n    &quot;;
   return buffer;
   }
 
 function program4(depth0,data) {
   
   var buffer = &quot;&quot;, stack1, stack2;
-  buffer += &quot;\r\n    &lt;b&gt;is subject of:&lt;/b&gt;\r\n    &quot;;
+  buffer += &quot;\n    &lt;b&gt;is subject of:&lt;/b&gt;\n    &quot;;
   stack2 = helpers.each.call(depth0, ((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.triples)),stack1 == null || stack1 === false ? stack1 : stack1.inc), {hash:{},inverse:self.noop,fn:self.programWithDepth(2, program2, data, depth0),data:data});
   if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += &quot;\r\n    &quot;;
+  buffer += &quot;\n    &quot;;
   return buffer;
   }
 
@@ -4023,19 +4031,19 @@ function program4(depth0,data) {
     + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.detripler)),stack1 == null || stack1 === false ? stack1 : stack1.id)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + &quot; &quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.semantic_color)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\r\n    &lt;b&gt;Resource:&lt;/b&gt;\r\n    &lt;div class=\&quot;&quot;
+    + &quot;\&quot;&gt;\n    &lt;b&gt;Resource:&lt;/b&gt;\n    &lt;div class=\&quot;&quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.uri)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + &quot; &quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.dynamic_text_size)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\r\n        &quot;
+    + &quot;\&quot;&gt;\n        &quot;
     + escapeExpression(((stack1 = ((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.resource)),stack1 == null || stack1 === false ? stack1 : stack1.nominalValue)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\r\n    &lt;/div&gt;\r\n    &quot;;
+    + &quot;\n    &lt;/div&gt;\n    &quot;;
   stack2 = helpers[&#x27;if&#x27;].call(depth0, ((stack1 = ((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.triples)),stack1 == null || stack1 === false ? stack1 : stack1.out)),stack1 == null || stack1 === false ? stack1 : stack1.length), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
   if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += &quot;\r\n    &quot;;
+  buffer += &quot;\n    &quot;;
   stack2 = helpers[&#x27;if&#x27;].call(depth0, ((stack1 = ((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.triples)),stack1 == null || stack1 === false ? stack1 : stack1.inc)),stack1 == null || stack1 === false ? stack1 : stack1.length), {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data});
   if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += &quot;\r\n&lt;/div&gt;&quot;;
+  buffer += &quot;\n&lt;/div&gt;&quot;;
   return buffer;
   });
 
@@ -4051,13 +4059,13 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.detripler)),stack1 == null || stack1 === false ? stack1 : stack1.id)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + &quot; &quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.semantic_color)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\r\n    &lt;b&gt;Subgraph:&lt;/b&gt;\r\n    &lt;div class=\&quot;\&quot;&gt;\r\n    &lt;/div&gt;\r\n    &lt;b&gt;is object of:&lt;/b&gt;\r\n    &lt;div class=\&quot;&quot;
+    + &quot;\&quot;&gt;\n    &lt;b&gt;Subgraph:&lt;/b&gt;\n    &lt;div class=\&quot;\&quot;&gt;\n    &lt;/div&gt;\n    &lt;b&gt;is object of:&lt;/b&gt;\n    &lt;div class=\&quot;&quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.uri)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + &quot; &quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.dynamic_text_size)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\r\n        &quot;
+    + &quot;\&quot;&gt;\n        &quot;
     + escapeExpression(((stack1 = ((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.triple)),stack1 == null || stack1 === false ? stack1 : stack1.predicate)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\r\n    &lt;/div&gt;\r\n&lt;/div&gt;&quot;;
+    + &quot;\n    &lt;/div&gt;\n&lt;/div&gt;&quot;;
   return buffer;
   });
 
@@ -4075,21 +4083,21 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.detripler)),stack1 == null || stack1 === false ? stack1 : stack1.id)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + &quot; &quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.semantic_color)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\r\n    &lt;b&gt;Value:&lt;/b&gt;\r\n    &lt;div class=\&quot;&quot;
+    + &quot;\&quot;&gt;\n    &lt;b&gt;Value:&lt;/b&gt;\n    &lt;div class=\&quot;&quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.dynamic_text_size)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + &quot; &quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.shrink)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + &quot; &quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.y_scroll)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\r\n        &quot;
+    + &quot;\&quot;&gt;\n        &quot;
     + escapeExpression(((stack1 = ((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.triple)),stack1 == null || stack1 === false ? stack1 : stack1.object)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\r\n    &lt;/div&gt;\r\n    &lt;b&gt;is object of:&lt;/b&gt;\r\n    &lt;div class=\&quot;&quot;
+    + &quot;\n    &lt;/div&gt;\n    &lt;b&gt;is object of:&lt;/b&gt;\n    &lt;div class=\&quot;&quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.uri)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + &quot; &quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.dynamic_text_size)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\r\n        &quot;
+    + &quot;\&quot;&gt;\n        &quot;
     + escapeExpression(((stack1 = ((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.triple)),stack1 == null || stack1 === false ? stack1 : stack1.predicate)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\r\n    &lt;/div&gt;\r\n&lt;/div&gt;&quot;;
+    + &quot;\n    &lt;/div&gt;\n&lt;/div&gt;&quot;;
   return buffer;
   });
 
@@ -4105,21 +4113,21 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
     + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.detripler)),stack1 == null || stack1 === false ? stack1 : stack1.id)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + &quot; &quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.semantic_color)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\r\n    &lt;b&gt;Resource:&lt;/b&gt;\r\n    &lt;div class=\&quot;&quot;
+    + &quot;\&quot;&gt;\n    &lt;b&gt;Resource:&lt;/b&gt;\n    &lt;div class=\&quot;&quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.uri)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + &quot; &quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.dynamic_text_size)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\r\n        &quot;
+    + &quot;\&quot;&gt;\n        &quot;
     + escapeExpression(((stack1 = ((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.triple)),stack1 == null || stack1 === false ? stack1 : stack1.object)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\r\n    &lt;/div&gt;\r\n    &lt;b&gt;is object of:&lt;/b&gt;\r\n    &lt;div class=\&quot;&quot;
+    + &quot;\n    &lt;/div&gt;\n    &lt;b&gt;is object of:&lt;/b&gt;\n    &lt;div class=\&quot;&quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.uri)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
     + &quot; &quot;
     + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.dynamic_text_size)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\r\n        &quot;
+    + &quot;\&quot;&gt;\n        &quot;
     + escapeExpression(helpers.log.call(depth0, ((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.triple)),stack1 == null || stack1 === false ? stack1 : stack1.predicate), {hash:{},data:data}))
-    + &quot;\r\n        &quot;
+    + &quot;\n        &quot;
     + escapeExpression(((stack1 = ((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.triple)),stack1 == null || stack1 === false ? stack1 : stack1.predicate)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\r\n    &lt;/div&gt;\r\n&lt;/div&gt;&quot;;
+    + &quot;\n    &lt;/div&gt;\n&lt;/div&gt;&quot;;
   return buffer;
   });
 

@@ -26,97 +26,97 @@
     "classitems": [
         {
             "file": "build/synopsis.js",
-            "line": 910,
+            "line": 918,
             "description": "Worker",
             "class": ""
         },
         {
             "file": "build/synopsis.js",
-            "line": 971,
+            "line": 979,
             "description": "Singleton worker group creation. Needs to be set once.",
             "class": ""
         },
         {
             "file": "build/synopsis.js",
-            "line": 1100,
+            "line": 1108,
             "description": "Worker",
             "class": ""
         },
         {
             "file": "build/synopsis.js",
-            "line": 1615,
+            "line": 1623,
             "description": "Singleton info box creation.",
             "class": ""
         },
         {
             "file": "build/synopsis.js",
-            "line": 1740,
+            "line": 1748,
             "description": "Layer factory",
             "class": ""
         },
         {
             "file": "build/synopsis.js",
-            "line": 1860,
+            "line": 1868,
             "description": "Layer",
             "class": ""
         },
         {
             "file": "build/synopsis.js",
-            "line": 2134,
+            "line": 2142,
             "description": "Layer",
             "class": ""
         },
         {
             "file": "build/synopsis.js",
-            "line": 2144,
+            "line": 2152,
             "description": "Layer",
             "class": ""
         },
         {
             "file": "build/synopsis.js",
-            "line": 2154,
+            "line": 2162,
             "description": "Layer",
             "class": ""
         },
         {
             "file": "build/synopsis.js",
-            "line": 2271,
+            "line": 2279,
             "description": "Layer",
             "class": ""
         },
         {
             "file": "build/synopsis.js",
-            "line": 2299,
+            "line": 2307,
             "description": "Layer",
             "class": ""
         },
         {
             "file": "build/synopsis.js",
-            "line": 2445,
+            "line": 2453,
             "description": "Wrapper for logger creation",
             "class": ""
         },
         {
             "file": "build/synopsis.js",
-            "line": 2587,
+            "line": 2595,
             "description": "Overlay management for synopsis",
             "class": ""
         },
         {
             "file": "build/synopsis.js",
-            "line": 2649,
+            "line": 2657,
             "description": "Singleton Progress box creation.",
             "class": ""
         },
         {
             "file": "build/synopsis.js",
-            "line": 2854,
+            "line": 2862,
             "description": "Singleton store local",
             "class": ""
         },
         {
             "file": "build/synopsis.js",
-            "line": 2860,
+            "line": 2868,
             "description": "Remote loading for rdf data via describe queries.",
             "params": [
                 {
@@ -133,7 +133,7 @@
         },
         {
             "file": "build/synopsis.js",
-            "line": 2875,
+            "line": 2883,
             "description": "Creates the cors request object",
             "params": [
                 {
@@ -155,7 +155,7 @@
         },
         {
             "file": "build/synopsis.js",
-            "line": 2906,
+            "line": 2914,
             "description": "Execute given query on sparql service via cors.",
             "params": [
                 {
@@ -179,7 +179,7 @@
         },
         {
             "file": "build/synopsis.js",
-            "line": 2941,
+            "line": 2949,
             "description": "Execute given query on sparql service via yql. Fix YQL.",
             "params": [
                 {
@@ -199,13 +199,13 @@
         },
         {
             "file": "build/synopsis.js",
-            "line": 2996,
+            "line": 3004,
             "description": "Singleton local rdf store. Needs to be set once.",
             "class": ""
         },
         {
             "file": "build/synopsis.js",
-            "line": 3037,
+            "line": 3045,
             "description": "Implements interface to local rdf store.",
             "params": [
                 {
@@ -218,7 +218,7 @@
         },
         {
             "file": "build/synopsis.js",
-            "line": 3061,
+            "line": 3069,
             "description": "Returns initialization promise statement",
             "return": {
                 "description": "",
@@ -228,37 +228,37 @@
         },
         {
             "file": "build/synopsis.js",
-            "line": 3093,
+            "line": 3101,
             "class": ""
         },
         {
             "file": "build/synopsis.js",
-            "line": 3100,
+            "line": 3108,
             "class": ""
         },
         {
             "file": "build/synopsis.js",
-            "line": 3107,
+            "line": 3115,
             "class": ""
         },
         {
             "file": "build/synopsis.js",
-            "line": 3114,
+            "line": 3122,
             "class": ""
         },
         {
             "file": "build/synopsis.js",
-            "line": 3121,
+            "line": 3129,
             "class": ""
         },
         {
             "file": "build/synopsis.js",
-            "line": 3128,
+            "line": 3136,
             "class": ""
         },
         {
             "file": "build/synopsis.js",
-            "line": 3135,
+            "line": 3143,
             "description": "Inserts given triples into the store.",
             "params": [
                 {
@@ -278,7 +278,7 @@
         },
         {
             "file": "build/synopsis.js",
-            "line": 3244,
+            "line": 3252,
             "description": "Execute given query on store.",
             "params": [
                 {
@@ -298,13 +298,13 @@
         },
         {
             "file": "build/synopsis.js",
-            "line": 3312,
+            "line": 3320,
             "description": "Extend jQUery selector for contains",
             "class": ""
         },
         {
             "file": "build/synopsis.js",
-            "line": 3321,
+            "line": 3329,
             "description": "Main plugin class",
             "params": [
                 {
@@ -325,7 +325,7 @@
         },
         {
             "file": "build/synopsis.js",
-            "line": 3548,
+            "line": 3556,
             "description": "Clean up after plugin (destroy bindings, clear events..)",
             "itemtype": "method",
             "name": "destroy",
@@ -333,13 +333,13 @@
         },
         {
             "file": "build/synopsis.js",
-            "line": 4067,
+            "line": 4075,
             "description": "Extends an object with backbone events and switching. A switch is a event which is triggered once and stays \"on\". If a function gets bond to a switch in on state it is invoked instantly.",
             "class": ""
         },
         {
             "file": "build/synopsis.js",
-            "line": 4109,
+            "line": 4117,
             "description": "Get browser dependent event names. (Uses Modernizr)",
             "itemtype": "method",
             "name": "getTransEndEventName",
@@ -351,7 +351,7 @@
         },
         {
             "file": "build/synopsis.js",
-            "line": 4119,
+            "line": 4127,
             "description": "Checks of transitions support is available.",
             "itemtype": "method",
             "name": "checkTransitionSupport",
@@ -371,143 +371,143 @@
     "warnings": [
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " build/synopsis.js:2875"
+            "line": " build/synopsis.js:2883"
         },
         {
             "message": "replacing incorrect tag: returns with return",
-            "line": " build/synopsis.js:3061"
+            "line": " build/synopsis.js:3069"
         },
         {
             "message": "Missing item type\nWorker",
-            "line": " build/synopsis.js:910"
+            "line": " build/synopsis.js:918"
         },
         {
             "message": "Missing item type\nSingleton worker group creation. Needs to be set once.",
-            "line": " build/synopsis.js:971"
+            "line": " build/synopsis.js:979"
         },
         {
             "message": "Missing item type\nWorker",
-            "line": " build/synopsis.js:1100"
+            "line": " build/synopsis.js:1108"
         },
         {
             "message": "Missing item type\nSingleton info box creation.",
-            "line": " build/synopsis.js:1615"
+            "line": " build/synopsis.js:1623"
         },
         {
             "message": "Missing item type\nLayer factory",
-            "line": " build/synopsis.js:1740"
+            "line": " build/synopsis.js:1748"
         },
         {
             "message": "Missing item type\nLayer",
-            "line": " build/synopsis.js:1860"
+            "line": " build/synopsis.js:1868"
         },
         {
             "message": "Missing item type\nLayer",
-            "line": " build/synopsis.js:2134"
+            "line": " build/synopsis.js:2142"
         },
         {
             "message": "Missing item type\nLayer",
-            "line": " build/synopsis.js:2144"
+            "line": " build/synopsis.js:2152"
         },
         {
             "message": "Missing item type\nLayer",
-            "line": " build/synopsis.js:2154"
+            "line": " build/synopsis.js:2162"
         },
         {
             "message": "Missing item type\nLayer",
-            "line": " build/synopsis.js:2271"
+            "line": " build/synopsis.js:2279"
         },
         {
             "message": "Missing item type\nLayer",
-            "line": " build/synopsis.js:2299"
+            "line": " build/synopsis.js:2307"
         },
         {
             "message": "Missing item type\nWrapper for logger creation",
-            "line": " build/synopsis.js:2445"
+            "line": " build/synopsis.js:2453"
         },
         {
             "message": "Missing item type\nOverlay management for synopsis",
-            "line": " build/synopsis.js:2587"
+            "line": " build/synopsis.js:2595"
         },
         {
             "message": "Missing item type\nSingleton Progress box creation.",
-            "line": " build/synopsis.js:2649"
+            "line": " build/synopsis.js:2657"
         },
         {
             "message": "Missing item type\nSingleton store local",
-            "line": " build/synopsis.js:2854"
+            "line": " build/synopsis.js:2862"
         },
         {
             "message": "Missing item type\nRemote loading for rdf data via describe queries.",
-            "line": " build/synopsis.js:2860"
+            "line": " build/synopsis.js:2868"
         },
         {
             "message": "Missing item type\nCreates the cors request object",
-            "line": " build/synopsis.js:2875"
+            "line": " build/synopsis.js:2883"
         },
         {
             "message": "Missing item type\nExecute given query on sparql service via cors.",
-            "line": " build/synopsis.js:2906"
+            "line": " build/synopsis.js:2914"
         },
         {
             "message": "Missing item type\nExecute given query on sparql service via yql. Fix YQL.",
-            "line": " build/synopsis.js:2941"
+            "line": " build/synopsis.js:2949"
         },
         {
             "message": "Missing item type\nSingleton local rdf store. Needs to be set once.",
-            "line": " build/synopsis.js:2996"
+            "line": " build/synopsis.js:3004"
         },
         {
             "message": "Missing item type\nImplements interface to local rdf store.",
-            "line": " build/synopsis.js:3037"
+            "line": " build/synopsis.js:3045"
         },
         {
             "message": "Missing item type\nReturns initialization promise statement",
-            "line": " build/synopsis.js:3061"
+            "line": " build/synopsis.js:3069"
         },
         {
             "message": "Missing item type",
-            "line": " build/synopsis.js:3093"
+            "line": " build/synopsis.js:3101"
         },
         {
             "message": "Missing item type",
-            "line": " build/synopsis.js:3100"
+            "line": " build/synopsis.js:3108"
         },
         {
             "message": "Missing item type",
-            "line": " build/synopsis.js:3107"
+            "line": " build/synopsis.js:3115"
         },
         {
             "message": "Missing item type",
-            "line": " build/synopsis.js:3114"
+            "line": " build/synopsis.js:3122"
         },
         {
             "message": "Missing item type",
-            "line": " build/synopsis.js:3121"
+            "line": " build/synopsis.js:3129"
         },
         {
             "message": "Missing item type",
-            "line": " build/synopsis.js:3128"
+            "line": " build/synopsis.js:3136"
         },
         {
             "message": "Missing item type\nInserts given triples into the store.",
-            "line": " build/synopsis.js:3135"
+            "line": " build/synopsis.js:3143"
         },
         {
             "message": "Missing item type\nExecute given query on store.",
-            "line": " build/synopsis.js:3244"
+            "line": " build/synopsis.js:3252"
         },
         {
             "message": "Missing item type\nExtend jQUery selector for contains",
-            "line": " build/synopsis.js:3312"
+            "line": " build/synopsis.js:3320"
         },
         {
             "message": "Missing item type\nMain plugin class",
-            "line": " build/synopsis.js:3321"
+            "line": " build/synopsis.js:3329"
         },
         {
             "message": "Missing item type\nExtends an object with backbone events and switching. A switch is a event which is triggered once and stays \"on\". If a function gets bond to a switch in on state it is invoked instantly.",
-            "line": " build/synopsis.js:4067"
+            "line": " build/synopsis.js:4075"
         },
         {
             "message": "Missing item type\nRunner for worker functions",
