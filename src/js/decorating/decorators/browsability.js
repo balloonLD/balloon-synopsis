@@ -20,7 +20,7 @@ var Decorator = function () {
             if (config.hasOwnProperty(type)) {
                 div.on("click", function (target_resource, data) {
                     return function () {
-                        var layer = Layer_factory.make(synopsis, target_resource);
+                        var layer = target_resource.interfaceName ? Layer_factory.make(synopsis, target_resource, target_resource.interfaceName) : Layer_factory.make(synopsis, target_resource);
                         if (data["post_view_cbs"]) {
                             layer.post_view_cbs = data["post_view_cbs"];
                             synopsis.show(layer, function (view) {

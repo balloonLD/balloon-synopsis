@@ -238,7 +238,7 @@ var Decorator = function () {
             if (config.hasOwnProperty(type)) {
                 div.on(&quot;click&quot;, function (target_resource, data) {
                     return function () {
-                        var layer = Layer_factory.make(synopsis, target_resource);
+                        var layer = target_resource.interfaceName ? Layer_factory.make(synopsis, target_resource, target_resource.interfaceName) : Layer_factory.make(synopsis, target_resource);
                         if (data[&quot;post_view_cbs&quot;]) {
                             layer.post_view_cbs = data[&quot;post_view_cbs&quot;];
                             synopsis.show(layer, function (view) {
@@ -263,7 +263,7 @@ var Decorator = function () {
 };
 
 module.exports = Decorator;
-},{&quot;../../info&quot;:29,&quot;../../layers/factory&quot;:32,&quot;../../logger&quot;:41}],6:[function(require,module,exports){
+},{&quot;../../info&quot;:29,&quot;../../layers/factory&quot;:32,&quot;../../logger&quot;:42}],6:[function(require,module,exports){
 (function (global){
 var log = require(&quot;../../logger&quot;)(&quot;Browsability decorator&quot;), chroma = (typeof window !== &quot;undefined&quot; ? window[&#x27;chroma&#x27;] : typeof global !== &quot;undefined&quot; ? global[&#x27;chroma&#x27;] : null), md5 = (typeof window !== &quot;undefined&quot; ? window[&#x27;md5&#x27;] : typeof global !== &quot;undefined&quot; ? global[&#x27;md5&#x27;] : null), CSS = require(&quot;../../const/css&quot;);
 var Debounced_remote = require(&quot;../../remote/debounced_remote&quot;);
@@ -372,7 +372,7 @@ var Decorator = function () {
 
 module.exports = Decorator;
 }).call(this,typeof global !== &quot;undefined&quot; ? global : typeof self !== &quot;undefined&quot; ? self : typeof window !== &quot;undefined&quot; ? window : {})
-},{&quot;../../const/css&quot;:2,&quot;../../logger&quot;:41,&quot;../../remote/debounced_remote&quot;:46}],7:[function(require,module,exports){
+},{&quot;../../const/css&quot;:2,&quot;../../logger&quot;:42,&quot;../../remote/debounced_remote&quot;:47}],7:[function(require,module,exports){
 var log = require(&quot;../../logger&quot;)(&quot;Browsability decorator&quot;), CSS = require(&quot;../../const/css&quot;);
 RDFModel = window.RDFModel;
 
@@ -434,7 +434,7 @@ var Decorator = function () {
 };
 
 module.exports = Decorator;
-},{&quot;../../const/css&quot;:2,&quot;../../logger&quot;:41}],8:[function(require,module,exports){
+},{&quot;../../const/css&quot;:2,&quot;../../logger&quot;:42}],8:[function(require,module,exports){
 var log = require(&quot;../../logger&quot;)(&quot;URI_TO_LABEL decorator&quot;), CSS = require(&quot;../../const/css&quot;);
 var Debounced_remote = require(&quot;../../remote/debounced_remote&quot;);
 
@@ -550,7 +550,7 @@ var Decorator = function () {
 };
 
 module.exports = Decorator;
-},{&quot;../../const/css&quot;:2,&quot;../../logger&quot;:41,&quot;../../remote/debounced_remote&quot;:46}],9:[function(require,module,exports){
+},{&quot;../../const/css&quot;:2,&quot;../../logger&quot;:42,&quot;../../remote/debounced_remote&quot;:47}],9:[function(require,module,exports){
 var log = require(&quot;../../logger&quot;)(&quot;URI_TO_THUMBNAIL decorator&quot;), CSS = require(&quot;../../const/css&quot;);
 var Debounced_remote = require(&quot;../../remote/debounced_remote&quot;);
 
@@ -646,7 +646,7 @@ var Decorator = function () {
 };
 
 module.exports = Decorator;
-},{&quot;../../const/css&quot;:2,&quot;../../logger&quot;:41,&quot;../../remote/debounced_remote&quot;:46}],10:[function(require,module,exports){
+},{&quot;../../const/css&quot;:2,&quot;../../logger&quot;:42,&quot;../../remote/debounced_remote&quot;:47}],10:[function(require,module,exports){
 var log = require(&quot;./../logger&quot;)(&quot;Decorator_manager&quot;);
 
 var decorators = require(&quot;./decorators.js&quot;);
@@ -676,7 +676,7 @@ Manager.prototype.decorate = function (divs, cb) {
 };
 
 module.exports = Manager;
-},{&quot;./../logger&quot;:41,&quot;./decorators.js&quot;:4}],11:[function(require,module,exports){
+},{&quot;./../logger&quot;:42,&quot;./decorators.js&quot;:4}],11:[function(require,module,exports){
 var templating = require(&quot;../../templating&quot;), Base_detripler = require(&quot;../scheme&quot;), CSS = require(&quot;../../const/css&quot;);
 
 var ID = &quot;incoming.blank&quot;;
@@ -705,7 +705,7 @@ Detripler.prototype = Object.create(Base_detripler.prototype);
 Detripler.prototype.constructor = Detripler;
 
 module.exports = Detripler;
-},{&quot;../../const/css&quot;:2,&quot;../../templating&quot;:51,&quot;../scheme&quot;:24}],12:[function(require,module,exports){
+},{&quot;../../const/css&quot;:2,&quot;../../templating&quot;:52,&quot;../scheme&quot;:24}],12:[function(require,module,exports){
 var templating = require(&quot;../../templating&quot;), Base_detripler = require(&quot;../scheme&quot;), CSS = require(&quot;../../const/css&quot;);
 
 var ID = &quot;incoming.named&quot;;
@@ -734,7 +734,7 @@ Detripler.prototype = Object.create(Base_detripler.prototype);
 Detripler.prototype.constructor = Detripler;
 
 module.exports = Detripler;
-},{&quot;../../const/css&quot;:2,&quot;../../templating&quot;:51,&quot;../scheme&quot;:24}],13:[function(require,module,exports){
+},{&quot;../../const/css&quot;:2,&quot;../../templating&quot;:52,&quot;../scheme&quot;:24}],13:[function(require,module,exports){
 var templating = require(&quot;../../templating&quot;), Base_detripler = require(&quot;../scheme&quot;), CSS = require(&quot;../../const/css&quot;);
 
 var ID = &quot;map&quot;;
@@ -771,7 +771,7 @@ Detripler.prototype = Object.create(Base_detripler.prototype);
 Detripler.prototype.constructor = Detripler;
 
 module.exports = Detripler;
-},{&quot;../../const/css&quot;:2,&quot;../../templating&quot;:51,&quot;../scheme&quot;:24}],14:[function(require,module,exports){
+},{&quot;../../const/css&quot;:2,&quot;../../templating&quot;:52,&quot;../scheme&quot;:24}],14:[function(require,module,exports){
 var templating = require(&quot;../../templating&quot;), Base_detripler = require(&quot;../scheme&quot;), CSS = require(&quot;../../const/css&quot;);
 
 var ID = &quot;multi.named&quot;;
@@ -890,7 +890,7 @@ Detripler.prototype = Object.create(Base_detripler.prototype);
 Detripler.prototype.constructor = Detripler;
 
 module.exports = Detripler;
-},{&quot;../../const/css&quot;:2,&quot;../../templating&quot;:51,&quot;../scheme&quot;:24}],15:[function(require,module,exports){
+},{&quot;../../const/css&quot;:2,&quot;../../templating&quot;:52,&quot;../scheme&quot;:24}],15:[function(require,module,exports){
 var templating = require(&quot;../../templating&quot;), Base_detripler = require(&quot;../scheme&quot;), CSS = require(&quot;../../const/css&quot;);
 
 var ID = &quot;outgoing.blank&quot;;
@@ -919,7 +919,7 @@ Detripler.prototype = Object.create(Base_detripler.prototype);
 Detripler.prototype.constructor = Detripler;
 
 module.exports = Detripler;
-},{&quot;../../const/css&quot;:2,&quot;../../templating&quot;:51,&quot;../scheme&quot;:24}],16:[function(require,module,exports){
+},{&quot;../../const/css&quot;:2,&quot;../../templating&quot;:52,&quot;../scheme&quot;:24}],16:[function(require,module,exports){
 var templating = require(&quot;../../templating&quot;), Base_detripler = require(&quot;../scheme&quot;), CSS = require(&quot;../../const/css&quot;);
 
 var ID = &quot;outgoing.literal&quot;;
@@ -948,7 +948,7 @@ Detripler.prototype = Object.create(Base_detripler.prototype);
 Detripler.prototype.constructor = Detripler;
 
 module.exports = Detripler;
-},{&quot;../../const/css&quot;:2,&quot;../../templating&quot;:51,&quot;../scheme&quot;:24}],17:[function(require,module,exports){
+},{&quot;../../const/css&quot;:2,&quot;../../templating&quot;:52,&quot;../scheme&quot;:24}],17:[function(require,module,exports){
 var templating = require(&quot;../../templating&quot;), Base_detripler = require(&quot;../scheme&quot;), CSS = require(&quot;../../const/css&quot;);
 
 var ID = &quot;outgoing.named&quot;;
@@ -976,7 +976,7 @@ Detripler.prototype = Object.create(Base_detripler.prototype);
 Detripler.prototype.constructor = Detripler;
 
 module.exports = Detripler;
-},{&quot;../../const/css&quot;:2,&quot;../../templating&quot;:51,&quot;../scheme&quot;:24}],18:[function(require,module,exports){
+},{&quot;../../const/css&quot;:2,&quot;../../templating&quot;:52,&quot;../scheme&quot;:24}],18:[function(require,module,exports){
 var detriplers = {};
 
 var add = function (c) {
@@ -1190,7 +1190,7 @@ module.exports = {
     }
 };
 }).call(this,typeof global !== &quot;undefined&quot; ? global : typeof self !== &quot;undefined&quot; ? self : typeof window !== &quot;undefined&quot; ? window : {})
-},{&quot;../../const/general_plugin.js&quot;:3,&quot;../../logger&quot;:41,&quot;./internal&quot;:19,&quot;./worker&quot;:21}],21:[function(require,module,exports){
+},{&quot;../../const/general_plugin.js&quot;:3,&quot;../../logger&quot;:42,&quot;./internal&quot;:19,&quot;./worker&quot;:21}],21:[function(require,module,exports){
 /**
  * Worker
  **/
@@ -1273,7 +1273,7 @@ Worker_wrap.prototype.clear_data_of = function (run) {
 };
 
 module.exports = Worker_wrap;
-},{&quot;../../util/event_obj_extender&quot;:52}],22:[function(require,module,exports){
+},{&quot;../../util/event_obj_extender&quot;:53}],22:[function(require,module,exports){
 var log = require(&quot;./../logger&quot;)(&quot;Detripler_manager&quot;), Structure = require(&quot;./structure&quot;), Jobs = require(&quot;./jobs/jobs&quot;), Run = require(&quot;./run&quot;);
 var detriplers = require(&quot;./detriplers.js&quot;), Base_detripler = require(&quot;./scheme&quot;);
 
@@ -1311,7 +1311,7 @@ Manager.prototype.get_detriplers = function () {
 };
 
 module.exports = Manager;
-},{&quot;./../logger&quot;:41,&quot;./detriplers.js&quot;:18,&quot;./jobs/jobs&quot;:20,&quot;./run&quot;:23,&quot;./scheme&quot;:24,&quot;./structure&quot;:25}],23:[function(require,module,exports){
+},{&quot;./../logger&quot;:42,&quot;./detriplers.js&quot;:18,&quot;./jobs/jobs&quot;:20,&quot;./run&quot;:23,&quot;./scheme&quot;:24,&quot;./structure&quot;:25}],23:[function(require,module,exports){
 var log = require(&quot;./../logger&quot;)(&quot;Detripler_run&quot;), e_ext = require(&quot;../util/event_obj_extender&quot;);
 
 var run_id_counter = 0;
@@ -1386,7 +1386,7 @@ Detripling_run.prototype.is_done = function () {
 };
 
 module.exports = Detripling_run;
-},{&quot;../util/event_obj_extender&quot;:52,&quot;./../logger&quot;:41}],24:[function(require,module,exports){
+},{&quot;../util/event_obj_extender&quot;:53,&quot;./../logger&quot;:42}],24:[function(require,module,exports){
 (function (global){
 var templating = require(&quot;../templating&quot;), CSS = require(&quot;../const/css&quot;), Handlebars = (typeof window !== &quot;undefined&quot; ? window[&#x27;Handlebars&#x27;] : typeof global !== &quot;undefined&quot; ? global[&#x27;Handlebars&#x27;] : null);
 
@@ -1434,7 +1434,7 @@ var Detripler = function (id) {
 
 module.exports = Detripler;
 }).call(this,typeof global !== &quot;undefined&quot; ? global : typeof self !== &quot;undefined&quot; ? self : typeof window !== &quot;undefined&quot; ? window : {})
-},{&quot;../const/css&quot;:2,&quot;../templating&quot;:51}],25:[function(require,module,exports){
+},{&quot;../const/css&quot;:2,&quot;../templating&quot;:52}],25:[function(require,module,exports){
 (function (global){
 var log = require(&quot;./../logger&quot;)(&quot;Detripler_structure&quot;), cytoscape = (typeof window !== &quot;undefined&quot; ? window[&#x27;cytoscape&#x27;] : typeof global !== &quot;undefined&quot; ? global[&#x27;cytoscape&#x27;] : null);
 
@@ -1545,7 +1545,7 @@ Structure.prototype.paint_dependencies_on = function (ele) {
 
 module.exports = Structure;
 }).call(this,typeof global !== &quot;undefined&quot; ? global : typeof self !== &quot;undefined&quot; ? self : typeof window !== &quot;undefined&quot; ? window : {})
-},{&quot;./../logger&quot;:41}],26:[function(require,module,exports){
+},{&quot;./../logger&quot;:42}],26:[function(require,module,exports){
 (function (global){
 var cytoscape = (typeof window !== &quot;undefined&quot; ? window[&#x27;cytoscape&#x27;] : typeof global !== &quot;undefined&quot; ? global[&#x27;cytoscape&#x27;] : null), CSS = require(&quot;./const/css&quot;), templating = require(&quot;./templating&quot;), log = require(&quot;./logger.js&quot;)(&quot;History&quot;);
 var Layer_factory = require(&quot;./layers/factory&quot;);
@@ -1598,7 +1598,7 @@ History.prototype.show = function () {
 
 module.exports = History;
 }).call(this,typeof global !== &quot;undefined&quot; ? global : typeof self !== &quot;undefined&quot; ? self : typeof window !== &quot;undefined&quot; ? window : {})
-},{&quot;./const/css&quot;:2,&quot;./layers/factory&quot;:32,&quot;./logger.js&quot;:41,&quot;./templating&quot;:51}],27:[function(require,module,exports){
+},{&quot;./const/css&quot;:2,&quot;./layers/factory&quot;:32,&quot;./logger.js&quot;:42,&quot;./templating&quot;:52}],27:[function(require,module,exports){
 var CSS = require(&quot;./../const/css.js&quot;), templating = require(&#x27;./../templating.js&#x27;);
 
 var Nav = function (fn, l, ele, c) {
@@ -1619,7 +1619,7 @@ Nav.prototype.toggle_disable = function () {
 };
 
 module.exports = Nav;
-},{&quot;./../const/css.js&quot;:2,&quot;./../templating.js&quot;:51}],28:[function(require,module,exports){
+},{&quot;./../const/css.js&quot;:2,&quot;./../templating.js&quot;:52}],28:[function(require,module,exports){
 var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 var CSS = require(&quot;./../const/css.js&quot;), templating = require(&#x27;./../templating.js&#x27;), e_ext = require(&quot;../util/event_obj_extender&quot;);
 
@@ -1704,7 +1704,7 @@ Scroll.prototype.disable_observer = function () {
 };
 
 module.exports = Scroll;
-},{&quot;../util/event_obj_extender&quot;:52,&quot;./../const/css.js&quot;:2,&quot;./../templating.js&quot;:51}],29:[function(require,module,exports){
+},{&quot;../util/event_obj_extender&quot;:53,&quot;./../const/css.js&quot;:2,&quot;./../templating.js&quot;:52}],29:[function(require,module,exports){
 (function (global){
 /**
  * Singleton info box creation.
@@ -1804,7 +1804,7 @@ var instance = new Info();
 
 module.exports = instance;
 }).call(this,typeof global !== &quot;undefined&quot; ? global : typeof self !== &quot;undefined&quot; ? self : typeof window !== &quot;undefined&quot; ? window : {})
-},{&quot;./const/css.js&quot;:2,&quot;./util/layout.js&quot;:53}],30:[function(require,module,exports){
+},{&quot;./const/css.js&quot;:2,&quot;./util/layout.js&quot;:54}],30:[function(require,module,exports){
 module.exports={
   &quot;filter&quot; : &quot;Filtern: &quot;,
   &quot;sorter&quot; : &quot;Sortieren: &quot;
@@ -1858,7 +1858,8 @@ var constructors = {
     Literal: require(&#x27;./types/literal_node_layer&#x27;),
     Blank: require(&#x27;./types/blank_node_layer&#x27;),
     Pattern: require(&#x27;./types/pattern_layer&#x27;),
-    NamedNode: require(&#x27;./types/named_node_layer&#x27;)
+    NamedNode: require(&#x27;./types/named_node_layer&#x27;),
+    Item: require(&#x27;./types/item_layer&#x27;)
 };
 
 Factory.addLayerTypes(constructors);
@@ -1950,7 +1951,7 @@ Factory.make = function (synopsis, input, type) {
 module.exports = Factory;
 
 require(&quot;./layer&quot;);
-},{&quot;../store&quot;:48,&quot;../util/event_obj_extender&quot;:52,&quot;./../logger.js&quot;:41,&quot;./../util/misc&quot;:54,&quot;./layer&quot;:33,&quot;./types/blank_node_layer&quot;:35,&quot;./types/literal_node_layer&quot;:36,&quot;./types/named_node_layer&quot;:37,&quot;./types/pattern_layer&quot;:38,&quot;./types/query_layer&quot;:39}],33:[function(require,module,exports){
+},{&quot;../store&quot;:49,&quot;../util/event_obj_extender&quot;:53,&quot;./../logger.js&quot;:42,&quot;./../util/misc&quot;:55,&quot;./layer&quot;:33,&quot;./types/blank_node_layer&quot;:35,&quot;./types/item_layer&quot;:36,&quot;./types/literal_node_layer&quot;:37,&quot;./types/named_node_layer&quot;:38,&quot;./types/pattern_layer&quot;:39,&quot;./types/query_layer&quot;:40}],33:[function(require,module,exports){
 /**
  * Layer
  **/
@@ -2193,7 +2194,7 @@ Layer.prototype.reload = function () {
 };
 
 module.exports = Layer;
-},{&quot;../const/css&quot;:2,&quot;../const/general_plugin&quot;:3,&quot;../html_obj/nav&quot;:27,&quot;../html_obj/scroll&quot;:28,&quot;../info&quot;:29,&quot;../layout_engines/flexbox&quot;:40,&quot;../logger.js&quot;:41,&quot;../templating&quot;:51,&quot;../util/event_obj_extender&quot;:52,&quot;../util/misc&quot;:54,&quot;./factory&quot;:32,&quot;./triple_set&quot;:34}],34:[function(require,module,exports){
+},{&quot;../const/css&quot;:2,&quot;../const/general_plugin&quot;:3,&quot;../html_obj/nav&quot;:27,&quot;../html_obj/scroll&quot;:28,&quot;../info&quot;:29,&quot;../layout_engines/flexbox&quot;:41,&quot;../logger.js&quot;:42,&quot;../templating&quot;:52,&quot;../util/event_obj_extender&quot;:53,&quot;../util/misc&quot;:55,&quot;./factory&quot;:32,&quot;./triple_set&quot;:34}],34:[function(require,module,exports){
 var e_ext = require(&quot;../util/event_obj_extender&quot;);
 
 var Triple_set = function () {
@@ -2224,7 +2225,7 @@ Triple_set.prototype.clear = function (index) {
 };
 
 module.exports = Triple_set;
-},{&quot;../util/event_obj_extender&quot;:52}],35:[function(require,module,exports){
+},{&quot;../util/event_obj_extender&quot;:53}],35:[function(require,module,exports){
 /**
  * Layer
  **/
@@ -2236,6 +2237,59 @@ var Blank_node_layer = function () {
 module.exports = Blank_node_layer;
 },{}],36:[function(require,module,exports){
 /**
+ * Layer used to show the contents of an MICO item.
+ **/
+
+var CSS = require(&quot;../../const/css&quot;), store_wrap = require(&quot;../../store&quot;).get(), templating = require(&quot;../../templating&quot;), log = require(&quot;../../logger.js&quot;)(&quot;Layer_query&quot;);
+var info = require(&#x27;../../info&#x27;);
+var Layer = require(&#x27;../layer&#x27;);
+var Query_layer = require(&#x27;../types/query_layer&#x27;);
+
+var Item_layer = function (detripling, decorating, msg, item, opt) {
+    this.item = item;
+    this._query = &quot;CONSTRUCT { &lt;&quot;+item.nominalValue+&quot;&gt; &lt;http://www.mico-project.eu/ns/mmm/2.0/schema#hasPart&gt; ?o } WHERE { &lt;&quot;+item.nominalValue+&quot;&gt; &lt;http://www.mico-project.eu/ns/mmm/2.0/schema#hasPart&gt; ?o}&quot;;
+    Query_layer.call(this, detripling, decorating, msg, this._query, opt);
+    this.id = item.nominalValue;
+    this.label = item.nominalValue;
+    this.label_small = &quot;&quot;;
+    var that = this;
+
+    this.get_concepts = function (triples) {
+        var concepts = {part: []};
+        for (var i = 0; i &lt; triples.length; i++) {
+            concepts[&quot;part&quot;].push(triples[i].object.nominalValue);
+        }
+        return concepts;
+    };
+};
+
+Item_layer.prototype = Object.create(Layer.prototype);
+Item_layer.prototype.constructor = Item_layer;
+
+Item_layer.prototype.load_remote = function () {
+    var that = this;
+    this.trigger(&quot;request_remote&quot;, [&#x27;SELECT DISTINCT ?s ?p ?o where {?s ?p ?o. VALUES ?s {&lt;&#x27; + this.item.nominalValue + &#x27;&gt;} VALUES ?p {&lt;http://www.mico-project.eu/ns/mmm/2.0/schema#hasPart&gt;}}&#x27;], function (resp, b, remote_num, partial) {
+        var graph = store_wrap.store.parser.parse_to_graph(resp.results.bindings, [&quot;s&quot;, &quot;p&quot;, &quot;o&quot;]);
+        that.triples.add(graph.triples);
+        if (partial) {
+            b.do_partial_progress(remote_num);
+        } else {
+            b.do_progress(remote_num);
+        }
+        //store_wrap.store.insert_triples(resp.results.bindings, null, function () {
+        //    if (partial) {
+        //        b.do_partial_progress(remote_num);
+        //        that.log(&quot;insert done&quot;);
+        //    } else {
+        //        b.do_progress(remote_num);
+        //    }
+        //});
+    });
+};
+
+module.exports = Item_layer;
+},{&quot;../../const/css&quot;:2,&quot;../../info&quot;:29,&quot;../../logger.js&quot;:42,&quot;../../store&quot;:49,&quot;../../templating&quot;:52,&quot;../layer&quot;:33,&quot;../types/query_layer&quot;:40}],37:[function(require,module,exports){
+/**
  * Layer
  **/
 
@@ -2244,7 +2298,7 @@ var Literal_node_layer = function () {
 };
 
 module.exports = Literal_node_layer;
-},{}],37:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 /**
  * Layer
  **/
@@ -2361,7 +2415,7 @@ Named_node_layer.prototype.load_local = function () {
 };
 
 module.exports = Named_node_layer;
-},{&quot;../../const/css&quot;:2,&quot;../../info&quot;:29,&quot;../../logger.js&quot;:41,&quot;../../store&quot;:48,&quot;../../templating&quot;:51,&quot;../layer&quot;:33}],38:[function(require,module,exports){
+},{&quot;../../const/css&quot;:2,&quot;../../info&quot;:29,&quot;../../logger.js&quot;:42,&quot;../../store&quot;:49,&quot;../../templating&quot;:52,&quot;../layer&quot;:33}],39:[function(require,module,exports){
 /**
  * Layer
  **/
@@ -2389,7 +2443,7 @@ Pattern_layer.prototype = Object.create(Layer.prototype);
 Pattern_layer.prototype.constructor = Pattern_layer;
 
 module.exports = Pattern_layer;
-},{&quot;../../const/css&quot;:2,&quot;../../info&quot;:29,&quot;../../logger.js&quot;:41,&quot;../../store&quot;:48,&quot;../../templating&quot;:51,&quot;../layer&quot;:33}],39:[function(require,module,exports){
+},{&quot;../../const/css&quot;:2,&quot;../../info&quot;:29,&quot;../../logger.js&quot;:42,&quot;../../store&quot;:49,&quot;../../templating&quot;:52,&quot;../layer&quot;:33}],40:[function(require,module,exports){
 /**
  * Layer
  **/
@@ -2431,7 +2485,7 @@ Query_layer.prototype.load_local = function () {
 };
 
 module.exports = Query_layer;
-},{&quot;../../const/css&quot;:2,&quot;../../info&quot;:29,&quot;../../logger.js&quot;:41,&quot;../../store&quot;:48,&quot;../../templating&quot;:51,&quot;../layer&quot;:33}],40:[function(require,module,exports){
+},{&quot;../../const/css&quot;:2,&quot;../../info&quot;:29,&quot;../../logger.js&quot;:42,&quot;../../store&quot;:49,&quot;../../templating&quot;:52,&quot;../layer&quot;:33}],41:[function(require,module,exports){
 var CSS = require(&quot;../const/css&quot;);
 
 var defaults = {
@@ -2534,7 +2588,7 @@ Flex_layout.prototype.filter = function (filter_functions) {
 };
 
 module.exports = Flex_layout;
-},{&quot;../const/css&quot;:2}],41:[function(require,module,exports){
+},{&quot;../const/css&quot;:2}],42:[function(require,module,exports){
 (function (global){
 /**
  * Wrapper for logger creation
@@ -2558,7 +2612,7 @@ module.exports = function (str) {
     return loggers[id];
 };
 }).call(this,typeof global !== &quot;undefined&quot; ? global : typeof self !== &quot;undefined&quot; ? self : typeof window !== &quot;undefined&quot; ? window : {})
-},{&quot;./const/general_plugin.js&quot;:3}],42:[function(require,module,exports){
+},{&quot;./const/general_plugin.js&quot;:3}],43:[function(require,module,exports){
 var log = require(&quot;./logger&quot;)(&quot;Language&quot;);
 
 var Languages = function (language) {
@@ -2591,7 +2645,7 @@ Languages.prototype.get_language = function () {
 };
 
 module.exports = Languages;
-},{&quot;./languages/de.json&quot;:30,&quot;./languages/en.json&quot;:31,&quot;./logger&quot;:41}],43:[function(require,module,exports){
+},{&quot;./languages/de.json&quot;:30,&quot;./languages/en.json&quot;:31,&quot;./logger&quot;:42}],44:[function(require,module,exports){
 var CSS = require(&quot;./const/css&quot;), templating = require(&quot;./templating&quot;), e_ext = require(&quot;./util/event_obj_extender&quot;), log = require(&quot;./logger.js&quot;)(&quot;Overlay&quot;), History = require(&quot;./history&quot;), Nav = require(&quot;./html_obj/nav&quot;);
 var pN = require(&quot;./const/general_plugin&quot;).name;
 var defaults = {};
@@ -2677,7 +2731,7 @@ Overlay.prototype.destroy = function () {
 };
 
 module.exports = Overlay;
-},{&quot;./const/css&quot;:2,&quot;./const/general_plugin&quot;:3,&quot;./history&quot;:26,&quot;./html_obj/nav&quot;:27,&quot;./logger.js&quot;:41,&quot;./templating&quot;:51,&quot;./util/event_obj_extender&quot;:52}],44:[function(require,module,exports){
+},{&quot;./const/css&quot;:2,&quot;./const/general_plugin&quot;:3,&quot;./history&quot;:26,&quot;./html_obj/nav&quot;:27,&quot;./logger.js&quot;:42,&quot;./templating&quot;:52,&quot;./util/event_obj_extender&quot;:53}],45:[function(require,module,exports){
 /**
  * Overlay management for synopsis
  **/
@@ -2738,7 +2792,7 @@ Overlay_manager.prototype.destroy_all = function () {
 };
 
 module.exports = Overlay_manager;
-},{&quot;./const/css&quot;:2,&quot;./history&quot;:26,&quot;./logger.js&quot;:41,&quot;./overlay&quot;:43,&quot;./store&quot;:48,&quot;./templating&quot;:51}],45:[function(require,module,exports){
+},{&quot;./const/css&quot;:2,&quot;./history&quot;:26,&quot;./logger.js&quot;:42,&quot;./overlay&quot;:44,&quot;./store&quot;:49,&quot;./templating&quot;:52}],46:[function(require,module,exports){
 (function (global){
 /**
  * Singleton Progress box creation.
@@ -2854,7 +2908,7 @@ var instance = new Progress();
 
 module.exports = instance;
 }).call(this,typeof global !== &quot;undefined&quot; ? global : typeof self !== &quot;undefined&quot; ? self : typeof window !== &quot;undefined&quot; ? window : {})
-},{&quot;./const/css.js&quot;:2,&quot;./templating&quot;:51,&quot;./util/event_obj_extender&quot;:52}],46:[function(require,module,exports){
+},{&quot;./const/css.js&quot;:2,&quot;./templating&quot;:52,&quot;./util/event_obj_extender&quot;:53}],47:[function(require,module,exports){
 var e_ext = require(&quot;../util/event_obj_extender&quot;);
 
 var max_url_length = 2000;
@@ -2943,7 +2997,7 @@ Debounced_remote_loader.prototype.pop_query = function () {
 };
 
 module.exports = Debounced_remote_loader;
-},{&quot;../util/event_obj_extender&quot;:52}],47:[function(require,module,exports){
+},{&quot;../util/event_obj_extender&quot;:53}],48:[function(require,module,exports){
 (function (global){
 /**
  * Singleton store local
@@ -3007,6 +3061,7 @@ Remote.prototype.get_service_name = function () {
  */
 Remote.prototype.execute = function (query, cb, fail, flag) {
     var xhr = this._createCORSRequest(&#x27;GET&#x27;, this._service + this._exec_url[0] + encodeURIComponent(query) + this._exec_url[1]), that = this;
+    xhr.setRequestHeader(&quot;accept&quot;, &quot;application/json&quot;);
     if (flag) {
         flag.on(&quot;interrupt&quot;, function() {
             log(&quot;Aborted remote query.&quot;);
@@ -3085,7 +3140,7 @@ var counter = 0;
 
 module.exports = Remote;
 }).call(this,typeof global !== &quot;undefined&quot; ? global : typeof self !== &quot;undefined&quot; ? self : typeof window !== &quot;undefined&quot; ? window : {})
-},{&quot;./../logger.js&quot;:41}],48:[function(require,module,exports){
+},{&quot;./../logger.js&quot;:42}],49:[function(require,module,exports){
 (function (global){
 /**
  * Singleton local rdf store. Needs to be set once.
@@ -3375,7 +3430,7 @@ module.exports = {
     }
 };
 }).call(this,typeof global !== &quot;undefined&quot; ? global : typeof self !== &quot;undefined&quot; ? self : typeof window !== &quot;undefined&quot; ? window : {})
-},{&quot;./logger.js&quot;:41,&quot;./util/event_obj_extender.js&quot;:52,&quot;./util/misc.js&quot;:54}],49:[function(require,module,exports){
+},{&quot;./logger.js&quot;:42,&quot;./util/event_obj_extender.js&quot;:53,&quot;./util/misc.js&quot;:55}],50:[function(require,module,exports){
 (function (global){
 var $ = (typeof window !== &quot;undefined&quot; ? window[&#x27;$&#x27;] : typeof global !== &quot;undefined&quot; ? global[&#x27;$&#x27;] : null);
 (typeof window !== &quot;undefined&quot; ? window[&#x27;rdfstore&#x27;] : typeof global !== &quot;undefined&quot; ? global[&#x27;rdfstore&#x27;] : null);
@@ -3678,7 +3733,7 @@ module.exports = Synopsis;
 //See the License for the specific language governing permissions and
 //limitations under the License.
 }).call(this,typeof global !== &quot;undefined&quot; ? global : typeof self !== &quot;undefined&quot; ? self : typeof window !== &quot;undefined&quot; ? window : {})
-},{&quot;./const/css&quot;:2,&quot;./const/general_plugin&quot;:3,&quot;./decorating/manager&quot;:10,&quot;./detripling/manager&quot;:22,&quot;./history&quot;:26,&quot;./info&quot;:29,&quot;./layers/factory&quot;:32,&quot;./logger&quot;:41,&quot;./msg&quot;:42,&quot;./overlay_manager&quot;:44,&quot;./progress&quot;:45,&quot;./remote/remote&quot;:47,&quot;./store&quot;:48,&quot;./util/misc&quot;:54}],50:[function(require,module,exports){
+},{&quot;./const/css&quot;:2,&quot;./const/general_plugin&quot;:3,&quot;./decorating/manager&quot;:10,&quot;./detripling/manager&quot;:22,&quot;./history&quot;:26,&quot;./info&quot;:29,&quot;./layers/factory&quot;:32,&quot;./logger&quot;:42,&quot;./msg&quot;:43,&quot;./overlay_manager&quot;:45,&quot;./progress&quot;:46,&quot;./remote/remote&quot;:48,&quot;./store&quot;:49,&quot;./util/misc&quot;:55}],51:[function(require,module,exports){
 module.exports = function(Handlebars) {
 
 var templates = {};
@@ -4134,7 +4189,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 return templates;
 
 };
-},{}],51:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 (function (global){
 var Handlebars = (typeof window !== &quot;undefined&quot; ? window[&#x27;Handlebars&#x27;] : typeof global !== &quot;undefined&quot; ? global[&#x27;Handlebars&#x27;] : null);
 
@@ -4156,7 +4211,7 @@ Handlebars.registerHelper(&#x27;prefix&#x27;, function (msg, type, str) {
 var templates = require(&quot;./templates.js&quot;)(Handlebars);
 module.exports = templates;
 }).call(this,typeof global !== &quot;undefined&quot; ? global : typeof self !== &quot;undefined&quot; ? self : typeof window !== &quot;undefined&quot; ? window : {})
-},{&quot;./const/general_plugin&quot;:3,&quot;./templates.js&quot;:50}],52:[function(require,module,exports){
+},{&quot;./const/general_plugin&quot;:3,&quot;./templates.js&quot;:51}],53:[function(require,module,exports){
 (function (global){
 /**
 * Extends an object with backbone events and switching. A switch is a event which is triggered once and stays &quot;on&quot;. If a function gets bond to a switch in on state it is invoked instantly.
@@ -4183,7 +4238,7 @@ module.exports = function(obj) {
     return obj;
 };
 }).call(this,typeof global !== &quot;undefined&quot; ? global : typeof self !== &quot;undefined&quot; ? self : typeof window !== &quot;undefined&quot; ? window : {})
-},{}],53:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 (function (global){
 var Modernizr = (typeof window !== &quot;undefined&quot; ? window[&#x27;Modernizr&#x27;] : typeof global !== &quot;undefined&quot; ? global[&#x27;Modernizr&#x27;] : null);
 var transEndEventName = function() {
@@ -4222,7 +4277,7 @@ module.exports = {
     }
 };
 }).call(this,typeof global !== &quot;undefined&quot; ? global : typeof self !== &quot;undefined&quot; ? self : typeof window !== &quot;undefined&quot; ? window : {})
-},{}],54:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 var log = require(&quot;../logger.js&quot;)(&quot;Util&quot;);
 
 module.exports = {
@@ -4270,7 +4325,7 @@ module.exports = {
         };
     })()
 };
-},{&quot;../logger.js&quot;:41}]},{},[49]);
+},{&quot;../logger.js&quot;:42}]},{},[50]);
 
     </pre>
 </div>

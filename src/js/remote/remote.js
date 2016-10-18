@@ -60,6 +60,7 @@ Remote.prototype.get_service_name = function () {
  */
 Remote.prototype.execute = function (query, cb, fail, flag) {
     var xhr = this._createCORSRequest('GET', this._service + this._exec_url[0] + encodeURIComponent(query) + this._exec_url[1]), that = this;
+    xhr.setRequestHeader("accept", "application/json");
     if (flag) {
         flag.on("interrupt", function() {
             log("Aborted remote query.");

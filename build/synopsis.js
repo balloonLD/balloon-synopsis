@@ -152,7 +152,7 @@ var Decorator = function () {
             if (config.hasOwnProperty(type)) {
                 div.on("click", function (target_resource, data) {
                     return function () {
-                        var layer = Layer_factory.make(synopsis, target_resource);
+                        var layer = target_resource.interfaceName ? Layer_factory.make(synopsis, target_resource, target_resource.interfaceName) : Layer_factory.make(synopsis, target_resource);
                         if (data["post_view_cbs"]) {
                             layer.post_view_cbs = data["post_view_cbs"];
                             synopsis.show(layer, function (view) {
@@ -177,7 +177,7 @@ var Decorator = function () {
 };
 
 module.exports = Decorator;
-},{"../../info":29,"../../layers/factory":32,"../../logger":41}],6:[function(require,module,exports){
+},{"../../info":29,"../../layers/factory":32,"../../logger":42}],6:[function(require,module,exports){
 (function (global){
 var log = require("../../logger")("Browsability decorator"), chroma = (typeof window !== "undefined" ? window['chroma'] : typeof global !== "undefined" ? global['chroma'] : null), md5 = (typeof window !== "undefined" ? window['md5'] : typeof global !== "undefined" ? global['md5'] : null), CSS = require("../../const/css");
 var Debounced_remote = require("../../remote/debounced_remote");
@@ -286,7 +286,7 @@ var Decorator = function () {
 
 module.exports = Decorator;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../../const/css":2,"../../logger":41,"../../remote/debounced_remote":46}],7:[function(require,module,exports){
+},{"../../const/css":2,"../../logger":42,"../../remote/debounced_remote":47}],7:[function(require,module,exports){
 var log = require("../../logger")("Browsability decorator"), CSS = require("../../const/css");
 RDFModel = window.RDFModel;
 
@@ -348,7 +348,7 @@ var Decorator = function () {
 };
 
 module.exports = Decorator;
-},{"../../const/css":2,"../../logger":41}],8:[function(require,module,exports){
+},{"../../const/css":2,"../../logger":42}],8:[function(require,module,exports){
 var log = require("../../logger")("URI_TO_LABEL decorator"), CSS = require("../../const/css");
 var Debounced_remote = require("../../remote/debounced_remote");
 
@@ -464,7 +464,7 @@ var Decorator = function () {
 };
 
 module.exports = Decorator;
-},{"../../const/css":2,"../../logger":41,"../../remote/debounced_remote":46}],9:[function(require,module,exports){
+},{"../../const/css":2,"../../logger":42,"../../remote/debounced_remote":47}],9:[function(require,module,exports){
 var log = require("../../logger")("URI_TO_THUMBNAIL decorator"), CSS = require("../../const/css");
 var Debounced_remote = require("../../remote/debounced_remote");
 
@@ -560,7 +560,7 @@ var Decorator = function () {
 };
 
 module.exports = Decorator;
-},{"../../const/css":2,"../../logger":41,"../../remote/debounced_remote":46}],10:[function(require,module,exports){
+},{"../../const/css":2,"../../logger":42,"../../remote/debounced_remote":47}],10:[function(require,module,exports){
 var log = require("./../logger")("Decorator_manager");
 
 var decorators = require("./decorators.js");
@@ -590,7 +590,7 @@ Manager.prototype.decorate = function (divs, cb) {
 };
 
 module.exports = Manager;
-},{"./../logger":41,"./decorators.js":4}],11:[function(require,module,exports){
+},{"./../logger":42,"./decorators.js":4}],11:[function(require,module,exports){
 var templating = require("../../templating"), Base_detripler = require("../scheme"), CSS = require("../../const/css");
 
 var ID = "incoming.blank";
@@ -619,7 +619,7 @@ Detripler.prototype = Object.create(Base_detripler.prototype);
 Detripler.prototype.constructor = Detripler;
 
 module.exports = Detripler;
-},{"../../const/css":2,"../../templating":51,"../scheme":24}],12:[function(require,module,exports){
+},{"../../const/css":2,"../../templating":52,"../scheme":24}],12:[function(require,module,exports){
 var templating = require("../../templating"), Base_detripler = require("../scheme"), CSS = require("../../const/css");
 
 var ID = "incoming.named";
@@ -648,7 +648,7 @@ Detripler.prototype = Object.create(Base_detripler.prototype);
 Detripler.prototype.constructor = Detripler;
 
 module.exports = Detripler;
-},{"../../const/css":2,"../../templating":51,"../scheme":24}],13:[function(require,module,exports){
+},{"../../const/css":2,"../../templating":52,"../scheme":24}],13:[function(require,module,exports){
 var templating = require("../../templating"), Base_detripler = require("../scheme"), CSS = require("../../const/css");
 
 var ID = "map";
@@ -685,7 +685,7 @@ Detripler.prototype = Object.create(Base_detripler.prototype);
 Detripler.prototype.constructor = Detripler;
 
 module.exports = Detripler;
-},{"../../const/css":2,"../../templating":51,"../scheme":24}],14:[function(require,module,exports){
+},{"../../const/css":2,"../../templating":52,"../scheme":24}],14:[function(require,module,exports){
 var templating = require("../../templating"), Base_detripler = require("../scheme"), CSS = require("../../const/css");
 
 var ID = "multi.named";
@@ -804,7 +804,7 @@ Detripler.prototype = Object.create(Base_detripler.prototype);
 Detripler.prototype.constructor = Detripler;
 
 module.exports = Detripler;
-},{"../../const/css":2,"../../templating":51,"../scheme":24}],15:[function(require,module,exports){
+},{"../../const/css":2,"../../templating":52,"../scheme":24}],15:[function(require,module,exports){
 var templating = require("../../templating"), Base_detripler = require("../scheme"), CSS = require("../../const/css");
 
 var ID = "outgoing.blank";
@@ -833,7 +833,7 @@ Detripler.prototype = Object.create(Base_detripler.prototype);
 Detripler.prototype.constructor = Detripler;
 
 module.exports = Detripler;
-},{"../../const/css":2,"../../templating":51,"../scheme":24}],16:[function(require,module,exports){
+},{"../../const/css":2,"../../templating":52,"../scheme":24}],16:[function(require,module,exports){
 var templating = require("../../templating"), Base_detripler = require("../scheme"), CSS = require("../../const/css");
 
 var ID = "outgoing.literal";
@@ -862,7 +862,7 @@ Detripler.prototype = Object.create(Base_detripler.prototype);
 Detripler.prototype.constructor = Detripler;
 
 module.exports = Detripler;
-},{"../../const/css":2,"../../templating":51,"../scheme":24}],17:[function(require,module,exports){
+},{"../../const/css":2,"../../templating":52,"../scheme":24}],17:[function(require,module,exports){
 var templating = require("../../templating"), Base_detripler = require("../scheme"), CSS = require("../../const/css");
 
 var ID = "outgoing.named";
@@ -890,7 +890,7 @@ Detripler.prototype = Object.create(Base_detripler.prototype);
 Detripler.prototype.constructor = Detripler;
 
 module.exports = Detripler;
-},{"../../const/css":2,"../../templating":51,"../scheme":24}],18:[function(require,module,exports){
+},{"../../const/css":2,"../../templating":52,"../scheme":24}],18:[function(require,module,exports){
 var detriplers = {};
 
 var add = function (c) {
@@ -1104,7 +1104,7 @@ module.exports = {
     }
 };
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../../const/general_plugin.js":3,"../../logger":41,"./internal":19,"./worker":21}],21:[function(require,module,exports){
+},{"../../const/general_plugin.js":3,"../../logger":42,"./internal":19,"./worker":21}],21:[function(require,module,exports){
 /**
  * Worker
  **/
@@ -1187,7 +1187,7 @@ Worker_wrap.prototype.clear_data_of = function (run) {
 };
 
 module.exports = Worker_wrap;
-},{"../../util/event_obj_extender":52}],22:[function(require,module,exports){
+},{"../../util/event_obj_extender":53}],22:[function(require,module,exports){
 var log = require("./../logger")("Detripler_manager"), Structure = require("./structure"), Jobs = require("./jobs/jobs"), Run = require("./run");
 var detriplers = require("./detriplers.js"), Base_detripler = require("./scheme");
 
@@ -1225,7 +1225,7 @@ Manager.prototype.get_detriplers = function () {
 };
 
 module.exports = Manager;
-},{"./../logger":41,"./detriplers.js":18,"./jobs/jobs":20,"./run":23,"./scheme":24,"./structure":25}],23:[function(require,module,exports){
+},{"./../logger":42,"./detriplers.js":18,"./jobs/jobs":20,"./run":23,"./scheme":24,"./structure":25}],23:[function(require,module,exports){
 var log = require("./../logger")("Detripler_run"), e_ext = require("../util/event_obj_extender");
 
 var run_id_counter = 0;
@@ -1300,7 +1300,7 @@ Detripling_run.prototype.is_done = function () {
 };
 
 module.exports = Detripling_run;
-},{"../util/event_obj_extender":52,"./../logger":41}],24:[function(require,module,exports){
+},{"../util/event_obj_extender":53,"./../logger":42}],24:[function(require,module,exports){
 (function (global){
 var templating = require("../templating"), CSS = require("../const/css"), Handlebars = (typeof window !== "undefined" ? window['Handlebars'] : typeof global !== "undefined" ? global['Handlebars'] : null);
 
@@ -1348,7 +1348,7 @@ var Detripler = function (id) {
 
 module.exports = Detripler;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../const/css":2,"../templating":51}],25:[function(require,module,exports){
+},{"../const/css":2,"../templating":52}],25:[function(require,module,exports){
 (function (global){
 var log = require("./../logger")("Detripler_structure"), cytoscape = (typeof window !== "undefined" ? window['cytoscape'] : typeof global !== "undefined" ? global['cytoscape'] : null);
 
@@ -1459,7 +1459,7 @@ Structure.prototype.paint_dependencies_on = function (ele) {
 
 module.exports = Structure;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./../logger":41}],26:[function(require,module,exports){
+},{"./../logger":42}],26:[function(require,module,exports){
 (function (global){
 var cytoscape = (typeof window !== "undefined" ? window['cytoscape'] : typeof global !== "undefined" ? global['cytoscape'] : null), CSS = require("./const/css"), templating = require("./templating"), log = require("./logger.js")("History");
 var Layer_factory = require("./layers/factory");
@@ -1512,7 +1512,7 @@ History.prototype.show = function () {
 
 module.exports = History;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./const/css":2,"./layers/factory":32,"./logger.js":41,"./templating":51}],27:[function(require,module,exports){
+},{"./const/css":2,"./layers/factory":32,"./logger.js":42,"./templating":52}],27:[function(require,module,exports){
 var CSS = require("./../const/css.js"), templating = require('./../templating.js');
 
 var Nav = function (fn, l, ele, c) {
@@ -1533,7 +1533,7 @@ Nav.prototype.toggle_disable = function () {
 };
 
 module.exports = Nav;
-},{"./../const/css.js":2,"./../templating.js":51}],28:[function(require,module,exports){
+},{"./../const/css.js":2,"./../templating.js":52}],28:[function(require,module,exports){
 var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 var CSS = require("./../const/css.js"), templating = require('./../templating.js'), e_ext = require("../util/event_obj_extender");
 
@@ -1618,7 +1618,7 @@ Scroll.prototype.disable_observer = function () {
 };
 
 module.exports = Scroll;
-},{"../util/event_obj_extender":52,"./../const/css.js":2,"./../templating.js":51}],29:[function(require,module,exports){
+},{"../util/event_obj_extender":53,"./../const/css.js":2,"./../templating.js":52}],29:[function(require,module,exports){
 (function (global){
 /**
  * Singleton info box creation.
@@ -1718,7 +1718,7 @@ var instance = new Info();
 
 module.exports = instance;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./const/css.js":2,"./util/layout.js":53}],30:[function(require,module,exports){
+},{"./const/css.js":2,"./util/layout.js":54}],30:[function(require,module,exports){
 module.exports={
   "filter" : "Filtern: ",
   "sorter" : "Sortieren: "
@@ -1772,7 +1772,8 @@ var constructors = {
     Literal: require('./types/literal_node_layer'),
     Blank: require('./types/blank_node_layer'),
     Pattern: require('./types/pattern_layer'),
-    NamedNode: require('./types/named_node_layer')
+    NamedNode: require('./types/named_node_layer'),
+    Item: require('./types/item_layer')
 };
 
 Factory.addLayerTypes(constructors);
@@ -1864,7 +1865,7 @@ Factory.make = function (synopsis, input, type) {
 module.exports = Factory;
 
 require("./layer");
-},{"../store":48,"../util/event_obj_extender":52,"./../logger.js":41,"./../util/misc":54,"./layer":33,"./types/blank_node_layer":35,"./types/literal_node_layer":36,"./types/named_node_layer":37,"./types/pattern_layer":38,"./types/query_layer":39}],33:[function(require,module,exports){
+},{"../store":49,"../util/event_obj_extender":53,"./../logger.js":42,"./../util/misc":55,"./layer":33,"./types/blank_node_layer":35,"./types/item_layer":36,"./types/literal_node_layer":37,"./types/named_node_layer":38,"./types/pattern_layer":39,"./types/query_layer":40}],33:[function(require,module,exports){
 /**
  * Layer
  **/
@@ -2107,7 +2108,7 @@ Layer.prototype.reload = function () {
 };
 
 module.exports = Layer;
-},{"../const/css":2,"../const/general_plugin":3,"../html_obj/nav":27,"../html_obj/scroll":28,"../info":29,"../layout_engines/flexbox":40,"../logger.js":41,"../templating":51,"../util/event_obj_extender":52,"../util/misc":54,"./factory":32,"./triple_set":34}],34:[function(require,module,exports){
+},{"../const/css":2,"../const/general_plugin":3,"../html_obj/nav":27,"../html_obj/scroll":28,"../info":29,"../layout_engines/flexbox":41,"../logger.js":42,"../templating":52,"../util/event_obj_extender":53,"../util/misc":55,"./factory":32,"./triple_set":34}],34:[function(require,module,exports){
 var e_ext = require("../util/event_obj_extender");
 
 var Triple_set = function () {
@@ -2138,7 +2139,7 @@ Triple_set.prototype.clear = function (index) {
 };
 
 module.exports = Triple_set;
-},{"../util/event_obj_extender":52}],35:[function(require,module,exports){
+},{"../util/event_obj_extender":53}],35:[function(require,module,exports){
 /**
  * Layer
  **/
@@ -2150,6 +2151,59 @@ var Blank_node_layer = function () {
 module.exports = Blank_node_layer;
 },{}],36:[function(require,module,exports){
 /**
+ * Layer used to show the contents of an MICO item.
+ **/
+
+var CSS = require("../../const/css"), store_wrap = require("../../store").get(), templating = require("../../templating"), log = require("../../logger.js")("Layer_query");
+var info = require('../../info');
+var Layer = require('../layer');
+var Query_layer = require('../types/query_layer');
+
+var Item_layer = function (detripling, decorating, msg, item, opt) {
+    this.item = item;
+    this._query = "CONSTRUCT { <"+item.nominalValue+"> <http://www.mico-project.eu/ns/mmm/2.0/schema#hasPart> ?o } WHERE { <"+item.nominalValue+"> <http://www.mico-project.eu/ns/mmm/2.0/schema#hasPart> ?o}";
+    Query_layer.call(this, detripling, decorating, msg, this._query, opt);
+    this.id = item.nominalValue;
+    this.label = item.nominalValue;
+    this.label_small = "";
+    var that = this;
+
+    this.get_concepts = function (triples) {
+        var concepts = {part: []};
+        for (var i = 0; i < triples.length; i++) {
+            concepts["part"].push(triples[i].object.nominalValue);
+        }
+        return concepts;
+    };
+};
+
+Item_layer.prototype = Object.create(Layer.prototype);
+Item_layer.prototype.constructor = Item_layer;
+
+Item_layer.prototype.load_remote = function () {
+    var that = this;
+    this.trigger("request_remote", ['SELECT DISTINCT ?s ?p ?o where {?s ?p ?o. VALUES ?s {<' + this.item.nominalValue + '>} VALUES ?p {<http://www.mico-project.eu/ns/mmm/2.0/schema#hasPart>}}'], function (resp, b, remote_num, partial) {
+        var graph = store_wrap.store.parser.parse_to_graph(resp.results.bindings, ["s", "p", "o"]);
+        that.triples.add(graph.triples);
+        if (partial) {
+            b.do_partial_progress(remote_num);
+        } else {
+            b.do_progress(remote_num);
+        }
+        //store_wrap.store.insert_triples(resp.results.bindings, null, function () {
+        //    if (partial) {
+        //        b.do_partial_progress(remote_num);
+        //        that.log("insert done");
+        //    } else {
+        //        b.do_progress(remote_num);
+        //    }
+        //});
+    });
+};
+
+module.exports = Item_layer;
+},{"../../const/css":2,"../../info":29,"../../logger.js":42,"../../store":49,"../../templating":52,"../layer":33,"../types/query_layer":40}],37:[function(require,module,exports){
+/**
  * Layer
  **/
 
@@ -2158,7 +2212,7 @@ var Literal_node_layer = function () {
 };
 
 module.exports = Literal_node_layer;
-},{}],37:[function(require,module,exports){
+},{}],38:[function(require,module,exports){
 /**
  * Layer
  **/
@@ -2275,7 +2329,7 @@ Named_node_layer.prototype.load_local = function () {
 };
 
 module.exports = Named_node_layer;
-},{"../../const/css":2,"../../info":29,"../../logger.js":41,"../../store":48,"../../templating":51,"../layer":33}],38:[function(require,module,exports){
+},{"../../const/css":2,"../../info":29,"../../logger.js":42,"../../store":49,"../../templating":52,"../layer":33}],39:[function(require,module,exports){
 /**
  * Layer
  **/
@@ -2303,7 +2357,7 @@ Pattern_layer.prototype = Object.create(Layer.prototype);
 Pattern_layer.prototype.constructor = Pattern_layer;
 
 module.exports = Pattern_layer;
-},{"../../const/css":2,"../../info":29,"../../logger.js":41,"../../store":48,"../../templating":51,"../layer":33}],39:[function(require,module,exports){
+},{"../../const/css":2,"../../info":29,"../../logger.js":42,"../../store":49,"../../templating":52,"../layer":33}],40:[function(require,module,exports){
 /**
  * Layer
  **/
@@ -2345,7 +2399,7 @@ Query_layer.prototype.load_local = function () {
 };
 
 module.exports = Query_layer;
-},{"../../const/css":2,"../../info":29,"../../logger.js":41,"../../store":48,"../../templating":51,"../layer":33}],40:[function(require,module,exports){
+},{"../../const/css":2,"../../info":29,"../../logger.js":42,"../../store":49,"../../templating":52,"../layer":33}],41:[function(require,module,exports){
 var CSS = require("../const/css");
 
 var defaults = {
@@ -2448,7 +2502,7 @@ Flex_layout.prototype.filter = function (filter_functions) {
 };
 
 module.exports = Flex_layout;
-},{"../const/css":2}],41:[function(require,module,exports){
+},{"../const/css":2}],42:[function(require,module,exports){
 (function (global){
 /**
  * Wrapper for logger creation
@@ -2472,7 +2526,7 @@ module.exports = function (str) {
     return loggers[id];
 };
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./const/general_plugin.js":3}],42:[function(require,module,exports){
+},{"./const/general_plugin.js":3}],43:[function(require,module,exports){
 var log = require("./logger")("Language");
 
 var Languages = function (language) {
@@ -2505,7 +2559,7 @@ Languages.prototype.get_language = function () {
 };
 
 module.exports = Languages;
-},{"./languages/de.json":30,"./languages/en.json":31,"./logger":41}],43:[function(require,module,exports){
+},{"./languages/de.json":30,"./languages/en.json":31,"./logger":42}],44:[function(require,module,exports){
 var CSS = require("./const/css"), templating = require("./templating"), e_ext = require("./util/event_obj_extender"), log = require("./logger.js")("Overlay"), History = require("./history"), Nav = require("./html_obj/nav");
 var pN = require("./const/general_plugin").name;
 var defaults = {};
@@ -2591,7 +2645,7 @@ Overlay.prototype.destroy = function () {
 };
 
 module.exports = Overlay;
-},{"./const/css":2,"./const/general_plugin":3,"./history":26,"./html_obj/nav":27,"./logger.js":41,"./templating":51,"./util/event_obj_extender":52}],44:[function(require,module,exports){
+},{"./const/css":2,"./const/general_plugin":3,"./history":26,"./html_obj/nav":27,"./logger.js":42,"./templating":52,"./util/event_obj_extender":53}],45:[function(require,module,exports){
 /**
  * Overlay management for synopsis
  **/
@@ -2652,7 +2706,7 @@ Overlay_manager.prototype.destroy_all = function () {
 };
 
 module.exports = Overlay_manager;
-},{"./const/css":2,"./history":26,"./logger.js":41,"./overlay":43,"./store":48,"./templating":51}],45:[function(require,module,exports){
+},{"./const/css":2,"./history":26,"./logger.js":42,"./overlay":44,"./store":49,"./templating":52}],46:[function(require,module,exports){
 (function (global){
 /**
  * Singleton Progress box creation.
@@ -2768,7 +2822,7 @@ var instance = new Progress();
 
 module.exports = instance;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./const/css.js":2,"./templating":51,"./util/event_obj_extender":52}],46:[function(require,module,exports){
+},{"./const/css.js":2,"./templating":52,"./util/event_obj_extender":53}],47:[function(require,module,exports){
 var e_ext = require("../util/event_obj_extender");
 
 var max_url_length = 2000;
@@ -2857,7 +2911,7 @@ Debounced_remote_loader.prototype.pop_query = function () {
 };
 
 module.exports = Debounced_remote_loader;
-},{"../util/event_obj_extender":52}],47:[function(require,module,exports){
+},{"../util/event_obj_extender":53}],48:[function(require,module,exports){
 (function (global){
 /**
  * Singleton store local
@@ -2921,6 +2975,7 @@ Remote.prototype.get_service_name = function () {
  */
 Remote.prototype.execute = function (query, cb, fail, flag) {
     var xhr = this._createCORSRequest('GET', this._service + this._exec_url[0] + encodeURIComponent(query) + this._exec_url[1]), that = this;
+    xhr.setRequestHeader("accept", "application/json");
     if (flag) {
         flag.on("interrupt", function() {
             log("Aborted remote query.");
@@ -2999,7 +3054,7 @@ var counter = 0;
 
 module.exports = Remote;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./../logger.js":41}],48:[function(require,module,exports){
+},{"./../logger.js":42}],49:[function(require,module,exports){
 (function (global){
 /**
  * Singleton local rdf store. Needs to be set once.
@@ -3289,7 +3344,7 @@ module.exports = {
     }
 };
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./logger.js":41,"./util/event_obj_extender.js":52,"./util/misc.js":54}],49:[function(require,module,exports){
+},{"./logger.js":42,"./util/event_obj_extender.js":53,"./util/misc.js":55}],50:[function(require,module,exports){
 (function (global){
 var $ = (typeof window !== "undefined" ? window['$'] : typeof global !== "undefined" ? global['$'] : null);
 (typeof window !== "undefined" ? window['rdfstore'] : typeof global !== "undefined" ? global['rdfstore'] : null);
@@ -3592,7 +3647,7 @@ module.exports = Synopsis;
 //See the License for the specific language governing permissions and
 //limitations under the License.
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./const/css":2,"./const/general_plugin":3,"./decorating/manager":10,"./detripling/manager":22,"./history":26,"./info":29,"./layers/factory":32,"./logger":41,"./msg":42,"./overlay_manager":44,"./progress":45,"./remote/remote":47,"./store":48,"./util/misc":54}],50:[function(require,module,exports){
+},{"./const/css":2,"./const/general_plugin":3,"./decorating/manager":10,"./detripling/manager":22,"./history":26,"./info":29,"./layers/factory":32,"./logger":42,"./msg":43,"./overlay_manager":45,"./progress":46,"./remote/remote":48,"./store":49,"./util/misc":55}],51:[function(require,module,exports){
 module.exports = function(Handlebars) {
 
 var templates = {};
@@ -4048,7 +4103,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 return templates;
 
 };
-},{}],51:[function(require,module,exports){
+},{}],52:[function(require,module,exports){
 (function (global){
 var Handlebars = (typeof window !== "undefined" ? window['Handlebars'] : typeof global !== "undefined" ? global['Handlebars'] : null);
 
@@ -4070,7 +4125,7 @@ Handlebars.registerHelper('prefix', function (msg, type, str) {
 var templates = require("./templates.js")(Handlebars);
 module.exports = templates;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./const/general_plugin":3,"./templates.js":50}],52:[function(require,module,exports){
+},{"./const/general_plugin":3,"./templates.js":51}],53:[function(require,module,exports){
 (function (global){
 /**
 * Extends an object with backbone events and switching. A switch is a event which is triggered once and stays "on". If a function gets bond to a switch in on state it is invoked instantly.
@@ -4097,7 +4152,7 @@ module.exports = function(obj) {
     return obj;
 };
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],53:[function(require,module,exports){
+},{}],54:[function(require,module,exports){
 (function (global){
 var Modernizr = (typeof window !== "undefined" ? window['Modernizr'] : typeof global !== "undefined" ? global['Modernizr'] : null);
 var transEndEventName = function() {
@@ -4136,7 +4191,7 @@ module.exports = {
     }
 };
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],54:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 var log = require("../logger.js")("Util");
 
 module.exports = {
@@ -4184,4 +4239,4 @@ module.exports = {
         };
     })()
 };
-},{"../logger.js":41}]},{},[49]);
+},{"../logger.js":42}]},{},[50]);

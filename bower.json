@@ -8,7 +8,7 @@
     "jquery": "~2.1.0",
     "handlebars": "~1.3.0",
     "modernizr": "~2.7.2",
-    "rdfstore": "~0.9.6",
+    "rdfstore": "~0.9.17",
     "fontawesome": "~4.2.0",
     "bootstrap": "~3.3.4",
     "bows": "~1.4.2",

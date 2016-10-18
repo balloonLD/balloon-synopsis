@@ -73,22 +73,17 @@
     <div class="well">
         <form>
             <label for="service">Remote data service:</label> <input
-                type="text" id="service" value="http://dbpedia.org/sparql">
+                type="text" id="service" value="http://mico-platform:8080/marmotta/sparql/select">
 
             <p>
                 <label for="query">Remote data query:</label>
                 <textarea id="query" style="width:80%; max-width:80%; min-height:200px">
-                    SELECT ?s ?p ?o {
-                    VALUES ?s {
-                    &lt;http://dbpedia.org/resource/Berlin&gt;
-                    &lt;http://dbpedia.org/resource/Passau&gt;
-                    &lt;http://dbpedia.org/resource/Munich&gt;
-                    &lt;http://dbpedia.org/resource/Frankfurt&gt;
-                    }
-                    VALUES ?p { rdfs:label }
-                    ?s ?p ?o.
-                    FILTER (lang(?o) = 'en')
-                    } LIMIT 150
+SELECT ?s ?p ?o {
+VALUES ?o {
+&lt;http://www.mico-project.eu/ns/mmm/2.0/schema#Item&gt;
+}
+?s ?p ?o.
+} LIMIT 150
                 </textarea>
 
             <p>
@@ -116,13 +111,20 @@
     var synopsis, layer = null;
     $(function () {
         $('.synopsis').synopsis({
+                    "remote": [
+                        [
+                            "http://mico-platform:8080/marmotta/sparql/select",
+                            "?query=",
+                            "&Accept=application/json"
+                        ]
+                    ],
                     detripling: {
                         detriplers: {
-                            init_node: {
-                                compiled_template: Handlebars.compile("<div class='{{CSS.tile}} {{data.detripler.id}} {{CSS.semantic_color}}'><div class='{{CSS.uri}}'>{{data.draft}}</div></div>"),
+                            item: {
+                                compiled_template: Handlebars.compile("<div class='{{CSS.tile}} {{data.detripler.id}} {{CSS.semantic_color}}'>ITEM:<div class='{{CSS.uri}}'>{{data.draft}}</div></div>"),
                                 worker: false,
                                 fn: function (triples, transport, cb) {
-                                    transport.get_concept("init_node", function (concept) {
+                                    transport.get_concept("item", function (concept) {
                                         cb(concept);
                                     });
                                 },
@@ -130,7 +132,27 @@
                                     var divs = [], template = this.compiled_template;
                                     for (var i = 0; i < draft.length; i++) {
                                         var div = $(template({CSS: synopsis.css, data: {draft: draft[i], detripler: this}}));
-                                        div.data("draft_data", {leads_to: RDFModel.buildNamedNode(draft[i])});
+                                        div.data("draft_data", {leads_to: {interfaceName: "Item", nominalValue: draft[i]}});
+                                        div.data("post_view_cbs", []);
+                                        div.data("type", this.id);
+                                        divs.push(div);
+                                    }
+                                    return divs;
+                                }
+                            },
+                            part: {
+                                compiled_template: Handlebars.compile("<div class='{{CSS.tile}} {{data.detripler.id}} {{CSS.semantic_color}}'>PART:<div class='{{CSS.uri}}'>{{data.draft}}</div></div>"),
+                                worker: false,
+                                fn: function (triples, transport, cb) {
+                                    transport.get_concept("part", function (concept) {
+                                        cb(concept);
+                                    });
+                                },
+                                templating_fn: function (draft) {
+                                    var divs = [], template = this.compiled_template;
+                                    for (var i = 0; i < draft.length; i++) {
+                                        var div = $(template({CSS: synopsis.css, data: {draft: draft[i], detripler: this}}));
+                                        div.data("draft_data", {leads_to: {interfaceName: "Part", nominalValue: draft[i]}});
                                         div.data("post_view_cbs", []);
                                         div.data("type", this.id);
                                         divs.push(div);
@@ -148,21 +170,28 @@
                         decorators: {
                             semantic_color: {
                                 config : {
-                                    init_node : function (draft) {
+                                    item : function (draft) {
+                                        return draft.leads_to.nominalValue;
+                                    },
+                                    part : function (draft) {
                                         return draft.leads_to.nominalValue;
                                     }
                                 }
                             },
                             browsability: {
                                 config : {
-                                    init_node : function (draft) {
+                                    item : function (draft) {
+                                        return draft.leads_to;
+                                    },
+                                    part : function (draft) {
                                         return draft.leads_to;
                                     }
                                 }
                             },
                             uri_to_label : {
                                 config : {
-                                    init_node : true
+                                    item : false,
+                                    part : false
                                 }
                             }
                         }
@@ -170,13 +199,13 @@
                 }, function (instance) {
                     synopsis = instance;
                     //synopsis.show_on($('.synopsis'), "Select ?subject ?predicate ?object WHERE { ?subject rdfs:label ?l. ?subject ?predicate ?object. }", "Query");
-                    layer = Synopsis.Layer_factory.make(synopsis, "CONSTRUCT { ?subject rdfs:label ?l } WHERE { ?subject rdfs:label ?l }", "Query");
+                    layer = Synopsis.Layer_factory.make(synopsis, "CONSTRUCT { ?subject rdf:type ?l } WHERE { ?subject rdf:type ?l }", "Query");
                     layer.show_on($('.synopsis'));
                     //synopsis.show_on($('.synopsis'), [[null, null, null, null]], "Pattern");
                     layer.get_concepts = function (triples) {
-                        var concepts = {init_node: []};
+                        var concepts = {item: []};
                         for (var i = 0; i < triples.length; i++) {
-                            concepts["init_node"].push(triples[i].subject.nominalValue);
+                            concepts["item"].push(triples[i].subject.nominalValue);
                         }
                         return concepts;
                     }
