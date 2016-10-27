@@ -9,13 +9,9 @@ var add = function (c) {
 };
 
 var constructors = [
-    require("./detripler/incoming.blank"),
-    require("./detripler/incoming.named"),
     require("./detripler/outgoing.blank"),
     require("./detripler/outgoing.named"),
-    require("./detripler/outgoing.literal"),
-    require("./detripler/map"),
-    require("./detripler/multi.named")
+    require("./detripler/outgoing.literal")
 ];
 
 add(constructors);

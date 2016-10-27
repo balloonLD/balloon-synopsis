@@ -46,8 +46,6 @@
         <div id="navbar" class="collapse navbar-collapse">
             <ul class="nav navbar-nav">
                 <<li class="active"><a href="../default/demo.html">Loading form local / remote</a></li>
-                <li><a href="../inText/inText.html">Resource in text</a></li>
-                <li><a href="../tripleViewer/tripleViewer.html">Simple triple viewing</a></li>
             </ul>
         </div>
     </div>
@@ -58,26 +56,10 @@
         <div class="synopsis" sytle="height:500px"></div>
     </div>
     <div class="well">
-
-        <form class="form-horizontal" role="form">
-            <div class="form-group">
-                <label class="col-sm-2 control-label" for="inputFile">Local file:</label>
-
-                <div class="col-sm-4">
-                    <input type="file" id="inputFile"
-                           onchange="load_file(this)">
-                </div>
-            </div>
-        </form>
-    </div>
-    <div class="well">
         <form>
-            <label for="service">Remote data service:</label> <input
-                type="text" id="service" value="http://mico-platform:8080/marmotta/sparql/select">
-
-            <p>
-                <label for="query">Remote data query:</label>
-                <textarea id="query" style="width:80%; max-width:80%; min-height:200px">
+            <input
+                type="text" id="service" value="http://mico-platform:8080/marmotta/sparql/select" style="display:none;">
+                <textarea  id="query" style="display:none; width:80%; max-width:80%; min-height:200px">
 SELECT ?s ?p ?o {
 VALUES ?o {
 &lt;http://www.mico-project.eu/ns/mmm/2.0/schema#Item&gt;
@@ -87,21 +69,10 @@ VALUES ?o {
                 </textarea>
 
             <p>
-                <input type="button" name="insertRemote" value="Insert remote data"
+                <input type="button" name="insertRemote" value="Load from Marmotta"
                        onclick="load_remote(this);">
         </form>
     </div>
-    <!--<div class="well">
-        <form>
-            <label for="localQuery">Remote data query:</label>
-            <textarea id="localQuery" name="localQuery">SELECT ?s ?p ?o WHERE { ?s ?p ?o }
-            </textarea>
-
-            <p>
-                <input type="button" name="runQuery" value="Run query on local store"
-                       onclick="$('.synopsis').data('plugin_synopsis').runQuery(this.form.localQuery.value, console.log);">
-        </form>
-    </div>-->
 </div>
 
 <script type="text/javascript">
@@ -131,28 +102,16 @@ VALUES ?o {
                                 templating_fn: function (draft) {
                                     var divs = [], template = this.compiled_template;
                                     for (var i = 0; i < draft.length; i++) {
-                                        var div = $(template({CSS: synopsis.css, data: {draft: draft[i], detripler: this}}));
-                                        div.data("draft_data", {leads_to: {interfaceName: "Item", nominalValue: draft[i]}});
-                                        div.data("post_view_cbs", []);
-                                        div.data("type", this.id);
-                                        divs.push(div);
-                                    }
-                                    return divs;
-                                }
-                            },
-                            part: {
-                                compiled_template: Handlebars.compile("<div class='{{CSS.tile}} {{data.detripler.id}} {{CSS.semantic_color}}'>PART:<div class='{{CSS.uri}}'>{{data.draft}}</div></div>"),
-                                worker: false,
-                                fn: function (triples, transport, cb) {
-                                    transport.get_concept("part", function (concept) {
-                                        cb(concept);
-                                    });
-                                },
-                                templating_fn: function (draft) {
-                                    var divs = [], template = this.compiled_template;
-                                    for (var i = 0; i < draft.length; i++) {
-                                        var div = $(template({CSS: synopsis.css, data: {draft: draft[i], detripler: this}}));
-                                        div.data("draft_data", {leads_to: {interfaceName: "Part", nominalValue: draft[i]}});
+                                        var div = $(template({
+                                            CSS: synopsis.css,
+                                            data: {draft: draft[i], detripler: this}
+                                        }));
+                                        div.data("draft_data", {
+                                            leads_to: {
+                                                interfaceName: "Item",
+                                                nominalValue: draft[i]
+                                            }
+                                        });
                                         div.data("post_view_cbs", []);
                                         div.data("type", this.id);
                                         divs.push(div);
@@ -169,31 +128,12 @@ VALUES ?o {
                     decorating: {
                         decorators: {
                             semantic_color: {
-                                config : {
-                                    item : function (draft) {
-                                        return draft.leads_to.nominalValue;
-                                    },
-                                    part : function (draft) {
-                                        return draft.leads_to.nominalValue;
-                                    }
-                                }
+                                config : {}
                             },
                             browsability: {
-                                config : {
-                                    item : function (draft) {
-                                        return draft.leads_to;
-                                    },
-                                    part : function (draft) {
-                                        return draft.leads_to;
-                                    }
-                                }
+                                config : {}
                             },
-                            uri_to_label : {
-                                config : {
-                                    item : false,
-                                    part : false
-                                }
-                            }
+                            uri_to_label : {}
                         }
                     }
                 }, function (instance) {
@@ -213,22 +153,6 @@ VALUES ?o {
         )
         ;
     });
-
-    function load_file(f) {
-        if (f.files && f.files[0]) {
-            synopsis.insert_file(f.files[0], function (err, res) {
-                if (!err) {
-                    synopsis.info.show("Inserting file succeded.");
-                    layer.reload();
-                    synopsis.store_wrap.store.execute("SELECT * WHERE {?s ?p ?o}", function (err, res) {
-                        synopsis.info.show(res.length + " triples in store.");
-                    });
-                } else {
-                    synopsis.info.show("Inserting file failed.");
-                }
-            });
-        }
-    }
 
     function load_remote(f) {
         synopsis.execute_on_remote(f.form.query.value, f.form.service.value, function (resp) {

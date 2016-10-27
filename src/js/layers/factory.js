@@ -22,11 +22,10 @@ Factory.addLayerTypes = function (constructors) {
 
 var constructors = {
     Query: require('./types/query_layer'),
-    Literal: require('./types/literal_node_layer'),
-    Blank: require('./types/blank_node_layer'),
     Pattern: require('./types/pattern_layer'),
-    NamedNode: require('./types/named_node_layer'),
-    Item: require('./types/item_layer')
+    Out: require('./types/out_layer'),
+    Item: require('./types/out_layer'),
+    NamedNode: require('./types/out_layer')
 };
 
 Factory.addLayerTypes(constructors);

@@ -208,6 +208,8 @@ var add = function (Decorator) {
     decorators.keys_for_decorators.push(decorator.id);
 };
 
+add(require(&quot;./decorators/animal_detection_part&quot;));
+add(require(&quot;./decorators/item_image&quot;));
 add(require(&quot;./decorators/browsability&quot;));
 add(require(&quot;./decorators/semantic_color&quot;));
 add(require(&quot;./decorators/uri_to_label&quot;));
@@ -215,7 +217,43 @@ add(require(&quot;./decorators/uri_to_thumbnail&quot;));
 add(require(&quot;./decorators/text_size&quot;));
 
 module.exports = decorators;
-},{&quot;./decorators/browsability&quot;:5,&quot;./decorators/semantic_color&quot;:6,&quot;./decorators/text_size&quot;:7,&quot;./decorators/uri_to_label&quot;:8,&quot;./decorators/uri_to_thumbnail&quot;:9}],5:[function(require,module,exports){
+},{&quot;./decorators/animal_detection_part&quot;:5,&quot;./decorators/browsability&quot;:6,&quot;./decorators/item_image&quot;:7,&quot;./decorators/semantic_color&quot;:8,&quot;./decorators/text_size&quot;:9,&quot;./decorators/uri_to_label&quot;:10,&quot;./decorators/uri_to_thumbnail&quot;:11}],5:[function(require,module,exports){
+var log = require(&quot;../../logger&quot;)(&quot;Browsability decorator&quot;), info = require(&#x27;../../info&#x27;), Layer_factory = require(&quot;../../layers/factory&quot;);
+var Debounced_remote = require(&quot;../../remote/debounced_remote&quot;);
+RDFModel = window.RDFModel;
+
+var Decorator = function () {
+    this.id = &quot;animal_detection_part&quot;;
+    this.config = {
+        &quot;outgoing.named&quot;: function (draft) {
+            return draft.triple.object;
+        }
+    };
+    this.decorate = function (divs, synopsis, config, cb) {
+        var debounced_remote_loader = new Debounced_remote(synopsis, &quot;SELECT DISTINCT ?value ?animal ?coord ?lo WHERE { ?value &lt;http://www.w3.org/ns/oa#hasBody&gt; ?body. ?body rdf:type &lt;http://www.mico-project.eu/ns/mmmterms/2.0/schema#AnimalDetectionBody&gt;.&quot; +
+            &quot;?body rdf:value ?animal. ?value &lt;http://www.mico-project.eu/ns/mmm/2.0/schema#hasTarget&gt; ?target. ?target &lt;http://www.mico-project.eu/ns/mmm/2.0/schema#hasSelector&gt; ?selector. ?selector rdf:value ?coord. &quot; + Debounced_remote.dummy + &quot; }&quot;, null);
+        for (var i = 0; i &lt; divs.length; i++) {
+            var div = $(divs[i]);
+            var type = div.data(&quot;type&quot;);
+            if (config.hasOwnProperty(type)) {
+                div.on(&quot;appended&quot;, function (d, part_uri) {
+                    debounced_remote_loader.add_value(part_uri, function (bindings) {
+                        if (bindings.length &gt; 0) {
+                            d.append(&quot;&lt;b&gt;Found animal:&lt;/b&gt; &lt;div&gt;&quot;+bindings[0].animal.value+&quot;&lt;/div&gt;&quot;);
+                            d.append(&quot;&lt;b&gt;On coordiantes&lt;/b&gt; &lt;div&gt;&quot;+bindings[0].coord.value+&quot;&lt;/div&gt;&quot;);
+                        }
+                    });
+                }(div, config[type](div.data(&quot;draft_data&quot;))));
+            }
+        }
+        if (cb)
+            cb(divs);
+        return divs;
+    }
+};
+
+module.exports = Decorator;
+},{&quot;../../info&quot;:27,&quot;../../layers/factory&quot;:30,&quot;../../logger&quot;:37,&quot;../../remote/debounced_remote&quot;:42}],6:[function(require,module,exports){
 var log = require(&quot;../../logger&quot;)(&quot;Browsability decorator&quot;), info = require(&#x27;../../info&#x27;), Layer_factory = require(&quot;../../layers/factory&quot;);
 RDFModel = window.RDFModel;
 
@@ -224,11 +262,8 @@ var Decorator = function () {
     this.config = {
         &quot;outgoing.named&quot;: function (draft) {
             return draft.triple.object;
-        }, &quot;incoming.named&quot;: function (draft) {
-            return draft.triple.subject;
-        },
-        &quot;multi.named&quot;: function (draft) {
-            return draft.resource;
+        }, &quot;item&quot;: function (draft) {
+            return draft.leads_to;
         }
     };
     this.decorate = function (divs, synopsis, config, cb) {
@@ -263,7 +298,48 @@ var Decorator = function () {
 };
 
 module.exports = Decorator;
-},{&quot;../../info&quot;:29,&quot;../../layers/factory&quot;:32,&quot;../../logger&quot;:42}],6:[function(require,module,exports){
+},{&quot;../../info&quot;:27,&quot;../../layers/factory&quot;:30,&quot;../../logger&quot;:37}],7:[function(require,module,exports){
+var log = require(&quot;../../logger&quot;)(&quot;Browsability decorator&quot;), info = require(&#x27;../../info&#x27;), Layer_factory = require(&quot;../../layers/factory&quot;);
+var Debounced_remote = require(&quot;../../remote/debounced_remote&quot;);
+RDFModel = window.RDFModel;
+
+var Decorator = function () {
+    this.id = &quot;item_image&quot;;
+    this.config = {
+        dref : &quot;http://mico-platform:8080/broker/status/download?itemUri=&quot;,
+        types : {
+            &quot;item&quot;: function (draft) {
+                return draft.leads_to.nominalValue;
+            }
+        }
+    };
+    this.decorate = function (divs, synopsis, config, cb) {
+        var debounced_remote_loader = new Debounced_remote(synopsis, &quot;SELECT DISTINCT ?value ?asset ?type ?format WHERE { ?value &lt;http://www.mico-project.eu/ns/mmm/2.0/schema#hasAsset&gt; ?asset . ?asset &lt;http://purl.org/dc/elements/1.1/format&gt; ?format. ?asset &lt;http://purl.org/dc/elements/1.1/format&gt; ?format. &quot; + Debounced_remote.dummy + &quot; }&quot;, null);
+        for (var i = 0; i &lt; divs.length; i++) {
+            var div = $(divs[i]);
+            var type = div.data(&quot;type&quot;);
+            if (config[&quot;types&quot;].hasOwnProperty(type)) {
+                div.on(&quot;appended&quot;, function (d, part_uri) {
+                    debounced_remote_loader.add_value(part_uri, function (bindings) {
+                        if (bindings.length &gt; 0 &amp;&amp; (bindings[0][&quot;format&quot;].value == &quot;image/png&quot; || bindings[0][&quot;format&quot;].value == &quot;image/jpeg&quot; || bindings[0][&quot;format&quot;].value == &quot;image/jpg&quot;)) {
+                            if (!d.data(&quot;image&quot;)) {
+                                d.data(&quot;image&quot;, bindings[0][&quot;asset&quot;].value);
+                                var width = d.width() - 20;
+                                d.prepend(&quot;&lt;div class=&#x27;&quot; + CSS.shrink + &quot;&#x27;&gt;&lt;img class=&quot;+ CSS.thumbnail +&quot; src=&#x27;&quot;+config[&quot;dref&quot;]+bindings[0][&quot;value&quot;].value+&quot;&#x27; width=&#x27;&quot;+ width +&quot;&#x27;&gt;&lt;/div&gt;&quot;);
+                            }
+                        }
+                    });
+                }(div, config[&quot;types&quot;][type](div.data(&quot;draft_data&quot;))));
+            }
+        }
+        if (cb)
+            cb(divs);
+        return divs;
+    }
+};
+
+module.exports = Decorator;
+},{&quot;../../info&quot;:27,&quot;../../layers/factory&quot;:30,&quot;../../logger&quot;:37,&quot;../../remote/debounced_remote&quot;:42}],8:[function(require,module,exports){
 (function (global){
 var log = require(&quot;../../logger&quot;)(&quot;Browsability decorator&quot;), chroma = (typeof window !== &quot;undefined&quot; ? window[&#x27;chroma&#x27;] : typeof global !== &quot;undefined&quot; ? global[&#x27;chroma&#x27;] : null), md5 = (typeof window !== &quot;undefined&quot; ? window[&#x27;md5&#x27;] : typeof global !== &quot;undefined&quot; ? global[&#x27;md5&#x27;] : null), CSS = require(&quot;../../const/css&quot;);
 var Debounced_remote = require(&quot;../../remote/debounced_remote&quot;);
@@ -322,11 +398,8 @@ var Decorator = function () {
     this.config = {
         &quot;outgoing.named&quot;: function (draft) {
             return draft.triple.object.nominalValue;
-        }, &quot;incoming.named&quot;: function (draft) {
-            return draft.triple.subject.nominalValue;
-        },
-        &quot;multi.named&quot;: function (draft) {
-            return draft.resource.nominalValue;
+        }, &quot;item&quot;: function (draft) {
+            return draft.leads_to.nominalValue;
         }
     };
     this.decorate = function (divs, synopsis, config, cb) {
@@ -372,7 +445,7 @@ var Decorator = function () {
 
 module.exports = Decorator;
 }).call(this,typeof global !== &quot;undefined&quot; ? global : typeof self !== &quot;undefined&quot; ? self : typeof window !== &quot;undefined&quot; ? window : {})
-},{&quot;../../const/css&quot;:2,&quot;../../logger&quot;:42,&quot;../../remote/debounced_remote&quot;:47}],7:[function(require,module,exports){
+},{&quot;../../const/css&quot;:2,&quot;../../logger&quot;:37,&quot;../../remote/debounced_remote&quot;:42}],9:[function(require,module,exports){
 var log = require(&quot;../../logger&quot;)(&quot;Browsability decorator&quot;), CSS = require(&quot;../../const/css&quot;);
 RDFModel = window.RDFModel;
 
@@ -434,7 +507,7 @@ var Decorator = function () {
 };
 
 module.exports = Decorator;
-},{&quot;../../const/css&quot;:2,&quot;../../logger&quot;:42}],8:[function(require,module,exports){
+},{&quot;../../const/css&quot;:2,&quot;../../logger&quot;:37}],10:[function(require,module,exports){
 var log = require(&quot;../../logger&quot;)(&quot;URI_TO_LABEL decorator&quot;), CSS = require(&quot;../../const/css&quot;);
 var Debounced_remote = require(&quot;../../remote/debounced_remote&quot;);
 
@@ -550,7 +623,7 @@ var Decorator = function () {
 };
 
 module.exports = Decorator;
-},{&quot;../../const/css&quot;:2,&quot;../../logger&quot;:42,&quot;../../remote/debounced_remote&quot;:47}],9:[function(require,module,exports){
+},{&quot;../../const/css&quot;:2,&quot;../../logger&quot;:37,&quot;../../remote/debounced_remote&quot;:42}],11:[function(require,module,exports){
 var log = require(&quot;../../logger&quot;)(&quot;URI_TO_THUMBNAIL decorator&quot;), CSS = require(&quot;../../const/css&quot;);
 var Debounced_remote = require(&quot;../../remote/debounced_remote&quot;);
 
@@ -646,7 +719,7 @@ var Decorator = function () {
 };
 
 module.exports = Decorator;
-},{&quot;../../const/css&quot;:2,&quot;../../logger&quot;:42,&quot;../../remote/debounced_remote&quot;:47}],10:[function(require,module,exports){
+},{&quot;../../const/css&quot;:2,&quot;../../logger&quot;:37,&quot;../../remote/debounced_remote&quot;:42}],12:[function(require,module,exports){
 var log = require(&quot;./../logger&quot;)(&quot;Decorator_manager&quot;);
 
 var decorators = require(&quot;./decorators.js&quot;);
@@ -676,221 +749,7 @@ Manager.prototype.decorate = function (divs, cb) {
 };
 
 module.exports = Manager;
-},{&quot;./../logger&quot;:42,&quot;./decorators.js&quot;:4}],11:[function(require,module,exports){
-var templating = require(&quot;../../templating&quot;), Base_detripler = require(&quot;../scheme&quot;), CSS = require(&quot;../../const/css&quot;);
-
-var ID = &quot;incoming.blank&quot;;
-
-var Detripler = function () {
-    Base_detripler.call(this, ID);
-    this.worker = true;
-    this.template_id = &quot;tiles.incoming.blank&quot;;
-    this.fn = function (triples, transport, cb) {
-        var draft = [];
-        transport.get_concept(&quot;incoming.BlankNode&quot;, function (blank) {
-            if (blank) {
-                while (blank.length &gt; 0) {
-                    var index = blank.pop();
-                    var triple = triples[index];
-                    draft.push({direction: &quot;inc&quot;, triple: triple});
-                }
-            }
-            cb(draft);
-        });
-    };
-
-};
-
-Detripler.prototype = Object.create(Base_detripler.prototype);
-Detripler.prototype.constructor = Detripler;
-
-module.exports = Detripler;
-},{&quot;../../const/css&quot;:2,&quot;../../templating&quot;:52,&quot;../scheme&quot;:24}],12:[function(require,module,exports){
-var templating = require(&quot;../../templating&quot;), Base_detripler = require(&quot;../scheme&quot;), CSS = require(&quot;../../const/css&quot;);
-
-var ID = &quot;incoming.named&quot;;
-
-var Detripler = function () {
-    Base_detripler.call(this, ID);
-    this.worker = true;
-    this.template_id = &quot;tiles.incoming.named&quot;;
-    this.fn = function (triples, transport, cb) {
-        var draft = [];
-        transport.get_concept(&quot;incoming.NamedNode&quot;, function (named) {
-            if (named) {
-                while (named.length &gt; 0) {
-                    var index = named.pop();
-                    var triple = triples[index];
-                    draft.push({direction: &quot;inc&quot;, triple: triple});
-                }
-            }
-            cb(draft);
-        });
-    };
-
-};
-
-Detripler.prototype = Object.create(Base_detripler.prototype);
-Detripler.prototype.constructor = Detripler;
-
-module.exports = Detripler;
-},{&quot;../../const/css&quot;:2,&quot;../../templating&quot;:52,&quot;../scheme&quot;:24}],13:[function(require,module,exports){
-var templating = require(&quot;../../templating&quot;), Base_detripler = require(&quot;../scheme&quot;), CSS = require(&quot;../../const/css&quot;);
-
-var ID = &quot;map&quot;;
-
-var Detripler = function () {
-    Base_detripler.call(this, ID);
-    this.worker = true;
-    this.template_id = &quot;tiles.map&quot;;
-    this.fn = function (triples, transport, cb) {
-        var draft = [];
-        transport.get_concept(&#x27;outgoing.Literal&#x27;, function (literal) {
-            if (literal) {
-                var tmp = {out: {lat: null, long: null}};
-                while (literal.length &gt; 0) {
-                    var index = literal.pop();
-                    var triple = triples[index];
-                    if (triple.predicate.nominalValue == &#x27;http://www.w3.org/2003/01/geo/wgs84_pos#long&#x27;) {
-                        tmp.out.long = triple.object.nominalValue;
-                    } else if (triple.predicate.nominalValue == &#x27;http://www.w3.org/2003/01/geo/wgs84_pos#lat&#x27;) {
-                        tmp.out.lat = triple.object.nominalValue;
-                    }
-                }
-                if (tmp.out.lat &amp;&amp; tmp.out.long) {
-                    draft.push({direction: &quot;outgoing&quot;, longitude: tmp.out.lat, latitude: tmp.out.long});
-                }
-            }
-            cb(draft);
-        });
-    };
-
-};
-
-Detripler.prototype = Object.create(Base_detripler.prototype);
-Detripler.prototype.constructor = Detripler;
-
-module.exports = Detripler;
-},{&quot;../../const/css&quot;:2,&quot;../../templating&quot;:52,&quot;../scheme&quot;:24}],14:[function(require,module,exports){
-var templating = require(&quot;../../templating&quot;), Base_detripler = require(&quot;../scheme&quot;), CSS = require(&quot;../../const/css&quot;);
-
-var ID = &quot;multi.named&quot;;
-
-var Detripler = function () {
-        Base_detripler.call(this, ID);
-        this.worker = true;
-        this.parents = [&quot;incoming.named&quot;, &quot;outgoing.named&quot;];
-        this.template_id = &quot;tiles.multi.named&quot;;
-        this.fn = function (triples, transport, cb) {
-            var draft = [], tmp = {};
-
-            // get incoming draft and search for same subjects
-            var inc_draft;
-            transport.get_draft(&quot;incoming.named&quot;, function (inc_named) {
-                inc_draft = inc_named;
-                for (var i = 0; i &lt; inc_named.length; i++) {
-                    var inc_triple = inc_named[i].triple;
-                    if (!tmp[inc_triple.subject.nominalValue]) {
-                        tmp[inc_triple.subject.nominalValue] = {
-                            inc: [{triple: inc_triple, index: i}],
-                            out: []
-                        };
-                        tmp[inc_triple.subject.nominalValue].length = 1;
-                    } else {
-                        tmp[inc_triple.subject.nominalValue].inc.push({triple: inc_triple, index: i});
-                        tmp[inc_triple.subject.nominalValue].length++;
-                    }
-                }
-            });
-
-            // get outgoing draft and search for same objects
-            var out_draft;
-            transport.get_draft(&quot;outgoing.named&quot;, function (out_named) {
-                out_draft = out_named;
-                for (var i = 0; i &lt; out_named.length; i++) {
-                    var out_triple = out_named[i].triple;
-                    if (!tmp[out_triple.object.nominalValue]) {
-                        tmp[out_triple.object.nominalValue] = {
-                            inc: [],
-                            out: [{triple: out_triple, index: i}]
-                        };
-                        tmp[out_triple.object.nominalValue].length = 1;
-                    } else {
-                        tmp[out_triple.object.nominalValue].out.push({triple: out_triple, index: i});
-                        tmp[out_triple.object.nominalValue].length++;
-                    }
-                }
-            });
-
-            // Modify flags
-            var inc_draft_delete_indexes = [], out_draft_delete_indexes = [];
-            var found_targets = Object.keys(tmp);
-            for (var i = 0; i &lt; found_targets.length; i++) {
-                if(tmp[found_targets[i]].length &gt; 1) {
-                    var draft_triples = {out: [], inc: []}, draft_resource = null;
-                    var inc_data = tmp[found_targets[i]].inc;
-                    for (var j = 0; j &lt; inc_data.length; j++) {
-                        if (!draft_resource)
-                            draft_resource = inc_data[j].triple.subject;
-                        draft_triples.inc.push(inc_data[j].triple);
-                        inc_draft_delete_indexes.push(inc_data[j].index);
-                    }
-                    var out_data = tmp[found_targets[i]].out;
-                    for (var k = 0; k &lt; out_data.length; k++) {
-                        if (!draft_resource)
-                            draft_resource = out_data[j].triple.object;
-                        draft_triples.out.push(out_data[k].triple);
-                        out_draft_delete_indexes.push(out_data[k].index);
-                    }
-
-                    // add to final draft
-                    draft.push({resource: draft_resource, triples: draft_triples});
-                }
-            }
-
-            if (inc_draft_delete_indexes.length &gt; 0 || out_draft_delete_indexes.length &gt; 0) {
-                // Modify drafts
-                var wait_for_n_mods = 0;
-                if (inc_draft_delete_indexes.length &gt; 0)
-                    wait_for_n_mods++;
-                if (out_draft_delete_indexes.length &gt; 0)
-                    wait_for_n_mods++;
-                var mods_done = 0;
-                if (inc_draft_delete_indexes.length &gt; 0)
-                    inc_draft_delete_indexes.sort(function(a, b) {return a-b;});
-                while (inc_draft_delete_indexes.length &gt; 0) {
-                    var index = inc_draft_delete_indexes.pop();
-                    inc_draft.splice(index, 1);
-                }
-                transport.set_draft(&quot;incoming.named&quot;, inc_draft, function () {
-                    mods_done++;
-                    if (mods_done == wait_for_n_mods)
-                        cb(draft);
-                });
-                if (out_draft_delete_indexes.length &gt; 0)
-                    out_draft_delete_indexes.sort();
-                while (out_draft_delete_indexes.length &gt; 0) {
-                    var index = out_draft_delete_indexes.pop();
-                    out_draft.splice(index, 1);
-                }
-                transport.set_draft(&quot;outgoing.named&quot;, out_draft, function () {
-                    mods_done++;
-                    if (mods_done == wait_for_n_mods)
-                        cb(draft);
-                });
-            } else {
-                cb([]);
-            }
-        };
-
-    }
-    ;
-
-Detripler.prototype = Object.create(Base_detripler.prototype);
-Detripler.prototype.constructor = Detripler;
-
-module.exports = Detripler;
-},{&quot;../../const/css&quot;:2,&quot;../../templating&quot;:52,&quot;../scheme&quot;:24}],15:[function(require,module,exports){
+},{&quot;./../logger&quot;:37,&quot;./decorators.js&quot;:4}],13:[function(require,module,exports){
 var templating = require(&quot;../../templating&quot;), Base_detripler = require(&quot;../scheme&quot;), CSS = require(&quot;../../const/css&quot;);
 
 var ID = &quot;outgoing.blank&quot;;
@@ -919,7 +778,7 @@ Detripler.prototype = Object.create(Base_detripler.prototype);
 Detripler.prototype.constructor = Detripler;
 
 module.exports = Detripler;
-},{&quot;../../const/css&quot;:2,&quot;../../templating&quot;:52,&quot;../scheme&quot;:24}],16:[function(require,module,exports){
+},{&quot;../../const/css&quot;:2,&quot;../../templating&quot;:47,&quot;../scheme&quot;:22}],14:[function(require,module,exports){
 var templating = require(&quot;../../templating&quot;), Base_detripler = require(&quot;../scheme&quot;), CSS = require(&quot;../../const/css&quot;);
 
 var ID = &quot;outgoing.literal&quot;;
@@ -948,7 +807,7 @@ Detripler.prototype = Object.create(Base_detripler.prototype);
 Detripler.prototype.constructor = Detripler;
 
 module.exports = Detripler;
-},{&quot;../../const/css&quot;:2,&quot;../../templating&quot;:52,&quot;../scheme&quot;:24}],17:[function(require,module,exports){
+},{&quot;../../const/css&quot;:2,&quot;../../templating&quot;:47,&quot;../scheme&quot;:22}],15:[function(require,module,exports){
 var templating = require(&quot;../../templating&quot;), Base_detripler = require(&quot;../scheme&quot;), CSS = require(&quot;../../const/css&quot;);
 
 var ID = &quot;outgoing.named&quot;;
@@ -976,7 +835,7 @@ Detripler.prototype = Object.create(Base_detripler.prototype);
 Detripler.prototype.constructor = Detripler;
 
 module.exports = Detripler;
-},{&quot;../../const/css&quot;:2,&quot;../../templating&quot;:52,&quot;../scheme&quot;:24}],18:[function(require,module,exports){
+},{&quot;../../const/css&quot;:2,&quot;../../templating&quot;:47,&quot;../scheme&quot;:22}],16:[function(require,module,exports){
 var detriplers = {};
 
 var add = function (c) {
@@ -988,19 +847,15 @@ var add = function (c) {
 };
 
 var constructors = [
-    require(&quot;./detripler/incoming.blank&quot;),
-    require(&quot;./detripler/incoming.named&quot;),
     require(&quot;./detripler/outgoing.blank&quot;),
     require(&quot;./detripler/outgoing.named&quot;),
-    require(&quot;./detripler/outgoing.literal&quot;),
-    require(&quot;./detripler/map&quot;),
-    require(&quot;./detripler/multi.named&quot;)
+    require(&quot;./detripler/outgoing.literal&quot;)
 ];
 
 add(constructors);
 
 module.exports = detriplers;
-},{&quot;./detripler/incoming.blank&quot;:11,&quot;./detripler/incoming.named&quot;:12,&quot;./detripler/map&quot;:13,&quot;./detripler/multi.named&quot;:14,&quot;./detripler/outgoing.blank&quot;:15,&quot;./detripler/outgoing.literal&quot;:16,&quot;./detripler/outgoing.named&quot;:17}],19:[function(require,module,exports){
+},{&quot;./detripler/outgoing.blank&quot;:13,&quot;./detripler/outgoing.literal&quot;:14,&quot;./detripler/outgoing.named&quot;:15}],17:[function(require,module,exports){
 /**
  * Worker
  **/
@@ -1060,7 +915,7 @@ Internal.prototype.get_state = function () {
 };
 
 module.exports = Internal;
-},{}],20:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 (function (global){
 /**
  * Singleton worker group creation. Needs to be set once.
@@ -1190,7 +1045,7 @@ module.exports = {
     }
 };
 }).call(this,typeof global !== &quot;undefined&quot; ? global : typeof self !== &quot;undefined&quot; ? self : typeof window !== &quot;undefined&quot; ? window : {})
-},{&quot;../../const/general_plugin.js&quot;:3,&quot;../../logger&quot;:42,&quot;./internal&quot;:19,&quot;./worker&quot;:21}],21:[function(require,module,exports){
+},{&quot;../../const/general_plugin.js&quot;:3,&quot;../../logger&quot;:37,&quot;./internal&quot;:17,&quot;./worker&quot;:19}],19:[function(require,module,exports){
 /**
  * Worker
  **/
@@ -1273,7 +1128,7 @@ Worker_wrap.prototype.clear_data_of = function (run) {
 };
 
 module.exports = Worker_wrap;
-},{&quot;../../util/event_obj_extender&quot;:53}],22:[function(require,module,exports){
+},{&quot;../../util/event_obj_extender&quot;:48}],20:[function(require,module,exports){
 var log = require(&quot;./../logger&quot;)(&quot;Detripler_manager&quot;), Structure = require(&quot;./structure&quot;), Jobs = require(&quot;./jobs/jobs&quot;), Run = require(&quot;./run&quot;);
 var detriplers = require(&quot;./detriplers.js&quot;), Base_detripler = require(&quot;./scheme&quot;);
 
@@ -1311,7 +1166,7 @@ Manager.prototype.get_detriplers = function () {
 };
 
 module.exports = Manager;
-},{&quot;./../logger&quot;:42,&quot;./detriplers.js&quot;:18,&quot;./jobs/jobs&quot;:20,&quot;./run&quot;:23,&quot;./scheme&quot;:24,&quot;./structure&quot;:25}],23:[function(require,module,exports){
+},{&quot;./../logger&quot;:37,&quot;./detriplers.js&quot;:16,&quot;./jobs/jobs&quot;:18,&quot;./run&quot;:21,&quot;./scheme&quot;:22,&quot;./structure&quot;:23}],21:[function(require,module,exports){
 var log = require(&quot;./../logger&quot;)(&quot;Detripler_run&quot;), e_ext = require(&quot;../util/event_obj_extender&quot;);
 
 var run_id_counter = 0;
@@ -1386,7 +1241,7 @@ Detripling_run.prototype.is_done = function () {
 };
 
 module.exports = Detripling_run;
-},{&quot;../util/event_obj_extender&quot;:53,&quot;./../logger&quot;:42}],24:[function(require,module,exports){
+},{&quot;../util/event_obj_extender&quot;:48,&quot;./../logger&quot;:37}],22:[function(require,module,exports){
 (function (global){
 var templating = require(&quot;../templating&quot;), CSS = require(&quot;../const/css&quot;), Handlebars = (typeof window !== &quot;undefined&quot; ? window[&#x27;Handlebars&#x27;] : typeof global !== &quot;undefined&quot; ? global[&#x27;Handlebars&#x27;] : null);
 
@@ -1434,7 +1289,7 @@ var Detripler = function (id) {
 
 module.exports = Detripler;
 }).call(this,typeof global !== &quot;undefined&quot; ? global : typeof self !== &quot;undefined&quot; ? self : typeof window !== &quot;undefined&quot; ? window : {})
-},{&quot;../const/css&quot;:2,&quot;../templating&quot;:52}],25:[function(require,module,exports){
+},{&quot;../const/css&quot;:2,&quot;../templating&quot;:47}],23:[function(require,module,exports){
 (function (global){
 var log = require(&quot;./../logger&quot;)(&quot;Detripler_structure&quot;), cytoscape = (typeof window !== &quot;undefined&quot; ? window[&#x27;cytoscape&#x27;] : typeof global !== &quot;undefined&quot; ? global[&#x27;cytoscape&#x27;] : null);
 
@@ -1545,7 +1400,7 @@ Structure.prototype.paint_dependencies_on = function (ele) {
 
 module.exports = Structure;
 }).call(this,typeof global !== &quot;undefined&quot; ? global : typeof self !== &quot;undefined&quot; ? self : typeof window !== &quot;undefined&quot; ? window : {})
-},{&quot;./../logger&quot;:42}],26:[function(require,module,exports){
+},{&quot;./../logger&quot;:37}],24:[function(require,module,exports){
 (function (global){
 var cytoscape = (typeof window !== &quot;undefined&quot; ? window[&#x27;cytoscape&#x27;] : typeof global !== &quot;undefined&quot; ? global[&#x27;cytoscape&#x27;] : null), CSS = require(&quot;./const/css&quot;), templating = require(&quot;./templating&quot;), log = require(&quot;./logger.js&quot;)(&quot;History&quot;);
 var Layer_factory = require(&quot;./layers/factory&quot;);
@@ -1598,7 +1453,7 @@ History.prototype.show = function () {
 
 module.exports = History;
 }).call(this,typeof global !== &quot;undefined&quot; ? global : typeof self !== &quot;undefined&quot; ? self : typeof window !== &quot;undefined&quot; ? window : {})
-},{&quot;./const/css&quot;:2,&quot;./layers/factory&quot;:32,&quot;./logger.js&quot;:42,&quot;./templating&quot;:52}],27:[function(require,module,exports){
+},{&quot;./const/css&quot;:2,&quot;./layers/factory&quot;:30,&quot;./logger.js&quot;:37,&quot;./templating&quot;:47}],25:[function(require,module,exports){
 var CSS = require(&quot;./../const/css.js&quot;), templating = require(&#x27;./../templating.js&#x27;);
 
 var Nav = function (fn, l, ele, c) {
@@ -1619,7 +1474,7 @@ Nav.prototype.toggle_disable = function () {
 };
 
 module.exports = Nav;
-},{&quot;./../const/css.js&quot;:2,&quot;./../templating.js&quot;:52}],28:[function(require,module,exports){
+},{&quot;./../const/css.js&quot;:2,&quot;./../templating.js&quot;:47}],26:[function(require,module,exports){
 var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 var CSS = require(&quot;./../const/css.js&quot;), templating = require(&#x27;./../templating.js&#x27;), e_ext = require(&quot;../util/event_obj_extender&quot;);
 
@@ -1704,7 +1559,7 @@ Scroll.prototype.disable_observer = function () {
 };
 
 module.exports = Scroll;
-},{&quot;../util/event_obj_extender&quot;:53,&quot;./../const/css.js&quot;:2,&quot;./../templating.js&quot;:52}],29:[function(require,module,exports){
+},{&quot;../util/event_obj_extender&quot;:48,&quot;./../const/css.js&quot;:2,&quot;./../templating.js&quot;:47}],27:[function(require,module,exports){
 (function (global){
 /**
  * Singleton info box creation.
@@ -1804,12 +1659,12 @@ var instance = new Info();
 
 module.exports = instance;
 }).call(this,typeof global !== &quot;undefined&quot; ? global : typeof self !== &quot;undefined&quot; ? self : typeof window !== &quot;undefined&quot; ? window : {})
-},{&quot;./const/css.js&quot;:2,&quot;./util/layout.js&quot;:54}],30:[function(require,module,exports){
+},{&quot;./const/css.js&quot;:2,&quot;./util/layout.js&quot;:49}],28:[function(require,module,exports){
 module.exports={
   &quot;filter&quot; : &quot;Filtern: &quot;,
   &quot;sorter&quot; : &quot;Sortieren: &quot;
 }
-},{}],31:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 module.exports={
   &quot;filter&quot; : &quot;Filter&quot;,
   &quot;sorter&quot; : &quot;Sort: &quot;,
@@ -1830,7 +1685,7 @@ module.exports={
   &quot;empty&quot;: &quot;No data&quot;,
   &quot;no_browse&quot;: &quot;Browsing for this tile type disabled. Type: &quot;
 }
-},{}],32:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 /**
  * Layer factory
  **/
@@ -1855,11 +1710,10 @@ Factory.addLayerTypes = function (constructors) {
 
 var constructors = {
     Query: require(&#x27;./types/query_layer&#x27;),
-    Literal: require(&#x27;./types/literal_node_layer&#x27;),
-    Blank: require(&#x27;./types/blank_node_layer&#x27;),
     Pattern: require(&#x27;./types/pattern_layer&#x27;),
-    NamedNode: require(&#x27;./types/named_node_layer&#x27;),
-    Item: require(&#x27;./types/item_layer&#x27;)
+    Out: require(&#x27;./types/out_layer&#x27;),
+    Item: require(&#x27;./types/out_layer&#x27;),
+    NamedNode: require(&#x27;./types/out_layer&#x27;)
 };
 
 Factory.addLayerTypes(constructors);
@@ -1951,7 +1805,7 @@ Factory.make = function (synopsis, input, type) {
 module.exports = Factory;
 
 require(&quot;./layer&quot;);
-},{&quot;../store&quot;:49,&quot;../util/event_obj_extender&quot;:53,&quot;./../logger.js&quot;:42,&quot;./../util/misc&quot;:55,&quot;./layer&quot;:33,&quot;./types/blank_node_layer&quot;:35,&quot;./types/item_layer&quot;:36,&quot;./types/literal_node_layer&quot;:37,&quot;./types/named_node_layer&quot;:38,&quot;./types/pattern_layer&quot;:39,&quot;./types/query_layer&quot;:40}],33:[function(require,module,exports){
+},{&quot;../store&quot;:44,&quot;../util/event_obj_extender&quot;:48,&quot;./../logger.js&quot;:37,&quot;./../util/misc&quot;:50,&quot;./layer&quot;:31,&quot;./types/out_layer&quot;:33,&quot;./types/pattern_layer&quot;:34,&quot;./types/query_layer&quot;:35}],31:[function(require,module,exports){
 /**
  * Layer
  **/
@@ -2194,7 +2048,7 @@ Layer.prototype.reload = function () {
 };
 
 module.exports = Layer;
-},{&quot;../const/css&quot;:2,&quot;../const/general_plugin&quot;:3,&quot;../html_obj/nav&quot;:27,&quot;../html_obj/scroll&quot;:28,&quot;../info&quot;:29,&quot;../layout_engines/flexbox&quot;:41,&quot;../logger.js&quot;:42,&quot;../templating&quot;:52,&quot;../util/event_obj_extender&quot;:53,&quot;../util/misc&quot;:55,&quot;./factory&quot;:32,&quot;./triple_set&quot;:34}],34:[function(require,module,exports){
+},{&quot;../const/css&quot;:2,&quot;../const/general_plugin&quot;:3,&quot;../html_obj/nav&quot;:25,&quot;../html_obj/scroll&quot;:26,&quot;../info&quot;:27,&quot;../layout_engines/flexbox&quot;:36,&quot;../logger.js&quot;:37,&quot;../templating&quot;:47,&quot;../util/event_obj_extender&quot;:48,&quot;../util/misc&quot;:50,&quot;./factory&quot;:30,&quot;./triple_set&quot;:32}],32:[function(require,module,exports){
 var e_ext = require(&quot;../util/event_obj_extender&quot;);
 
 var Triple_set = function () {
@@ -2225,17 +2079,7 @@ Triple_set.prototype.clear = function (index) {
 };
 
 module.exports = Triple_set;
-},{&quot;../util/event_obj_extender&quot;:53}],35:[function(require,module,exports){
-/**
- * Layer
- **/
-
-var Blank_node_layer = function () {
-
-};
-
-module.exports = Blank_node_layer;
-},{}],36:[function(require,module,exports){
+},{&quot;../util/event_obj_extender&quot;:48}],33:[function(require,module,exports){
 /**
  * Layer used to show the contents of an MICO item.
  **/
@@ -2245,126 +2089,32 @@ var info = require(&#x27;../../info&#x27;);
 var Layer = require(&#x27;../layer&#x27;);
 var Query_layer = require(&#x27;../types/query_layer&#x27;);
 
-var Item_layer = function (detripling, decorating, msg, item, opt) {
+var Out_layer = function (detripling, decorating, msg, item, opt) {
     this.item = item;
-    this._query = &quot;CONSTRUCT { &lt;&quot;+item.nominalValue+&quot;&gt; &lt;http://www.mico-project.eu/ns/mmm/2.0/schema#hasPart&gt; ?o } WHERE { &lt;&quot;+item.nominalValue+&quot;&gt; &lt;http://www.mico-project.eu/ns/mmm/2.0/schema#hasPart&gt; ?o}&quot;;
+    this._query = &quot;CONSTRUCT { &lt;&quot;+item.nominalValue+&quot;&gt; ?p ?o } WHERE { &lt;&quot;+item.nominalValue+&quot;&gt; ?p ?o}&quot;;
     Query_layer.call(this, detripling, decorating, msg, this._query, opt);
     this.id = item.nominalValue;
     this.label = item.nominalValue;
     this.label_small = &quot;&quot;;
-    var that = this;
 
     this.get_concepts = function (triples) {
-        var concepts = {part: []};
+        var concepts = {};
         for (var i = 0; i &lt; triples.length; i++) {
-            concepts[&quot;part&quot;].push(triples[i].object.nominalValue);
-        }
-        return concepts;
-    };
-};
-
-Item_layer.prototype = Object.create(Layer.prototype);
-Item_layer.prototype.constructor = Item_layer;
-
-Item_layer.prototype.load_remote = function () {
-    var that = this;
-    this.trigger(&quot;request_remote&quot;, [&#x27;SELECT DISTINCT ?s ?p ?o where {?s ?p ?o. VALUES ?s {&lt;&#x27; + this.item.nominalValue + &#x27;&gt;} VALUES ?p {&lt;http://www.mico-project.eu/ns/mmm/2.0/schema#hasPart&gt;}}&#x27;], function (resp, b, remote_num, partial) {
-        var graph = store_wrap.store.parser.parse_to_graph(resp.results.bindings, [&quot;s&quot;, &quot;p&quot;, &quot;o&quot;]);
-        that.triples.add(graph.triples);
-        if (partial) {
-            b.do_partial_progress(remote_num);
-        } else {
-            b.do_progress(remote_num);
-        }
-        //store_wrap.store.insert_triples(resp.results.bindings, null, function () {
-        //    if (partial) {
-        //        b.do_partial_progress(remote_num);
-        //        that.log(&quot;insert done&quot;);
-        //    } else {
-        //        b.do_progress(remote_num);
-        //    }
-        //});
-    });
-};
-
-module.exports = Item_layer;
-},{&quot;../../const/css&quot;:2,&quot;../../info&quot;:29,&quot;../../logger.js&quot;:42,&quot;../../store&quot;:49,&quot;../../templating&quot;:52,&quot;../layer&quot;:33,&quot;../types/query_layer&quot;:40}],37:[function(require,module,exports){
-/**
- * Layer
- **/
-
-var Literal_node_layer = function () {
-
-};
-
-module.exports = Literal_node_layer;
-},{}],38:[function(require,module,exports){
-/**
- * Layer
- **/
-
-var CSS = require(&quot;../../const/css&quot;), store_wrap = require(&quot;../../store&quot;).get(), templating = require(&quot;../../templating&quot;), log = require(&quot;../../logger.js&quot;)(&quot;Layer_Named&quot;);
-var info = require(&#x27;../../info&#x27;);
-var Layer = require(&#x27;../layer&#x27;);
-
-var Named_node_layer = function (detripling, decorating, msg, node, opt) {
-    Layer.call(this, detripling, decorating, msg, opt);
-    this.id = node.nominalValue;
-    this.node = node;
-    var that = this;
-
-    this.get_concepts = function (triples) {
-        var concepts = {incoming: [], outgoing: []};
-        for (var i = 0; i &lt; triples.length; i++) {
-            if (triples[i].subject == that.node.nominalValue) {
-                if (!concepts[triples[i].object.interfaceName]) {
-                    concepts[triples[i].object.interfaceName] = [];
-                    concepts[&quot;outgoing.&quot; + triples[i].object.interfaceName] = [];
-                    concepts[&quot;incoming.&quot; + triples[i].object.interfaceName] = [];
-                }
-                concepts[triples[i].object.interfaceName].push(i);
-                concepts[&quot;outgoing.&quot; + triples[i].object.interfaceName].push(i);
-                concepts[&quot;outgoing&quot;].push(i);
-            } else {
-                if (!concepts[triples[i].subject.interfaceName]) {
-                    concepts[triples[i].subject.interfaceName] = [];
-                    concepts[&quot;outgoing.&quot; + triples[i].subject.interfaceName] = [];
-                    concepts[&quot;incoming.&quot; + triples[i].subject.interfaceName] = [];
-                }
-                concepts[triples[i].subject.interfaceName].push(i);
-                concepts[&quot;incoming.&quot; + triples[i].subject.interfaceName].push(i);
-                concepts[&quot;incoming&quot;].push(i);
+            if (!concepts[&quot;outgoing.&quot;+triples[i].object.interfaceName]) {
+                concepts[&quot;outgoing.&quot;+triples[i].object.interfaceName] = [];
             }
+            concepts[&quot;outgoing.&quot;+triples[i].object.interfaceName].push(i);
         }
         return concepts;
     };
-
-    // Store observing
-    //store.startObservingNode.call(store_wrap.store, node.nominalValue, function (node_env) {
-    //    log(node_env);
-    //});
-    store_wrap.store.subscribe.call(store_wrap.store, node.nominalValue, null, null, null, function (event, triples) {
-        that.triples.add(triples);
-    });
-    store_wrap.store.subscribe.call(store_wrap.store, null, null, node.nominalValue, null, function (event, triples) {
-        that.triples.add(triples);
-    });
-
-    // On new triples
-    that.triples.on(&quot;updated&quot;, function (triples, new_triples) {
-        log(&quot;Got new triples&quot;, [triples]);
-        that.tileify(triples);
-    });
-    this.label = node.nominalValue; // TODO get label
-    this.label_small = node.nominalValue;
 };
 
-Named_node_layer.prototype = Object.create(Layer.prototype);
-Named_node_layer.prototype.constructor = Named_node_layer;
+Out_layer.prototype = Object.create(Layer.prototype);
+Out_layer.prototype.constructor = Out_layer;
 
-Named_node_layer.prototype.load_remote = function () {
+Out_layer.prototype.load_remote = function () {
     var that = this;
-    this.trigger(&quot;request_remote&quot;, [&#x27;SELECT DISTINCT ?s ?p ?o where {{?s ?p ?o. VALUES ?s {&lt;&#x27; + this.node.nominalValue + &#x27;&gt;}} UNION {?s ?p ?o. VALUES ?o {&lt;&#x27; + this.node.nominalValue + &#x27;&gt;}}} ORDER BY ?s&#x27;], function (resp, b, remote_num, partial) {
+    this.trigger(&quot;request_remote&quot;, [&#x27;SELECT DISTINCT ?s ?p ?o where {?s ?p ?o. VALUES ?s {&lt;&#x27; + this.item.nominalValue + &#x27;&gt;}}&#x27;], function (resp, b, remote_num, partial) {
         var graph = store_wrap.store.parser.parse_to_graph(resp.results.bindings, [&quot;s&quot;, &quot;p&quot;, &quot;o&quot;]);
         that.triples.add(graph.triples);
         if (partial) {
@@ -2372,50 +2122,11 @@ Named_node_layer.prototype.load_remote = function () {
         } else {
             b.do_progress(remote_num);
         }
-        //store_wrap.store.insert_triples(resp.results.bindings, null, function () {
-        //    if (partial) {
-        //        b.do_partial_progress(remote_num);
-        //        that.log(&quot;insert done&quot;);
-        //    } else {
-        //        b.do_progress(remote_num);
-        //    }
-        //});
     });
 };
 
-Named_node_layer.prototype.load_local = function () {
-    var that = this, triples = [], cnt = 0;
-
-    var prepare_triples = function (results) {
-        cnt++;
-        if (triples) {
-            triples = triples.concat(results.triples);
-        }
-        if (cnt == 2) {
-            that.triples.add(triples);
-        }
-    };
-
-    store_wrap.store.execute(&#x27;CONSTRUCT {?s ?p &lt;&#x27; + that.node.nominalValue + &#x27;&gt;} WHERE {?s ?p &lt;&#x27; + that.node.nominalValue + &#x27;&gt;}&#x27;,
-        function (err, result) {
-            prepare_triples(result);
-        },
-        function () {
-            prepare_triples();
-            info.show(&quot;Error on local incoming triple loading.&quot;);
-        });
-    store_wrap.store.execute(&#x27;CONSTRUCT {&lt;&#x27; + this.node.nominalValue + &#x27;&gt; ?p ?o} WHERE {&lt;&#x27; + this.node.nominalValue + &#x27;&gt; ?p ?o}&#x27;,
-        function (err, result) {
-            prepare_triples(result);
-        },
-        function () {
-            prepare_triples();
-            info.show(&quot;Error on local outgoing triple loading.&quot;);
-        });
-};
-
-module.exports = Named_node_layer;
-},{&quot;../../const/css&quot;:2,&quot;../../info&quot;:29,&quot;../../logger.js&quot;:42,&quot;../../store&quot;:49,&quot;../../templating&quot;:52,&quot;../layer&quot;:33}],39:[function(require,module,exports){
+module.exports = Out_layer;
+},{&quot;../../const/css&quot;:2,&quot;../../info&quot;:27,&quot;../../logger.js&quot;:37,&quot;../../store&quot;:44,&quot;../../templating&quot;:47,&quot;../layer&quot;:31,&quot;../types/query_layer&quot;:35}],34:[function(require,module,exports){
 /**
  * Layer
  **/
@@ -2443,7 +2154,7 @@ Pattern_layer.prototype = Object.create(Layer.prototype);
 Pattern_layer.prototype.constructor = Pattern_layer;
 
 module.exports = Pattern_layer;
-},{&quot;../../const/css&quot;:2,&quot;../../info&quot;:29,&quot;../../logger.js&quot;:42,&quot;../../store&quot;:49,&quot;../../templating&quot;:52,&quot;../layer&quot;:33}],40:[function(require,module,exports){
+},{&quot;../../const/css&quot;:2,&quot;../../info&quot;:27,&quot;../../logger.js&quot;:37,&quot;../../store&quot;:44,&quot;../../templating&quot;:47,&quot;../layer&quot;:31}],35:[function(require,module,exports){
 /**
  * Layer
  **/
@@ -2485,7 +2196,7 @@ Query_layer.prototype.load_local = function () {
 };
 
 module.exports = Query_layer;
-},{&quot;../../const/css&quot;:2,&quot;../../info&quot;:29,&quot;../../logger.js&quot;:42,&quot;../../store&quot;:49,&quot;../../templating&quot;:52,&quot;../layer&quot;:33}],41:[function(require,module,exports){
+},{&quot;../../const/css&quot;:2,&quot;../../info&quot;:27,&quot;../../logger.js&quot;:37,&quot;../../store&quot;:44,&quot;../../templating&quot;:47,&quot;../layer&quot;:31}],36:[function(require,module,exports){
 var CSS = require(&quot;../const/css&quot;);
 
 var defaults = {
@@ -2588,7 +2299,7 @@ Flex_layout.prototype.filter = function (filter_functions) {
 };
 
 module.exports = Flex_layout;
-},{&quot;../const/css&quot;:2}],42:[function(require,module,exports){
+},{&quot;../const/css&quot;:2}],37:[function(require,module,exports){
 (function (global){
 /**
  * Wrapper for logger creation
@@ -2612,7 +2323,7 @@ module.exports = function (str) {
     return loggers[id];
 };
 }).call(this,typeof global !== &quot;undefined&quot; ? global : typeof self !== &quot;undefined&quot; ? self : typeof window !== &quot;undefined&quot; ? window : {})
-},{&quot;./const/general_plugin.js&quot;:3}],43:[function(require,module,exports){
+},{&quot;./const/general_plugin.js&quot;:3}],38:[function(require,module,exports){
 var log = require(&quot;./logger&quot;)(&quot;Language&quot;);
 
 var Languages = function (language) {
@@ -2645,7 +2356,7 @@ Languages.prototype.get_language = function () {
 };
 
 module.exports = Languages;
-},{&quot;./languages/de.json&quot;:30,&quot;./languages/en.json&quot;:31,&quot;./logger&quot;:42}],44:[function(require,module,exports){
+},{&quot;./languages/de.json&quot;:28,&quot;./languages/en.json&quot;:29,&quot;./logger&quot;:37}],39:[function(require,module,exports){
 var CSS = require(&quot;./const/css&quot;), templating = require(&quot;./templating&quot;), e_ext = require(&quot;./util/event_obj_extender&quot;), log = require(&quot;./logger.js&quot;)(&quot;Overlay&quot;), History = require(&quot;./history&quot;), Nav = require(&quot;./html_obj/nav&quot;);
 var pN = require(&quot;./const/general_plugin&quot;).name;
 var defaults = {};
@@ -2731,7 +2442,7 @@ Overlay.prototype.destroy = function () {
 };
 
 module.exports = Overlay;
-},{&quot;./const/css&quot;:2,&quot;./const/general_plugin&quot;:3,&quot;./history&quot;:26,&quot;./html_obj/nav&quot;:27,&quot;./logger.js&quot;:42,&quot;./templating&quot;:52,&quot;./util/event_obj_extender&quot;:53}],45:[function(require,module,exports){
+},{&quot;./const/css&quot;:2,&quot;./const/general_plugin&quot;:3,&quot;./history&quot;:24,&quot;./html_obj/nav&quot;:25,&quot;./logger.js&quot;:37,&quot;./templating&quot;:47,&quot;./util/event_obj_extender&quot;:48}],40:[function(require,module,exports){
 /**
  * Overlay management for synopsis
  **/
@@ -2792,7 +2503,7 @@ Overlay_manager.prototype.destroy_all = function () {
 };
 
 module.exports = Overlay_manager;
-},{&quot;./const/css&quot;:2,&quot;./history&quot;:26,&quot;./logger.js&quot;:42,&quot;./overlay&quot;:44,&quot;./store&quot;:49,&quot;./templating&quot;:52}],46:[function(require,module,exports){
+},{&quot;./const/css&quot;:2,&quot;./history&quot;:24,&quot;./logger.js&quot;:37,&quot;./overlay&quot;:39,&quot;./store&quot;:44,&quot;./templating&quot;:47}],41:[function(require,module,exports){
 (function (global){
 /**
  * Singleton Progress box creation.
@@ -2908,7 +2619,7 @@ var instance = new Progress();
 
 module.exports = instance;
 }).call(this,typeof global !== &quot;undefined&quot; ? global : typeof self !== &quot;undefined&quot; ? self : typeof window !== &quot;undefined&quot; ? window : {})
-},{&quot;./const/css.js&quot;:2,&quot;./templating&quot;:52,&quot;./util/event_obj_extender&quot;:53}],47:[function(require,module,exports){
+},{&quot;./const/css.js&quot;:2,&quot;./templating&quot;:47,&quot;./util/event_obj_extender&quot;:48}],42:[function(require,module,exports){
 var e_ext = require(&quot;../util/event_obj_extender&quot;);
 
 var max_url_length = 2000;
@@ -2997,7 +2708,7 @@ Debounced_remote_loader.prototype.pop_query = function () {
 };
 
 module.exports = Debounced_remote_loader;
-},{&quot;../util/event_obj_extender&quot;:53}],48:[function(require,module,exports){
+},{&quot;../util/event_obj_extender&quot;:48}],43:[function(require,module,exports){
 (function (global){
 /**
  * Singleton store local
@@ -3140,7 +2851,7 @@ var counter = 0;
 
 module.exports = Remote;
 }).call(this,typeof global !== &quot;undefined&quot; ? global : typeof self !== &quot;undefined&quot; ? self : typeof window !== &quot;undefined&quot; ? window : {})
-},{&quot;./../logger.js&quot;:42}],49:[function(require,module,exports){
+},{&quot;./../logger.js&quot;:37}],44:[function(require,module,exports){
 (function (global){
 /**
  * Singleton local rdf store. Needs to be set once.
@@ -3430,7 +3141,7 @@ module.exports = {
     }
 };
 }).call(this,typeof global !== &quot;undefined&quot; ? global : typeof self !== &quot;undefined&quot; ? self : typeof window !== &quot;undefined&quot; ? window : {})
-},{&quot;./logger.js&quot;:42,&quot;./util/event_obj_extender.js&quot;:53,&quot;./util/misc.js&quot;:55}],50:[function(require,module,exports){
+},{&quot;./logger.js&quot;:37,&quot;./util/event_obj_extender.js&quot;:48,&quot;./util/misc.js&quot;:50}],45:[function(require,module,exports){
 (function (global){
 var $ = (typeof window !== &quot;undefined&quot; ? window[&#x27;$&#x27;] : typeof global !== &quot;undefined&quot; ? global[&#x27;$&#x27;] : null);
 (typeof window !== &quot;undefined&quot; ? window[&#x27;rdfstore&#x27;] : typeof global !== &quot;undefined&quot; ? global[&#x27;rdfstore&#x27;] : null);
@@ -3733,7 +3444,7 @@ module.exports = Synopsis;
 //See the License for the specific language governing permissions and
 //limitations under the License.
 }).call(this,typeof global !== &quot;undefined&quot; ? global : typeof self !== &quot;undefined&quot; ? self : typeof window !== &quot;undefined&quot; ? window : {})
-},{&quot;./const/css&quot;:2,&quot;./const/general_plugin&quot;:3,&quot;./decorating/manager&quot;:10,&quot;./detripling/manager&quot;:22,&quot;./history&quot;:26,&quot;./info&quot;:29,&quot;./layers/factory&quot;:32,&quot;./logger&quot;:42,&quot;./msg&quot;:43,&quot;./overlay_manager&quot;:45,&quot;./progress&quot;:46,&quot;./remote/remote&quot;:48,&quot;./store&quot;:49,&quot;./util/misc&quot;:55}],51:[function(require,module,exports){
+},{&quot;./const/css&quot;:2,&quot;./const/general_plugin&quot;:3,&quot;./decorating/manager&quot;:12,&quot;./detripling/manager&quot;:20,&quot;./history&quot;:24,&quot;./info&quot;:27,&quot;./layers/factory&quot;:30,&quot;./logger&quot;:37,&quot;./msg&quot;:38,&quot;./overlay_manager&quot;:40,&quot;./progress&quot;:41,&quot;./remote/remote&quot;:43,&quot;./store&quot;:44,&quot;./util/misc&quot;:50}],46:[function(require,module,exports){
 module.exports = function(Handlebars) {
 
 var templates = {};
@@ -3969,139 +3680,6 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-templates[&quot;tiles.incoming.blank&quot;] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,&#x27;&gt;= 1.0.0&#x27;];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = &quot;&quot;, stack1, functionType=&quot;function&quot;, escapeExpression=this.escapeExpression;
-
-
-  buffer += &quot;&lt;div class=\&quot;&quot;
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.tile)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;  &quot;
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.detripler)),stack1 == null || stack1 === false ? stack1 : stack1.id)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot; &quot;
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.semantic_color)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\n    &lt;b&gt;Subgraph:&lt;/b&gt;\n    &lt;div class=\&quot;&quot;
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.uri)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot; &quot;
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.dynamic_text_size)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\n        &quot;
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.triple)),stack1 == null || stack1 === false ? stack1 : stack1.subject)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\n    &lt;/div&gt;\n    &lt;b&gt;is subject of:&lt;/b&gt;\n    &lt;div class=\&quot;&quot;
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.uri)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot; &quot;
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.dynamic_text_size)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\n        &quot;
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.triple)),stack1 == null || stack1 === false ? stack1 : stack1.predicate)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\n    &lt;/div&gt;\n&lt;/div&gt;&quot;;
-  return buffer;
-  });
-
-templates[&quot;tiles.incoming.named&quot;] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,&#x27;&gt;= 1.0.0&#x27;];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = &quot;&quot;, stack1, functionType=&quot;function&quot;, escapeExpression=this.escapeExpression;
-
-
-  buffer += &quot;&lt;div class=\&quot;&quot;
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.tile)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;  &quot;
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.detripler)),stack1 == null || stack1 === false ? stack1 : stack1.id)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot; &quot;
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.semantic_color)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\n    &lt;b&gt;Resource:&lt;/b&gt;\n    &lt;div class=\&quot;&quot;
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.uri)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot; &quot;
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.dynamic_text_size)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\n        &quot;
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.triple)),stack1 == null || stack1 === false ? stack1 : stack1.subject)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\n    &lt;/div&gt;\n    &lt;b&gt;is subject of:&lt;/b&gt;\n    &lt;div class=\&quot;&quot;
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.uri)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot; &quot;
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.dynamic_text_size)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\n        &quot;
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.triple)),stack1 == null || stack1 === false ? stack1 : stack1.predicate)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\n    &lt;/div&gt;\n&lt;/div&gt;&quot;;
-  return buffer;
-  });
-
-templates[&quot;tiles.map&quot;] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,&#x27;&gt;= 1.0.0&#x27;];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = &quot;&quot;, stack1, functionType=&quot;function&quot;, escapeExpression=this.escapeExpression;
-
-
-  buffer += &quot;&lt;div class=\&quot;&quot;
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.tile)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot; &quot;
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.detripler)),stack1 == null || stack1 === false ? stack1 : stack1.id)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot; style=\&quot;width:404px; height: 200px\&quot;&gt;\n    &lt;iframe width=\&quot;404\&quot; height=\&quot;200\&quot; frameborder=\&quot;0\&quot; scrolling=\&quot;no\&quot; marginheight=\&quot;0\&quot; marginwidth=\&quot;0\&quot; src=\&quot;https://maps.google.com/?ie=UTF8&amp;amp;t=m&amp;amp;ll=&quot;
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.longitude)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;,&quot;
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.latitude)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;&amp;amp;spn=0.079502,0.145912&amp;amp;z=12&amp;amp;output=embed\&quot;&gt;&lt;/iframe&gt;\n&lt;/div&gt;&quot;;
-  return buffer;
-  });
-
-templates[&quot;tiles.multi.named&quot;] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,&#x27;&gt;= 1.0.0&#x27;];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = &quot;&quot;, stack1, stack2, functionType=&quot;function&quot;, escapeExpression=this.escapeExpression, self=this;
-
-function program1(depth0,data) {
-  
-  var buffer = &quot;&quot;, stack1, stack2;
-  buffer += &quot;\n    &lt;b&gt;is object of:&lt;/b&gt;\n    &quot;;
-  stack2 = helpers.each.call(depth0, ((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.triples)),stack1 == null || stack1 === false ? stack1 : stack1.out), {hash:{},inverse:self.noop,fn:self.programWithDepth(2, program2, data, depth0),data:data});
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += &quot;\n    &quot;;
-  return buffer;
-  }
-function program2(depth0,data,depth1) {
-  
-  var buffer = &quot;&quot;, stack1;
-  buffer += &quot;\n        &lt;div class=\&quot;&quot;
-    + escapeExpression(((stack1 = ((stack1 = depth1.CSS),stack1 == null || stack1 === false ? stack1 : stack1.uri)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot; &quot;
-    + escapeExpression(((stack1 = ((stack1 = depth1.CSS),stack1 == null || stack1 === false ? stack1 : stack1.dynamic_text_size)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\n            &quot;
-    + escapeExpression(((stack1 = ((stack1 = depth0.predicate),stack1 == null || stack1 === false ? stack1 : stack1.nominalValue)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\n        &lt;/div&gt;\n    &quot;;
-  return buffer;
-  }
-
-function program4(depth0,data) {
-  
-  var buffer = &quot;&quot;, stack1, stack2;
-  buffer += &quot;\n    &lt;b&gt;is subject of:&lt;/b&gt;\n    &quot;;
-  stack2 = helpers.each.call(depth0, ((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.triples)),stack1 == null || stack1 === false ? stack1 : stack1.inc), {hash:{},inverse:self.noop,fn:self.programWithDepth(2, program2, data, depth0),data:data});
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += &quot;\n    &quot;;
-  return buffer;
-  }
-
-  buffer += &quot;&lt;div class=\&quot;&quot;
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.tile)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;  &quot;
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.detripler)),stack1 == null || stack1 === false ? stack1 : stack1.id)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot; &quot;
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.semantic_color)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\n    &lt;b&gt;Resource:&lt;/b&gt;\n    &lt;div class=\&quot;&quot;
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.uri)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot; &quot;
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.dynamic_text_size)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\&quot;&gt;\n        &quot;
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.resource)),stack1 == null || stack1 === false ? stack1 : stack1.nominalValue)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + &quot;\n    &lt;/div&gt;\n    &quot;;
-  stack2 = helpers[&#x27;if&#x27;].call(depth0, ((stack1 = ((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.triples)),stack1 == null || stack1 === false ? stack1 : stack1.out)),stack1 == null || stack1 === false ? stack1 : stack1.length), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += &quot;\n    &quot;;
-  stack2 = helpers[&#x27;if&#x27;].call(depth0, ((stack1 = ((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.triples)),stack1 == null || stack1 === false ? stack1 : stack1.inc)),stack1 == null || stack1 === false ? stack1 : stack1.length), {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data});
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += &quot;\n&lt;/div&gt;&quot;;
-  return buffer;
-  });
-
 templates[&quot;tiles.outgoing.blank&quot;] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,&#x27;&gt;= 1.0.0&#x27;];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
@@ -4189,7 +3767,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 return templates;
 
 };
-},{}],52:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 (function (global){
 var Handlebars = (typeof window !== &quot;undefined&quot; ? window[&#x27;Handlebars&#x27;] : typeof global !== &quot;undefined&quot; ? global[&#x27;Handlebars&#x27;] : null);
 
@@ -4211,7 +3789,7 @@ Handlebars.registerHelper(&#x27;prefix&#x27;, function (msg, type, str) {
 var templates = require(&quot;./templates.js&quot;)(Handlebars);
 module.exports = templates;
 }).call(this,typeof global !== &quot;undefined&quot; ? global : typeof self !== &quot;undefined&quot; ? self : typeof window !== &quot;undefined&quot; ? window : {})
-},{&quot;./const/general_plugin&quot;:3,&quot;./templates.js&quot;:51}],53:[function(require,module,exports){
+},{&quot;./const/general_plugin&quot;:3,&quot;./templates.js&quot;:46}],48:[function(require,module,exports){
 (function (global){
 /**
 * Extends an object with backbone events and switching. A switch is a event which is triggered once and stays &quot;on&quot;. If a function gets bond to a switch in on state it is invoked instantly.
@@ -4238,7 +3816,7 @@ module.exports = function(obj) {
     return obj;
 };
 }).call(this,typeof global !== &quot;undefined&quot; ? global : typeof self !== &quot;undefined&quot; ? self : typeof window !== &quot;undefined&quot; ? window : {})
-},{}],54:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 (function (global){
 var Modernizr = (typeof window !== &quot;undefined&quot; ? window[&#x27;Modernizr&#x27;] : typeof global !== &quot;undefined&quot; ? global[&#x27;Modernizr&#x27;] : null);
 var transEndEventName = function() {
@@ -4277,7 +3855,7 @@ module.exports = {
     }
 };
 }).call(this,typeof global !== &quot;undefined&quot; ? global : typeof self !== &quot;undefined&quot; ? self : typeof window !== &quot;undefined&quot; ? window : {})
-},{}],55:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 var log = require(&quot;../logger.js&quot;)(&quot;Util&quot;);
 
 module.exports = {
@@ -4325,7 +3903,7 @@ module.exports = {
         };
     })()
 };
-},{&quot;../logger.js&quot;:42}]},{},[50]);
+},{&quot;../logger.js&quot;:37}]},{},[45]);
 
     </pre>
 </div>

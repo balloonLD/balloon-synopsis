@@ -122,6 +122,8 @@ var add = function (Decorator) {
     decorators.keys_for_decorators.push(decorator.id);
 };
 
+add(require("./decorators/animal_detection_part"));
+add(require("./decorators/item_image"));
 add(require("./decorators/browsability"));
 add(require("./decorators/semantic_color"));
 add(require("./decorators/uri_to_label"));
@@ -129,7 +131,43 @@ add(require("./decorators/uri_to_thumbnail"));
 add(require("./decorators/text_size"));
 
 module.exports = decorators;
-},{"./decorators/browsability":5,"./decorators/semantic_color":6,"./decorators/text_size":7,"./decorators/uri_to_label":8,"./decorators/uri_to_thumbnail":9}],5:[function(require,module,exports){
+},{"./decorators/animal_detection_part":5,"./decorators/browsability":6,"./decorators/item_image":7,"./decorators/semantic_color":8,"./decorators/text_size":9,"./decorators/uri_to_label":10,"./decorators/uri_to_thumbnail":11}],5:[function(require,module,exports){
+var log = require("../../logger")("Browsability decorator"), info = require('../../info'), Layer_factory = require("../../layers/factory");
+var Debounced_remote = require("../../remote/debounced_remote");
+RDFModel = window.RDFModel;
+
+var Decorator = function () {
+    this.id = "animal_detection_part";
+    this.config = {
+        "outgoing.named": function (draft) {
+            return draft.triple.object;
+        }
+    };
+    this.decorate = function (divs, synopsis, config, cb) {
+        var debounced_remote_loader = new Debounced_remote(synopsis, "SELECT DISTINCT ?value ?animal ?coord ?lo WHERE { ?value <http://www.w3.org/ns/oa#hasBody> ?body. ?body rdf:type <http://www.mico-project.eu/ns/mmmterms/2.0/schema#AnimalDetectionBody>." +
+            "?body rdf:value ?animal. ?value <http://www.mico-project.eu/ns/mmm/2.0/schema#hasTarget> ?target. ?target <http://www.mico-project.eu/ns/mmm/2.0/schema#hasSelector> ?selector. ?selector rdf:value ?coord. " + Debounced_remote.dummy + " }", null);
+        for (var i = 0; i < divs.length; i++) {
+            var div = $(divs[i]);
+            var type = div.data("type");
+            if (config.hasOwnProperty(type)) {
+                div.on("appended", function (d, part_uri) {
+                    debounced_remote_loader.add_value(part_uri, function (bindings) {
+                        if (bindings.length > 0) {
+                            d.append("<b>Found animal:</b> <div>"+bindings[0].animal.value+"</div>");
+                            d.append("<b>On coordiantes</b> <div>"+bindings[0].coord.value+"</div>");
+                        }
+                    });
+                }(div, config[type](div.data("draft_data"))));
+            }
+        }
+        if (cb)
+            cb(divs);
+        return divs;
+    }
+};
+
+module.exports = Decorator;
+},{"../../info":27,"../../layers/factory":30,"../../logger":37,"../../remote/debounced_remote":42}],6:[function(require,module,exports){
 var log = require("../../logger")("Browsability decorator"), info = require('../../info'), Layer_factory = require("../../layers/factory");
 RDFModel = window.RDFModel;
 
@@ -138,11 +176,8 @@ var Decorator = function () {
     this.config = {
         "outgoing.named": function (draft) {
             return draft.triple.object;
-        }, "incoming.named": function (draft) {
-            return draft.triple.subject;
-        },
-        "multi.named": function (draft) {
-            return draft.resource;
+        }, "item": function (draft) {
+            return draft.leads_to;
         }
     };
     this.decorate = function (divs, synopsis, config, cb) {
@@ -177,7 +212,48 @@ var Decorator = function () {
 };
 
 module.exports = Decorator;
-},{"../../info":29,"../../layers/factory":32,"../../logger":42}],6:[function(require,module,exports){
+},{"../../info":27,"../../layers/factory":30,"../../logger":37}],7:[function(require,module,exports){
+var log = require("../../logger")("Browsability decorator"), info = require('../../info'), Layer_factory = require("../../layers/factory");
+var Debounced_remote = require("../../remote/debounced_remote");
+RDFModel = window.RDFModel;
+
+var Decorator = function () {
+    this.id = "item_image";
+    this.config = {
+        dref : "http://mico-platform:8080/broker/status/download?itemUri=",
+        types : {
+            "item": function (draft) {
+                return draft.leads_to.nominalValue;
+            }
+        }
+    };
+    this.decorate = function (divs, synopsis, config, cb) {
+        var debounced_remote_loader = new Debounced_remote(synopsis, "SELECT DISTINCT ?value ?asset ?type ?format WHERE { ?value <http://www.mico-project.eu/ns/mmm/2.0/schema#hasAsset> ?asset . ?asset <http://purl.org/dc/elements/1.1/format> ?format. ?asset <http://purl.org/dc/elements/1.1/format> ?format. " + Debounced_remote.dummy + " }", null);
+        for (var i = 0; i < divs.length; i++) {
+            var div = $(divs[i]);
+            var type = div.data("type");
+            if (config["types"].hasOwnProperty(type)) {
+                div.on("appended", function (d, part_uri) {
+                    debounced_remote_loader.add_value(part_uri, function (bindings) {
+                        if (bindings.length > 0 && (bindings[0]["format"].value == "image/png" || bindings[0]["format"].value == "image/jpeg" || bindings[0]["format"].value == "image/jpg")) {
+                            if (!d.data("image")) {
+                                d.data("image", bindings[0]["asset"].value);
+                                var width = d.width() - 20;
+                                d.prepend("<div class='" + CSS.shrink + "'><img class="+ CSS.thumbnail +" src='"+config["dref"]+bindings[0]["value"].value+"' width='"+ width +"'></div>");
+                            }
+                        }
+                    });
+                }(div, config["types"][type](div.data("draft_data"))));
+            }
+        }
+        if (cb)
+            cb(divs);
+        return divs;
+    }
+};
+
+module.exports = Decorator;
+},{"../../info":27,"../../layers/factory":30,"../../logger":37,"../../remote/debounced_remote":42}],8:[function(require,module,exports){
 (function (global){
 var log = require("../../logger")("Browsability decorator"), chroma = (typeof window !== "undefined" ? window['chroma'] : typeof global !== "undefined" ? global['chroma'] : null), md5 = (typeof window !== "undefined" ? window['md5'] : typeof global !== "undefined" ? global['md5'] : null), CSS = require("../../const/css");
 var Debounced_remote = require("../../remote/debounced_remote");
@@ -236,11 +312,8 @@ var Decorator = function () {
     this.config = {
         "outgoing.named": function (draft) {
             return draft.triple.object.nominalValue;
-        }, "incoming.named": function (draft) {
-            return draft.triple.subject.nominalValue;
-        },
-        "multi.named": function (draft) {
-            return draft.resource.nominalValue;
+        }, "item": function (draft) {
+            return draft.leads_to.nominalValue;
         }
     };
     this.decorate = function (divs, synopsis, config, cb) {
@@ -286,7 +359,7 @@ var Decorator = function () {
 
 module.exports = Decorator;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../../const/css":2,"../../logger":42,"../../remote/debounced_remote":47}],7:[function(require,module,exports){
+},{"../../const/css":2,"../../logger":37,"../../remote/debounced_remote":42}],9:[function(require,module,exports){
 var log = require("../../logger")("Browsability decorator"), CSS = require("../../const/css");
 RDFModel = window.RDFModel;
 
@@ -348,7 +421,7 @@ var Decorator = function () {
 };
 
 module.exports = Decorator;
-},{"../../const/css":2,"../../logger":42}],8:[function(require,module,exports){
+},{"../../const/css":2,"../../logger":37}],10:[function(require,module,exports){
 var log = require("../../logger")("URI_TO_LABEL decorator"), CSS = require("../../const/css");
 var Debounced_remote = require("../../remote/debounced_remote");
 
@@ -464,7 +537,7 @@ var Decorator = function () {
 };
 
 module.exports = Decorator;
-},{"../../const/css":2,"../../logger":42,"../../remote/debounced_remote":47}],9:[function(require,module,exports){
+},{"../../const/css":2,"../../logger":37,"../../remote/debounced_remote":42}],11:[function(require,module,exports){
 var log = require("../../logger")("URI_TO_THUMBNAIL decorator"), CSS = require("../../const/css");
 var Debounced_remote = require("../../remote/debounced_remote");
 
@@ -560,7 +633,7 @@ var Decorator = function () {
 };
 
 module.exports = Decorator;
-},{"../../const/css":2,"../../logger":42,"../../remote/debounced_remote":47}],10:[function(require,module,exports){
+},{"../../const/css":2,"../../logger":37,"../../remote/debounced_remote":42}],12:[function(require,module,exports){
 var log = require("./../logger")("Decorator_manager");
 
 var decorators = require("./decorators.js");
@@ -590,221 +663,7 @@ Manager.prototype.decorate = function (divs, cb) {
 };
 
 module.exports = Manager;
-},{"./../logger":42,"./decorators.js":4}],11:[function(require,module,exports){
-var templating = require("../../templating"), Base_detripler = require("../scheme"), CSS = require("../../const/css");
-
-var ID = "incoming.blank";
-
-var Detripler = function () {
-    Base_detripler.call(this, ID);
-    this.worker = true;
-    this.template_id = "tiles.incoming.blank";
-    this.fn = function (triples, transport, cb) {
-        var draft = [];
-        transport.get_concept("incoming.BlankNode", function (blank) {
-            if (blank) {
-                while (blank.length > 0) {
-                    var index = blank.pop();
-                    var triple = triples[index];
-                    draft.push({direction: "inc", triple: triple});
-                }
-            }
-            cb(draft);
-        });
-    };
-
-};
-
-Detripler.prototype = Object.create(Base_detripler.prototype);
-Detripler.prototype.constructor = Detripler;
-
-module.exports = Detripler;
-},{"../../const/css":2,"../../templating":52,"../scheme":24}],12:[function(require,module,exports){
-var templating = require("../../templating"), Base_detripler = require("../scheme"), CSS = require("../../const/css");
-
-var ID = "incoming.named";
-
-var Detripler = function () {
-    Base_detripler.call(this, ID);
-    this.worker = true;
-    this.template_id = "tiles.incoming.named";
-    this.fn = function (triples, transport, cb) {
-        var draft = [];
-        transport.get_concept("incoming.NamedNode", function (named) {
-            if (named) {
-                while (named.length > 0) {
-                    var index = named.pop();
-                    var triple = triples[index];
-                    draft.push({direction: "inc", triple: triple});
-                }
-            }
-            cb(draft);
-        });
-    };
-
-};
-
-Detripler.prototype = Object.create(Base_detripler.prototype);
-Detripler.prototype.constructor = Detripler;
-
-module.exports = Detripler;
-},{"../../const/css":2,"../../templating":52,"../scheme":24}],13:[function(require,module,exports){
-var templating = require("../../templating"), Base_detripler = require("../scheme"), CSS = require("../../const/css");
-
-var ID = "map";
-
-var Detripler = function () {
-    Base_detripler.call(this, ID);
-    this.worker = true;
-    this.template_id = "tiles.map";
-    this.fn = function (triples, transport, cb) {
-        var draft = [];
-        transport.get_concept('outgoing.Literal', function (literal) {
-            if (literal) {
-                var tmp = {out: {lat: null, long: null}};
-                while (literal.length > 0) {
-                    var index = literal.pop();
-                    var triple = triples[index];
-                    if (triple.predicate.nominalValue == 'http://www.w3.org/2003/01/geo/wgs84_pos#long') {
-                        tmp.out.long = triple.object.nominalValue;
-                    } else if (triple.predicate.nominalValue == 'http://www.w3.org/2003/01/geo/wgs84_pos#lat') {
-                        tmp.out.lat = triple.object.nominalValue;
-                    }
-                }
-                if (tmp.out.lat && tmp.out.long) {
-                    draft.push({direction: "outgoing", longitude: tmp.out.lat, latitude: tmp.out.long});
-                }
-            }
-            cb(draft);
-        });
-    };
-
-};
-
-Detripler.prototype = Object.create(Base_detripler.prototype);
-Detripler.prototype.constructor = Detripler;
-
-module.exports = Detripler;
-},{"../../const/css":2,"../../templating":52,"../scheme":24}],14:[function(require,module,exports){
-var templating = require("../../templating"), Base_detripler = require("../scheme"), CSS = require("../../const/css");
-
-var ID = "multi.named";
-
-var Detripler = function () {
-        Base_detripler.call(this, ID);
-        this.worker = true;
-        this.parents = ["incoming.named", "outgoing.named"];
-        this.template_id = "tiles.multi.named";
-        this.fn = function (triples, transport, cb) {
-            var draft = [], tmp = {};
-
-            // get incoming draft and search for same subjects
-            var inc_draft;
-            transport.get_draft("incoming.named", function (inc_named) {
-                inc_draft = inc_named;
-                for (var i = 0; i < inc_named.length; i++) {
-                    var inc_triple = inc_named[i].triple;
-                    if (!tmp[inc_triple.subject.nominalValue]) {
-                        tmp[inc_triple.subject.nominalValue] = {
-                            inc: [{triple: inc_triple, index: i}],
-                            out: []
-                        };
-                        tmp[inc_triple.subject.nominalValue].length = 1;
-                    } else {
-                        tmp[inc_triple.subject.nominalValue].inc.push({triple: inc_triple, index: i});
-                        tmp[inc_triple.subject.nominalValue].length++;
-                    }
-                }
-            });
-
-            // get outgoing draft and search for same objects
-            var out_draft;
-            transport.get_draft("outgoing.named", function (out_named) {
-                out_draft = out_named;
-                for (var i = 0; i < out_named.length; i++) {
-                    var out_triple = out_named[i].triple;
-                    if (!tmp[out_triple.object.nominalValue]) {
-                        tmp[out_triple.object.nominalValue] = {
-                            inc: [],
-                            out: [{triple: out_triple, index: i}]
-                        };
-                        tmp[out_triple.object.nominalValue].length = 1;
-                    } else {
-                        tmp[out_triple.object.nominalValue].out.push({triple: out_triple, index: i});
-                        tmp[out_triple.object.nominalValue].length++;
-                    }
-                }
-            });
-
-            // Modify flags
-            var inc_draft_delete_indexes = [], out_draft_delete_indexes = [];
-            var found_targets = Object.keys(tmp);
-            for (var i = 0; i < found_targets.length; i++) {
-                if(tmp[found_targets[i]].length > 1) {
-                    var draft_triples = {out: [], inc: []}, draft_resource = null;
-                    var inc_data = tmp[found_targets[i]].inc;
-                    for (var j = 0; j < inc_data.length; j++) {
-                        if (!draft_resource)
-                            draft_resource = inc_data[j].triple.subject;
-                        draft_triples.inc.push(inc_data[j].triple);
-                        inc_draft_delete_indexes.push(inc_data[j].index);
-                    }
-                    var out_data = tmp[found_targets[i]].out;
-                    for (var k = 0; k < out_data.length; k++) {
-                        if (!draft_resource)
-                            draft_resource = out_data[j].triple.object;
-                        draft_triples.out.push(out_data[k].triple);
-                        out_draft_delete_indexes.push(out_data[k].index);
-                    }
-
-                    // add to final draft
-                    draft.push({resource: draft_resource, triples: draft_triples});
-                }
-            }
-
-            if (inc_draft_delete_indexes.length > 0 || out_draft_delete_indexes.length > 0) {
-                // Modify drafts
-                var wait_for_n_mods = 0;
-                if (inc_draft_delete_indexes.length > 0)
-                    wait_for_n_mods++;
-                if (out_draft_delete_indexes.length > 0)
-                    wait_for_n_mods++;
-                var mods_done = 0;
-                if (inc_draft_delete_indexes.length > 0)
-                    inc_draft_delete_indexes.sort(function(a, b) {return a-b;});
-                while (inc_draft_delete_indexes.length > 0) {
-                    var index = inc_draft_delete_indexes.pop();
-                    inc_draft.splice(index, 1);
-                }
-                transport.set_draft("incoming.named", inc_draft, function () {
-                    mods_done++;
-                    if (mods_done == wait_for_n_mods)
-                        cb(draft);
-                });
-                if (out_draft_delete_indexes.length > 0)
-                    out_draft_delete_indexes.sort();
-                while (out_draft_delete_indexes.length > 0) {
-                    var index = out_draft_delete_indexes.pop();
-                    out_draft.splice(index, 1);
-                }
-                transport.set_draft("outgoing.named", out_draft, function () {
-                    mods_done++;
-                    if (mods_done == wait_for_n_mods)
-                        cb(draft);
-                });
-            } else {
-                cb([]);
-            }
-        };
-
-    }
-    ;
-
-Detripler.prototype = Object.create(Base_detripler.prototype);
-Detripler.prototype.constructor = Detripler;
-
-module.exports = Detripler;
-},{"../../const/css":2,"../../templating":52,"../scheme":24}],15:[function(require,module,exports){
+},{"./../logger":37,"./decorators.js":4}],13:[function(require,module,exports){
 var templating = require("../../templating"), Base_detripler = require("../scheme"), CSS = require("../../const/css");
 
 var ID = "outgoing.blank";
@@ -833,7 +692,7 @@ Detripler.prototype = Object.create(Base_detripler.prototype);
 Detripler.prototype.constructor = Detripler;
 
 module.exports = Detripler;
-},{"../../const/css":2,"../../templating":52,"../scheme":24}],16:[function(require,module,exports){
+},{"../../const/css":2,"../../templating":47,"../scheme":22}],14:[function(require,module,exports){
 var templating = require("../../templating"), Base_detripler = require("../scheme"), CSS = require("../../const/css");
 
 var ID = "outgoing.literal";
@@ -862,7 +721,7 @@ Detripler.prototype = Object.create(Base_detripler.prototype);
 Detripler.prototype.constructor = Detripler;
 
 module.exports = Detripler;
-},{"../../const/css":2,"../../templating":52,"../scheme":24}],17:[function(require,module,exports){
+},{"../../const/css":2,"../../templating":47,"../scheme":22}],15:[function(require,module,exports){
 var templating = require("../../templating"), Base_detripler = require("../scheme"), CSS = require("../../const/css");
 
 var ID = "outgoing.named";
@@ -890,7 +749,7 @@ Detripler.prototype = Object.create(Base_detripler.prototype);
 Detripler.prototype.constructor = Detripler;
 
 module.exports = Detripler;
-},{"../../const/css":2,"../../templating":52,"../scheme":24}],18:[function(require,module,exports){
+},{"../../const/css":2,"../../templating":47,"../scheme":22}],16:[function(require,module,exports){
 var detriplers = {};
 
 var add = function (c) {
@@ -902,19 +761,15 @@ var add = function (c) {
 };
 
 var constructors = [
-    require("./detripler/incoming.blank"),
-    require("./detripler/incoming.named"),
     require("./detripler/outgoing.blank"),
     require("./detripler/outgoing.named"),
-    require("./detripler/outgoing.literal"),
-    require("./detripler/map"),
-    require("./detripler/multi.named")
+    require("./detripler/outgoing.literal")
 ];
 
 add(constructors);
 
 module.exports = detriplers;
-},{"./detripler/incoming.blank":11,"./detripler/incoming.named":12,"./detripler/map":13,"./detripler/multi.named":14,"./detripler/outgoing.blank":15,"./detripler/outgoing.literal":16,"./detripler/outgoing.named":17}],19:[function(require,module,exports){
+},{"./detripler/outgoing.blank":13,"./detripler/outgoing.literal":14,"./detripler/outgoing.named":15}],17:[function(require,module,exports){
 /**
  * Worker
  **/
@@ -974,7 +829,7 @@ Internal.prototype.get_state = function () {
 };
 
 module.exports = Internal;
-},{}],20:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 (function (global){
 /**
  * Singleton worker group creation. Needs to be set once.
@@ -1104,7 +959,7 @@ module.exports = {
     }
 };
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../../const/general_plugin.js":3,"../../logger":42,"./internal":19,"./worker":21}],21:[function(require,module,exports){
+},{"../../const/general_plugin.js":3,"../../logger":37,"./internal":17,"./worker":19}],19:[function(require,module,exports){
 /**
  * Worker
  **/
@@ -1187,7 +1042,7 @@ Worker_wrap.prototype.clear_data_of = function (run) {
 };
 
 module.exports = Worker_wrap;
-},{"../../util/event_obj_extender":53}],22:[function(require,module,exports){
+},{"../../util/event_obj_extender":48}],20:[function(require,module,exports){
 var log = require("./../logger")("Detripler_manager"), Structure = require("./structure"), Jobs = require("./jobs/jobs"), Run = require("./run");
 var detriplers = require("./detriplers.js"), Base_detripler = require("./scheme");
 
@@ -1225,7 +1080,7 @@ Manager.prototype.get_detriplers = function () {
 };
 
 module.exports = Manager;
-},{"./../logger":42,"./detriplers.js":18,"./jobs/jobs":20,"./run":23,"./scheme":24,"./structure":25}],23:[function(require,module,exports){
+},{"./../logger":37,"./detriplers.js":16,"./jobs/jobs":18,"./run":21,"./scheme":22,"./structure":23}],21:[function(require,module,exports){
 var log = require("./../logger")("Detripler_run"), e_ext = require("../util/event_obj_extender");
 
 var run_id_counter = 0;
@@ -1300,7 +1155,7 @@ Detripling_run.prototype.is_done = function () {
 };
 
 module.exports = Detripling_run;
-},{"../util/event_obj_extender":53,"./../logger":42}],24:[function(require,module,exports){
+},{"../util/event_obj_extender":48,"./../logger":37}],22:[function(require,module,exports){
 (function (global){
 var templating = require("../templating"), CSS = require("../const/css"), Handlebars = (typeof window !== "undefined" ? window['Handlebars'] : typeof global !== "undefined" ? global['Handlebars'] : null);
 
@@ -1348,7 +1203,7 @@ var Detripler = function (id) {
 
 module.exports = Detripler;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"../const/css":2,"../templating":52}],25:[function(require,module,exports){
+},{"../const/css":2,"../templating":47}],23:[function(require,module,exports){
 (function (global){
 var log = require("./../logger")("Detripler_structure"), cytoscape = (typeof window !== "undefined" ? window['cytoscape'] : typeof global !== "undefined" ? global['cytoscape'] : null);
 
@@ -1459,7 +1314,7 @@ Structure.prototype.paint_dependencies_on = function (ele) {
 
 module.exports = Structure;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./../logger":42}],26:[function(require,module,exports){
+},{"./../logger":37}],24:[function(require,module,exports){
 (function (global){
 var cytoscape = (typeof window !== "undefined" ? window['cytoscape'] : typeof global !== "undefined" ? global['cytoscape'] : null), CSS = require("./const/css"), templating = require("./templating"), log = require("./logger.js")("History");
 var Layer_factory = require("./layers/factory");
@@ -1512,7 +1367,7 @@ History.prototype.show = function () {
 
 module.exports = History;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./const/css":2,"./layers/factory":32,"./logger.js":42,"./templating":52}],27:[function(require,module,exports){
+},{"./const/css":2,"./layers/factory":30,"./logger.js":37,"./templating":47}],25:[function(require,module,exports){
 var CSS = require("./../const/css.js"), templating = require('./../templating.js');
 
 var Nav = function (fn, l, ele, c) {
@@ -1533,7 +1388,7 @@ Nav.prototype.toggle_disable = function () {
 };
 
 module.exports = Nav;
-},{"./../const/css.js":2,"./../templating.js":52}],28:[function(require,module,exports){
+},{"./../const/css.js":2,"./../templating.js":47}],26:[function(require,module,exports){
 var MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
 var CSS = require("./../const/css.js"), templating = require('./../templating.js'), e_ext = require("../util/event_obj_extender");
 
@@ -1618,7 +1473,7 @@ Scroll.prototype.disable_observer = function () {
 };
 
 module.exports = Scroll;
-},{"../util/event_obj_extender":53,"./../const/css.js":2,"./../templating.js":52}],29:[function(require,module,exports){
+},{"../util/event_obj_extender":48,"./../const/css.js":2,"./../templating.js":47}],27:[function(require,module,exports){
 (function (global){
 /**
  * Singleton info box creation.
@@ -1718,12 +1573,12 @@ var instance = new Info();
 
 module.exports = instance;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./const/css.js":2,"./util/layout.js":54}],30:[function(require,module,exports){
+},{"./const/css.js":2,"./util/layout.js":49}],28:[function(require,module,exports){
 module.exports={
   "filter" : "Filtern: ",
   "sorter" : "Sortieren: "
 }
-},{}],31:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 module.exports={
   "filter" : "Filter",
   "sorter" : "Sort: ",
@@ -1744,7 +1599,7 @@ module.exports={
   "empty": "No data",
   "no_browse": "Browsing for this tile type disabled. Type: "
 }
-},{}],32:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 /**
  * Layer factory
  **/
@@ -1769,11 +1624,10 @@ Factory.addLayerTypes = function (constructors) {
 
 var constructors = {
     Query: require('./types/query_layer'),
-    Literal: require('./types/literal_node_layer'),
-    Blank: require('./types/blank_node_layer'),
     Pattern: require('./types/pattern_layer'),
-    NamedNode: require('./types/named_node_layer'),
-    Item: require('./types/item_layer')
+    Out: require('./types/out_layer'),
+    Item: require('./types/out_layer'),
+    NamedNode: require('./types/out_layer')
 };
 
 Factory.addLayerTypes(constructors);
@@ -1865,7 +1719,7 @@ Factory.make = function (synopsis, input, type) {
 module.exports = Factory;
 
 require("./layer");
-},{"../store":49,"../util/event_obj_extender":53,"./../logger.js":42,"./../util/misc":55,"./layer":33,"./types/blank_node_layer":35,"./types/item_layer":36,"./types/literal_node_layer":37,"./types/named_node_layer":38,"./types/pattern_layer":39,"./types/query_layer":40}],33:[function(require,module,exports){
+},{"../store":44,"../util/event_obj_extender":48,"./../logger.js":37,"./../util/misc":50,"./layer":31,"./types/out_layer":33,"./types/pattern_layer":34,"./types/query_layer":35}],31:[function(require,module,exports){
 /**
  * Layer
  **/
@@ -2108,7 +1962,7 @@ Layer.prototype.reload = function () {
 };
 
 module.exports = Layer;
-},{"../const/css":2,"../const/general_plugin":3,"../html_obj/nav":27,"../html_obj/scroll":28,"../info":29,"../layout_engines/flexbox":41,"../logger.js":42,"../templating":52,"../util/event_obj_extender":53,"../util/misc":55,"./factory":32,"./triple_set":34}],34:[function(require,module,exports){
+},{"../const/css":2,"../const/general_plugin":3,"../html_obj/nav":25,"../html_obj/scroll":26,"../info":27,"../layout_engines/flexbox":36,"../logger.js":37,"../templating":47,"../util/event_obj_extender":48,"../util/misc":50,"./factory":30,"./triple_set":32}],32:[function(require,module,exports){
 var e_ext = require("../util/event_obj_extender");
 
 var Triple_set = function () {
@@ -2139,17 +1993,7 @@ Triple_set.prototype.clear = function (index) {
 };
 
 module.exports = Triple_set;
-},{"../util/event_obj_extender":53}],35:[function(require,module,exports){
-/**
- * Layer
- **/
-
-var Blank_node_layer = function () {
-
-};
-
-module.exports = Blank_node_layer;
-},{}],36:[function(require,module,exports){
+},{"../util/event_obj_extender":48}],33:[function(require,module,exports){
 /**
  * Layer used to show the contents of an MICO item.
  **/
@@ -2159,126 +2003,32 @@ var info = require('../../info');
 var Layer = require('../layer');
 var Query_layer = require('../types/query_layer');
 
-var Item_layer = function (detripling, decorating, msg, item, opt) {
+var Out_layer = function (detripling, decorating, msg, item, opt) {
     this.item = item;
-    this._query = "CONSTRUCT { <"+item.nominalValue+"> <http://www.mico-project.eu/ns/mmm/2.0/schema#hasPart> ?o } WHERE { <"+item.nominalValue+"> <http://www.mico-project.eu/ns/mmm/2.0/schema#hasPart> ?o}";
+    this._query = "CONSTRUCT { <"+item.nominalValue+"> ?p ?o } WHERE { <"+item.nominalValue+"> ?p ?o}";
     Query_layer.call(this, detripling, decorating, msg, this._query, opt);
     this.id = item.nominalValue;
     this.label = item.nominalValue;
     this.label_small = "";
-    var that = this;
 
     this.get_concepts = function (triples) {
-        var concepts = {part: []};
+        var concepts = {};
         for (var i = 0; i < triples.length; i++) {
-            concepts["part"].push(triples[i].object.nominalValue);
-        }
-        return concepts;
-    };
-};
-
-Item_layer.prototype = Object.create(Layer.prototype);
-Item_layer.prototype.constructor = Item_layer;
-
-Item_layer.prototype.load_remote = function () {
-    var that = this;
-    this.trigger("request_remote", ['SELECT DISTINCT ?s ?p ?o where {?s ?p ?o. VALUES ?s {<' + this.item.nominalValue + '>} VALUES ?p {<http://www.mico-project.eu/ns/mmm/2.0/schema#hasPart>}}'], function (resp, b, remote_num, partial) {
-        var graph = store_wrap.store.parser.parse_to_graph(resp.results.bindings, ["s", "p", "o"]);
-        that.triples.add(graph.triples);
-        if (partial) {
-            b.do_partial_progress(remote_num);
-        } else {
-            b.do_progress(remote_num);
-        }
-        //store_wrap.store.insert_triples(resp.results.bindings, null, function () {
-        //    if (partial) {
-        //        b.do_partial_progress(remote_num);
-        //        that.log("insert done");
-        //    } else {
-        //        b.do_progress(remote_num);
-        //    }
-        //});
-    });
-};
-
-module.exports = Item_layer;
-},{"../../const/css":2,"../../info":29,"../../logger.js":42,"../../store":49,"../../templating":52,"../layer":33,"../types/query_layer":40}],37:[function(require,module,exports){
-/**
- * Layer
- **/
-
-var Literal_node_layer = function () {
-
-};
-
-module.exports = Literal_node_layer;
-},{}],38:[function(require,module,exports){
-/**
- * Layer
- **/
-
-var CSS = require("../../const/css"), store_wrap = require("../../store").get(), templating = require("../../templating"), log = require("../../logger.js")("Layer_Named");
-var info = require('../../info');
-var Layer = require('../layer');
-
-var Named_node_layer = function (detripling, decorating, msg, node, opt) {
-    Layer.call(this, detripling, decorating, msg, opt);
-    this.id = node.nominalValue;
-    this.node = node;
-    var that = this;
-
-    this.get_concepts = function (triples) {
-        var concepts = {incoming: [], outgoing: []};
-        for (var i = 0; i < triples.length; i++) {
-            if (triples[i].subject == that.node.nominalValue) {
-                if (!concepts[triples[i].object.interfaceName]) {
-                    concepts[triples[i].object.interfaceName] = [];
-                    concepts["outgoing." + triples[i].object.interfaceName] = [];
-                    concepts["incoming." + triples[i].object.interfaceName] = [];
-                }
-                concepts[triples[i].object.interfaceName].push(i);
-                concepts["outgoing." + triples[i].object.interfaceName].push(i);
-                concepts["outgoing"].push(i);
-            } else {
-                if (!concepts[triples[i].subject.interfaceName]) {
-                    concepts[triples[i].subject.interfaceName] = [];
-                    concepts["outgoing." + triples[i].subject.interfaceName] = [];
-                    concepts["incoming." + triples[i].subject.interfaceName] = [];
-                }
-                concepts[triples[i].subject.interfaceName].push(i);
-                concepts["incoming." + triples[i].subject.interfaceName].push(i);
-                concepts["incoming"].push(i);
+            if (!concepts["outgoing."+triples[i].object.interfaceName]) {
+                concepts["outgoing."+triples[i].object.interfaceName] = [];
             }
+            concepts["outgoing."+triples[i].object.interfaceName].push(i);
         }
         return concepts;
     };
-
-    // Store observing
-    //store.startObservingNode.call(store_wrap.store, node.nominalValue, function (node_env) {
-    //    log(node_env);
-    //});
-    store_wrap.store.subscribe.call(store_wrap.store, node.nominalValue, null, null, null, function (event, triples) {
-        that.triples.add(triples);
-    });
-    store_wrap.store.subscribe.call(store_wrap.store, null, null, node.nominalValue, null, function (event, triples) {
-        that.triples.add(triples);
-    });
-
-    // On new triples
-    that.triples.on("updated", function (triples, new_triples) {
-        log("Got new triples", [triples]);
-        that.tileify(triples);
-    });
-    this.label = node.nominalValue; // TODO get label
-    this.label_small = node.nominalValue;
 };
 
-Named_node_layer.prototype = Object.create(Layer.prototype);
-Named_node_layer.prototype.constructor = Named_node_layer;
+Out_layer.prototype = Object.create(Layer.prototype);
+Out_layer.prototype.constructor = Out_layer;
 
-Named_node_layer.prototype.load_remote = function () {
+Out_layer.prototype.load_remote = function () {
     var that = this;
-    this.trigger("request_remote", ['SELECT DISTINCT ?s ?p ?o where {{?s ?p ?o. VALUES ?s {<' + this.node.nominalValue + '>}} UNION {?s ?p ?o. VALUES ?o {<' + this.node.nominalValue + '>}}} ORDER BY ?s'], function (resp, b, remote_num, partial) {
+    this.trigger("request_remote", ['SELECT DISTINCT ?s ?p ?o where {?s ?p ?o. VALUES ?s {<' + this.item.nominalValue + '>}}'], function (resp, b, remote_num, partial) {
         var graph = store_wrap.store.parser.parse_to_graph(resp.results.bindings, ["s", "p", "o"]);
         that.triples.add(graph.triples);
         if (partial) {
@@ -2286,50 +2036,11 @@ Named_node_layer.prototype.load_remote = function () {
         } else {
             b.do_progress(remote_num);
         }
-        //store_wrap.store.insert_triples(resp.results.bindings, null, function () {
-        //    if (partial) {
-        //        b.do_partial_progress(remote_num);
-        //        that.log("insert done");
-        //    } else {
-        //        b.do_progress(remote_num);
-        //    }
-        //});
     });
 };
 
-Named_node_layer.prototype.load_local = function () {
-    var that = this, triples = [], cnt = 0;
-
-    var prepare_triples = function (results) {
-        cnt++;
-        if (triples) {
-            triples = triples.concat(results.triples);
-        }
-        if (cnt == 2) {
-            that.triples.add(triples);
-        }
-    };
-
-    store_wrap.store.execute('CONSTRUCT {?s ?p <' + that.node.nominalValue + '>} WHERE {?s ?p <' + that.node.nominalValue + '>}',
-        function (err, result) {
-            prepare_triples(result);
-        },
-        function () {
-            prepare_triples();
-            info.show("Error on local incoming triple loading.");
-        });
-    store_wrap.store.execute('CONSTRUCT {<' + this.node.nominalValue + '> ?p ?o} WHERE {<' + this.node.nominalValue + '> ?p ?o}',
-        function (err, result) {
-            prepare_triples(result);
-        },
-        function () {
-            prepare_triples();
-            info.show("Error on local outgoing triple loading.");
-        });
-};
-
-module.exports = Named_node_layer;
-},{"../../const/css":2,"../../info":29,"../../logger.js":42,"../../store":49,"../../templating":52,"../layer":33}],39:[function(require,module,exports){
+module.exports = Out_layer;
+},{"../../const/css":2,"../../info":27,"../../logger.js":37,"../../store":44,"../../templating":47,"../layer":31,"../types/query_layer":35}],34:[function(require,module,exports){
 /**
  * Layer
  **/
@@ -2357,7 +2068,7 @@ Pattern_layer.prototype = Object.create(Layer.prototype);
 Pattern_layer.prototype.constructor = Pattern_layer;
 
 module.exports = Pattern_layer;
-},{"../../const/css":2,"../../info":29,"../../logger.js":42,"../../store":49,"../../templating":52,"../layer":33}],40:[function(require,module,exports){
+},{"../../const/css":2,"../../info":27,"../../logger.js":37,"../../store":44,"../../templating":47,"../layer":31}],35:[function(require,module,exports){
 /**
  * Layer
  **/
@@ -2399,7 +2110,7 @@ Query_layer.prototype.load_local = function () {
 };
 
 module.exports = Query_layer;
-},{"../../const/css":2,"../../info":29,"../../logger.js":42,"../../store":49,"../../templating":52,"../layer":33}],41:[function(require,module,exports){
+},{"../../const/css":2,"../../info":27,"../../logger.js":37,"../../store":44,"../../templating":47,"../layer":31}],36:[function(require,module,exports){
 var CSS = require("../const/css");
 
 var defaults = {
@@ -2502,7 +2213,7 @@ Flex_layout.prototype.filter = function (filter_functions) {
 };
 
 module.exports = Flex_layout;
-},{"../const/css":2}],42:[function(require,module,exports){
+},{"../const/css":2}],37:[function(require,module,exports){
 (function (global){
 /**
  * Wrapper for logger creation
@@ -2526,7 +2237,7 @@ module.exports = function (str) {
     return loggers[id];
 };
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./const/general_plugin.js":3}],43:[function(require,module,exports){
+},{"./const/general_plugin.js":3}],38:[function(require,module,exports){
 var log = require("./logger")("Language");
 
 var Languages = function (language) {
@@ -2559,7 +2270,7 @@ Languages.prototype.get_language = function () {
 };
 
 module.exports = Languages;
-},{"./languages/de.json":30,"./languages/en.json":31,"./logger":42}],44:[function(require,module,exports){
+},{"./languages/de.json":28,"./languages/en.json":29,"./logger":37}],39:[function(require,module,exports){
 var CSS = require("./const/css"), templating = require("./templating"), e_ext = require("./util/event_obj_extender"), log = require("./logger.js")("Overlay"), History = require("./history"), Nav = require("./html_obj/nav");
 var pN = require("./const/general_plugin").name;
 var defaults = {};
@@ -2645,7 +2356,7 @@ Overlay.prototype.destroy = function () {
 };
 
 module.exports = Overlay;
-},{"./const/css":2,"./const/general_plugin":3,"./history":26,"./html_obj/nav":27,"./logger.js":42,"./templating":52,"./util/event_obj_extender":53}],45:[function(require,module,exports){
+},{"./const/css":2,"./const/general_plugin":3,"./history":24,"./html_obj/nav":25,"./logger.js":37,"./templating":47,"./util/event_obj_extender":48}],40:[function(require,module,exports){
 /**
  * Overlay management for synopsis
  **/
@@ -2706,7 +2417,7 @@ Overlay_manager.prototype.destroy_all = function () {
 };
 
 module.exports = Overlay_manager;
-},{"./const/css":2,"./history":26,"./logger.js":42,"./overlay":44,"./store":49,"./templating":52}],46:[function(require,module,exports){
+},{"./const/css":2,"./history":24,"./logger.js":37,"./overlay":39,"./store":44,"./templating":47}],41:[function(require,module,exports){
 (function (global){
 /**
  * Singleton Progress box creation.
@@ -2822,7 +2533,7 @@ var instance = new Progress();
 
 module.exports = instance;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./const/css.js":2,"./templating":52,"./util/event_obj_extender":53}],47:[function(require,module,exports){
+},{"./const/css.js":2,"./templating":47,"./util/event_obj_extender":48}],42:[function(require,module,exports){
 var e_ext = require("../util/event_obj_extender");
 
 var max_url_length = 2000;
@@ -2911,7 +2622,7 @@ Debounced_remote_loader.prototype.pop_query = function () {
 };
 
 module.exports = Debounced_remote_loader;
-},{"../util/event_obj_extender":53}],48:[function(require,module,exports){
+},{"../util/event_obj_extender":48}],43:[function(require,module,exports){
 (function (global){
 /**
  * Singleton store local
@@ -3054,7 +2765,7 @@ var counter = 0;
 
 module.exports = Remote;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./../logger.js":42}],49:[function(require,module,exports){
+},{"./../logger.js":37}],44:[function(require,module,exports){
 (function (global){
 /**
  * Singleton local rdf store. Needs to be set once.
@@ -3344,7 +3055,7 @@ module.exports = {
     }
 };
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./logger.js":42,"./util/event_obj_extender.js":53,"./util/misc.js":55}],50:[function(require,module,exports){
+},{"./logger.js":37,"./util/event_obj_extender.js":48,"./util/misc.js":50}],45:[function(require,module,exports){
 (function (global){
 var $ = (typeof window !== "undefined" ? window['$'] : typeof global !== "undefined" ? global['$'] : null);
 (typeof window !== "undefined" ? window['rdfstore'] : typeof global !== "undefined" ? global['rdfstore'] : null);
@@ -3647,7 +3358,7 @@ module.exports = Synopsis;
 //See the License for the specific language governing permissions and
 //limitations under the License.
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./const/css":2,"./const/general_plugin":3,"./decorating/manager":10,"./detripling/manager":22,"./history":26,"./info":29,"./layers/factory":32,"./logger":42,"./msg":43,"./overlay_manager":45,"./progress":46,"./remote/remote":48,"./store":49,"./util/misc":55}],51:[function(require,module,exports){
+},{"./const/css":2,"./const/general_plugin":3,"./decorating/manager":12,"./detripling/manager":20,"./history":24,"./info":27,"./layers/factory":30,"./logger":37,"./msg":38,"./overlay_manager":40,"./progress":41,"./remote/remote":43,"./store":44,"./util/misc":50}],46:[function(require,module,exports){
 module.exports = function(Handlebars) {
 
 var templates = {};
@@ -3883,139 +3594,6 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
   return buffer;
   });
 
-templates["tiles.incoming.blank"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
-
-
-  buffer += "<div class=\""
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.tile)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "  "
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.detripler)),stack1 == null || stack1 === false ? stack1 : stack1.id)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " "
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.semantic_color)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">\n    <b>Subgraph:</b>\n    <div class=\""
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.uri)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " "
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.dynamic_text_size)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">\n        "
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.triple)),stack1 == null || stack1 === false ? stack1 : stack1.subject)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\n    </div>\n    <b>is subject of:</b>\n    <div class=\""
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.uri)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " "
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.dynamic_text_size)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">\n        "
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.triple)),stack1 == null || stack1 === false ? stack1 : stack1.predicate)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\n    </div>\n</div>";
-  return buffer;
-  });
-
-templates["tiles.incoming.named"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
-
-
-  buffer += "<div class=\""
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.tile)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "  "
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.detripler)),stack1 == null || stack1 === false ? stack1 : stack1.id)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " "
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.semantic_color)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">\n    <b>Resource:</b>\n    <div class=\""
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.uri)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " "
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.dynamic_text_size)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">\n        "
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.triple)),stack1 == null || stack1 === false ? stack1 : stack1.subject)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\n    </div>\n    <b>is subject of:</b>\n    <div class=\""
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.uri)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " "
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.dynamic_text_size)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">\n        "
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.triple)),stack1 == null || stack1 === false ? stack1 : stack1.predicate)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\n    </div>\n</div>";
-  return buffer;
-  });
-
-templates["tiles.map"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, functionType="function", escapeExpression=this.escapeExpression;
-
-
-  buffer += "<div class=\""
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.tile)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " "
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.detripler)),stack1 == null || stack1 === false ? stack1 : stack1.id)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\" style=\"width:404px; height: 200px\">\n    <iframe width=\"404\" height=\"200\" frameborder=\"0\" scrolling=\"no\" marginheight=\"0\" marginwidth=\"0\" src=\"https://maps.google.com/?ie=UTF8&amp;t=m&amp;ll="
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.longitude)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + ","
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.latitude)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "&amp;spn=0.079502,0.145912&amp;z=12&amp;output=embed\"></iframe>\n</div>";
-  return buffer;
-  });
-
-templates["tiles.multi.named"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
-  this.compilerInfo = [4,'>= 1.0.0'];
-helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
-  var buffer = "", stack1, stack2, functionType="function", escapeExpression=this.escapeExpression, self=this;
-
-function program1(depth0,data) {
-  
-  var buffer = "", stack1, stack2;
-  buffer += "\n    <b>is object of:</b>\n    ";
-  stack2 = helpers.each.call(depth0, ((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.triples)),stack1 == null || stack1 === false ? stack1 : stack1.out), {hash:{},inverse:self.noop,fn:self.programWithDepth(2, program2, data, depth0),data:data});
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += "\n    ";
-  return buffer;
-  }
-function program2(depth0,data,depth1) {
-  
-  var buffer = "", stack1;
-  buffer += "\n        <div class=\""
-    + escapeExpression(((stack1 = ((stack1 = depth1.CSS),stack1 == null || stack1 === false ? stack1 : stack1.uri)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " "
-    + escapeExpression(((stack1 = ((stack1 = depth1.CSS),stack1 == null || stack1 === false ? stack1 : stack1.dynamic_text_size)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">\n            "
-    + escapeExpression(((stack1 = ((stack1 = depth0.predicate),stack1 == null || stack1 === false ? stack1 : stack1.nominalValue)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\n        </div>\n    ";
-  return buffer;
-  }
-
-function program4(depth0,data) {
-  
-  var buffer = "", stack1, stack2;
-  buffer += "\n    <b>is subject of:</b>\n    ";
-  stack2 = helpers.each.call(depth0, ((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.triples)),stack1 == null || stack1 === false ? stack1 : stack1.inc), {hash:{},inverse:self.noop,fn:self.programWithDepth(2, program2, data, depth0),data:data});
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += "\n    ";
-  return buffer;
-  }
-
-  buffer += "<div class=\""
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.tile)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "  "
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.detripler)),stack1 == null || stack1 === false ? stack1 : stack1.id)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " "
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.semantic_color)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">\n    <b>Resource:</b>\n    <div class=\""
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.uri)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + " "
-    + escapeExpression(((stack1 = ((stack1 = depth0.CSS),stack1 == null || stack1 === false ? stack1 : stack1.dynamic_text_size)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\">\n        "
-    + escapeExpression(((stack1 = ((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.resource)),stack1 == null || stack1 === false ? stack1 : stack1.nominalValue)),typeof stack1 === functionType ? stack1.apply(depth0) : stack1))
-    + "\n    </div>\n    ";
-  stack2 = helpers['if'].call(depth0, ((stack1 = ((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.triples)),stack1 == null || stack1 === false ? stack1 : stack1.out)),stack1 == null || stack1 === false ? stack1 : stack1.length), {hash:{},inverse:self.noop,fn:self.program(1, program1, data),data:data});
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += "\n    ";
-  stack2 = helpers['if'].call(depth0, ((stack1 = ((stack1 = ((stack1 = ((stack1 = depth0.data),stack1 == null || stack1 === false ? stack1 : stack1.draft)),stack1 == null || stack1 === false ? stack1 : stack1.triples)),stack1 == null || stack1 === false ? stack1 : stack1.inc)),stack1 == null || stack1 === false ? stack1 : stack1.length), {hash:{},inverse:self.noop,fn:self.program(4, program4, data),data:data});
-  if(stack2 || stack2 === 0) { buffer += stack2; }
-  buffer += "\n</div>";
-  return buffer;
-  });
-
 templates["tiles.outgoing.blank"] = Handlebars.template(function (Handlebars,depth0,helpers,partials,data) {
   this.compilerInfo = [4,'>= 1.0.0'];
 helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
@@ -4103,7 +3681,7 @@ helpers = this.merge(helpers, Handlebars.helpers); data = data || {};
 return templates;
 
 };
-},{}],52:[function(require,module,exports){
+},{}],47:[function(require,module,exports){
 (function (global){
 var Handlebars = (typeof window !== "undefined" ? window['Handlebars'] : typeof global !== "undefined" ? global['Handlebars'] : null);
 
@@ -4125,7 +3703,7 @@ Handlebars.registerHelper('prefix', function (msg, type, str) {
 var templates = require("./templates.js")(Handlebars);
 module.exports = templates;
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./const/general_plugin":3,"./templates.js":51}],53:[function(require,module,exports){
+},{"./const/general_plugin":3,"./templates.js":46}],48:[function(require,module,exports){
 (function (global){
 /**
 * Extends an object with backbone events and switching. A switch is a event which is triggered once and stays "on". If a function gets bond to a switch in on state it is invoked instantly.
@@ -4152,7 +3730,7 @@ module.exports = function(obj) {
     return obj;
 };
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],54:[function(require,module,exports){
+},{}],49:[function(require,module,exports){
 (function (global){
 var Modernizr = (typeof window !== "undefined" ? window['Modernizr'] : typeof global !== "undefined" ? global['Modernizr'] : null);
 var transEndEventName = function() {
@@ -4191,7 +3769,7 @@ module.exports = {
     }
 };
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],55:[function(require,module,exports){
+},{}],50:[function(require,module,exports){
 var log = require("../logger.js")("Util");
 
 module.exports = {
@@ -4239,4 +3817,4 @@ module.exports = {
         };
     })()
 };
-},{"../logger.js":42}]},{},[50]);
+},{"../logger.js":37}]},{},[45]);

@@ -6,6 +6,8 @@ var add = function (Decorator) {
     decorators.keys_for_decorators.push(decorator.id);
 };
 
+add(require("./decorators/animal_detection_part"));
+add(require("./decorators/item_image"));
 add(require("./decorators/browsability"));
 add(require("./decorators/semantic_color"));
 add(require("./decorators/uri_to_label"));

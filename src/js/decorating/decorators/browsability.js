@@ -6,11 +6,8 @@ var Decorator = function () {
     this.config = {
         "outgoing.named": function (draft) {
             return draft.triple.object;
-        }, "incoming.named": function (draft) {
-            return draft.triple.subject;
-        },
-        "multi.named": function (draft) {
-            return draft.resource;
+        }, "item": function (draft) {
+            return draft.leads_to;
         }
     };
     this.decorate = function (divs, synopsis, config, cb) {

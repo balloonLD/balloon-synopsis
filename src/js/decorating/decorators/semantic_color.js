@@ -55,11 +55,8 @@ var Decorator = function () {
     this.config = {
         "outgoing.named": function (draft) {
             return draft.triple.object.nominalValue;
-        }, "incoming.named": function (draft) {
-            return draft.triple.subject.nominalValue;
-        },
-        "multi.named": function (draft) {
-            return draft.resource.nominalValue;
+        }, "item": function (draft) {
+            return draft.leads_to.nominalValue;
         }
     };
     this.decorate = function (divs, synopsis, config, cb) {
