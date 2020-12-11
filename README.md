@@ -18,5 +18,3 @@ Our current prototype offers following features:
 * Timeline (track history of the browsing behaviour)
 
 ![Screenshot](http://schlegel.github.io/balloon/images/slider/balloon_synopsis.png)
-
-##TODO update
